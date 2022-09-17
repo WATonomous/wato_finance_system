@@ -9,7 +9,7 @@ npm start
 ```
 
 To setup backend, 
-create a `.env` file in the "backend" folder 
+create a `.env` file in the root folder 
 Set the following config variable, which is your MongoDB atlas URI
 ATLAS_URI=<YOUR_MONGO_ATLAS_URI_HERE>
 Please contact Victor or Anson if you do not know how to set it up
