@@ -30,7 +30,7 @@ const fundingItemsRouter = require('./routes/fundingItems');
 
 // app.use('/exercises', exercisesRouter);
 app.use('/users', usersRouter);
-app.use('/fundingitem', fundingItemsRouter);
+app.use('/fundingitems', fundingItemsRouter);
 
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);

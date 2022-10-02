@@ -1,7 +1,7 @@
 const router = require('express').Router();
 let FundingItem = require('../models/FundingItem.model');
 
-router.route('/').get((req, res) => {
+router.route('/').get((_, res) => {
   FundingItem.find()
     .then(fundingItems => res.json(fundingItems))
     .catch(err => res.status(400).json('Error: ' + err));
