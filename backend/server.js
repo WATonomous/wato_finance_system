@@ -15,7 +15,6 @@ console.log(uri);
 mongoose.connect(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  // useCreateIndex: true
 });
 
 const connection = mongoose.connection;
@@ -25,10 +24,14 @@ connection.once("open", () => {
 
 // const exercisesRouter = require('./routes/exercises');
 const usersRouter = require("./routes/users");
-const sponsorshipFundsRouter = require("./routes/SponsorshipFund");
+const fundingItemsRouter = require("./routes/fundingItems");
+const emailRouter = require("./routes/email");
 
+app.use(express.json());
 // app.use('/exercises', exercisesRouter);
 app.use("/users", usersRouter);
+app.use("/fundingitems", fundingItemsRouter);
+app.use("/email", emailRouter);
 app.use("/sponsorshipfunds", sponsorshipFundsRouter);
 
 app.listen(port, () => {
