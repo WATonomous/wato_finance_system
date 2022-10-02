@@ -9,9 +9,20 @@ npm start
 ```
 
 To setup backend, 
+create a `.env` file in the root folder 
+
 create a `.env` file in the "backend" folder 
+
+
+*MongoDB atlas URI*
 Set the following config variable, which is your MongoDB atlas URI
 ATLAS_URI=<YOUR_MONGO_ATLAS_URI_HERE>
+*Email Keys*
+Create an account here to use the email api: https://www.mailjet.com/
+MAILJET_API_KEY=<YOUR_MAILJET_API_KEY>
+MAILJET_SECRET_KEY=<YOUR_MAILJET_SECRET_KEY>
+FINANCE_EMAIL=<EMAIL_WHERE_YOU_WANT_TO_SEND_FROM>
+
 Please contact Victor or Anson if you do not know how to set it up
 
 In another terminal:

@@ -1,10 +1,10 @@
 import { Schema, model, Types } from "mongoose";
-import { UPR_STATUS } from "./Constants";
+import { PPR_STATUS } from "./Constants";
 
-const UWFinancePurchaseSchema = new Schema(
+const PersonalPurchaseSchema = new Schema(
   {
     reporter_id: { type: String, required: true },
-    status: { type: String, enum: UPR_STATUS },
+    status: { type: String, enum: PPR_STATUS },
     fi_link: { type: Types.ObjectId, ref: "FundingItem", required: true },
     purchase_url: { type: String, required: true },
     purchase_instructions: { type: String, required: true },
@@ -20,4 +20,4 @@ const UWFinancePurchaseSchema = new Schema(
   }
 );
 
-export default model("UWFinancePurchase", UWFinancePurchaseSchema);
+export default model("PersonalPurchase", PersonalPurchaseSchema);
