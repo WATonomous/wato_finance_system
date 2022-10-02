@@ -26,8 +26,10 @@ connection.once("open", () => {
 const usersRouter = require("./routes/users");
 const fundingItemsRouter = require("./routes/fundingItems");
 const emailRouter = require("./routes/email");
+const sponsorshipFundsRouter = require("./routes/SponsorshipFund");
 
 app.use(express.json());
+
 // app.use('/exercises', exercisesRouter);
 app.use("/users", usersRouter);
 app.use("/fundingitems", fundingItemsRouter);
