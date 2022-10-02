@@ -1,7 +1,7 @@
 const router = require("express").Router();
 let SponsorshipFund = require("../models/SponsorshipFund.model");
 
-router.route("/").get((req, res) => {
+router.route("/").get((_, res) => {
   SponsorshipFund.find()
     .then((SponsorshipFund) => res.json(SponsorshipFund))
     .catch((err) => res.status(400).json(err));
@@ -10,7 +10,7 @@ router.route("/").get((req, res) => {
 router.route("/").post((req, res) => {
   if (!req.body) {
     res.status(400);
-    throw new Error("Body has missing values");
+    throw new Error("Body is missing");
   }
   SponsorshipFund.create(req.body)
     .then((body) => res.status(200).json(body))
@@ -18,33 +18,33 @@ router.route("/").post((req, res) => {
 });
 
 router.route("/:id").put((req, res) => {
-  const id = req.params;
-  const updatedBody = req.body;
-  SponsorshipFund.findOne({ id: id })
+  const { id } = req.params;
+  const updatedFields = req.body;
+  SponsorshipFund.findById(id)
     .then((sponsorshipFundToUpdate) => {
       if (!sponsorshipFundToUpdate) {
-        res.status(400);
+        res.status(404);
         throw new Error("Sponsorship Fund not found");
       }
       SponsorshipFund.findByIdAndUpdate(
         sponsorshipFundToUpdate._id,
-        updatedBody,
+        updatedFields,
         {
           new: false,
         }
       )
-        .then(() => res.status(200).json(updatedBody))
+        .then(() => res.status(200).json(updatedFields))
         .catch((err) => res.status(400).json(err));
     })
     .catch((err) => res.status(400).json(err));
 });
 
 router.route("/:id").delete((req, res) => {
-  const id = req.params;
-  SponsorshipFund.findOne({ id: id })
+  const { id } = req.params;
+  SponsorshipFund.findById(id)
     .then((sponsorshipFundToDelete) => {
       if (!sponsorshipFundToDelete) {
-        res.status(400);
+        res.status(404);
         throw new Error("Sponsorship Fund not found");
       }
       res.status(200).json(sponsorshipFundToDelete);
@@ -54,11 +54,11 @@ router.route("/:id").delete((req, res) => {
 });
 
 router.route("/:id").get((req, res) => {
-  const id = req.params;
-  SponsorshipFund.findOne({ id: id })
+  const { id } = req.params;
+  SponsorshipFund.findById(id)
     .then((sponsorshipFundToRetrieve) => {
       if (!sponsorshipFundToRetrieve) {
-        res.status(400);
+        res.status(404);
         throw new Error("Sponsorship Fund not found");
       }
       res.status(200).json(sponsorshipFundToRetrieve);

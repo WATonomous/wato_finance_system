@@ -1,9 +1,8 @@
 const mongoose = require("mongoose");
 const Types = mongoose.Types;
 const Schema = mongoose.Schema;
-
-const ENDOWMENT_FUNDS = ["MEF", "WEEF", "ENGSOC", "DEAN_OF_ENG"];
-const SF_STATUS = ["ALLOCATED", "CLAIM_SUBMITTED", "REIMBURSED"];
+const constants = require("./Constants");
+const { SF_STATUS, ENDOWMENT_FUNDS } = constants;
 
 const SponsorShipFundSchema = new Schema(
   {
