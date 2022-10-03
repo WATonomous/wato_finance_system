@@ -1,19 +1,24 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose')
 
-const Schema = mongoose.Schema;
+const Schema = mongoose.Schema
 
-const fundingItemSchema = new Schema({
-  sf_link: { type: mongoose.Types.ObjectId, ref: "SponsorshipFund" }, // add required:true 
-  ppr_links: [{ type: mongoose.Types.ObjectId, ref: "PersonalPurchase" }],
-  upr_links: [{ type: mongoose.Types.ObjectId, ref: "UWFinancePurchase" }],
-  funding_allocation: { type: Number, required: true },
-  funding_spent: { type: Number },
-  amount_reimbursed: { type: Number },
-  purchase_justification: { type: String },
-}, {
-  timestamps: true,
-});
+const fundingItemSchema = new Schema(
+    {
+        sf_link: { type: mongoose.Types.ObjectId, ref: 'SponsorshipFund' }, // add required:true
+        ppr_links: [{ type: mongoose.Types.ObjectId, ref: 'PersonalPurchase' }],
+        upr_links: [
+            { type: mongoose.Types.ObjectId, ref: 'UWFinancePurchase' },
+        ],
+        funding_allocation: { type: Number, required: true },
+        funding_spent: { type: Number },
+        amount_reimbursed: { type: Number },
+        purchase_justification: { type: String },
+    },
+    {
+        timestamps: true,
+    }
+)
 
-const FundingItem = mongoose.model("FundingItem", fundingItemSchema);
+const FundingItem = mongoose.model('FundingItem', fundingItemSchema)
 
-module.exports = FundingItem;
+module.exports = FundingItem
