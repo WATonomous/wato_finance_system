@@ -22,4 +22,4 @@ const UPR_STATUS = [
     'REIMBURSED',
 ]
 
-module.exports = { ENDOWMENT_FUNDS, SF_STATUS, PPR_STATUS, UPR_STATUS };
+module.exports = { ENDOWMENT_FUNDS, SF_STATUS, PPR_STATUS, UPR_STATUS }

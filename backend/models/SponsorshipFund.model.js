@@ -1,8 +1,8 @@
-const mongoose = require("mongoose");
-const Types = mongoose.Types;
-const Schema = mongoose.Schema;
-const constants = require("./Constants");
-const { SF_STATUS, ENDOWMENT_FUNDS } = constants;
+const mongoose = require('mongoose')
+const Types = mongoose.Types
+const Schema = mongoose.Schema
+const constants = require('./Constants')
+const { SF_STATUS, ENDOWMENT_FUNDS } = constants
 
 const SponsorShipFundSchema = new Schema(
     {
@@ -24,9 +24,6 @@ const SponsorShipFundSchema = new Schema(
     }
 )
 
-const SponsorshipFund = mongoose.model(
-  "SponsorshipFund",
-  SponsorShipFundSchema
-);
+const SponsorshipFund = mongoose.model('SponsorshipFund', SponsorShipFundSchema)
 
-module.exports = SponsorshipFund;
+module.exports = SponsorshipFund
