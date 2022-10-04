@@ -25,12 +25,14 @@ connection.once('open', () => {
 // const exercisesRouter = require('./routes/exercises');
 const usersRouter = require('./routes/users')
 const fundingItemsRouter = require('./routes/fundingItems')
+const personalPurchaseRouter = require('./routes/personalPurchase')
 const emailRouter = require('./routes/email')
 
 app.use(express.json())
 // app.use('/exercises', exercisesRouter);
 app.use('/users', usersRouter)
 app.use('/fundingitems', fundingItemsRouter)
+app.use('/personalpurchase', personalPurchaseRouter)
 app.use('/email', emailRouter)
 
 app.listen(port, () => {
