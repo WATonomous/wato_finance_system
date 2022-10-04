@@ -5,7 +5,7 @@ const model = mongoose.model
 const Types = mongoose.Types
 
 const Constants = require('./Constants')
-const PPR_STATUS = Constants.PPR_STATUS
+const UPR_STATUS = Constants.UPR_STATUS
 
 const UWFinancePurchaseSchema = new Schema(
     {

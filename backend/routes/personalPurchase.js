@@ -25,6 +25,7 @@ router.route('/').post((req, res) => {
 })
 
 router.route('/:id').put((req, res) => {
+    console.log(req.params.id)
     PersonalPurchase.findByIdAndUpdate(req.params.id, req.body)
         .then(() => res.json(req.body))
         .catch((err) => res.status(400).json('Error: ' + err))
