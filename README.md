@@ -16,8 +16,8 @@ create a `.env` file in the "backend" folder
 
 _MongoDB atlas URI_
 Set the following config variable, which is your MongoDB atlas URI
-ATLAS_URI=<YOUR_MONGO_ATLAS_URI_HERE>
-_Email Keys_
+ATLAS*URI=<YOUR_MONGO_ATLAS_URI_HERE>
+\_Email Keys*
 Create an account here to use the email api: https://www.mailjet.com/
 MAILJET_API_KEY=<YOUR_MAILJET_API_KEY>
 MAILJET_SECRET_KEY=<YOUR_MAILJET_SECRET_KEY>
