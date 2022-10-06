@@ -1,5 +1,8 @@
-import { Schema, model, Types } from 'mongoose'
-import { SF_STATUS, ENDOWMENT_FUNDS } from './Constants'
+const mongoose = require('mongoose')
+const Types = mongoose.Types
+const Schema = mongoose.Schema
+const constants = require('./Constants')
+const { SF_STATUS, ENDOWMENT_FUNDS } = constants
 
 const SponsorShipFundSchema = new Schema(
     {
@@ -21,4 +24,6 @@ const SponsorShipFundSchema = new Schema(
     }
 )
 
-export default model('SponsorshipFund', SponsorShipFundSchema)
+const SponsorshipFund = mongoose.model('SponsorshipFund', SponsorShipFundSchema)
+
+module.exports = SponsorshipFund
