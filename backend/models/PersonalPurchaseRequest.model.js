@@ -1,5 +1,10 @@
-import { Schema, model, Types } from 'mongoose'
-import { PPR_STATUS } from './Constants'
+const mongoose = require('mongoose')
+
+const Schema = mongoose.Schema
+const Types = mongoose.Types
+
+const Constants = require('./Constants')
+const PPR_STATUS = Constants.PPR_STATUS
 
 const PersonalPurchaseSchema = new Schema(
     {
@@ -22,4 +27,9 @@ const PersonalPurchaseSchema = new Schema(
     }
 )
 
-export default model('PersonalPurchase', PersonalPurchaseSchema)
+const PersonalPurchase = mongoose.model(
+    'PersonalPurchase',
+    PersonalPurchaseSchema
+)
+
+module.exports = PersonalPurchase

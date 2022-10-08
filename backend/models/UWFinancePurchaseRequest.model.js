@@ -1,5 +1,11 @@
-import { Schema, model, Types } from 'mongoose'
-import { UPR_STATUS } from './Constants'
+const mongoose = require('mongoose')
+
+const Schema = mongoose.Schema
+const model = mongoose.model
+const Types = mongoose.Types
+
+const Constants = require('./Constants')
+const UPR_STATUS = Constants.UPR_STATUS
 
 const UWFinancePurchaseSchema = new Schema(
     {
@@ -22,4 +28,9 @@ const UWFinancePurchaseSchema = new Schema(
     }
 )
 
-export default model('UWFinancePurchase', UWFinancePurchaseSchema)
+const UWFinancePurchase = mongoose.model(
+    'UWFinancePurchase',
+    UWFinancePurchaseSchema
+)
+
+module.exports = UWFinancePurchase
