@@ -10,7 +10,6 @@ const CreateUser = (props) => {
     const navigate = useNavigate()
 
     const handleLogout = async () => {
-        setError('')
         try {
             await logout()
             navigate('/login')

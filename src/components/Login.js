@@ -9,7 +9,6 @@ const Login = () => {
     const navigate = useNavigate()
 
     const handleLogin = async () => {
-        setError('')
         setLoading(true)
         try {
             await login()
