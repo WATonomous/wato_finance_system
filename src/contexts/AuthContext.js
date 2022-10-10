@@ -1,4 +1,10 @@
-import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth'
+import {
+    getAuth,
+    GoogleAuthProvider,
+    onAuthStateChanged,
+    signInWithPopup,
+    signOut,
+} from 'firebase/auth'
 import React, { useContext, useEffect, useState } from 'react'
 import app from '../firebase'
 
@@ -12,9 +18,9 @@ export const AuthProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState()
     const [loading, setLoading] = useState(true)
     const auth = getAuth(app)
-    
+
     const provider = new GoogleAuthProvider()
-    provider.setCustomParameters({prompt: 'select_account'})
+    provider.setCustomParameters({ prompt: 'select_account' })
 
     const login = () => {
         return signInWithPopup(auth, provider)
@@ -36,7 +42,7 @@ export const AuthProvider = ({ children }) => {
     const value = {
         currentUser,
         login,
-        logout
+        logout,
     }
 
     return (

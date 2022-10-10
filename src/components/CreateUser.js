@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
-import { useAuth } from "../contexts/AuthContext"
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react'
+import { useAuth } from '../contexts/AuthContext'
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 const CreateUser = (props) => {
-    const [error, setError] = useState("")
+    const [error, setError] = useState('')
     const [username, setUsername] = useState('')
     const { logout } = useAuth()
     const navigate = useNavigate()
-    
+
     const handleLogout = async () => {
-        setError("")
+        setError('')
         try {
             await logout()
-            navigate("/login")
+            navigate('/login')
         } catch {
-            setError("Failed to log out")
+            setError('Failed to log out')
         }
     }
 
@@ -33,11 +33,7 @@ const CreateUser = (props) => {
 
     return (
         <div>
-            <button
-                onClick={handleLogout}
-            >
-                Log Out
-            </button>
+            <button onClick={handleLogout}>Log Out</button>
             {error && <span>{error}</span>}
             <h3>Create New User</h3>
             <form onSubmit={onSubmit}>
