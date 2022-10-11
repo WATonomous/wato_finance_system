@@ -27,7 +27,7 @@ const fundingItemsRouter = require('./routes/FundingItems')
 const emailRouter = require('./routes/Emails')
 const sponsorshipFundsRouter = require('./routes/SponsorshipFunds')
 const personalPurchaseRouter = require('./routes/PersonalPurchases')
-const UWFinancePurchaseRouter = require('./models/UwFinancePurchaseRequest')
+const UWFinancePurchaseRouter = require('./models/UWFinancePurchaseRequest')
 
 app.use(express.json())
 
