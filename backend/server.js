@@ -27,6 +27,7 @@ const fundingItemsRouter = require('./routes/FundingItems')
 const emailRouter = require('./routes/Emails')
 const sponsorshipFundsRouter = require('./routes/SponsorshipFunds')
 const personalPurchaseRouter = require('./routes/PersonalPurchases')
+const UWFinancePurchaseRouter = require('./models/UwFinancePurchaseRequest')
 
 app.use(express.json())
 
@@ -35,6 +36,7 @@ app.use('/fundingitems', fundingItemsRouter)
 app.use('/personalpurchase', personalPurchaseRouter)
 app.use('/emails', emailRouter)
 app.use('/sponsorshipfunds', sponsorshipFundsRouter)
+app.use('/uwfinancepurchase', UWFinancePurchaseRouter)
 
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`)
