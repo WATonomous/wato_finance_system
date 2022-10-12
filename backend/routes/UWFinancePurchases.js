@@ -15,7 +15,6 @@ router.route('/:id').get((req, res) => {
 
 router.route('/').post((req, res) => {
     const { body } = req
-    console.log(body)
     const newUWFinancePurchase = new UWFinancePurchase(body)
     newUWFinancePurchase
         .save()
@@ -24,7 +23,6 @@ router.route('/').post((req, res) => {
 })
 
 router.route('/:id').put((req, res) => {
-    console.log(req.params.id)
     UWFinancePurchase.findByIdAndUpdate(req.params.id, req.body)
         .then(() => res.json(req.body))
         .catch((err) => res.status(400).json('Error: ' + err))
