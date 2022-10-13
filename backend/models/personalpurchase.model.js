@@ -25,6 +25,7 @@ const PersonalPurchaseSchema = new Schema(
     },
     {
         timestamps: true,
+        collection: 'PersonalPurchase',
     }
 )
 

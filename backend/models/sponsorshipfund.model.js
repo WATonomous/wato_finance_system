@@ -6,7 +6,7 @@ const Schema = mongoose.Schema
 const constants = require('./constants')
 const { SF_STATUS, ENDOWMENT_FUNDS } = constants
 
-const SponsorShipFundSchema = new Schema(
+const SponsorshipFundSchema = new Schema(
     {
         reporter_id: { type: String, required: true },
         status: { type: String, emum: SF_STATUS, required: true },
@@ -23,6 +23,7 @@ const SponsorShipFundSchema = new Schema(
     },
     {
         timestamps: true,
+        collection: 'SponsorshipFund',
     }
 )
 
