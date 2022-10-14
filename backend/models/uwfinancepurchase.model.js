@@ -8,6 +8,7 @@ const UPR_STATUS = Constants.UPR_STATUS
 
 const UWFinancePurchaseSchema = new Schema(
     {
+        ticket_id: { type: Number, required: true },
         reporter_id: { type: String, required: true },
         status: { type: String, enum: UPR_STATUS },
         fi_link: { type: Types.ObjectId, ref: 'FundingItem', required: true },
