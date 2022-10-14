@@ -1,5 +1,6 @@
 const router = require('express').Router()
 let FundingItem = require('../models/FundingItem.model')
+let FICounter = require('../models/AutoCounter.model')
 
 router.route('/').get((_, res) => {
     FundingItem.find()
@@ -14,13 +15,33 @@ router.route('/:id').get((req, res) => {
 })
 
 router.route('/').post((req, res) => {
-    const { body } = req
-    const newFundingItem = new FundingItem(body)
-
-    newFundingItem
-        .save()
-        .then(() => res.json(newFundingItem))
-        .catch((err) => res.status(400).json('Error: ' + err))
+    FICounter.findOneAndUpdate(
+        { _id: 'FundingItems' },
+        { $inc: { seq: 1 } },
+        { new: true },
+        (err, counter) => {
+            let ticketId;
+            if (counter == null) {
+                const newCounter = new FICounter({
+                    _id: 'FundingItems',
+                    seq: 1
+                })
+                newCounter.save()
+                ticketId = 1
+            }
+            else {
+                ticketId = counter.seq
+            }
+            const newFundingItem = new FundingItem({
+                ticket_id: ticketId,
+                ...req.body
+            })
+            newFundingItem
+                .save()
+                .then(() => res.json(newFundingItem))
+                .catch((err) => res.status(400).json('Error: ' + err))
+        }
+    )
 })
 
 router.route('/:id').put((req, res) => {

@@ -1,5 +1,6 @@
 const router = require('express').Router()
 let SponsorshipFund = require('../models/SponsorshipFund.model')
+let SFCounter = require('../models/AutoCounter.model')
 
 router.route('/').get((_, res) => {
     SponsorshipFund.find()
@@ -8,10 +9,33 @@ router.route('/').get((_, res) => {
 })
 
 router.route('/').post((req, res) => {
-    const { body } = req
-    SponsorshipFund.create(body)
-        .then((body) => res.status(200).json(body))
-        .catch((err) => res.status(400).json(err))
+    SFCounter.findOneAndUpdate(
+        { _id: 'SponsorshipFunds' },
+        { $inc: { seq: 1 } },
+        { new: true },
+        (err, counter) => {
+            let ticketId;
+            if (counter == null) {
+                const newCounter = new SFCounter({
+                    _id: 'SponsorshipFunds',
+                    seq: 1
+                })
+                newCounter.save()
+                ticketId = 1
+            }
+            else {
+                ticketId = counter.seq
+            }
+            const newSponsorshipFund = new SponsorshipFund({
+                ticket_id: ticketId,
+                ...req.body
+            })
+            newSponsorshipFund
+                .save()
+                .then(() => res.json(newSponsorshipFund))
+                .catch((err) => res.status(400).json('Error: ' + err))
+        }
+    )
 })
 
 router.route('/:id').put((req, res) => {

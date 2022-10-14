@@ -1,5 +1,6 @@
 const router = require('express').Router()
 let PersonalPurchase = require('../models/PersonalPurchaseRequest.model')
+let PPRCounter = require('../models/AutoCounter.model')
 
 router.route('/').get((_, res) => {
     PersonalPurchase.find()
@@ -14,14 +15,33 @@ router.route('/:id').get((req, res) => {
 })
 
 router.route('/').post((req, res) => {
-    const { body } = req
-    console.log(body)
-    const newPersonalPurchase = new PersonalPurchase(body)
-
-    newPersonalPurchase
-        .save()
-        .then(() => res.json(newPersonalPurchase))
-        .catch((err) => res.status(400).json('Error: ' + err))
+    PPRCounter.findOneAndUpdate(
+        { _id: 'PersonalPurchases' },
+        { $inc: { seq: 1 } },
+        { new: true },
+        (err, counter) => {
+            let ticketId;
+            if (counter == null) {
+                const newCounter = new PPRCounter({
+                    _id: 'PersonalPurchases',
+                    seq: 1
+                })
+                newCounter.save()
+                ticketId = 1
+            }
+            else {
+                ticketId = counter.seq
+            }
+            const newPersonalPurchase = new PersonalPurchase({
+                ticket_id: ticketId,
+                ...req.body
+            })
+            newPersonalPurchase
+                .save()
+                .then(() => res.json(newPersonalPurchase))
+                .catch((err) => res.status(400).json('Error: ' + err))
+        }
+    )
 })
 
 router.route('/:id').put((req, res) => {
