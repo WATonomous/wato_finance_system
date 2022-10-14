@@ -25,6 +25,7 @@ const createSponsorshipFund = (req, res) => {
         .then((body) => res.status(200).json(body))
         .catch((err) => res.status(400).json(err))
 }
+
 const updateSponsorshipFund = (req, res) => {
     const { id } = req.params
     const updatedFields = req.body
