@@ -20,21 +20,20 @@ router.route('/').post((req, res) => {
         { $inc: { seq: 1 } },
         { new: true },
         (err, counter) => {
-            let ticketId;
+            let ticketId
             if (counter == null) {
                 const newCounter = new UPRCounter({
                     _id: 'UWFinancePurchases',
-                    seq: 1
+                    seq: 1,
                 })
                 newCounter.save()
                 ticketId = 1
-            }
-            else {
+            } else {
                 ticketId = counter.seq
             }
             const newUWFinancePurchase = new UWFinancePurchase({
                 ticket_id: ticketId,
-                ...req.body
+                ...req.body,
             })
             newUWFinancePurchase
                 .save()

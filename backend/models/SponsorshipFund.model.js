@@ -9,7 +9,7 @@ const SponsorShipFundSchema = new Schema(
         ticket_id: { type: Number, required: true },
         reporter_id: { type: String, required: true },
         status: { type: String, emum: SF_STATUS, required: true },
-        organization: { type: String, enum: ENDOWMENT_FUNDS, required: true }, 
+        organization: { type: String, enum: ENDOWMENT_FUNDS, required: true },
         semester: { type: String, required: true },
         proposal_id: { type: String },
         funding_allocation: { type: Number, required: true },

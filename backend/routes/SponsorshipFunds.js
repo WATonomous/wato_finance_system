@@ -14,21 +14,20 @@ router.route('/').post((req, res) => {
         { $inc: { seq: 1 } },
         { new: true },
         (err, counter) => {
-            let ticketId;
+            let ticketId
             if (counter == null) {
                 const newCounter = new SFCounter({
                     _id: 'SponsorshipFunds',
-                    seq: 1
+                    seq: 1,
                 })
                 newCounter.save()
                 ticketId = 1
-            }
-            else {
+            } else {
                 ticketId = counter.seq
             }
             const newSponsorshipFund = new SponsorshipFund({
                 ticket_id: ticketId,
-                ...req.body
+                ...req.body,
             })
             newSponsorshipFund
                 .save()
