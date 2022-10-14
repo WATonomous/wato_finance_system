@@ -99,7 +99,9 @@ const PersonalPurchaseApproved = (purchaseRequestDetails) => {
             {issue.request_funding_amount} CAD, and more details about it can be
             found <a href={issue.toUrl}>here</a>. Once you have purchased this
             item, please click{' '}
-            <a href="https://finance.watonomous.ca/transition.php?transition_name=Purchased&issue={{issue.key}}">
+            <a
+                href={`$https://finance.watonomous.ca/transition.php?transition_name=Purchased&issue=${issue.key}`}
+            >
                 this link
             </a>{' '}
             to update its status on Jira, and provide you with an email with
