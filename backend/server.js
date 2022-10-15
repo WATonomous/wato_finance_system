@@ -15,8 +15,8 @@ console.log(uri)
 mongoose.connect(uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    socketTimeoutMS: 1000 * 5,
-    connectTimeoutMS: 1000 * 5,
+    socketTimeoutMS: 1000 * 20,
+    connectTimeoutMS: 1000 * 20,
 })
 
 const connection = mongoose.connection
