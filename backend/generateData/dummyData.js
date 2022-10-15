@@ -99,7 +99,7 @@ const UPR1 = {
     purchase_instructions: 'purchase fortnite',
     cost: 9.99,
     purchase_justification: '#1 Victory Royale!',
-    pickup_instruction: 'Buy it from ur mom',
+    pickup_instruction: 'IN FORTNITE CHAPTER 3 SEASON 4: PARADISE, A MYSTERIOUS SUBSTANCE HAS APPEARED ON THE ISLAND. CHROME WILL CONSUME ALL, CHROME WILL BE ALL. EMBRACE THE CHROME BY TURNING STRUCTURES CHROME, MAKING YOURSELF CHROME, AND PROVING THE POWER OF CHROME WEAPONS.',
     finance_team_approval: true,
     team_captain_approval: true,
     faculty_advisor_approval: true,
