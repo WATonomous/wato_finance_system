@@ -57,3 +57,13 @@ To start the frontend, in a different terminal run
 cd frontend
 npm start
 ```
+
+---
+
+## Generating dummy data
+
+To generate dummy data, in the terminal in the backend directory, run:
+
+```
+npm run generatedata
+```
