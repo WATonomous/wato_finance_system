@@ -33,3 +33,11 @@ cd backend
 npm install
 nodemon start
 ```
+
+# Generating dummy data
+
+To generate dummy data, in the terminal in the root directory, run:
+```
+npm run generatedata
+```
+ 
