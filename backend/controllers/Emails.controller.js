@@ -1,4 +1,3 @@
-const router = require('express').Router()
 const Mailjet = require('node-mailjet')
 
 const mailjet = Mailjet.apiConnect(
@@ -6,7 +5,7 @@ const mailjet = Mailjet.apiConnect(
     process.env.MAILJET_SECRET_KEY
 )
 
-router.route('/').post(async (req, res) => {
+const createEmail = async (req, res) => {
     const { body: emailDetail } = req
     console.log(emailDetail)
     const mailRequest = mailjet.post('send', { version: 'v3.1' }).request({
@@ -33,6 +32,8 @@ router.route('/').post(async (req, res) => {
     } catch (err) {
         res.status(500).send(`Uh oh bad email!: ${err}`)
     }
-})
+}
 
-module.exports = router
+module.exports = {
+    createEmail,
+}

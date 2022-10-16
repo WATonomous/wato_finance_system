@@ -35,7 +35,7 @@ app.use(express.json())
 
 app.use('/users', usersRouter)
 app.use('/fundingitems', fundingItemsRouter)
-app.use('/personalpurchase', personalPurchaseRouter)
+app.use('/personalpurchases', personalPurchaseRouter)
 app.use('/emails', emailRouter)
 app.use('/sponsorshipfunds', sponsorshipFundsRouter)
 app.use('/uwfinancepurchases', UWFinancePurchaseRouter)
