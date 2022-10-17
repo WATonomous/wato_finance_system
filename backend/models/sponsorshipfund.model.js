@@ -23,7 +23,7 @@ const SponsorshipFundSchema = new Schema(
     },
     {
         timestamps: true,
-        collection: 'SponsorshipFund',
+        collection: 'sponsorshipfund',
     }
 )
 
