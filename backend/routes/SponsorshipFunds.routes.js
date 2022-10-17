@@ -1,5 +1,5 @@
 const router = require('express').Router()
-let SponsorshipFundController = require('../controllers/SponsorshipFunds.controller')
+let SponsorshipFundController = require('../controllers/sponsorshipfunds.controller')
 
 router.route('/').get(SponsorshipFundController.getAllSponsorshipFunds)
 router.route('/').post(SponsorshipFundController.createSponsorshipFund)

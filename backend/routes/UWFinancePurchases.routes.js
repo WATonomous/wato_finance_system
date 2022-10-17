@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const UWFinancePurchaseController = require('../controllers/UWFinancePurchases.controller')
+const UWFinancePurchaseController = require('../controllers/uwfinancepurchases.controller')
 
 router.route('/').get(UWFinancePurchaseController.getAllUWFinancePurchases)
 router.route('/').post(UWFinancePurchaseController.createNewUWFinancePurchase)

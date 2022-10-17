@@ -25,11 +25,11 @@ connection.once('open', () => {
 })
 
 const usersRouter = require('./routes/users')
-const fundingItemsRouter = require('./routes/FundingItems')
-const emailRouter = require('./routes/Emails')
-const sponsorshipFundsRouter = require('./routes/SponsorshipFunds')
-const personalPurchaseRouter = require('./routes/PersonalPurchases')
-const UWFinancePurchaseRouter = require('./routes/UWFinancePurchases')
+const fundingItemsRouter = require('./routes/fundingitems.routes')
+const emailRouter = require('./routes/emails.routes')
+const sponsorshipFundsRouter = require('./routes/sponsorshipfunds.routes')
+const personalPurchaseRouter = require('./routes/personalpurchases.routes')
+const UWFinancePurchaseRouter = require('./routes/uwfinancepurchases.routes')
 
 app.use(express.json())
 
