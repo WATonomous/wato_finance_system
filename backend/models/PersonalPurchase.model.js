@@ -3,13 +3,13 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 const Types = mongoose.Types
 
-const Constants = require('./Constants')
-const UPR_STATUS = Constants.UPR_STATUS
+const Constants = require('./constants')
+const PPR_STATUS = Constants.PPR_STATUS
 
-const UWFinancePurchaseSchema = new Schema(
+const PersonalPurchaseSchema = new Schema(
     {
         reporter_id: { type: String, required: true },
-        status: { type: String, enum: UPR_STATUS },
+        status: { type: String, enum: PPR_STATUS },
         fi_link: { type: Types.ObjectId, ref: 'FundingItem', required: true },
         purchase_url: { type: String, required: true },
         purchase_instructions: { type: String, required: true },
@@ -27,9 +27,9 @@ const UWFinancePurchaseSchema = new Schema(
     }
 )
 
-const UWFinancePurchase = mongoose.model(
-    'UWFinancePurchase',
-    UWFinancePurchaseSchema
+const PersonalPurchase = mongoose.model(
+    'PersonalPurchase',
+    PersonalPurchaseSchema
 )
 
-module.exports = UWFinancePurchase
+module.exports = PersonalPurchase

@@ -1,20 +1,31 @@
-const router = require('express').Router()
-let SponsorshipFund = require('../models/SponsorshipFund.model')
+let SponsorshipFund = require('../models/sponsorshipfund.model')
 
-router.route('/').get((_, res) => {
+const getAllSponsorshipFunds = (_, res) => {
     SponsorshipFund.find()
         .then((SponsorshipFund) => res.json(SponsorshipFund))
         .catch((err) => res.status(400).json(err))
-})
+}
 
-router.route('/').post((req, res) => {
+const getSponsorshipFund = (req, res) => {
+    const { id } = req.params
+    SponsorshipFund.findById(id)
+        .then((sponsorshipFundToRetrieve) => {
+            if (!sponsorshipFundToRetrieve) {
+                res.status(404)
+                throw new Error('Sponsorship Fund not found')
+            }
+            res.status(200).json(sponsorshipFundToRetrieve)
+        })
+        .catch((err) => res.status(400).json(err))
+}
+
+const createSponsorshipFund = (req, res) => {
     const { body } = req
     SponsorshipFund.create(body)
         .then((body) => res.status(200).json(body))
         .catch((err) => res.status(400).json(err))
-})
-
-router.route('/:id').put((req, res) => {
+}
+const updateSponsorshipFund = (req, res) => {
     const { id } = req.params
     const updatedFields = req.body
     SponsorshipFund.findById(id)
@@ -34,9 +45,9 @@ router.route('/:id').put((req, res) => {
                 .catch((err) => res.status(400).json(err))
         })
         .catch((err) => res.status(400).json(err))
-})
+}
 
-router.route('/:id').delete((req, res) => {
+const deleteSponsorshipFund = (req, res) => {
     const { id } = req.params
     SponsorshipFund.findById(id)
         .then((sponsorshipFundToDelete) => {
@@ -48,19 +59,12 @@ router.route('/:id').delete((req, res) => {
             sponsorshipFundToDelete.remove()
         })
         .catch((err) => res.status(400).json(err))
-})
+}
 
-router.route('/:id').get((req, res) => {
-    const { id } = req.params
-    SponsorshipFund.findById(id)
-        .then((sponsorshipFundToRetrieve) => {
-            if (!sponsorshipFundToRetrieve) {
-                res.status(404)
-                throw new Error('Sponsorship Fund not found')
-            }
-            res.status(200).json(sponsorshipFundToRetrieve)
-        })
-        .catch((err) => res.status(400).json(err))
-})
-
-module.exports = router
+module.exports = {
+    getAllSponsorshipFunds,
+    createSponsorshipFund,
+    getSponsorshipFund,
+    updateSponsorshipFund,
+    deleteSponsorshipFund,
+}

@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 const Types = mongoose.Types
 
-const Constants = require('./Constants')
+const Constants = require('./constants')
 const PPR_STATUS = Constants.PPR_STATUS
 
 const PersonalPurchaseSchema = new Schema(
