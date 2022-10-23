@@ -1,4 +1,6 @@
 const mongoose = require('mongoose')
+const AutoIncrement = require('mongoose-sequence')(mongoose);
+
 const Types = mongoose.Types
 const Schema = mongoose.Schema
 const constants = require('./Constants')
@@ -6,7 +8,6 @@ const { SF_STATUS, ENDOWMENT_FUNDS } = constants
 
 const SponsorShipFundSchema = new Schema(
     {
-        ticket_id: { type: Number, required: true },
         reporter_id: { type: String, required: true },
         status: { type: String, emum: SF_STATUS, required: true },
         organization: { type: String, enum: ENDOWMENT_FUNDS, required: true },
@@ -25,6 +26,7 @@ const SponsorShipFundSchema = new Schema(
     }
 )
 
+SponsorShipFundSchema.plugin(AutoIncrement, { inc_field: 'sf_id' })
 const SponsorshipFund = mongoose.model('SponsorshipFund', SponsorShipFundSchema)
 
 module.exports = SponsorshipFund
