@@ -1,6 +1,5 @@
 const router = require('express').Router()
 let UWFinancePurchase = require('../models/UWFinancePurchaseRequest.model')
-let UPRCounter = require('../models/AutoCounter.model')
 
 router.route('/').get((_, res) => {
     UWFinancePurchase.find()
@@ -15,32 +14,13 @@ router.route('/:id').get((req, res) => {
 })
 
 router.route('/').post((req, res) => {
-    UPRCounter.findOneAndUpdate(
-        { _id: 'UWFinancePurchases' },
-        { $inc: { seq: 1 } },
-        { new: true },
-        (err, counter) => {
-            let ticketId
-            if (counter == null) {
-                const newCounter = new UPRCounter({
-                    _id: 'UWFinancePurchases',
-                    seq: 1,
-                })
-                newCounter.save()
-                ticketId = 1
-            } else {
-                ticketId = counter.seq
-            }
-            const newUWFinancePurchase = new UWFinancePurchase({
-                ticket_id: ticketId,
-                ...req.body,
-            })
-            newUWFinancePurchase
-                .save()
-                .then(() => res.json(newUWFinancePurchase))
-                .catch((err) => res.status(400).json('Error: ' + err))
-        }
-    )
+    const { body } = req
+    const newUWFinancePurchase  = new UWFinancePurchase(body)
+
+    newUWFinancePurchase 
+        .save()
+        .then(() => res.json(newUWFinancePurchase ))
+        .catch((err) => res.status(400).json('Error: ' + err))
 })
 
 router.route('/:id').put((req, res) => {

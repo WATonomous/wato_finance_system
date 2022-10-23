@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 const Schema = mongoose.Schema
 const Types = mongoose.Types
@@ -8,7 +9,6 @@ const PPR_STATUS = Constants.PPR_STATUS
 
 const PersonalPurchaseSchema = new Schema(
     {
-        ticket_id: { type: Number, required: true },
         reporter_id: { type: String, required: true },
         status: { type: String, enum: PPR_STATUS },
         fi_link: { type: Types.ObjectId, ref: 'FundingItem', required: true },
@@ -28,6 +28,7 @@ const PersonalPurchaseSchema = new Schema(
     }
 )
 
+PersonalPurchaseSchema.plugin(AutoIncrement, { inc_field: 'ppr_id' })
 const PersonalPurchase = mongoose.model(
     'PersonalPurchase',
     PersonalPurchaseSchema
