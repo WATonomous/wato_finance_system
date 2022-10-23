@@ -312,11 +312,7 @@ const SubmitReimbursementClaimToSponsorshipFund = (issueDetails) => {
     const htmlComponent = (
         <div>
             Hi, An award is ready to be claimed. Please{' '}
-            <a
-                href={
-                    'https://finance.watonomous.ca/claim.php?issue=' + `${key}`
-                }
-            >
+            <a href={`https://finance.watonomous.ca/claim.php?issue=${key}`}>
                 visit this link
             </a>{' '}
             to view items which need to be claimed{' '}
