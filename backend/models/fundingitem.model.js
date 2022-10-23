@@ -8,7 +8,8 @@ const fundingItemSchema = new Schema(
         sf_link: {
             type: mongoose.Types.ObjectId,
             ref: 'SponsorshipFund',
-        }, // required: true
+            required: true,
+        }, 
         ppr_links: [{ type: mongoose.Types.ObjectId, ref: 'PersonalPurchase' }],
         upr_links: [
             { type: mongoose.Types.ObjectId, ref: 'UWFinancePurchase' },
