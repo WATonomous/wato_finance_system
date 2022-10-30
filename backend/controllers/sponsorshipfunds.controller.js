@@ -21,9 +21,12 @@ const getSponsorshipFund = (req, res) => {
 
 const createSponsorshipFund = (req, res) => {
     const { body } = req
-    SponsorshipFund.create(body)
-        .then((body) => res.status(200).json(body))
-        .catch((err) => res.status(400).json(err))
+    const newSponsorshipFund = new SponsorshipFund(body)
+
+    newSponsorshipFund
+        .save()
+        .then(() => res.json(newSponsorshipFund))
+        .catch((err) => res.status(400).json('Error: ' + err))
 }
 
 const updateSponsorshipFund = (req, res) => {
