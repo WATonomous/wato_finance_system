@@ -1,10 +1,12 @@
 const router = require('express').Router()
-const UWFinancePurchaseController = require('../controllers/uwfinancepurchases.controller')
+const UWFinancePurchasesController = require('../controllers/uwfinancepurchases.controller')
 
-router.route('/').get(UWFinancePurchaseController.getAllUWFinancePurchases)
-router.route('/').post(UWFinancePurchaseController.createNewUWFinancePurchase)
-router.route('/:id').get(UWFinancePurchaseController.getUWFinancePurchase)
-router.route('/:id').put(UWFinancePurchaseController.updateUWFinancePurchase)
-router.route('/:id').delete(UWFinancePurchaseController.deleteUWFinancePurchase)
+router.route('/').get(UWFinancePurchasesController.getAllUWFinancePurchases)
+router.route('/').post(UWFinancePurchasesController.createNewUWFinancePurchase)
+router.route('/:id').get(UWFinancePurchasesController.getUWFinancePurchase)
+router.route('/:id').put(UWFinancePurchasesController.updateUWFinancePurchase)
+router
+    .route('/:id')
+    .delete(UWFinancePurchasesController.deleteUWFinancePurchase)
 
 module.exports = router
