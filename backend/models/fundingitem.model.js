@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const AutoIncrement = require('mongoose-sequence')(mongoose);
+const AutoIncrement = require('mongoose-sequence')(mongoose)
 
 const Schema = mongoose.Schema
 
@@ -9,7 +9,7 @@ const fundingItemSchema = new Schema(
             type: mongoose.Types.ObjectId,
             ref: 'SponsorshipFund',
             required: true,
-        }, 
+        },
         ppr_links: [{ type: mongoose.Types.ObjectId, ref: 'PersonalPurchase' }],
         upr_links: [
             { type: mongoose.Types.ObjectId, ref: 'UWFinancePurchase' },
