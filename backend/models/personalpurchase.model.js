@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const AutoIncrement = require('mongoose-sequence')(mongoose)
 
 const Schema = mongoose.Schema
 const Types = mongoose.Types
@@ -27,6 +28,7 @@ const PersonalPurchaseSchema = new Schema(
     }
 )
 
+PersonalPurchaseSchema.plugin(AutoIncrement, { inc_field: 'ppr_id' })
 const PersonalPurchase = mongoose.model(
     'PersonalPurchase',
     PersonalPurchaseSchema

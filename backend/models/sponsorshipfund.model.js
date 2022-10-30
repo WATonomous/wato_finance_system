@@ -1,4 +1,6 @@
 const mongoose = require('mongoose')
+const AutoIncrement = require('mongoose-sequence')(mongoose)
+
 const Types = mongoose.Types
 const Schema = mongoose.Schema
 const constants = require('./constants')
@@ -24,6 +26,7 @@ const SponsorShipFundSchema = new Schema(
     }
 )
 
+SponsorShipFundSchema.plugin(AutoIncrement, { inc_field: 'sf_id' })
 const SponsorshipFund = mongoose.model('SponsorshipFund', SponsorShipFundSchema)
 
 module.exports = SponsorshipFund

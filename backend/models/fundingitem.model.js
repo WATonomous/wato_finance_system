@@ -1,10 +1,15 @@
 const mongoose = require('mongoose')
+const AutoIncrement = require('mongoose-sequence')(mongoose)
 
 const Schema = mongoose.Schema
 
 const fundingItemSchema = new Schema(
     {
-        sf_link: { type: mongoose.Types.ObjectId, ref: 'SponsorshipFund' }, // add required:true
+        sf_link: {
+            type: mongoose.Types.ObjectId,
+            ref: 'SponsorshipFund',
+            required: true,
+        },
         ppr_links: [{ type: mongoose.Types.ObjectId, ref: 'PersonalPurchase' }],
         upr_links: [
             { type: mongoose.Types.ObjectId, ref: 'UWFinancePurchase' },
@@ -19,6 +24,7 @@ const fundingItemSchema = new Schema(
     }
 )
 
+fundingItemSchema.plugin(AutoIncrement, { inc_field: 'fi_id' })
 const FundingItem = mongoose.model('FundingItem', fundingItemSchema)
 
 module.exports = FundingItem
