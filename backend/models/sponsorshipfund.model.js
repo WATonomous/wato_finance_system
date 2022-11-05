@@ -27,7 +27,7 @@ const SponsorshipFundSchema = new Schema(
     }
 )
 
-SponsorShipFundSchema.plugin(AutoIncrement, { inc_field: 'sf_id' })
-const SponsorshipFund = mongoose.model('SponsorshipFund', SponsorShipFundSchema)
+SponsorshipFundSchema.plugin(AutoIncrement, { inc_field: 'sf_id' })
+const SponsorshipFund = mongoose.model('SponsorshipFund', SponsorshipFundSchema)
 
 module.exports = SponsorshipFund

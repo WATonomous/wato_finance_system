@@ -25,7 +25,7 @@ const FundingItemSchema = new Schema(
     }
 )
 
-fundingItemSchema.plugin(AutoIncrement, { inc_field: 'fi_id' })
-const FundingItem = mongoose.model('FundingItem', fundingItemSchema)
+FundingItemSchema.plugin(AutoIncrement, { inc_field: 'fi_id' })
+const FundingItem = mongoose.model('FundingItem', FundingItemSchema)
 
 module.exports = FundingItem

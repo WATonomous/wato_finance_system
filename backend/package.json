@@ -4,7 +4,7 @@
     "description": "",
     "main": "server.js",
     "scripts": {
-        "generatedata": "node generateData/generateData.js"
+        "generatedata": "node utils/generateDummyData.js"
     },
     "keywords": [],
     "author": "",
