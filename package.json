@@ -1,4 +1,6 @@
 {
+    "name": "wato_finance_system",
+    "version": "0.1.0",
     "scripts": {
         "postinstall": "(cd backend && npm i); (cd frontend && npm i)"
     },
