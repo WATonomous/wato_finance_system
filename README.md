@@ -6,11 +6,6 @@ After you clone the repository, run
 npm install
 ```
 
-<<<<<<< HEAD
-=======
-to install all packages
-
->>>>>>> 4e3655d (updated readme)
 ---
 ## Backend Configuration
 
