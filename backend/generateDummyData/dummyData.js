@@ -63,7 +63,7 @@ const PPR1 = {
     purchase_url: 'https://store.steampowered.com/app/945360/Among_Us/',
     purchase_instructions:
         'Buy Among Us, An online and local party game of teamwork and betrayal for 4-15 players...in space!',
-    cost: 5.70,
+    cost: 5.7,
     purchase_justification: 'Need to find the impostor',
     pickup_instruction: 'Buy it on steam',
     finance_team_approval: true,
@@ -99,7 +99,8 @@ const UPR1 = {
     purchase_instructions: 'purchase fortnite',
     cost: 9.99,
     purchase_justification: '#1 Victory Royale!',
-    pickup_instruction: 'IN FORTNITE CHAPTER 3 SEASON 4: PARADISE, A MYSTERIOUS SUBSTANCE HAS APPEARED ON THE ISLAND. CHROME WILL CONSUME ALL, CHROME WILL BE ALL. EMBRACE THE CHROME BY TURNING STRUCTURES CHROME, MAKING YOURSELF CHROME, AND PROVING THE POWER OF CHROME WEAPONS.',
+    pickup_instruction:
+        'IN FORTNITE CHAPTER 3 SEASON 4: PARADISE, A MYSTERIOUS SUBSTANCE HAS APPEARED ON THE ISLAND. CHROME WILL CONSUME ALL, CHROME WILL BE ALL. EMBRACE THE CHROME BY TURNING STRUCTURES CHROME, MAKING YOURSELF CHROME, AND PROVING THE POWER OF CHROME WEAPONS.',
     finance_team_approval: true,
     team_captain_approval: true,
     faculty_advisor_approval: true,
