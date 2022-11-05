@@ -5,7 +5,6 @@
         "postinstall": "(cd backend && npm i); (cd frontend && npm i)"
     },
     "dependencies": {
-        "eslint": "^8.26.0",
         "prettier": "^2.7.1"
     }
 }
