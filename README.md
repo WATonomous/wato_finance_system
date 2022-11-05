@@ -10,7 +10,6 @@ npm start
 ```
 
 To setup backend,
-create a `.env` file in the root folder
 
 create a `.env` file in the "backend" folder
 
