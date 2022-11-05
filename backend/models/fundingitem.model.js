@@ -3,7 +3,7 @@ const AutoIncrement = require('mongoose-sequence')(mongoose)
 
 const Schema = mongoose.Schema
 
-const fundingItemSchema = new Schema(
+const FundingItemSchema = new Schema(
     {
         sf_link: {
             type: mongoose.Types.ObjectId,
@@ -21,10 +21,11 @@ const fundingItemSchema = new Schema(
     },
     {
         timestamps: true,
+        collection: 'fundingitem',
     }
 )
 
-fundingItemSchema.plugin(AutoIncrement, { inc_field: 'fi_id' })
-const FundingItem = mongoose.model('FundingItem', fundingItemSchema)
+FundingItemSchema.plugin(AutoIncrement, { inc_field: 'fi_id' })
+const FundingItem = mongoose.model('FundingItem', FundingItemSchema)
 
 module.exports = FundingItem
