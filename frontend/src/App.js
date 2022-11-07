@@ -19,7 +19,7 @@ const App = () => {
                         <Route path="/login" element={<Login />} />
                     </Route>
                     <Route element={<PrivateRoute />}>
-                        <Route exact path="/" element={<CreateUser />}/>
+                        <Route exact path="/" element={<CreateUser />} />
                         <Route path="/user" element={<CreateUser />} />
                         {/* <Route path="/claim" element={ClaimSummary} /> */}
                     </Route>
