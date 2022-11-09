@@ -27,6 +27,7 @@ connection.once('open', () => {
     UWFinancePurchase.createCollection()
     PersonalPurchaseRequest.createCollection()
 
+
     const promise1 = SponsorshipFund.insertMany([dummyData.SF1, dummyData.SF2])
         .then(function () {
             console.log('Sponsorship Fund data generated')
