@@ -33,5 +33,5 @@ const getUWFinancePurchasesByFundingItem = async (funding_item_id) => {
 module.exports = {
     getFundingItemsBySponsorshipFund,
     getPersonalPurchasesByFundingItem,
-    getUWFinancePurchasesByFundingItem
+    getUWFinancePurchasesByFundingItem,
 }

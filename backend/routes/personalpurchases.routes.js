@@ -6,5 +6,8 @@ router.route('/').post(PersonalPurchasesController.createPersonalPurchase)
 router.route('/:id').get(PersonalPurchasesController.getPersonalPurchase)
 router.route('/:id').put(PersonalPurchasesController.updatePersonalPurchase)
 router.route('/:id').delete(PersonalPurchasesController.deletePersonalPurchase)
+router
+    .route('/getsponsorshipfund/:id')
+    .get(PersonalPurchasesController.getSponsorshipFund)
 
 module.exports = router

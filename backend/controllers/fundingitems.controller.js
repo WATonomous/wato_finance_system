@@ -1,4 +1,4 @@
-let FundingItem = require('../models/fundingitem.model')
+const FundingItem = require('../models/fundingitem.model')
 
 const getAllFundingItems = (_, res) => {
     FundingItem.find()

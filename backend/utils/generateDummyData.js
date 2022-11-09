@@ -2,10 +2,10 @@ const mongoose = require('mongoose')
 
 require('dotenv').config()
 
-let SponsorshipFund = require('../models/sponsorshipfund.model')
-let FundingItem = require('../models/fundingitem.model')
-let UWFinancePurchase = require('../models/uwfinancepurchase.model')
-let PersonalPurchaseRequest = require('../models/personalpurchase.model')
+const SponsorshipFund = require('../models/sponsorshipfund.model')
+const FundingItem = require('../models/fundingitem.model')
+const UWFinancePurchase = require('../models/uwfinancepurchase.model')
+const PersonalPurchaseRequest = require('../models/personalpurchase.model')
 
 const dummyData = require('./dummyData')
 
@@ -26,7 +26,6 @@ connection.once('open', () => {
     FundingItem.createCollection()
     UWFinancePurchase.createCollection()
     PersonalPurchaseRequest.createCollection()
-
 
     const promise1 = SponsorshipFund.insertMany([dummyData.SF1, dummyData.SF2])
         .then(function () {
