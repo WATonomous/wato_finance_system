@@ -1,6 +1,7 @@
 import React from 'react'
 import { AuthProvider } from './contexts/AuthContext'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { PrivateRoute, LoggedInRedirect } from './contexts/CustomRoutes'
 
 import './App.css'
 
@@ -14,14 +15,14 @@ const App = () => {
         <BrowserRouter>
             <AuthProvider>
                 <Routes>
-                    <Route
-                        exact
-                        path="/"
-                        element={<Navigate replace to="/login" />}
-                    />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/user" element={<CreateUser />} />
-                    {/* <Route path="/claim" element={ClaimSummary} /> */}
+                    <Route element={<LoggedInRedirect />}>
+                        <Route path="/login" element={<Login />} />
+                    </Route>
+                    <Route element={<PrivateRoute />}>
+                        <Route exact path="/" element={<CreateUser />} />
+                        <Route path="/user" element={<CreateUser />} />
+                        {/* <Route path="/claim" element={ClaimSummary} /> */}
+                    </Route>
                 </Routes>
             </AuthProvider>
         </BrowserRouter>
