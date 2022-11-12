@@ -8,5 +8,8 @@ router.route('/:id').put(UWFinancePurchasesController.updateUWFinancePurchase)
 router
     .route('/:id')
     .delete(UWFinancePurchasesController.deleteUWFinancePurchase)
+router
+    .route('/getsponsorshipfund/:id')
+    .get(UWFinancePurchasesController.getSponsorshipFund)
 
 module.exports = router

@@ -1,4 +1,6 @@
-let PersonalPurchase = require('../models/personalpurchase.model')
+const PersonalPurchase = require('../models/personalpurchase.model')
+const FundingItem = require('../models/fundingitem.model')
+const SponsorshipFund = require('../models/sponsorshipfund.model')
 
 const getAllPersonalPurchases = (_, res) => {
     PersonalPurchase.find()
@@ -35,6 +37,16 @@ const deletePersonalPurchase = (req, res) => {
         .then(() => res.json('PersonalPurchase deleted.'))
         .catch((err) => res.status(400).json('Error: ' + err))
 }
+const getSponsorshipFund = async (req, res) => {
+    const { id } = req.params
+    const personalPurchase = await PersonalPurchase.findById(id)
+    console.log('personal purchase')
+    console.log(personalPurchase)
+    const fundingItem = await FundingItem.findById(personalPurchase.fi_link)
+    console.log('funding item')
+    console.log(fundingItem)
+    res.json(await SponsorshipFund.findById(fundingItem.sf_link))
+}
 
 module.exports = {
     getAllPersonalPurchases,
@@ -42,4 +54,5 @@ module.exports = {
     createPersonalPurchase,
     updatePersonalPurchase,
     deletePersonalPurchase,
+    getSponsorshipFund,
 }

@@ -1,4 +1,9 @@
-let SponsorshipFund = require('../models/sponsorshipfund.model')
+const SponsorshipFund = require('../models/sponsorshipfund.model')
+const {
+    getFundingItemsBySponsorshipFund,
+    getPersonalPurchasesByFundingItem,
+    getUWFinancePurchasesByFundingItem,
+} = require('../helpers.js')
 
 const getAllSponsorshipFunds = (_, res) => {
     SponsorshipFund.find()
@@ -19,6 +24,27 @@ const getSponsorshipFund = (req, res) => {
         .catch((err) => res.status(400).json(err))
 }
 
+// this function reaches all the way down to the children
+const getAllChildren = async (req, res) => {
+    const { id } = req.params
+    const fundingItems = await getFundingItemsBySponsorshipFund(id)
+    const allData = await Promise.all(
+        fundingItems.map(async (fundingItem) => {
+            const personalPurchases = await getPersonalPurchasesByFundingItem(
+                fundingItem
+            )
+            const uwFinancePurchases = await getUWFinancePurchasesByFundingItem(
+                fundingItem
+            )
+            return {
+                ...fundingItem.toObject(),
+                personalPurchases,
+                uwFinancePurchases,
+            }
+        })
+    )
+    res.json(allData)
+}
 const createSponsorshipFund = (req, res) => {
     const { body } = req
     const newSponsorshipFund = new SponsorshipFund(body)
@@ -71,4 +97,5 @@ module.exports = {
     getSponsorshipFund,
     updateSponsorshipFund,
     deleteSponsorshipFund,
+    getAllChildren,
 }
