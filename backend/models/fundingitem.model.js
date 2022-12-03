@@ -21,7 +21,7 @@ const FundingItemSchema = new Schema(
     },
     {
         timestamps: true,
-        collection: 'fundingitem',
+        collection: 'fundingitems',
     }
 )
 
