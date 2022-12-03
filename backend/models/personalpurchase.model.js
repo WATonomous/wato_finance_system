@@ -9,9 +9,14 @@ const PPR_STATUS = Constants.PPR_STATUS
 
 const PersonalPurchaseSchema = new Schema(
     {
+        _id: { type: Number },
         reporter_id: { type: String, required: true },
         status: { type: String, enum: PPR_STATUS },
-        fi_link: { type: Types.ObjectId, ref: 'FundingItem', required: true },
+        fi_link: { 
+            type: Types.ObjectId, 
+            ref: 'FundingItem', 
+            required: true,
+        },
         purchase_url: { type: String, required: true },
         purchase_instructions: { type: String, required: true },
         cost: { type: Number, required: true },
@@ -24,12 +29,13 @@ const PersonalPurchaseSchema = new Schema(
         po_number: { type: String },
     },
     {
+        _id: false,
         timestamps: true,
         collection: 'personalpurchases',
     }
 )
 
-PersonalPurchaseSchema.plugin(AutoIncrement, { inc_field: 'ppr_id' })
+PersonalPurchaseSchema.plugin(AutoIncrement, { id: 'PPRcounter' })
 const PersonalPurchase = mongoose.model(
     'PersonalPurchase',
     PersonalPurchaseSchema

@@ -9,6 +9,7 @@ const UPR_STATUS = Constants.UPR_STATUS
 
 const UWFinancePurchaseSchema = new Schema(
     {
+        _id: { type: Number },
         reporter_id: { type: String, required: true },
         status: { type: String, enum: UPR_STATUS },
         fi_link: { type: Types.ObjectId, ref: 'FundingItem', required: true },
@@ -24,12 +25,13 @@ const UWFinancePurchaseSchema = new Schema(
         po_number: { type: String },
     },
     {
+        _id: false,
         timestamps: true,
         collection: 'uwfinancepurchases',
     }
 )
 
-UWFinancePurchaseSchema.plugin(AutoIncrement, { inc_field: 'upr_id' })
+UWFinancePurchaseSchema.plugin(AutoIncrement, { id: 'UPRcounter' })
 const UWFinancePurchase = mongoose.model(
     'UWFinancePurchase',
     UWFinancePurchaseSchema

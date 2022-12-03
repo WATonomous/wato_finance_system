@@ -8,6 +8,7 @@ const { SF_STATUS, ENDOWMENT_FUNDS } = constants
 
 const SponsorshipFundSchema = new Schema(
     {
+        _id: { type: Number },
         reporter_id: { type: String, required: true },
         status: { type: String, emum: SF_STATUS, required: true },
         organization: { type: String, enum: ENDOWMENT_FUNDS, required: true },
@@ -22,12 +23,13 @@ const SponsorshipFundSchema = new Schema(
         fi_links: [{ type: Types.ObjectId, ref: 'FundingItem' }],
     },
     {
+        _id: false,
         timestamps: true,
         collection: 'sponsorshipfunds',
     }
 )
 
-SponsorshipFundSchema.plugin(AutoIncrement, { inc_field: 'sf_id' })
+SponsorshipFundSchema.plugin(AutoIncrement, { id: 'SFcounter' })
 const SponsorshipFund = mongoose.model('SponsorshipFund', SponsorshipFundSchema)
 
 module.exports = SponsorshipFund
