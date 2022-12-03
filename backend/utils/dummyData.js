@@ -5,7 +5,6 @@
 const mongoose = require('mongoose')
 
 const SF1 = {
-    _id: mongoose.Types.ObjectId(1),
     reporter_id: '123',
     status: 'ALLOCATED',
     organization: 'WEEF',
@@ -21,7 +20,6 @@ const SF1 = {
 }
 
 const SF2 = {
-    _id: mongoose.Types.ObjectId(2),
     reporter_id: '1234',
     status: 'CLAIM_SUBMITTED',
     organization: 'MEF',

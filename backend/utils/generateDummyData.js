@@ -18,7 +18,6 @@ mongoose.connect(uri, {
 // that automatically creates (at least 2) sponsorship funds, with associated funding items, and associated uw finance purchases and personal purchases.
 
 const connection = mongoose.connection
-
 connection.once('open', () => {
     console.log('MongoDB database connection established successfully')
 
@@ -26,22 +25,31 @@ connection.once('open', () => {
     FundingItem.createCollection()
     UWFinancePurchase.createCollection()
     PersonalPurchaseRequest.createCollection()
+    generateFunds()
+})
 
-    const promise1 = SponsorshipFund.insertMany([dummyData.SF1, dummyData.SF2])
-        .then(function () {
-            console.log('Sponsorship Fund data generated')
-        })
-        .catch(function (error) {
-            console.log(error)
-        })
+const generateFunds = async () => {
+    // create parent sponsorshipfunds
+    const { insertedIds: sponsorhipFundIds } = await SponsorshipFund.insertMany(
+        [dummyData.SF1, dummyData.SF2]
+    )
+    console.log('sponsorship funds created')
 
-    const promise2 = FundingItem.insertMany([dummyData.FI1, dummyData.FI2])
-        .then(function () {
-            console.log('Funding data generated')
-        })
-        .catch(function (error) {
-            console.log(error)
-        })
+    const { insertedIds: fundingItemIds} = await FundingItem.insertMany([
+        { ...dummyData.FI1, sf_links: [sponsorshipFundIds[0]] },
+        { ...dummyData.FI2, sf_links: [sponsorshipFundIds[1]] },
+    ])
+    console.log('funding items created')
+
+    // update first sponsorshipfund to be linked to first funding item and second sponsorshipfund to be linked to second funding item
+    await SponsorshipFund.updateOne(
+        { _id: sponsorshipFundIds[0] },
+        { $set: { fi_links: [fundingItemIds[0]] } }
+    )
+    await SponsorshipFund.updateOne(
+        { _id: sponsorshipFundIds[1] },
+        { $set: { fi_links: [fundingItemIds[1]] } }
+    )
 
     const promise3 = PersonalPurchaseRequest.insertMany([
         dummyData.PPR1,
@@ -65,9 +73,11 @@ connection.once('open', () => {
             console.log(error)
         })
 
-    Promise.all([promise1, promise2, promise3, promise4]).then(function () {
-        connection.close(function () {
-            console.log('MongoDB database connection closed')
-        })
-    })
-})
+    return Promise.all([promise1, promise2, promise3, promise4]).then(
+        function () {
+            connection.close(function () {
+                console.log('MongoDB database connection closed')
+            })
+        }
+    )
+}
