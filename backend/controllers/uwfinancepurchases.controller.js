@@ -14,13 +14,18 @@ const getUWFinancePurchase = (req, res) => {
         .catch((err) => res.status(400).json('Error: ' + err))
 }
 
-const createNewUWFinancePurchase = (req, res) => {
+const createNewUWFinancePurchase = async (req, res) => {
     const { body } = req
     const newUWFinancePurchase = new UWFinancePurchase(body)
-    newUWFinancePurchase
-        .save()
-        .then(() => res.json(newUWFinancePurchase))
-        .catch((err) => res.status(400).json('Error: ' + err))
+    try {
+        const newUWFP = await newUWFinancePurchase.save()
+        await FundingItem.findByIdAndUpdate(newUWFP.fi_link, {
+            $push: { upr_links: newUWFP._id },
+        })
+        res.json(newUWFP)
+    } catch (err) {
+        res.status(400).json('Error: ' + err)
+    }
 }
 
 const updateUWFinancePurchase = (req, res) => {
@@ -29,10 +34,16 @@ const updateUWFinancePurchase = (req, res) => {
         .catch((err) => res.status(400).json('Error: ' + err))
 }
 
-const deleteUWFinancePurchase = (req, res) => {
-    UWFinancePurchase.findByIdAndDelete(req.params.id)
-        .then(() => res.json('UWFinancePurchase deleted.'))
-        .catch((err) => res.status(400).json('Error: ' + err))
+const deleteUWFinancePurchase = async (req, res) => {
+    try {
+        await UWFinancePurchase.findByIdAndDelete(req.params.id)
+        FundingItem.findByIdAndUpdate(req.body.fi_link, {
+            $pull: { upr_links: req.params.id },
+        })
+    } catch (err) {
+        res.status(400).json('Error: ' + err)
+    }
+    res.json('UW Finance Purchase deleted.')
 }
 
 const getSponsorshipFund = async (req, res) => {

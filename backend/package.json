@@ -15,6 +15,7 @@
         "express": "^4.18.1",
         "mongoose": "^6.5.5",
         "mongoose-sequence": "^5.3.1",
+        "node-fetch": "^2.6.7",
         "node-mailjet": "^5.1.1"
     }
 }

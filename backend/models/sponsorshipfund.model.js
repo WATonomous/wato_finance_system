@@ -20,7 +20,7 @@ const SponsorshipFundSchema = new Schema(
         proposal_url: { type: String },
         presentation_url: { type: String },
         claim_deadline: { type: Date, required: true },
-        fi_links: [{ type: Types.ObjectId, ref: 'FundingItem' }],
+        fi_links: [{ type: Number, ref: 'FundingItem' }],
     },
     {
         _id: false,

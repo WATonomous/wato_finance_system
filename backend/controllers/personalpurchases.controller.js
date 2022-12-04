@@ -14,15 +14,19 @@ const getPersonalPurchase = (req, res) => {
         .catch((err) => res.status(400).json('Error: ' + err))
 }
 
-const createPersonalPurchase = (req, res) => {
+const createPersonalPurchase = async (req, res) => {
     const { body } = req
-    console.log(body)
     const newPersonalPurchase = new PersonalPurchase(body)
 
-    newPersonalPurchase
-        .save()
-        .then(() => res.json(newPersonalPurchase))
-        .catch((err) => res.status(400).json('Error: ' + err))
+    try {
+        const newPP = await newPersonalPurchase.save()
+        await FundingItem.findByIdAndUpdate(newPP.fi_link, {
+            $push: { ppr_links: newPP._id },
+        })
+        res.json(newPP)
+    } catch (err) {
+        res.status(400).json('Error: ' + err)
+    }
 }
 
 const updatePersonalPurchase = (req, res) => {
@@ -32,19 +36,21 @@ const updatePersonalPurchase = (req, res) => {
         .catch((err) => res.status(400).json('Error: ' + err))
 }
 
-const deletePersonalPurchase = (req, res) => {
-    PersonalPurchase.findByIdAndDelete(req.params.id)
-        .then(() => res.json('PersonalPurchase deleted.'))
-        .catch((err) => res.status(400).json('Error: ' + err))
+const deletePersonalPurchase = async (req, res) => {
+    try {
+        await PersonalPurchase.findByIdAndDelete(req.params.id)
+        FundingItem.findByIdAndUpdate(req.body.fi_link, {
+            $pull: { ppr_links: req.params.id },
+        })
+        res.json('PersonalPurchase deleted.')
+    } catch (err) {
+        res.status(400).json('Error: ' + err)
+    }
 }
 const getSponsorshipFund = async (req, res) => {
     const { id } = req.params
     const personalPurchase = await PersonalPurchase.findById(id)
-    console.log('personal purchase')
-    console.log(personalPurchase)
     const fundingItem = await FundingItem.findById(personalPurchase.fi_link)
-    console.log('funding item')
-    console.log(fundingItem)
     res.json(await SponsorshipFund.findById(fundingItem.sf_link))
 }
 

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const AutoIncrement = require('mongoose-sequence')(mongoose)
 
-const { Schema, Types } = mongoose
+const { Schema } = mongoose
 
 const Constants = require('./constants')
 const PPR_STATUS = Constants.PPR_STATUS
@@ -12,7 +12,7 @@ const PersonalPurchaseSchema = new Schema(
         reporter_id: { type: String, required: true },
         status: { type: String, enum: PPR_STATUS },
         fi_link: {
-            type: Types.ObjectId,
+            type: Number,
             ref: 'FundingItem',
             required: true,
         },
