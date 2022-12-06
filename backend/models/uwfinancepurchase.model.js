@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const AutoIncrement = require('mongoose-sequence')(mongoose)
 
-const { Schema, Types } = mongoose
+const { Schema } = mongoose
 
 const Constants = require('./constants')
 const UPR_STATUS = Constants.UPR_STATUS

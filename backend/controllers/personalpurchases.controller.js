@@ -19,11 +19,11 @@ const createPersonalPurchase = async (req, res) => {
     const newPersonalPurchase = new PersonalPurchase(body)
 
     try {
-        const newPP = await newPersonalPurchase.save()
-        await FundingItem.findByIdAndUpdate(newPP.fi_link, {
-            $push: { ppr_links: newPP._id },
+        const newPPR = await newPersonalPurchase.save()
+        await FundingItem.findByIdAndUpdate(newPPR.fi_link, {
+            $push: { ppr_links: newPPR._id },
         })
-        res.json(newPP)
+        res.json(newPPR)
     } catch (err) {
         res.status(400).json('Error: ' + err)
     }

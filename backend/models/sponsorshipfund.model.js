@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const AutoIncrement = require('mongoose-sequence')(mongoose)
 
-const { Schema, Types } = mongoose
+const { Schema } = mongoose
 
 const constants = require('./constants')
 const { SF_STATUS, ENDOWMENT_FUNDS } = constants

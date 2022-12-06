@@ -18,11 +18,11 @@ const createNewUWFinancePurchase = async (req, res) => {
     const { body } = req
     const newUWFinancePurchase = new UWFinancePurchase(body)
     try {
-        const newUWFP = await newUWFinancePurchase.save()
-        await FundingItem.findByIdAndUpdate(newUWFP.fi_link, {
-            $push: { upr_links: newUWFP._id },
+        const newUPR = await newUWFinancePurchase.save()
+        await FundingItem.findByIdAndUpdate(newUPR.fi_link, {
+            $push: { upr_links: newUPR._id },
         })
-        res.json(newUWFP)
+        res.json(newUPR)
     } catch (err) {
         res.status(400).json('Error: ' + err)
     }
@@ -40,17 +40,17 @@ const deleteUWFinancePurchase = async (req, res) => {
         FundingItem.findByIdAndUpdate(req.body.fi_link, {
             $pull: { upr_links: req.params.id },
         })
+        res.json('UW Finance Purchase deleted.')
     } catch (err) {
         res.status(400).json('Error: ' + err)
     }
-    res.json('UW Finance Purchase deleted.')
 }
 
 const getSponsorshipFund = async (req, res) => {
     const { id } = req.params
     const uwFinancePurchase = await UWFinancePurchase.findById(id)
-    const fundingItem = await FundingItem.findById(uwFinancePurchase.fi_link)
-    res.json(await SponsorshipFund.findById(fundingItem.sf_link))
+    const fundingItem = await FundingItem.findById(uwFinancePurchase?.fi_link)
+    res.json(await SponsorshipFund.findById(fundingItem?.sf_link))
 }
 
 module.exports = {

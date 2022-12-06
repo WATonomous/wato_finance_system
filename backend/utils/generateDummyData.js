@@ -10,9 +10,7 @@ const generateDummyData = async () => {
         console.log('funding item created')
         await createPersonalPurchases(fundingItemIds)
         console.log('personal purchases created')
-        await createUWFinancePurchases(
-            fundingItemIds
-        )
+        await createUWFinancePurchases(fundingItemIds)
         console.log('uw finance purchases created')
     } catch (err) {
         console.log('script failed: ')
