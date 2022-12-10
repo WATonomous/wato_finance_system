@@ -14,13 +14,18 @@ const getUWFinancePurchase = (req, res) => {
         .catch((err) => res.status(400).json('Error: ' + err))
 }
 
-const createNewUWFinancePurchase = (req, res) => {
+const createNewUWFinancePurchase = async (req, res) => {
     const { body } = req
     const newUWFinancePurchase = new UWFinancePurchase(body)
-    newUWFinancePurchase
-        .save()
-        .then(() => res.json(newUWFinancePurchase))
-        .catch((err) => res.status(400).json('Error: ' + err))
+    try {
+        const newUPR = await newUWFinancePurchase.save()
+        await FundingItem.findByIdAndUpdate(newUPR.fi_link, {
+            $push: { upr_links: newUPR._id },
+        })
+        res.json(newUPR)
+    } catch (err) {
+        res.status(400).json('Error: ' + err)
+    }
 }
 
 const updateUWFinancePurchase = (req, res) => {
@@ -29,17 +34,25 @@ const updateUWFinancePurchase = (req, res) => {
         .catch((err) => res.status(400).json('Error: ' + err))
 }
 
-const deleteUWFinancePurchase = (req, res) => {
-    UWFinancePurchase.findByIdAndDelete(req.params.id)
-        .then(() => res.json('UWFinancePurchase deleted.'))
-        .catch((err) => res.status(400).json('Error: ' + err))
+const deleteUWFinancePurchase = async (req, res) => {
+    try {
+        const UPRid = req.params.id
+        const UPRtoDelete = await UWFinancePurchase.findById(UPRid)
+        await FundingItem.findByIdAndUpdate(UPRtoDelete.fi_link, {
+            $pull: { upr_links: UPRid },
+        })
+        await UPRtoDelete.remove()
+        res.json('UW Finance Purchase deleted.')
+    } catch (err) {
+        res.status(400).json('Error: ' + err)
+    }
 }
 
 const getSponsorshipFund = async (req, res) => {
     const { id } = req.params
     const uwFinancePurchase = await UWFinancePurchase.findById(id)
-    const fundingItem = await FundingItem.findById(uwFinancePurchase.fi_link)
-    res.json(await SponsorshipFund.findById(fundingItem.sf_link))
+    const fundingItem = await FundingItem.findById(uwFinancePurchase?.fi_link)
+    res.json(await SponsorshipFund.findById(fundingItem?.sf_link))
 }
 
 module.exports = {

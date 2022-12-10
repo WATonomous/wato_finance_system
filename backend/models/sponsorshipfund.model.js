@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const AutoIncrement = require('mongoose-sequence')(mongoose)
 
-const { Schema, Types } = mongoose
+const { Schema } = mongoose
 
 const constants = require('./constants')
 const { SF_STATUS, ENDOWMENT_FUNDS } = constants
@@ -20,7 +20,7 @@ const SponsorshipFundSchema = new Schema(
         proposal_url: { type: String },
         presentation_url: { type: String },
         claim_deadline: { type: Date, required: true },
-        fi_links: [{ type: Types.ObjectId, ref: 'FundingItem' }],
+        fi_links: [{ type: Number, ref: 'FundingItem' }],
     },
     {
         _id: false,

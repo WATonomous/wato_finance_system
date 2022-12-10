@@ -1,4 +1,5 @@
 const FundingItem = require('../models/fundingitem.model')
+const SponsorshipFund = require('../models/sponsorshipfund.model')
 
 const getAllFundingItems = (_, res) => {
     FundingItem.find()
@@ -12,14 +13,20 @@ const getFundingItem = (req, res) => {
         .catch((err) => res.status(400).json('Error: ' + err))
 }
 
-const createFundingItem = (req, res) => {
+const createFundingItem = async (req, res) => {
     const { body } = req
     const newFundingItem = new FundingItem(body)
 
-    newFundingItem
-        .save()
-        .then(() => res.json(newFundingItem))
-        .catch((err) => res.status(400).json('Error: ' + err))
+    try {
+        const newFI = await newFundingItem.save()
+        // update the parent to store link to child funding item
+        await SponsorshipFund.findByIdAndUpdate(newFI.sf_link, {
+            $push: { fi_links: newFI._id },
+        })
+        res.json(newFI)
+    } catch (err) {
+        res.status(400).json('Error: ' + err)
+    }
 }
 
 const updateFundingItem = (req, res) => {
@@ -28,10 +35,18 @@ const updateFundingItem = (req, res) => {
         .catch((err) => res.status(400).json('Error: ' + err))
 }
 
-const deleteFundingItem = (req, res) => {
-    FundingItem.findByIdAndDelete(req.params.id)
-        .then(() => res.json('FundingItem deleted.'))
-        .catch((err) => res.status(400).json('Error: ' + err))
+const deleteFundingItem = async (req, res) => {
+    try {
+        const FIid = req.params.id
+        const FItoDelete = await FundingItem.findById(FIid)
+        await SponsorshipFund.findByIdAndUpdate(FItoDelete.sf_link, {
+            $pull: { fi_links: FIid },
+        })
+        await FItoDelete.remove()
+        res.json('FundingItem deleted.')
+    } catch (err) {
+        res.status(400).json('Error: ' + err)
+    }
 }
 
 module.exports = {
