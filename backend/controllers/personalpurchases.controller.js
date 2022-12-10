@@ -38,10 +38,12 @@ const updatePersonalPurchase = (req, res) => {
 
 const deletePersonalPurchase = async (req, res) => {
     try {
-        await PersonalPurchase.findByIdAndDelete(req.params.id)
-        FundingItem.findByIdAndUpdate(req.body.fi_link, {
-            $pull: { ppr_links: req.params.id },
+        const PPRid = req.params.id
+        const PPRtoDelete = await PersonalPurchase.findById(PPRid)
+        await FundingItem.findByIdAndUpdate(PPRtoDelete.fi_link, {
+            $pull: { ppr_links: PPRid },
         })
+        await PPRtoDelete.remove()
         res.json('PersonalPurchase deleted.')
     } catch (err) {
         res.status(400).json('Error: ' + err)

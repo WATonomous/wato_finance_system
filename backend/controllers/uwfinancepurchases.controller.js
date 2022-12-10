@@ -36,10 +36,12 @@ const updateUWFinancePurchase = (req, res) => {
 
 const deleteUWFinancePurchase = async (req, res) => {
     try {
-        await UWFinancePurchase.findByIdAndDelete(req.params.id)
-        FundingItem.findByIdAndUpdate(req.body.fi_link, {
-            $pull: { upr_links: req.params.id },
+        const UPRid = req.params.id
+        const UPRtoDelete = await UWFinancePurchase.findById(UPRid)
+        await FundingItem.findByIdAndUpdate(UPRtoDelete.fi_link, {
+            $pull: { upr_links: UPRid },
         })
+        await UPRtoDelete.remove()
         res.json('UW Finance Purchase deleted.')
     } catch (err) {
         res.status(400).json('Error: ' + err)

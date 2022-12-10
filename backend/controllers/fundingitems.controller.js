@@ -37,10 +37,12 @@ const updateFundingItem = (req, res) => {
 
 const deleteFundingItem = async (req, res) => {
     try {
-        await FundingItem.findByIdAndDelete(req.params.id)
-        await SponsorshipFund.findByIdAndUpdate(req.body.sf_link, {
-            $pull: { fi_link: req.params.id },
+        const FIid = req.params.id
+        const FItoDelete = await FundingItem.findById(FIid)
+        await SponsorshipFund.findByIdAndUpdate(FItoDelete.sf_link, {
+            $pull: { fi_links: FIid },
         })
+        await FItoDelete.remove()
         res.json('FundingItem deleted.')
     } catch (err) {
         res.status(400).json('Error: ' + err)
