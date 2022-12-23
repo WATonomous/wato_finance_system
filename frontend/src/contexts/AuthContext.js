@@ -55,7 +55,5 @@ export const AuthProvider = ({ children }) => {
 
 export const AuthLayout = () => {
     const outlet = useOutlet()
-    return (
-      <AuthProvider>{outlet}</AuthProvider>
-    )
+    return <AuthProvider>{outlet}</AuthProvider>
 }
