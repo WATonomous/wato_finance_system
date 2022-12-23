@@ -6,6 +6,7 @@ import {
     signOut,
 } from 'firebase/auth'
 import React, { useContext, useEffect, useState } from 'react'
+import { useOutlet } from 'react-router-dom'
 import app from '../firebase'
 
 const AuthContext = React.createContext()
@@ -49,5 +50,12 @@ export const AuthProvider = ({ children }) => {
         <AuthContext.Provider value={value}>
             {!loading && children}
         </AuthContext.Provider>
+    )
+}
+
+export const AuthLayout = () => {
+    const outlet = useOutlet()
+    return (
+      <AuthProvider>{outlet}</AuthProvider>
     )
 }
