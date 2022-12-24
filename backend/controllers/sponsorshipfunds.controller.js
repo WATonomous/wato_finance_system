@@ -28,6 +28,7 @@ const getSponsorshipFund = (req, res) => {
 const getAllChildren = async (req, res) => {
     const { id } = req.params
     const fundingItems = await getFundingItemsBySponsorshipFund(id)
+    const sponsorshipfund = await SponsorshipFund.findById(id)
     const allData = await Promise.all(
         fundingItems.map(async (fundingItem) => {
             const personalPurchases = await getPersonalPurchasesByFundingItem(
@@ -43,7 +44,7 @@ const getAllChildren = async (req, res) => {
             }
         })
     )
-    res.json(allData)
+    res.json({ ...sponsorshipfund?.toObject(), fundingItems: allData })
 }
 const createSponsorshipFund = (req, res) => {
     const { body } = req
