@@ -12,11 +12,9 @@ const FundingItemSchema = new Schema(
             required: true,
         },
         name: { type: String, required: true },
-        ppr_links: [{ type: Number, ref: 'PersonalPurchase' }],
-        upr_links: [{ type: Number, ref: 'UWFinancePurchase' }],
+        ppr_links: [{ type: Number, ref: 'PersonalPurchase', default: [] }],
+        upr_links: [{ type: Number, ref: 'UWFinancePurchase', default: [] }],
         funding_allocation: { type: Number, required: true },
-        funding_spent: { type: Number },
-        amount_reimbursed: { type: Number },
         purchase_justification: { type: String },
     },
     {
