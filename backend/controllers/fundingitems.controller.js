@@ -8,15 +8,58 @@ const getAllFundingItems = (_, res) => {
 }
 
 const getFundingItem = (req, res) => {
-    FundingItem.findById(req.params.id)
-        .then((fundingItem) => res.json(fundingItem))
+    FundingItem.findById(req.params.id).lean()
+        .then(async (fundingItem) => {
+            fundingSpent = await FundingItem.aggregate([
+                {
+                    $match: {
+                        _id: fundingItem._id,
+                    },
+                },
+                {
+                    $lookup: {
+                        from: 'personalpurchases',
+                        localField: 'ppr_links',
+                        foreignField: '_id',
+                        as: 'ppr_links',
+                    },
+                },
+                {
+                    $lookup: {
+                        from: 'uwfinancepurchases',
+                        localField: 'upr_links',
+                        foreignField: '_id',
+                        as: 'upr_links',
+                    },
+                },
+                {
+                    $project: {
+                        "_id": 0,
+                        "funding_spent": {
+                            "$round": [{
+                                "$sum": [
+                                    {
+                                        "$sum": "$ppr_links.cost"
+                                    },
+                                    {
+                                        "$sum": "$upr_links.cost"
+                                    }
+                                ]
+
+                            }, 2]
+                        },
+                    }
+                },
+            ])
+            fundingItem.funding_spent = fundingSpent[0].funding_spent
+            res.json(fundingItem)
+        })
         .catch((err) => res.status(400).json('Error: ' + err))
 }
 
 const createFundingItem = async (req, res) => {
     const { body } = req
     const newFundingItem = new FundingItem(body)
-
     try {
         const newFI = await newFundingItem.save()
         // update the parent to store link to child funding item
