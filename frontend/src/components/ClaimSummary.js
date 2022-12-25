@@ -1,62 +1,96 @@
 import React, { useState, useEffect } from 'react'
-import { Box, Flex, Spinner, Heading, Center } from '@chakra-ui/react'
-import { getFriendlyDate } from '../utils/dateFormat'
+import {
+    Box,
+    Flex,
+    Heading,
+    Center,
+    Th,
+    Tr,
+    Tfoot,
+    Td,
+    TableContainer,
+    Table,
+    Thead,
+    Tbody,
+    Button,
+    Stack,
+} from '@chakra-ui/react'
+import { getSFName, getStandardizedDate } from '../utils/utils'
 import { useParams } from 'react-router-dom'
-const FundingItem = (fundingItem) => {
-    const item = fundingItem.fundingItem // weird hack for time being
-    // console.log('almost')
-    // console.log(fundingItem)
-    console.log(item.fundingItem)
-    console.log(item.personalPurchases)
-    console.log(item.uwFinancePurchases)
+import LoadingSpinner from './Spinner'
+
+const FundingItemView = ({ fundingItem }) => {
     return (
         <Box border="1px" borderRadius="4%" borderColor="black">
-            <Heading>{item.name}</Heading>
+            <Heading size="md">{fundingItem.name}</Heading>
             <Heading size="md">
-                Allocation: {item.funding_allocation}
+                Allocation: {fundingItem.funding_allocation}
             </Heading>
-            <Flex>
-                <h2>PersonalPurchases</h2>
-                {item.personalPurchases.map((pp) => {
-                    return (
-                        <>
-                            <Heading>Item Name {pp.name}</Heading>
-                            <Heading>Amount Spent: {pp.cost}</Heading>
-                            <Heading>
-                                Requisition Number: {pp.requisition_number}
-                            </Heading>
-                            <Heading>
-                                Purchase Order Number: {pp.po_number}
-                            </Heading>
-                            <Center>
-                                <h3>Action</h3>
-                                <button>Blah</button>
-                            </Center>
-                        </>
-                    )
-                })}
-            </Flex> 
-            <Flex>
-                <h2>UW Finance Purchases</h2>
-                {item.uwFinancePurchases.map((uwfp) => {
-                    return (
-                        <>
-                            <Heading>Item Name: {uwfp.name}</Heading>
-                            <Heading>Item Spent: {uwfp.item}</Heading>
-                            <Heading>
-                                Requisition Number: {uwfp.requisition_number}
-                            </Heading>
-                            <Heading>
-                                Purchase Order Number: {uwfp.po_number}
-                            </Heading>
-                            <Center>
-                                <h3>Action</h3>
-                                <button>Blah</button>
-                            </Center>
-                        </>
-                    )
-                })}
-            </Flex>
+            <Heading size="md">
+                amount_reimbursed: {fundingItem.amount_reimbursed}
+            </Heading>
+            <Stack>
+                <Heading size="sm">Personal Purchases</Heading>
+                <TableContainer>
+                    <Table size="lg">
+                        <Thead>
+                            <Tr>
+                                <Th>Item Name</Th>
+                                <Th isNumeric>Item Spend</Th>
+                                <Th>Requisition Number</Th>
+                                <Th>Purchase Order Number</Th>
+                                <Th>Action</Th>
+                            </Tr>
+                        </Thead>
+                        <Tbody>
+                            {fundingItem.personalPurchases.map((pp) => {
+                                return (
+                                    <Tr>
+                                        <Td>{pp.name}</Td>
+                                        <Td isNumeric>{pp.cost}</Td>
+                                        <Td>{pp.requisition_number}</Td>
+                                        <Td>{pp.po_number}</Td>
+                                        <Td>
+                                            <Button>Test</Button>
+                                        </Td>
+                                    </Tr>
+                                )
+                            })}
+                        </Tbody>
+                    </Table>
+                </TableContainer>
+            </Stack>
+            <Stack>
+                <Heading size="sm">UW Finance Purchases</Heading>
+                <TableContainer>
+                    <Table size="lg">
+                        <Thead>
+                            <Tr>
+                                <Th>Item Name</Th>
+                                <Th isNumeric>Item Spend</Th>
+                                <Th>Requisition Number</Th>
+                                <Th>Purchase Order Number</Th>
+                                <Th>Action</Th>
+                            </Tr>
+                        </Thead>
+                        <Tbody>
+                            {fundingItem.uwFinancePurchases.map((uwfp) => {
+                                return (
+                                    <Tr>
+                                        <Td>{uwfp.name}</Td>
+                                        <Td isNumeric>{uwfp.cost}</Td>
+                                        <Td>{uwfp.requisition_number}</Td>
+                                        <Td>{uwfp.po_number}</Td>
+                                        <Td>
+                                            <Button>Test</Button>
+                                        </Td>
+                                    </Tr>
+                                )
+                            })}
+                        </Tbody>
+                    </Table>
+                </TableContainer>
+            </Stack>
         </Box>
     )
 }
@@ -70,40 +104,29 @@ const ClaimSummary = () => {
                 `${process.env.REACT_APP_BACKEND_URL}/sponsorshipfunds/getallchildren/${id}`
             )
             const data = await res.json()
-            console.log('hello here')
-            console.log(data)
             setClaimData(data)
         }
         fetchClaimData()
     }, [id])
 
-    if (!claimData)
-        return (
-            <Box
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                height="100vh"
-            >
-                <Spinner size="lg" />
-            </Box>
-        )
+    if (!claimData) return <LoadingSpinner />
 
     return (
         <Box>
             <Heading>Claim Summary</Heading>
             <Heading size="md">Sponsorship Fund ID: {id}</Heading>
             <Heading size="md">
-                Organization: {claimData.organization} {claimData.semester}
+                Organization:{' '}
+                {getSFName(claimData.organization, claimData.semester)}
             </Heading>
             <Heading size="md">
-                Deadline: {getFriendlyDate(claimData.claim_deadline)}
+                Deadline: {getStandardizedDate(claimData.claim_deadline)}
             </Heading>
-            <Flex marginTop="5vw">
+            <Center marginTop="5vw">
                 {claimData.fundingItems.map((fi) => {
-                    return <FundingItem fundingItem={fi} />
+                    return <FundingItemView fundingItem={fi} />
                 })}
-            </Flex>
+            </Center>
         </Box>
     )
 }
