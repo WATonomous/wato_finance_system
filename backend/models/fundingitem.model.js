@@ -11,6 +11,7 @@ const FundingItemSchema = new Schema(
             ref: 'SponsorshipFund',
             required: true,
         },
+        name: { type: String, required: true },
         ppr_links: [{ type: Number, ref: 'PersonalPurchase' }],
         upr_links: [{ type: Number, ref: 'UWFinancePurchase' }],
         funding_allocation: { type: Number, required: true },
