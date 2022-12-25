@@ -33,6 +33,7 @@ const dummyFundingItems = [
     {
         ppr_links: [],
         upr_links: [],
+        name: 'games',
         funding_allocation: 150,
         funding_spent: 50,
         amount_reimbursed: 0,
@@ -41,7 +42,8 @@ const dummyFundingItems = [
     {
         ppr_links: [],
         upr_links: [],
-        funding_allocation: 150,
+        name: 'plushies',
+        funding_allocation: 100,
         funding_spent: 50,
         amount_reimbursed: 0,
         purchase_justification: 'We needed this too man',
@@ -52,6 +54,7 @@ const dummyPersonalPurchaseRequests = [
     {
         reporter_id: '123321',
         status: 'SEEKING_APPROVAL',
+        name: 'among us game',
         purchase_url: 'https://store.steampowered.com/app/945360/Among_Us/',
         purchase_instructions:
             'Buy Among Us, An online and local party game of teamwork and betrayal for 4-15 players...in space!',
@@ -67,13 +70,13 @@ const dummyPersonalPurchaseRequests = [
     {
         reporter_id: '123321',
         status: 'SEEKING_APPROVAL',
+        name: 'octupus plushie',
         purchase_url:
-            'https://innersloth.itch.io/among-us/devlog/171026/among-us-2',
-        purchase_instructions:
-            'An online and local party game of teamwork and betrayal for 4-15 players...in space!',
+            'https://www.amazon.com/Original-Reversible-Octopus-TeeTurtles-Patented/dp/B088X4XFNQ?th=1',
+        purchase_instructions: 'click the link and buy it',
         cost: 99.99,
-        purchase_justification: 'Need to find the impostor again!',
-        pickup_instruction: 'Wait for amongus 2 to come out, then buy it',
+        purchase_justification: 'super cute!',
+        pickup_instruction: 'pick up from bay',
         finance_team_approval: false,
         team_captain_approval: false,
         faculty_advisor_approval: false,
@@ -86,6 +89,7 @@ const dummyUWFinancePurchaseRequests = [
     {
         reporter_id: '123321',
         status: 'SEEKING_APPROVAL',
+        name: 'fortnite game',
         purchase_url: 'https://www.epicgames.com/fortnite/en-US/home',
         purchase_instructions: 'purchase fortnite',
         cost: 9.99,
@@ -101,11 +105,12 @@ const dummyUWFinancePurchaseRequests = [
     {
         reporter_id: '123321',
         status: 'SEEKING_APPROVAL',
+        name: 'cat plush',
         purchase_url:
-            'https://store.epicgames.com/en-US/p/fortnite--1000-v-bucks',
-        purchase_instructions: 'BUY VBUCKS',
+            'https://www.amazon.com/Stuffed-Plushie-Pillows-Cushion-Decoration/dp/B09BC511YJ/',
+        purchase_instructions: 'buy it',
         cost: 99.99,
-        purchase_justification: 'I need battlepass',
+        purchase_justification: 'cat is cute',
         pickup_instruction: 'Buy online',
         finance_team_approval: false,
         team_captain_approval: false,
