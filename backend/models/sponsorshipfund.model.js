@@ -15,12 +15,10 @@ const SponsorshipFundSchema = new Schema(
         semester: { type: String, required: true },
         proposal_id: { type: String },
         funding_allocation: { type: Number, required: true },
-        funding_spent: { type: Number, default: 0 },
-        amount_reimbursed: { type: Number, default: 0 },
         proposal_url: { type: String },
         presentation_url: { type: String },
         claim_deadline: { type: Date, required: true },
-        fi_links: [{ type: Number, ref: 'FundingItem' }],
+        fi_links: [{ type: Number, ref: 'FundingItem', default: [] }],
     },
     {
         _id: false,
