@@ -2,8 +2,12 @@ import React, { useState } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import Navbar from './Navbar'
-import { Center, Heading, keyframes, usePrefersReducedMotion } from '@chakra-ui/react'
-
+import {
+    Center,
+    Heading,
+    keyframes,
+    usePrefersReducedMotion,
+} from '@chakra-ui/react'
 
 const Login = () => {
     const [error, setError] = useState('')
@@ -37,14 +41,26 @@ const Login = () => {
 
     return (
         <>
-            <Navbar onClick={handleLogin} authButtonText="Log In" authButtonDisabled={loading}/>
-            <Center 
-                h='calc(100vh - 80px)'
-                bgGradient='linear(to-tl, #ee7752, #e73c7e, #23a6d5, #23d5ab)'
-                bgSize='400% 400%'
-                animation={prefersReducedMotion ? undefined : `${bgKeyframe} 15s ease infinite`}
+            <Navbar
+                onClick={handleLogin}
+                authButtonText="Log In"
+                authButtonDisabled={loading}
+            />
+            <Center
+                h="calc(100vh - 80px)"
+                bgGradient="linear(to-tl, #ee7752, #e73c7e, #23a6d5, #23d5ab)"
+                bgSize="400% 400%"
+                animation={
+                    prefersReducedMotion
+                        ? undefined
+                        : `${bgKeyframe} 15s ease infinite`
+                }
             >
-                <Heading>{error ? error : 'Log in to access the WATonomous Finance System'}</Heading>
+                <Heading>
+                    {error
+                        ? error
+                        : 'Log in to access the WATonomous Finance System'}
+                </Heading>
             </Center>
         </>
     )
