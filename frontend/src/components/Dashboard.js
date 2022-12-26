@@ -1,9 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useReducer, useState } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import axios from 'axios'
 import { useLocation, useNavigate } from 'react-router-dom'
 import TicketList from './TicketList'
 import Navbar from './Navbar'
+import { Text } from '@chakra-ui/react'
+
+export const SF_DATA_KEY = 'sfData'
+export const FI_DATA_KEY = 'fiData'
+export const PPR_DATA_KEY = 'pprData'
+export const UPR_DATA_KEY = 'uprData'
 
 const Dashboard = (props) => {
     const [error, setError] = useState('')
@@ -11,29 +17,31 @@ const Dashboard = (props) => {
     const navigate = useNavigate()
     const location = useLocation()
 
-    const [sfData, setSFData] = useState([])
-    const [fiData, setFIData] = useState([])
-    const [pprData, setPPRData] = useState([])
-    const [uprData, setUPRData] = useState([])
+    const [tickets, updateTickets] = useReducer((data, partialData) => ({
+            ...data,
+            ...partialData,
+        }), {
+        [SF_DATA_KEY]: [],
+        [FI_DATA_KEY]: [],
+        [PPR_DATA_KEY]: [],
+        [UPR_DATA_KEY]: []
+    })
 
     const getAllTickets = () => {
-        axios
-            .get('http://localhost:5000/sponsorshipfunds/')
-            .then(response => setSFData(response.data))
-        axios
-            .get('http://localhost:5000/fundingitems/')
-            .then(response => setFIData(response.data))
-        axios
-            .get('http://localhost:5000/personalpurchases/')
-            .then(response => setPPRData(response.data))
-        axios
-            .get('http://localhost:5000/uwfinancepurchases/')
-            .then(response => setUPRData(response.data))
+        const endpoints = {
+            [SF_DATA_KEY]: 'http://localhost:5000/sponsorshipfunds/',
+            [FI_DATA_KEY]: 'http://localhost:5000/fundingitems/',
+            [PPR_DATA_KEY]: 'http://localhost:5000/personalpurchases/',
+            [UPR_DATA_KEY]: 'http://localhost:5000/uwfinancepurchases/'
+        }
+        axios.all(Object.values(endpoints).map((endpoint) => axios.get(endpoint))).then(
+            (responses) => Object.keys(endpoints).forEach((key, index) => 
+                {updateTickets({[key]: responses[index].data})
+            })
+        )
     }
 
     useEffect(() => {
-        // const path = location.pathname
-        // console.log(path)
         getAllTickets()
     }, [])
 
@@ -50,11 +58,12 @@ const Dashboard = (props) => {
         <>
             <Navbar onClick={handleLogout} authButtonText={error ? error : 'Log Out'}/>
             <TicketList
-                sfData={sfData}
-                fiData={fiData}
-                pprData={pprData}
-                uprData={uprData}
+                sfData={tickets[SF_DATA_KEY]}
+                fiData={tickets[FI_DATA_KEY]}
+                pprData={tickets[PPR_DATA_KEY]}
+                uprData={tickets[UPR_DATA_KEY]}
             />
+            <Text pos='absolute' left='308px'>{location.pathname}</Text>
         </>
     )
 }
