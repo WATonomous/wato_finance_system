@@ -1,17 +1,18 @@
 import React from 'react'
-import { AuthLayout } from './contexts/AuthContext'
 import {
     Route,
     createBrowserRouter,
     RouterProvider,
     createRoutesFromElements,
 } from 'react-router-dom'
+import { ChakraProvider } from '@chakra-ui/react'
+
+import { AuthLayout } from './contexts/AuthContext'
 import { PrivateRoute, LoggedInRedirect } from './contexts/CustomRoutes'
 
 import Login from './components/Login'
 import CreateUser from './components/CreateUser'
 import Dashboard from './components/Dashboard'
-import { ChakraProvider, extendTheme } from '@chakra-ui/react'
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -21,26 +22,19 @@ const router = createBrowserRouter(
             </Route>
             <Route element={<PrivateRoute />}>
                 <Route path="/" element={<Dashboard />} />
+                <Route path="/SF/:id" element={<Dashboard />} />
+                <Route path="/FI/:id" element={<Dashboard />} />
+                <Route path="/PPR/:id" element={<Dashboard />} />
+                <Route path="/UPR/:id" element={<Dashboard />} />
                 <Route path="/user" element={<CreateUser />} />
-                {/* <Route path="/claim" element={ClaimSummary} /> */}
             </Route>
         </Route>
     )
 )
 
-const theme = extendTheme({
-    textStyles: {
-        navbarTitle: {
-            fontSize: '32px',
-            fontWeight: '700',
-            lineHeight: '48px',
-        },
-    }
-})
-
 const App = () => {
     return (
-        <ChakraProvider theme={theme}>
+        <ChakraProvider>
             <RouterProvider router={router} />
         </ChakraProvider>
     )
