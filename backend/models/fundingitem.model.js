@@ -20,7 +20,6 @@ const FundingItemSchema = new Schema(
     {
         _id: false,
         timestamps: true,
-        collection: 'fundingitems',
     }
 )
 
