@@ -17,28 +17,35 @@ const Dashboard = (props) => {
     const navigate = useNavigate()
     const location = useLocation()
 
-    const [tickets, updateTickets] = useReducer((data, partialData) => ({
+    const [tickets, updateTickets] = useReducer(
+        (data, partialData) => ({
             ...data,
             ...partialData,
-        }), {
-        [SF_DATA_KEY]: [],
-        [FI_DATA_KEY]: [],
-        [PPR_DATA_KEY]: [],
-        [UPR_DATA_KEY]: []
-    })
+        }),
+        {
+            [SF_DATA_KEY]: [],
+            [FI_DATA_KEY]: [],
+            [PPR_DATA_KEY]: [],
+            [UPR_DATA_KEY]: [],
+        }
+    )
 
     const getAllTickets = () => {
         const endpoints = {
             [SF_DATA_KEY]: 'http://localhost:5000/sponsorshipfunds/',
             [FI_DATA_KEY]: 'http://localhost:5000/fundingitems/',
             [PPR_DATA_KEY]: 'http://localhost:5000/personalpurchases/',
-            [UPR_DATA_KEY]: 'http://localhost:5000/uwfinancepurchases/'
+            [UPR_DATA_KEY]: 'http://localhost:5000/uwfinancepurchases/',
         }
-        axios.all(Object.values(endpoints).map((endpoint) => axios.get(endpoint))).then(
-            (responses) => Object.keys(endpoints).forEach((key, index) => 
-                {updateTickets({[key]: responses[index].data})
-            })
-        )
+        axios
+            .all(
+                Object.values(endpoints).map((endpoint) => axios.get(endpoint))
+            )
+            .then((responses) =>
+                Object.keys(endpoints).forEach((key, index) => {
+                    updateTickets({ [key]: responses[index].data })
+                })
+            )
     }
 
     useEffect(() => {
@@ -56,14 +63,19 @@ const Dashboard = (props) => {
 
     return (
         <>
-            <Navbar onClick={handleLogout} authButtonText={error ? error : 'Log Out'}/>
+            <Navbar
+                onClick={handleLogout}
+                authButtonText={error ? error : 'Log Out'}
+            />
             <TicketList
                 sfData={tickets[SF_DATA_KEY]}
                 fiData={tickets[FI_DATA_KEY]}
                 pprData={tickets[PPR_DATA_KEY]}
                 uprData={tickets[UPR_DATA_KEY]}
             />
-            <Text pos='absolute' left='308px'>{location.pathname}</Text>
+            <Text pos="absolute" left="308px">
+                {location.pathname}
+            </Text>
         </>
     )
 }
