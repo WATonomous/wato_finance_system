@@ -38,7 +38,6 @@ const generateDummyData = async () => {
         // as the cash fund even though it takes the shape of a funding item
         await createCashFund()
         console.log('✅ cash fund created')
-        return
         const sponsorshipFundIds = await createSponsorshipFunds()
         console.log('✅ sponsorship funds created')
         const fundingItemIds = await createFundingItems(sponsorshipFundIds)
@@ -55,8 +54,9 @@ const generateDummyData = async () => {
 
 const createCashFund = async () => {
     const cashFund = {
-        _id: 0,
         name: 'WATO Cash',
+        // sf_link is required, set to a dummy value
+        sf_link: -1,
         funding_allocation: 0,
     }
     await fetch(`${endpoint}/fundingitems`, {

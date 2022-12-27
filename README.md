@@ -34,6 +34,16 @@ npm install
 nodemon start
 ```
 
+## Generating seeding data
+
+To generate seed data, in the terminal in the backend directory, run:
+
+```
+npm run seeddata
+```
+
+Note that this step is not optional due to the fact we need to inject wato cash's id as it is a special case for a funding item.
+
 ---
 
 ## Frontend Configuration
@@ -60,6 +70,7 @@ REACT_APP_PROJECT_ID=<YOUR_FIREBASE_PROJECT_ID>
 REACT_APP_STORAGE_BUCKET=<YOUR_FIREBASE_STORAGE_BUCKET>
 REACT_APP_MESSAGING_SENDER_ID=<YOUR_FIREBASE_MESSAGING_SENDER_ID>
 REACT_APP_APP_ID=<YOUR_FIREBASE_API_ID>
+REACT_APP_BACKEND_URL=http://localhost:5000
 ```
 
 ### Enable Google OAuth
@@ -75,14 +86,4 @@ To start the frontend, in a different terminal run
 ```
 cd frontend
 npm start
-```
-
----
-
-## Generate Seed Data
-
-To generate seed data (generic testing data), in the terminal in the backend directory, run:
-
-```
-npm run generatedata
 ```

@@ -11,7 +11,7 @@ const UWFinancePurchaseSchema = new Schema(
         _id: { type: Number },
         reporter_id: { type: String, required: true },
         status: { type: String, enum: UPR_STATUS },
-        fi_link: { type: Number, ref: 'fundingitems', required: true },
+        fi_link: { type: Number, ref: 'FundingItem', required: true },
         name: { type: String, required: true },
         purchase_url: { type: String, required: true },
         purchase_instructions: { type: String, required: true },
@@ -27,7 +27,6 @@ const UWFinancePurchaseSchema = new Schema(
     {
         _id: false,
         timestamps: true,
-        collection: 'uwfinancepurchases',
     }
 )
 
