@@ -8,10 +8,6 @@ import {
 } from 'react-router-dom'
 import { PrivateRoute, LoggedInRedirect } from './contexts/CustomRoutes'
 
-import './App.css'
-
-// import MainContent from "./components/MainContent";
-// import ClaimSummary from "./components/ClaimSummary";
 import Login from './components/Login'
 import CreateUser from './components/CreateUser'
 
