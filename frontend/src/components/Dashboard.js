@@ -6,7 +6,6 @@ import TicketList from './TicketList'
 import Navbar from './Navbar'
 import { Text } from '@chakra-ui/react'
 
-
 const DATA_KEYS = Object.freeze({
     SF: 'sfData',
     FI: 'fiData',
