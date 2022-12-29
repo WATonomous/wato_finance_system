@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
-import { useAuth } from '../contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
-import Navbar from './Navbar'
 import { Center, Heading } from '@chakra-ui/react'
+
+import { useAuth } from '../contexts/AuthContext'
+import Navbar from './Navbar'
 
 const Login = () => {
     const [error, setError] = useState('')

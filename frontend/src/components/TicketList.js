@@ -1,6 +1,6 @@
 import React from 'react'
-import { Card, CardBody, Text, VStack } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
+import { Card, CardBody, Text, VStack } from '@chakra-ui/react'
 
 const TicketList = (props) => {
     const navigate = useNavigate()
