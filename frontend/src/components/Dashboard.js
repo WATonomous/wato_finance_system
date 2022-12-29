@@ -1,10 +1,11 @@
 import React, { useEffect, useReducer, useState } from 'react'
-import { useAuth } from '../contexts/AuthContext'
-import axios from 'axios'
 import { useLocation, useNavigate } from 'react-router-dom'
-import TicketList from './TicketList'
-import Navbar from './Navbar'
 import { Text } from '@chakra-ui/react'
+import axios from 'axios'
+
+import { useAuth } from '../contexts/AuthContext'
+import Navbar from './Navbar'
+import TicketList from './TicketList'
 
 const DATA_KEYS = Object.freeze({
     SF: 'sfData',
@@ -58,8 +59,8 @@ const Dashboard = (props) => {
         try {
             await logout()
             navigate('/login')
-        } catch {
-            setError('Log out failed, try again')
+        } catch (err) {
+            setError(`Failed to log out, Error: ${err}`)
         }
     }
 
