@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import {
     Box,
-    Flex,
     Heading,
     Center,
     Th,
     Tr,
-    Tfoot,
     Td,
     TableContainer,
     Table,
@@ -21,13 +19,19 @@ import LoadingSpinner from './Spinner'
 
 const FundingItemView = ({ fundingItem }) => {
     return (
-        <Box border="1px" borderRadius="4%" borderColor="black">
+        <Box
+            padding="15px"
+            marginTop="2vw"
+            border="1px"
+            borderRadius="4%"
+            borderColor="black"
+        >
             <Heading size="md">{fundingItem.name}</Heading>
             <Heading size="md">
-                Allocation: {fundingItem.funding_allocation}
+                {`Allocation: ${fundingItem.funding_allocation}`}
             </Heading>
             <Heading size="md">
-                amount_reimbursed: {fundingItem.amount_reimbursed}
+                {`Amount Reimbursed: ${fundingItem.amount_reimbursed}`}
             </Heading>
             <Stack>
                 <Heading size="sm">Personal Purchases</Heading>
@@ -45,7 +49,7 @@ const FundingItemView = ({ fundingItem }) => {
                         <Tbody>
                             {fundingItem.personalPurchases.map((pp) => {
                                 return (
-                                    <Tr>
+                                    <Tr key={pp._id}>
                                         <Td>{pp.name}</Td>
                                         <Td isNumeric>{pp.cost}</Td>
                                         <Td>{pp.requisition_number}</Td>
@@ -76,7 +80,7 @@ const FundingItemView = ({ fundingItem }) => {
                         <Tbody>
                             {fundingItem.uwFinancePurchases.map((uwfp) => {
                                 return (
-                                    <Tr>
+                                    <Tr key={uwfp._id}>
                                         <Td>{uwfp.name}</Td>
                                         <Td isNumeric>{uwfp.cost}</Td>
                                         <Td>{uwfp.requisition_number}</Td>
@@ -114,17 +118,19 @@ const ClaimSummary = () => {
     return (
         <Box>
             <Heading>Claim Summary</Heading>
-            <Heading size="md">Sponsorship Fund ID: {id}</Heading>
+            <Heading size="md">{`Sponsorship Fund ID: ${id}`}</Heading>
             <Heading size="md">
-                Organization:{' '}
-                {getSFName(claimData.organization, claimData.semester)}
+                {`Organization: ${getSFName(
+                    claimData.organization,
+                    claimData.semester
+                )}`}
             </Heading>
             <Heading size="md">
-                Deadline: {getStandardizedDate(claimData.claim_deadline)}
+                {`Deadline: ${getStandardizedDate(claimData.claim_deadline)}`}
             </Heading>
-            <Center marginTop="5vw">
+            <Center flexDir="column" marginTop="5vw">
                 {claimData.fundingItems.map((fi) => {
-                    return <FundingItemView fundingItem={fi} />
+                    return <FundingItemView fundingItem={fi} key={fi._id} />
                 })}
             </Center>
         </Box>

@@ -1,6 +1,6 @@
 import { Box, Spinner } from '@chakra-ui/react'
-const LoadingSpinner = () => {
-    ;<Box
+const LoadingSpinner = () => (
+    <Box
         display="flex"
         justifyContent="center"
         alignItems="center"
@@ -8,5 +8,6 @@ const LoadingSpinner = () => {
     >
         <Spinner size="lg" />
     </Box>
-}
+)
+
 export default LoadingSpinner

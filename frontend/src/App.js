@@ -18,7 +18,6 @@ import {
     PublicRoute,
 } from './contexts/CustomRoutes'
 import ClaimSummary from './components/ClaimSummary'
-import './App.css'
 
 const router = createBrowserRouter(
     createRoutesFromElements(
