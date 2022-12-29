@@ -33,8 +33,8 @@ const Login = () => {
         try {
             await login()
             navigate('/user')
-        } catch {
-            setError('Failed to log in, please retry')
+        } catch (err) {
+            setError(`Failed to log in, Error: ${err}`)
         }
         setLoading(false)
     }
