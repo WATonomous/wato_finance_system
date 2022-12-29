@@ -6,10 +6,13 @@ import TicketList from './TicketList'
 import Navbar from './Navbar'
 import { Text } from '@chakra-ui/react'
 
-export const SF_DATA_KEY = 'sfData'
-export const FI_DATA_KEY = 'fiData'
-export const PPR_DATA_KEY = 'pprData'
-export const UPR_DATA_KEY = 'uprData'
+
+const DATA_KEYS = Object.freeze({
+    SF: 'sfData',
+    FI: 'fiData',
+    PPR: 'pprData',
+    UPR: 'uprData',
+})
 
 const Dashboard = (props) => {
     const [error, setError] = useState('')
@@ -23,19 +26,19 @@ const Dashboard = (props) => {
             ...partialData,
         }),
         {
-            [SF_DATA_KEY]: [],
-            [FI_DATA_KEY]: [],
-            [PPR_DATA_KEY]: [],
-            [UPR_DATA_KEY]: [],
+            [DATA_KEYS.SF]: [],
+            [DATA_KEYS.FI]: [],
+            [DATA_KEYS.PPR]: [],
+            [DATA_KEYS.UPR]: [],
         }
     )
 
     const getAllTickets = () => {
         const endpoints = {
-            [SF_DATA_KEY]: 'http://localhost:5000/sponsorshipfunds/',
-            [FI_DATA_KEY]: 'http://localhost:5000/fundingitems/',
-            [PPR_DATA_KEY]: 'http://localhost:5000/personalpurchases/',
-            [UPR_DATA_KEY]: 'http://localhost:5000/uwfinancepurchases/',
+            [DATA_KEYS.SF]: 'http://localhost:5000/sponsorshipfunds/',
+            [DATA_KEYS.FI]: 'http://localhost:5000/fundingitems/',
+            [DATA_KEYS.PPR]: 'http://localhost:5000/personalpurchases/',
+            [DATA_KEYS.UPR]: 'http://localhost:5000/uwfinancepurchases/',
         }
         axios
             .all(
@@ -68,10 +71,10 @@ const Dashboard = (props) => {
                 authButtonText={error ? error : 'Log Out'}
             />
             <TicketList
-                sfData={tickets[SF_DATA_KEY]}
-                fiData={tickets[FI_DATA_KEY]}
-                pprData={tickets[PPR_DATA_KEY]}
-                uprData={tickets[UPR_DATA_KEY]}
+                sfData={tickets[DATA_KEYS.SF]}
+                fiData={tickets[DATA_KEYS.FI]}
+                pprData={tickets[DATA_KEYS.PPR]}
+                uprData={tickets[DATA_KEYS.UPR]}
             />
             <Text pos="absolute" left="308px">
                 {location.pathname}
