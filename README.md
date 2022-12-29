@@ -40,7 +40,18 @@ nodemon start
 
 **Create an account here to get authentication working: https://firebase.google.com/**
 
-Once you create a project and add a web app, fill in the following in the `.env` file you create in the "frontend" folder
+### Create Project
+
+1. Create a project at `console.firebase.google.com`
+2. Name it `wato-finance-system`
+3. Select parent resource/organization as `watonomous.ca`
+4. Optionally add analytics then wait for project to be created
+
+### Connect to web app
+
+1. In the Project Overview screen, add your app by web app
+2. Provide a nickname (`watofinance`) and do not enable Firebase Hosting
+3. Look for the `firebaseConfig` constant and fill in the following info in the `.env` file you create in the "frontend" folder
 
 ```
 REACT_APP_API_KEY=<YOUR_FIREBASE_API_KEY>
@@ -51,6 +62,14 @@ REACT_APP_MESSAGING_SENDER_ID=<YOUR_FIREBASE_MESSAGING_SENDER_ID>
 REACT_APP_APP_ID=<YOUR_FIREBASE_API_ID>
 ```
 
+### Enable Google OAuth
+
+1. In your Firebase Console, select Authentication on the left sidebarw
+2. Select the Sign-in method tab, select Google, and then select Enable
+3. Project public-facing name does not matter for dev environment, give it a nickname (`watofinance`) or not
+4. Set Project support email to your own email
+5. Select Save and ensure that the Google Provider has the Enabled Status
+
 To start the frontend, in a different terminal run
 
 ```
@@ -60,9 +79,9 @@ npm start
 
 ---
 
-## Generating dummy data
+## Generate Seed Data
 
-To generate dummy data, in the terminal in the backend directory, run:
+To generate seed data (generic testing data), in the terminal in the backend directory, run:
 
 ```
 npm run generatedata
