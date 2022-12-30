@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
-import { useAuth } from '../contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
+import { Center, Heading } from '@chakra-ui/react'
+
+import { useAuth } from '../contexts/AuthContext'
+import Navbar from './Navbar'
 
 const Login = () => {
     const [error, setError] = useState('')
@@ -13,19 +16,30 @@ const Login = () => {
         try {
             await login()
             navigate('/user')
-        } catch {
-            setError('Failed to log in. Please retry.')
+        } catch (err) {
+            setError(`Failed to log in, Error: ${err}`)
         }
         setLoading(false)
     }
 
     return (
-        <div>
-            <button disabled={loading} onClick={handleLogin}>
-                Log In
-            </button>
-            {error && <span>{error}</span>}
-        </div>
+        <>
+            <Navbar
+                onClick={handleLogin}
+                authButtonText="Log In"
+                authButtonDisabled={loading}
+            />
+            <Center
+                h="calc(100vh - 80px)"
+                bgGradient="linear(to-tl, #23a6d5, #23d5ab)"
+            >
+                <Heading>
+                    {error
+                        ? error
+                        : 'Log in to access the WATonomous Finance System'}
+                </Heading>
+            </Center>
+        </>
     )
 }
 
