@@ -27,7 +27,6 @@ const UWFinancePurchaseSchema = new Schema(
     {
         _id: false,
         timestamps: true,
-        collection: 'uwfinancepurchases',
     }
 )
 

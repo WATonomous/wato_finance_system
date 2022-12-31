@@ -34,6 +34,10 @@ const getRandomNumberFromLength = (length) => {
 
 const generateDummyData = async () => {
     try {
+        // cashfund must have a hardcoded id of 0, that is to uniquely identify it
+        // as the cash fund even though it takes the shape of a funding item
+        await createCashFund()
+        console.log('✅ cash fund created')
         const sponsorshipFundIds = await createSponsorshipFunds()
         console.log('✅ sponsorship funds created')
         const fundingItemIds = await createFundingItems(sponsorshipFundIds)
@@ -46,6 +50,20 @@ const generateDummyData = async () => {
         console.log('❌ script failed: ')
         console.log(err)
     }
+}
+
+const createCashFund = async () => {
+    const cashFund = {
+        name: 'WATO Cash',
+        // sf_link is required, set to a dummy value
+        sf_link: -1,
+        funding_allocation: 0,
+    }
+    await fetch(`${endpoint}/fundingitems`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(cashFund),
+    })
 }
 
 const generateDummySF = () => {
@@ -117,6 +135,7 @@ const generateDummyFundingItem = () => {
         purchase_justification: lorem.generateSentences(1),
     }
 }
+
 const createSponsorshipFunds = async () => {
     const sponsorshipFundsData = []
     for (let i = 0; i < numSponsorhipFundsToCreate; i++) {
