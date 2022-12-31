@@ -31,7 +31,6 @@ const PersonalPurchaseSchema = new Schema(
     {
         _id: false,
         timestamps: true,
-        collection: 'personalpurchases',
     }
 )
 
