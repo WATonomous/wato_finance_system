@@ -3,23 +3,31 @@ const {
     getFundingItemsBySponsorshipFund,
     getPersonalPurchasesByFundingItem,
     getUWFinancePurchasesByFundingItem,
+    getSponsorshipFundFundingSpentByFILinks,
 } = require('../helpers.js')
 
 const getAllSponsorshipFunds = (_, res) => {
-    SponsorshipFund.find()
-        .then((SponsorshipFund) => res.json(SponsorshipFund))
+    SponsorshipFund.find().lean()
+        .then(async (sponsorshipFunds) => {
+            const augmentedSponsorshipFunds = await Promise.all(sponsorshipFunds.map(async (sponsorshipFund) => {
+                sponsorshipFund.funding_spent = await getSponsorshipFundFundingSpentByFILinks(sponsorshipFund.fi_links)
+                return sponsorshipFund
+            }))
+            res.json(augmentedSponsorshipFunds)
+        })
         .catch((err) => res.status(400).json(err))
 }
 
 const getSponsorshipFund = (req, res) => {
     const { id } = req.params
-    SponsorshipFund.findById(id)
-        .then((sponsorshipFundToRetrieve) => {
-            if (!sponsorshipFundToRetrieve) {
+    SponsorshipFund.findById(id).lean()
+        .then(async (sponsorshipFund) => {
+            if (!sponsorshipFund) {
                 res.status(404)
                 throw new Error('Sponsorship Fund not found')
             }
-            res.status(200).json(sponsorshipFundToRetrieve)
+            sponsorshipFund.funding_spent = await getSponsorshipFundFundingSpentByFILinks(sponsorshipFund.fi_links)
+            res.status(200).json(sponsorshipFund)
         })
         .catch((err) => res.status(400).json(err))
 }
@@ -27,8 +35,8 @@ const getSponsorshipFund = (req, res) => {
 // this function reaches all the way down to the children
 const getAllChildren = async (req, res) => {
     const { id } = req.params
-    const fundingItems = await getFundingItemsBySponsorshipFund(id)
-    const sponsorshipfund = await SponsorshipFund.findById(id)
+    const fundingItems = await getFundingItemsBySponsorshipFund(id) // augment with funding spent
+    const sponsorshipfund = await SponsorshipFund.findById(id).lean() // augment with funding spent
     const allData = await Promise.all(
         fundingItems.map(async (fundingItem) => {
             const personalPurchases = await getPersonalPurchasesByFundingItem(
@@ -44,7 +52,7 @@ const getAllChildren = async (req, res) => {
             }
         })
     )
-    res.json({ ...sponsorshipfund?.toObject(), fundingItems: allData })
+    res.json({ ...sponsorshipfund, fundingItems: allData })
 }
 const createSponsorshipFund = (req, res) => {
     const { body } = req
