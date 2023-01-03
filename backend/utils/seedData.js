@@ -55,8 +55,9 @@ const generateDummyData = async () => {
 const createCashFund = async () => {
     const cashFund = {
         name: 'WATO Cash',
-        // sf_link is required, set to a dummy value
+        // sf_link and reporter_id are required, set to a dummy value
         sf_link: -1,
+        reporter_id: -1,
         funding_allocation: 0,
     }
     await fetch(`${endpoint}/fundingitems`, {
