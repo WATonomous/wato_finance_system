@@ -31,9 +31,11 @@ const getSponsorshipFund = (req, res) => {
 const getAllChildren = async (req, res) => {
     const { id } = req.params
 
-    const sponsorshipFunds = await getUpdatedSponsorshipFundsByIdList([id]) // augment with funding spent
+    const sponsorshipFunds = await getUpdatedSponsorshipFundsByIdList([id])
     const sponsorshipFund = sponsorshipFunds[0]
-    const fundingItems = await getUpdatedFundingItemsByIdList(sponsorshipFund.fi_links) // augment with funding spent
+    const fundingItems = await getUpdatedFundingItemsByIdList(
+        sponsorshipFund.fi_links
+    )
     const allData = await Promise.all(
         fundingItems.map(async (fundingItem) => {
             const personalPurchases = await getPersonalPurchasesByFundingItem(
