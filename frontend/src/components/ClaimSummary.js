@@ -15,7 +15,7 @@ import {
 } from '@chakra-ui/react'
 import { getSFName, getStandardizedDate } from '../utils/utils'
 import { useParams } from 'react-router-dom'
-import LoadingSpinner from './Spinner'
+import LoadingSpinner from './LoadingSpinner'
 
 const FundingItemView = ({ fundingItem }) => {
     return (
@@ -113,7 +113,7 @@ const ClaimSummary = () => {
         fetchClaimData()
     }, [id])
 
-    if (!claimData) return <LoadingSpinner />
+    if (!claimData) return <Box h="100vh"><LoadingSpinner /></Box>
 
     return (
         <Box>

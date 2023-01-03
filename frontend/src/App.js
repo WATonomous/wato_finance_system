@@ -8,16 +8,17 @@ import {
 import { ChakraProvider } from '@chakra-ui/react'
 
 import { AuthLayout } from './contexts/AuthContext'
-
-import Login from './components/Login'
-import CreateUser from './components/CreateUser'
-import Dashboard from './components/Dashboard'
 import {
     PrivateRoute,
     LoggedInRedirect,
     PublicRoute,
 } from './contexts/CustomRoutes'
+
+import Login from './components/Login'
+import CreateUser from './components/CreateUser'
+import Dashboard from './components/Dashboard'
 import ClaimSummary from './components/ClaimSummary'
+import NotFound from './components/NotFound'
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -36,6 +37,7 @@ const router = createBrowserRouter(
                 <Route path="/UPR/:id" element={<Dashboard />} />
                 <Route path="/user" element={<CreateUser />} />
             </Route>
+            <Route path="*" element={<NotFound />} />
         </Route>
     )
 )
