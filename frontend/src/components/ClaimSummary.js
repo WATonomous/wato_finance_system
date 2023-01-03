@@ -113,7 +113,12 @@ const ClaimSummary = () => {
         fetchClaimData()
     }, [id])
 
-    if (!claimData) return <Box h="100vh"><LoadingSpinner /></Box>
+    if (!claimData)
+        return (
+            <Box h="100vh">
+                <LoadingSpinner />
+            </Box>
+        )
 
     return (
         <Box>
