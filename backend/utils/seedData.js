@@ -131,6 +131,7 @@ const generateDummyFundingItem = () => {
             length: 3,
             separator: '-',
         }),
+        reporter_id: getRandomNumberFromLength(5),
         funding_allocation: generateRandomAmount(30),
         purchase_justification: lorem.generateSentences(1),
     }

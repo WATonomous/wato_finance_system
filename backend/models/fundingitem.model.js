@@ -6,6 +6,7 @@ const { Schema } = mongoose
 const FundingItemSchema = new Schema(
     {
         _id: { type: Number },
+        reporter_id: { type: String, required: true },
         sf_link: {
             type: Number,
             ref: 'SponsorshipFund',
