@@ -1,24 +1,19 @@
 const FundingItem = require('../models/fundingitem.model')
 const SponsorshipFund = require('../models/sponsorshipfund.model')
-const { getFundingItemFundingSpentById } = require('../helpers')
+const { getUpdatedFundingItemsByIdList } = require('../helpers')
 
 const getAllFundingItems = (_, res) => {
-    FundingItem.find().lean()
+    getUpdatedFundingItemsByIdList([])
         .then(async (fundingItems) => {
-            const augmentedFundingItems = await Promise.all(fundingItems.map(async (fundingItem) => {
-                fundingItem.funding_spent = await getFundingItemFundingSpentById(fundingItem._id)
-                return fundingItem
-            }))
-            res.json(augmentedFundingItems)
+            res.json(fundingItems)
         })
         .catch((err) => res.status(400).json('Error: ' + err))
 }
 
 const getFundingItem = (req, res) => {
-    FundingItem.findById(req.params.id)
-        .then(async (fundingItem) => {            
-            fundingItem.funding_spent = await getFundingItemFundingSpentById(fundingItem._id)
-            res.json(fundingItem)
+    getUpdatedFundingItemsByIdList([req.params.id])
+        .then((fundingItems) => {
+            res.json(fundingItems[0])
         })
         .catch((err) => res.status(400).json('Error: ' + err))
 }

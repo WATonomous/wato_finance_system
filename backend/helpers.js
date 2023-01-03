@@ -3,15 +3,6 @@ const FundingItem = require('./models/fundingitem.model')
 const PersonalPurchase = require('./models/personalpurchase.model')
 const UWFinancePurchase = require('./models/uwfinancepurchase.model')
 
-const getFundingItemsBySponsorshipFund = async (sponsorship_id) => {
-    const fund = await SponsorshipFund.findById(sponsorship_id)
-    return FundingItem.find({
-        _id: {
-            $in: fund.fi_links,
-        },
-    })
-}
-
 const getPersonalPurchasesByFundingItem = async (funding_item_id) => {
     const fundingItem = await FundingItem.findById(funding_item_id)
     return PersonalPurchase.find({
@@ -30,11 +21,15 @@ const getUWFinancePurchasesByFundingItem = async (funding_item_id) => {
     })
 }
 
-const getFundingItemFundingSpentById = async (id) => {
-    const fundingSpent = await FundingItem.aggregate([
+// empty list arg queries for all Funding Items
+const getUpdatedFundingItemsByIdList = async (idList) => {
+    if (idList.length === 0) {
+        idList = await FundingItem.distinct('_id')
+    }
+    const fundingItemList = await Promise.all(idList.map(async (id) => await FundingItem.aggregate([
         {
             $match: {
-                _id: id,
+                _id: parseInt(id),
             },
         },
         {
@@ -54,36 +49,80 @@ const getFundingItemFundingSpentById = async (id) => {
             },
         },
         {
-            $project: {
-                "_id": 0,
-                "funding_spent": {
-                    "$round": [{
-                        "$sum": [
+            $set: {
+                funding_spent: {
+                    $round: [{
+                        $sum: [
                             {
-                                "$sum": "$ppr_links.cost"
+                                $sum: "$ppr_links.cost"
                             },
                             {
-                                "$sum": "$upr_links.cost"
+                                $sum: "$upr_links.cost"
                             }
                         ]
                     }, 2]
                 },
+                upr_links: {
+                    $map: {
+                        input: "$upr_links",
+                        as: "uprObj",
+                        in: "$$uprObj._id",
+                    }
+                },
+                ppr_links: {
+                    $map: {
+                        input: "$ppr_links",
+                        as: "pprObj",
+                        in: "$$pprObj._id",
+                    }
+                },
             }
         },
-    ])
-    return fundingSpent[0].funding_spent
+    ])))
+
+    // aggregate always returns an array so fundingItemList will
+    // always be a list of one-elem lists:
+    // e.g. [[FI-1], [FI-2], ...] where FI-X is a FundingItem object
+    return fundingItemList.flat()
 }
 
+// empty list arg queries for all Sponsorship Funds
+const getUpdatedSponsorshipFundsByIdList = async (idList) => {
+    if (idList.length === 0) {
+        idList = await SponsorshipFund.distinct('_id')
+    }
+    const sponsorshipFundList = await Promise.all(idList.map(async (id) => {
+        const sponsorshipFund = await SponsorshipFund.findById(id)
+        let fundingSpent = 0
+        if (sponsorshipFund.fi_links.length > 0) {
+            const fundingItemList = await getUpdatedFundingItemsByIdList(sponsorshipFund.fi_links)
+            fundingSpent = fundingItemList.map(
+                (fundingItem) => fundingItem.funding_spent
+            ).reduce((a, b) => a + b, 0)
+        }
+        return await SponsorshipFund.aggregate([
+            {
+                $match: {
+                    _id: parseInt(id),
+                },
+            },
+            {
+                $set: {
+                    funding_spent: fundingSpent,
+                }
+            }
+        ])
+    }))
 
-const getSponsorshipFundFundingSpentByFILinks = async (fi_links) => {
-    const fundingSpentList = await Promise.all(fi_links.map(async (id) => await getFundingItemFundingSpentById(id)))
-    return fundingSpentList.reduce((a, b) => a + b, 0)
+    // aggregate always returns an array so sponsorshipFundList will
+    // always be a list of one-elem lists:
+    // e.g. [[SF-1], [SF-2], ...] where SF-X is a SponsorshipFund object
+    return sponsorshipFundList.flat()
 }
 
 module.exports = {
-    getFundingItemsBySponsorshipFund,
     getPersonalPurchasesByFundingItem,
     getUWFinancePurchasesByFundingItem,
-    getFundingItemFundingSpentById,
-    getSponsorshipFundFundingSpentByFILinks,
+    getUpdatedFundingItemsByIdList,
+    getUpdatedSponsorshipFundsByIdList,
 }
