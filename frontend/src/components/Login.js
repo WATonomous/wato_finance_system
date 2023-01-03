@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Center, Heading } from '@chakra-ui/react'
+import { Center, Heading, VStack } from '@chakra-ui/react'
 
 import { useAuth } from '../contexts/AuthContext'
 import Navbar from './Navbar'
@@ -23,13 +23,14 @@ const Login = () => {
     }
 
     return (
-        <>
+        <VStack spacing="0">
             <Navbar
                 onClick={handleLogin}
                 authButtonText="Log In"
                 authButtonDisabled={loading}
             />
             <Center
+                w="100%"
                 h="calc(100vh - 80px)"
                 bgGradient="linear(to-tl, #23a6d5, #23d5ab)"
             >
@@ -39,7 +40,7 @@ const Login = () => {
                         : 'Log in to access the WATonomous Finance System'}
                 </Heading>
             </Center>
-        </>
+        </VStack>
     )
 }
 

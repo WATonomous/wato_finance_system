@@ -6,7 +6,7 @@ const Navbar = (props) => {
     const navigate = useNavigate()
 
     return (
-        <Flex alignItems="center" p="16px 24px" bgColor="deepskyblue">
+        <Flex alignItems="center" p="16px 24px" bgColor="deepskyblue" width="100%">
             <Heading
                 lineHeight="48px"
                 onClick={() => navigate('/')}

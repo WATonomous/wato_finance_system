@@ -34,9 +34,7 @@ const TicketList = (props) => {
 
     return (
         <VStack
-            pos="absolute"
-            left="0"
-            w="300px"
+            minW="300px"
             h="calc(100vh - 80px)"
             overflowY="scroll"
         >

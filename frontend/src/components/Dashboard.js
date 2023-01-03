@@ -1,11 +1,14 @@
 import React, { useEffect, useReducer, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { Text } from '@chakra-ui/react'
+import { Box, Heading, Flex, VStack, Text, Center } from '@chakra-ui/react'
 import axios from 'axios'
 
 import { useAuth } from '../contexts/AuthContext'
 import Navbar from './Navbar'
 import TicketList from './TicketList'
+import LoadingSpinner from './Spinner'
+
+const VALID_TICKET_TYPES = Object.freeze(['SF', 'FI', 'PPR', 'UPR'])
 
 const DATA_KEYS = Object.freeze({
     SF: 'sfData',
@@ -20,7 +23,19 @@ const Dashboard = (props) => {
     const navigate = useNavigate()
     const location = useLocation()
 
-    const [tickets, updateTickets] = useReducer(
+    const [currentTicket, updateCurentTicket] = useReducer(
+        (data, partialData) => ({
+            ...data,
+            ...partialData,
+        }),
+        {
+            type: '',
+            id: 0,
+            data: {},
+        }
+    )
+
+    const [allTickets, updateAllTickets] = useReducer(
         (data, partialData) => ({
             ...data,
             ...partialData,
@@ -44,16 +59,34 @@ const Dashboard = (props) => {
             .all(
                 Object.values(endpoints).map((endpoint) => axios.get(endpoint))
             )
-            .then((responses) =>
+            .then((responses) => {
                 Object.keys(endpoints).forEach((key, index) => {
-                    updateTickets({ [key]: responses[index].data })
+                    updateAllTickets({ [key]: responses[index].data })
                 })
-            )
+                console.log('fetched all tickets')
+            })
     }
 
     useEffect(() => {
         getAllTickets()
     }, [])
+
+    useEffect(() => {
+        const splitPath = location.pathname.split('/')
+        if (splitPath.length !== 3 || !VALID_TICKET_TYPES.includes(splitPath[1])) return
+        const currentTicketType = splitPath[1]
+        const currentTicketId = splitPath[2]
+        const allTicketsWithCurrentTicketType = allTickets[DATA_KEYS[currentTicketType]]
+        const currentTicketData = allTicketsWithCurrentTicketType.find(
+            (ticket) => parseInt(ticket._id) === parseInt(currentTicketId)
+        )
+        if (!currentTicketData) return
+        updateCurentTicket({
+            type: currentTicketType,
+            id: currentTicketId,
+            data: currentTicketData,
+        })
+    }, [location.pathname, allTickets])
 
     const handleLogout = async () => {
         try {
@@ -64,22 +97,62 @@ const Dashboard = (props) => {
         }
     }
 
+    const getCurrentTicketContent = () => {
+        if (location.pathname === '/') {
+            return (
+                <Center w="100%">
+                    <Heading fontSize="24px">Choose a ticket to view</Heading>
+                </Center>
+            )
+        }
+        if (currentTicket.id === 0) {
+            return (
+                <Center w="100%">
+                    <LoadingSpinner />
+                </Center>
+            )
+        }
+        return (
+            <>
+                <Box w="100%" p="16px 24px" justifyContent="flex-start">
+                    <Heading fontSize="24px">
+                        {`${currentTicket.type}-${currentTicket.id}: ${currentTicket.data?.name}`}
+                    </Heading>
+                    <Text>
+                        {location.pathname}
+                    </Text>
+                    <Text>
+                        {location.pathname}
+                    </Text>
+                    <Text>
+                        {location.pathname}
+                    </Text>
+                </Box>
+                <Box minW="300px" p="16px 24px">
+                    <Text>
+                        {location.pathname}
+                    </Text>
+                </Box>
+            </>
+        )
+    }
+
     return (
-        <>
+        <VStack spacing="0">
             <Navbar
                 onClick={handleLogout}
                 authButtonText={error ? error : 'Log Out'}
             />
-            <TicketList
-                sfData={tickets[DATA_KEYS.SF]}
-                fiData={tickets[DATA_KEYS.FI]}
-                pprData={tickets[DATA_KEYS.PPR]}
-                uprData={tickets[DATA_KEYS.UPR]}
-            />
-            <Text pos="absolute" left="308px">
-                {location.pathname}
-            </Text>
-        </>
+            <Flex w="100%">
+                <TicketList
+                    sfData={allTickets[DATA_KEYS.SF]}
+                    fiData={allTickets[DATA_KEYS.FI]}
+                    pprData={allTickets[DATA_KEYS.PPR]}
+                    uprData={allTickets[DATA_KEYS.UPR]}
+                />
+                {getCurrentTicketContent()}
+            </Flex>
+        </VStack>
     )
 }
 
