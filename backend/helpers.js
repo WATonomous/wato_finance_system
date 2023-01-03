@@ -120,6 +120,9 @@ const getUpdatedSponsorshipFundsByIdList = async (idList) => {
                 {
                     $set: {
                         funding_spent: fundingSpent,
+                        name: {
+                            $concat: ['$organization', ' - ', '$semester'],
+                        },
                     },
                 },
             ])

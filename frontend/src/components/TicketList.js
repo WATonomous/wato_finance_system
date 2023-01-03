@@ -6,7 +6,7 @@ const TicketList = (props) => {
     const navigate = useNavigate()
 
     const sfCardData = props.sfData.map((sf) => ({
-        name: `${sf.organization} - ${sf.semester}`,
+        name: sf.name,
         type: 'SF',
         id: sf._id,
     }))
