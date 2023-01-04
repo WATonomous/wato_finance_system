@@ -7,7 +7,7 @@ const {
 } = require('../helpers.js')
 
 const getAllSponsorshipFunds = (_, res) => {
-    getUpdatedSponsorshipFundsByIdList([])
+    getUpdatedSponsorshipFundsByIdList()
         .then((sponsorshipFunds) => {
             res.json(sponsorshipFunds)
         })
@@ -36,7 +36,7 @@ const getAllChildren = async (req, res) => {
     const fundingItems = await getUpdatedFundingItemsByIdList(
         sponsorshipFund.fi_links
     )
-    const allData = await Promise.all(
+    const allSFChildren = await Promise.all(
         fundingItems.map(async (fundingItem) => {
             const personalPurchases = await getPersonalPurchasesByFundingItem(
                 fundingItem
@@ -51,7 +51,7 @@ const getAllChildren = async (req, res) => {
             }
         })
     )
-    res.json({ ...sponsorshipFund, fundingItems: allData })
+    res.json({ ...sponsorshipFund, fundingItems: allSFChildren })
 }
 
 const createSponsorshipFund = (req, res) => {

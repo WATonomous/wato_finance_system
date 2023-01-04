@@ -22,7 +22,7 @@ const getUWFinancePurchasesByFundingItem = async (funding_item_id) => {
 }
 
 // empty list arg queries for all Funding Items
-const getUpdatedFundingItemsByIdList = async (idList) => {
+const getUpdatedFundingItemsByIdList = async (idList = []) => {
     if (idList.length === 0) {
         idList = await FundingItem.distinct('_id')
     }
@@ -35,6 +35,7 @@ const getUpdatedFundingItemsByIdList = async (idList) => {
                             _id: parseInt(id),
                         },
                     },
+                    // map ppr_links and upr_links to documents via referenced collection
                     {
                         $lookup: {
                             from: 'personalpurchases',
@@ -68,18 +69,19 @@ const getUpdatedFundingItemsByIdList = async (idList) => {
                                     2,
                                 ],
                             },
+                            // map the documents back to their ids to preserve schema shape
                             upr_links: {
                                 $map: {
                                     input: '$upr_links',
-                                    as: 'uprObj',
-                                    in: '$$uprObj._id',
+                                    as: 'uprDoc',
+                                    in: '$$uprDoc._id',
                                 },
                             },
                             ppr_links: {
                                 $map: {
                                     input: '$ppr_links',
-                                    as: 'pprObj',
-                                    in: '$$pprObj._id',
+                                    as: 'pprDoc',
+                                    in: '$$pprDoc._id',
                                 },
                             },
                         },
@@ -95,7 +97,7 @@ const getUpdatedFundingItemsByIdList = async (idList) => {
 }
 
 // empty list arg queries for all Sponsorship Funds
-const getUpdatedSponsorshipFundsByIdList = async (idList) => {
+const getUpdatedSponsorshipFundsByIdList = async (idList = []) => {
     if (idList.length === 0) {
         idList = await SponsorshipFund.distinct('_id')
     }

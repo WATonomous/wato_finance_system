@@ -3,7 +3,7 @@ const SponsorshipFund = require('../models/sponsorshipfund.model')
 const { getUpdatedFundingItemsByIdList } = require('../helpers')
 
 const getAllFundingItems = (_, res) => {
-    getUpdatedFundingItemsByIdList([])
+    getUpdatedFundingItemsByIdList()
         .then(async (fundingItems) => {
             res.json(fundingItems)
         })
