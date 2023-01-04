@@ -13,9 +13,9 @@ import {
     Button,
     Stack,
 } from '@chakra-ui/react'
-import { getSFName, getStandardizedDate } from '../utils/utils'
+import { getStandardizedDate } from '../utils/utils'
 import { useParams } from 'react-router-dom'
-import LoadingSpinner from './Spinner'
+import LoadingSpinner from './LoadingSpinner'
 
 const FundingItemView = ({ fundingItem }) => {
     return (
@@ -113,18 +113,18 @@ const ClaimSummary = () => {
         fetchClaimData()
     }, [id])
 
-    if (!claimData) return <LoadingSpinner />
+    if (!claimData)
+        return (
+            <Box h="100vh">
+                <LoadingSpinner />
+            </Box>
+        )
 
     return (
         <Box>
             <Heading>Claim Summary</Heading>
             <Heading size="md">{`Sponsorship Fund ID: ${id}`}</Heading>
-            <Heading size="md">
-                {`Organization: ${getSFName(
-                    claimData.organization,
-                    claimData.semester
-                )}`}
-            </Heading>
+            <Heading size="md">{`Name: ${claimData.name}`}</Heading>
             <Heading size="md">
                 {`Deadline: ${getStandardizedDate(claimData.claim_deadline)}`}
             </Heading>

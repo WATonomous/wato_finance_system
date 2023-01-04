@@ -1,25 +1,29 @@
 const FundingItem = require('../models/fundingitem.model')
 const SponsorshipFund = require('../models/sponsorshipfund.model')
+const { getUpdatedFundingItemsByIdList } = require('../helpers')
 
 const getAllFundingItems = (_, res) => {
-    FundingItem.find()
-        .then((fundingItems) => res.json(fundingItems))
+    getUpdatedFundingItemsByIdList()
+        .then(async (fundingItems) => {
+            res.json(fundingItems)
+        })
         .catch((err) => res.status(400).json('Error: ' + err))
 }
 
 const getFundingItem = (req, res) => {
-    FundingItem.findById(req.params.id)
-        .then((fundingItem) => res.json(fundingItem))
+    getUpdatedFundingItemsByIdList([req.params.id])
+        .then((fundingItems) => {
+            res.json(fundingItems[0])
+        })
         .catch((err) => res.status(400).json('Error: ' + err))
 }
 
 const createFundingItem = async (req, res) => {
     const { body } = req
     const newFundingItem = new FundingItem(body)
-
     try {
         const newFI = await newFundingItem.save()
-        // update the parent to store link to child funding item
+        // update the parent SF to store link to child FI
         await SponsorshipFund.findByIdAndUpdate(newFI.sf_link, {
             $push: { fi_links: newFI._id },
         })

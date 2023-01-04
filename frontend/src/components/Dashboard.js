@@ -11,10 +11,10 @@ import LoadingSpinner from './Spinner'
 const VALID_TICKET_TYPES = Object.freeze(['SF', 'FI', 'PPR', 'UPR'])
 
 const DATA_KEYS = Object.freeze({
-    SF: 'sfData',
-    FI: 'fiData',
-    PPR: 'pprData',
-    UPR: 'uprData',
+    SF: 'SF',
+    FI: 'FI',
+    PPR: 'PPR',
+    UPR: 'UPR',
 })
 
 const Dashboard = (props) => {
@@ -73,10 +73,15 @@ const Dashboard = (props) => {
 
     useEffect(() => {
         const splitPath = location.pathname.split('/')
-        if (splitPath.length !== 3 || !VALID_TICKET_TYPES.includes(splitPath[1])) return
+        if (
+            splitPath.length !== 3 ||
+            !VALID_TICKET_TYPES.includes(splitPath[1])
+        )
+            return
         const currentTicketType = splitPath[1]
         const currentTicketId = splitPath[2]
-        const allTicketsWithCurrentTicketType = allTickets[DATA_KEYS[currentTicketType]]
+        const allTicketsWithCurrentTicketType =
+            allTickets[DATA_KEYS[currentTicketType]]
         const currentTicketData = allTicketsWithCurrentTicketType.find(
             (ticket) => parseInt(ticket._id) === parseInt(currentTicketId)
         )
@@ -118,20 +123,12 @@ const Dashboard = (props) => {
                     <Heading fontSize="24px">
                         {`${currentTicket.type}-${currentTicket.id}: ${currentTicket.data?.name}`}
                     </Heading>
-                    <Text>
-                        {location.pathname}
-                    </Text>
-                    <Text>
-                        {location.pathname}
-                    </Text>
-                    <Text>
-                        {location.pathname}
-                    </Text>
+                    <Text>{location.pathname}</Text>
+                    <Text>{location.pathname}</Text>
+                    <Text>{location.pathname}</Text>
                 </Box>
                 <Box minW="300px" p="16px 24px">
-                    <Text>
-                        {location.pathname}
-                    </Text>
+                    <Text>{location.pathname}</Text>
                 </Box>
             </>
         )
@@ -144,12 +141,7 @@ const Dashboard = (props) => {
                 authButtonText={error ? error : 'Log Out'}
             />
             <Flex w="100%">
-                <TicketList
-                    sfData={allTickets[DATA_KEYS.SF]}
-                    fiData={allTickets[DATA_KEYS.FI]}
-                    pprData={allTickets[DATA_KEYS.PPR]}
-                    uprData={allTickets[DATA_KEYS.UPR]}
-                />
+                <TicketList tickets={allTickets} />
                 {getCurrentTicketContent()}
             </Flex>
         </VStack>

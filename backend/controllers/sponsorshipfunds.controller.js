@@ -1,25 +1,28 @@
 const SponsorshipFund = require('../models/sponsorshipfund.model')
 const {
-    getFundingItemsBySponsorshipFund,
+    getUpdatedFundingItemsByIdList,
     getPersonalPurchasesByFundingItem,
     getUWFinancePurchasesByFundingItem,
+    getUpdatedSponsorshipFundsByIdList,
 } = require('../helpers.js')
 
 const getAllSponsorshipFunds = (_, res) => {
-    SponsorshipFund.find()
-        .then((SponsorshipFund) => res.json(SponsorshipFund))
+    getUpdatedSponsorshipFundsByIdList()
+        .then((sponsorshipFunds) => {
+            res.json(sponsorshipFunds)
+        })
         .catch((err) => res.status(400).json(err))
 }
 
 const getSponsorshipFund = (req, res) => {
     const { id } = req.params
-    SponsorshipFund.findById(id)
-        .then((sponsorshipFundToRetrieve) => {
-            if (!sponsorshipFundToRetrieve) {
+    getUpdatedSponsorshipFundsByIdList([id])
+        .then((sponsorshipFunds) => {
+            if (!sponsorshipFunds) {
                 res.status(404)
                 throw new Error('Sponsorship Fund not found')
             }
-            res.status(200).json(sponsorshipFundToRetrieve)
+            res.status(200).json(sponsorshipFunds[0])
         })
         .catch((err) => res.status(400).json(err))
 }
@@ -27,9 +30,13 @@ const getSponsorshipFund = (req, res) => {
 // this function reaches all the way down to the children
 const getAllChildren = async (req, res) => {
     const { id } = req.params
-    const fundingItems = await getFundingItemsBySponsorshipFund(id)
-    const sponsorshipfund = await SponsorshipFund.findById(id)
-    const allData = await Promise.all(
+
+    const sponsorshipFunds = await getUpdatedSponsorshipFundsByIdList([id])
+    const sponsorshipFund = sponsorshipFunds[0]
+    const fundingItems = await getUpdatedFundingItemsByIdList(
+        sponsorshipFund.fi_links
+    )
+    const allSFChildren = await Promise.all(
         fundingItems.map(async (fundingItem) => {
             const personalPurchases = await getPersonalPurchasesByFundingItem(
                 fundingItem
@@ -38,14 +45,15 @@ const getAllChildren = async (req, res) => {
                 fundingItem
             )
             return {
-                ...fundingItem.toObject(),
+                ...fundingItem,
                 personalPurchases,
                 uwFinancePurchases,
             }
         })
     )
-    res.json({ ...sponsorshipfund?.toObject(), fundingItems: allData })
+    res.json({ ...sponsorshipFund, fundingItems: allSFChildren })
 }
+
 const createSponsorshipFund = (req, res) => {
     const { body } = req
     const newSponsorshipFund = new SponsorshipFund(body)
