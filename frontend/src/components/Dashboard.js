@@ -8,10 +8,10 @@ import Navbar from './Navbar'
 import TicketList from './TicketList'
 
 const DATA_KEYS = Object.freeze({
-    SF: 'sfData',
-    FI: 'fiData',
-    PPR: 'pprData',
-    UPR: 'uprData',
+    SF: 'SF',
+    FI: 'FI',
+    PPR: 'PPR',
+    UPR: 'UPR',
 })
 
 const Dashboard = (props) => {
@@ -70,12 +70,7 @@ const Dashboard = (props) => {
                 onClick={handleLogout}
                 authButtonText={error ? error : 'Log Out'}
             />
-            <TicketList
-                sfData={tickets[DATA_KEYS.SF]}
-                fiData={tickets[DATA_KEYS.FI]}
-                pprData={tickets[DATA_KEYS.PPR]}
-                uprData={tickets[DATA_KEYS.UPR]}
-            />
+            <TicketList tickets={tickets} />
             <Text pos="absolute" left="308px">
                 {location.pathname}
             </Text>
