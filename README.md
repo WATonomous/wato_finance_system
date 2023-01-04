@@ -30,7 +30,6 @@ To start the server, run
 ```
 npm install -g nodemon
 cd backend
-npm install
 nodemon start
 ```
 
@@ -87,3 +86,12 @@ To start the frontend, in a different terminal run
 cd frontend
 npm start
 ```
+
+---
+
+## Notes
+
+### Running prettier
+
+If you have created a pr and are getting failed pipelines due to prettier, run `npx prettier -w .` in the root directory
+You can also configure prettier to run on save, by installing prettier and [following this guide](https://www.alphr.com/auto-format-vs-code)
