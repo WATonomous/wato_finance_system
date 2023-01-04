@@ -70,9 +70,7 @@ const Dashboard = (props) => {
                 onClick={handleLogout}
                 authButtonText={error ? error : 'Log Out'}
             />
-            <TicketList
-                tickets={tickets}
-            />
+            <TicketList tickets={tickets} />
             <Text pos="absolute" left="308px">
                 {location.pathname}
             </Text>

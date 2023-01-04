@@ -5,13 +5,15 @@ import { Card, CardBody, Text, VStack } from '@chakra-ui/react'
 const TicketList = (props) => {
     const navigate = useNavigate()
 
-    const allTickets = Object.entries(props.tickets).map(([ticketType, collection]) => {
-        return collection.map((ticket) => ({
-            name: ticket.name,
-            type: ticketType,
-            id: ticket._id,
-        }))
-    }).flat()
+    const allTickets = Object.entries(props.tickets)
+        .map(([ticketType, collection]) => {
+            return collection.map((ticket) => ({
+                name: ticket.name,
+                type: ticketType,
+                id: ticket._id,
+            }))
+        })
+        .flat()
 
     return (
         <VStack
