@@ -6,7 +6,7 @@ import axios from 'axios'
 import { useAuth } from '../contexts/AuthContext'
 import Navbar from './Navbar'
 import TicketList from './TicketList'
-import LoadingSpinner from './Spinner'
+import LoadingSpinner from './LoadingSpinner'
 
 const VALID_TICKET_TYPES = Object.freeze(['SF', 'FI', 'PPR', 'UPR'])
 
@@ -72,12 +72,15 @@ const Dashboard = (props) => {
     }, [])
 
     useEffect(() => {
+        if (location.pathname === '/') return
         const splitPath = location.pathname.split('/')
         if (
             splitPath.length !== 3 ||
             !VALID_TICKET_TYPES.includes(splitPath[1])
-        )
+        ) {
+            navigate('/notfound')
             return
+        }
         const currentTicketType = splitPath[1]
         const currentTicketId = splitPath[2]
         const allTicketsWithCurrentTicketType =
@@ -85,7 +88,10 @@ const Dashboard = (props) => {
         const currentTicketData = allTicketsWithCurrentTicketType.find(
             (ticket) => parseInt(ticket._id) === parseInt(currentTicketId)
         )
-        if (!currentTicketData) return
+        if (!currentTicketData) {
+            navigate('/notfound')
+            return
+        }
         updateCurentTicket({
             type: currentTicketType,
             id: currentTicketId,
