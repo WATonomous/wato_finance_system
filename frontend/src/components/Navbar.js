@@ -1,9 +1,37 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button, Flex, Heading, Spacer } from '@chakra-ui/react'
+import { useAuth } from '../contexts/AuthContext'
 
-const Navbar = (props) => {
+const Navbar = () => {
     const navigate = useNavigate()
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState('')
+    const { currentUser, login, logout } = useAuth()
+
+    const handleLogin = async () => {
+        setLoading(true)
+        try {
+            await login()
+            navigate('/')
+        } catch (err) {
+            setError('Failed to log in')
+            console.log(err)
+        }
+        setLoading(false)
+    }
+
+    const handleLogout = async () => {
+        setLoading(true)
+        try {
+            await logout()
+            navigate('/login')
+        } catch (err) {
+            setError('Failed to log out')
+            console.log(err)
+        }
+        setLoading(false)
+    }
 
     return (
         <Flex
@@ -25,8 +53,11 @@ const Navbar = (props) => {
                 WATonomous Finance System
             </Heading>
             <Spacer />
-            <Button onClick={props.onClick} disabled={props.authButtonDisabled}>
-                {props.authButtonText}
+            <Button
+                onClick={currentUser ? handleLogout : handleLogin}
+                disabled={loading}
+            >
+                {error ? error : currentUser ? 'Log Out' : 'Log In'}
             </Button>
         </Flex>
     )

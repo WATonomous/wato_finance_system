@@ -14,7 +14,6 @@ import {
 } from '@chakra-ui/react'
 import axios from 'axios'
 
-import { useAuth } from '../contexts/AuthContext'
 import Navbar from './Navbar'
 import TicketList from './TicketList'
 import LoadingSpinner from './LoadingSpinner'
@@ -29,9 +28,7 @@ const DATA_KEYS = Object.freeze({
     UPR: 'UPR',
 })
 
-const Dashboard = (props) => {
-    const [error, setError] = useState('')
-    const { logout } = useAuth()
+const Dashboard = () => {
     const navigate = useNavigate()
     const location = useLocation()
 
@@ -108,15 +105,6 @@ const Dashboard = (props) => {
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location.pathname, allTickets])
-
-    const handleLogout = async () => {
-        try {
-            await logout()
-            navigate('/login')
-        } catch (err) {
-            setError(`Failed to log out, Error: ${err}`)
-        }
-    }
 
     const getCurrentTicketContent = () => {
         if (location.pathname === '/') {
@@ -257,10 +245,7 @@ const Dashboard = (props) => {
 
     return (
         <VStack spacing="0">
-            <Navbar
-                onClick={handleLogout}
-                authButtonText={error ? error : 'Log Out'}
-            />
+            <Navbar />
             <Flex pos="absolute" top="80px" w="100%">
                 <TicketList tickets={allTickets} />
                 {getCurrentTicketContent()}
