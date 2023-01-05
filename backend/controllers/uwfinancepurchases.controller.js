@@ -41,8 +41,8 @@ const deleteUWFinancePurchase = async (req, res) => {
         await FundingItem.findByIdAndUpdate(UPRtoDelete.fi_link, {
             $pull: { upr_links: UPRid },
         })
-        await UPRtoDelete.remove()
-        res.json('UW Finance Purchase deleted.')
+        const deleted = await UPRtoDelete.remove()
+        res.json(deleted)
     } catch (err) {
         res.status(400).json('Error: ' + err)
     }

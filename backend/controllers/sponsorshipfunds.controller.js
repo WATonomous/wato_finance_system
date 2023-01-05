@@ -1,10 +1,12 @@
 const SponsorshipFund = require('../models/sponsorshipfund.model')
+const FundingItem = require('../models/fundingitem.model')
 const {
     getUpdatedFundingItemsByIdList,
     getPersonalPurchasesByFundingItem,
     getUWFinancePurchasesByFundingItem,
     getUpdatedSponsorshipFundsByIdList,
 } = require('../helpers.js')
+const { cascadeDeleteFundingItem } = require('./fundingitems.controller')
 
 const getAllSponsorshipFunds = (_, res) => {
     getUpdatedSponsorshipFundsByIdList()
@@ -22,7 +24,7 @@ const getSponsorshipFund = (req, res) => {
                 res.status(404)
                 throw new Error('Sponsorship Fund not found')
             }
-            res.status(200).json(sponsorshipFunds[0])
+            res.json(sponsorshipFunds[0])
         })
         .catch((err) => res.status(400).json(err))
 }
@@ -64,40 +66,36 @@ const createSponsorshipFund = (req, res) => {
         .catch((err) => res.status(400).json('Error: ' + err))
 }
 
-const updateSponsorshipFund = (req, res) => {
+const updateSponsorshipFund = async (req, res) => {
     const { id } = req.params
     const updatedFields = req.body
-    SponsorshipFund.findById(id)
-        .then((sponsorshipFundToUpdate) => {
-            if (!sponsorshipFundToUpdate) {
-                res.status(404)
-                throw new Error('Sponsorship Fund not found')
+    try {
+        const updated = await SponsorshipFund.findByIdAndUpdate(
+            id,
+            updatedFields,
+            {
+                new: false,
             }
-            SponsorshipFund.findByIdAndUpdate(
-                sponsorshipFundToUpdate._id,
-                updatedFields,
-                {
-                    new: false,
-                }
-            )
-                .then(() => res.status(200).json(updatedFields))
-                .catch((err) => res.status(400).json(err))
-        })
-        .catch((err) => res.status(400).json(err))
+        )
+        res.json(updated)
+    } catch (err) {
+        res.status(400).json('Error: ' + err)
+    }
 }
 
-const deleteSponsorshipFund = (req, res) => {
+const deleteSponsorshipFund = async (req, res) => {
     const { id } = req.params
-    SponsorshipFund.findById(id)
-        .then((sponsorshipFundToDelete) => {
-            if (!sponsorshipFundToDelete) {
-                res.status(404)
-                throw new Error('Sponsorship Fund not found')
-            }
-            res.status(200).json(sponsorshipFundToDelete)
-            sponsorshipFundToDelete.remove()
-        })
-        .catch((err) => res.status(400).json(err))
+    try {
+        const SFToDelete = await SponsorshipFund.findById(id)
+        const { fi_links } = SFToDelete
+        await Promise.all(fi_links.map(async (fi_id) => {
+            return await cascadeDeleteFundingItem(fi_id)
+        }))
+        const deleted = await SFToDelete.remove()
+        res.json(deleted)
+    } catch (err) {
+        res.status(400).json('Error: ' + err)
+    }
 }
 
 module.exports = {
