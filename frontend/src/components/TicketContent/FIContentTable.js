@@ -1,5 +1,6 @@
 import { Table, Tbody, VStack } from '@chakra-ui/react'
 import React from 'react'
+import { currencyFormatter } from '../../utils/utils'
 import TicketContentTableRow from './TicketContentTableRow'
 
 const FIContentTable = (props) => {
@@ -10,11 +11,15 @@ const FIContentTable = (props) => {
                 <Tbody>
                     <TicketContentTableRow
                         heading={'Funding Allocation'}
-                        description={ticketData.funding_allocation}
+                        description={currencyFormatter.format(
+                            ticketData.funding_allocation
+                        )}
                     />
                     <TicketContentTableRow
                         heading={'Funding Spent'}
-                        description={ticketData.funding_spent}
+                        description={currencyFormatter.format(
+                            ticketData.funding_spent
+                        )}
                     />
                     <TicketContentTableRow
                         heading={'Purchase Justification'}

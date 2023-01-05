@@ -1,5 +1,6 @@
 import { Checkbox, Table, Tbody, VStack } from '@chakra-ui/react'
 import React from 'react'
+import { currencyFormatter } from '../../utils/utils'
 import TicketContentTableRow from './TicketContentTableRow'
 
 const UPRContentTable = (props) => {
@@ -14,7 +15,7 @@ const UPRContentTable = (props) => {
                     />
                     <TicketContentTableRow
                         heading={'Cost'}
-                        description={ticketData.cost}
+                        description={currencyFormatter.format(ticketData.cost)}
                     />
                     <TicketContentTableRow
                         heading={'Purchase Justification'}
