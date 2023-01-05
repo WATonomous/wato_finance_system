@@ -17,7 +17,7 @@ const TicketList = (props) => {
 
     return (
         <VStack
-            minW="300px"
+            minW={['200px', '200px', '200px', '280px', '300px']}
             h="calc(100vh - 80px)"
             overflowY="scroll"
         >
@@ -36,7 +36,7 @@ const TicketList = (props) => {
                     >
                         <CardBody p="8px 16px">
                             <Text>{code}</Text>
-                            <Text>{ticket.name}</Text>
+                            <Text noOfLines="1">{ticket.name}</Text>
                         </CardBody>
                     </Card>
                 )

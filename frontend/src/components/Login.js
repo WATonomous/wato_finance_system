@@ -30,6 +30,8 @@ const Login = () => {
                 authButtonDisabled={loading}
             />
             <Center
+                pos="absolute"
+                top="80px"
                 w="100%"
                 h="calc(100vh - 80px)"
                 bgGradient="linear(to-tl, #23a6d5, #23d5ab)"
