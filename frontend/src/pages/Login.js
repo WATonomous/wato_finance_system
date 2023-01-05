@@ -1,7 +1,6 @@
 import React from 'react'
 import { Center, Heading, VStack } from '@chakra-ui/react'
-
-import Navbar from './Navbar'
+import Navbar from '../components/Navbar'
 
 const Login = () => {
     return (

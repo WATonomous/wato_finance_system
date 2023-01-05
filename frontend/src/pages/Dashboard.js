@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from 'react'
+import React, { useEffect, useReducer } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import {
     Box,
@@ -14,9 +14,9 @@ import {
 } from '@chakra-ui/react'
 import axios from 'axios'
 
-import Navbar from './Navbar'
-import TicketList from './TicketList'
-import LoadingSpinner from './LoadingSpinner'
+import Navbar from '../components/Navbar'
+import TicketList from '../components/TicketList'
+import LoadingSpinner from '../components/LoadingSpinner'
 import { getStandardizedDate } from '../utils/utils'
 
 const VALID_TICKET_TYPES = Object.freeze(['SF', 'FI', 'PPR', 'UPR'])

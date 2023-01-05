@@ -15,7 +15,7 @@ import {
 } from '@chakra-ui/react'
 import { getStandardizedDate } from '../utils/utils'
 import { useParams } from 'react-router-dom'
-import LoadingSpinner from './LoadingSpinner'
+import LoadingSpinner from '../components/LoadingSpinner'
 
 const FundingItemView = ({ fundingItem }) => {
     return (
