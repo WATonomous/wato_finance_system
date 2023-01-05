@@ -17,7 +17,7 @@ const TicketList = (props) => {
 
     return (
         <VStack
-            minW={['200px', '200px', '200px', '280px', '300px']}
+            minW={{ base: '200px', lg: '280px', xl: '300px' }}
             h="calc(100vh - 80px)"
             overflowY="scroll"
         >

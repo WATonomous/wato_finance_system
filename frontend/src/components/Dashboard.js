@@ -184,26 +184,22 @@ const Dashboard = (props) => {
             <Tr borderTopWidth="2px" borderBottomWidth="2px">
                 <Th
                     w="185px"
-                    fontSize={['xs', 'xs', 'sm', 'sm', 'sm']}
-                    p={[
-                        '4px 4px',
-                        '8px 8px',
-                        '8px 8px',
-                        '12px 24px',
-                        '12px 24px',
-                    ]}
+                    fontSize={{ base: 'xs', md: 'sm' }}
+                    p={{
+                        base: '4px 4px',
+                        sm: '8px 8px',
+                        lg: '12px 24px',
+                    }}
                 >
                     {key}
                 </Th>
                 <Td
-                    fontSize={['sm', 'sm', 'md', 'md', 'md']}
-                    p={[
-                        '4px 4px',
-                        '8px 8px',
-                        '8px 8px',
-                        '12px 24px',
-                        '12px 24px',
-                    ]}
+                    fontSize={{ base: 'sm', md: 'md' }}
+                    p={{
+                        base: '4px 4px',
+                        sm: '8px 8px',
+                        lg: '12px 24px',
+                    }}
                 >
                     {val}
                 </Td>
