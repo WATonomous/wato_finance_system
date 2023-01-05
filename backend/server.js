@@ -23,7 +23,6 @@ connection.once('open', () => {
     console.log('MongoDB database connection established successfully')
 })
 
-const usersRouter = require('./routes/users')
 const fundingItemsRouter = require('./routes/fundingitems.routes')
 const emailRouter = require('./routes/emails.routes')
 const sponsorshipFundsRouter = require('./routes/sponsorshipfunds.routes')
@@ -32,7 +31,6 @@ const UWFinancePurchaseRouter = require('./routes/uwfinancepurchases.routes')
 
 app.use(express.json())
 
-app.use('/users', usersRouter)
 app.use('/fundingitems', fundingItemsRouter)
 app.use('/personalpurchases', personalPurchaseRouter)
 app.use('/emails', emailRouter)
