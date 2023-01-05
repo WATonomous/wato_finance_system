@@ -4,8 +4,8 @@ import { Text } from '@chakra-ui/react'
 import axios from 'axios'
 
 import { useAuth } from '../contexts/AuthContext'
-import Navbar from './Navbar'
-import TicketList from './TicketList'
+import Navbar from '../components/Navbar'
+import TicketList from '../components/TicketList'
 
 const DATA_KEYS = Object.freeze({
     SF: 'SF',

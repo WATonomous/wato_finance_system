@@ -15,7 +15,7 @@ import {
 } from './contexts/CustomRoutes'
 
 import Login from './pages/Login'
-import Dashboard from './components/Dashboard'
+import Dashboard from './pages/Dashboard'
 import ClaimSummary from './pages/ClaimSummary'
 import NotFound from './pages/NotFound'
 
