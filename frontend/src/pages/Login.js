@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Center, Heading } from '@chakra-ui/react'
 
 import { useAuth } from '../contexts/AuthContext'
-import Navbar from './Navbar'
+import Navbar from '../components/Navbar'
 
 const Login = () => {
     const [error, setError] = useState('')

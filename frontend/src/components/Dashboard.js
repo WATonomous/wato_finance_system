@@ -14,7 +14,7 @@ const DATA_KEYS = Object.freeze({
     UPR: 'UPR',
 })
 
-const Dashboard = (props) => {
+const Dashboard = () => {
     const [error, setError] = useState('')
     const { logout } = useAuth()
     const navigate = useNavigate()
