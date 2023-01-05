@@ -184,7 +184,7 @@ const Dashboard = (props) => {
             <Tr borderTopWidth="2px" borderBottomWidth="2px">
                 <Th
                     w="185px"
-                    fontSize={['xs', 'xs', 'xs', 'sm', 'sm']}
+                    fontSize={['xs', 'xs', 'sm', 'sm', 'sm']}
                     p={[
                         '4px 4px',
                         '8px 8px',
@@ -196,10 +196,11 @@ const Dashboard = (props) => {
                     {key}
                 </Th>
                 <Td
+                    fontSize={['sm', 'sm', 'md', 'md', 'md']}
                     p={[
-                        '12px 12px',
-                        '12px 12px',
-                        '12px 12px',
+                        '4px 4px',
+                        '8px 8px',
+                        '8px 8px',
                         '12px 24px',
                         '12px 24px',
                     ]}
