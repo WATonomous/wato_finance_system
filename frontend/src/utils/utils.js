@@ -5,7 +5,11 @@ export const getStandardizedDate = (dateStr) => {
     return date.format('YYYY-MM-DD')
 }
 
-export const currencyFormatter = new Intl.NumberFormat('en-CA', {
+const currencyFormatter = new Intl.NumberFormat('en-CA', {
     style: 'currency',
     currency: 'CAD',
 })
+
+export const getFormattedCurrency = (currencyStr) => {
+    return `CAD ${currencyFormatter.format(currencyStr)}`
+}

@@ -24,7 +24,7 @@ const Dashboard = () => {
     const navigate = useNavigate()
     const location = useLocation()
 
-    const [currentTicket, updateCurentTicket] = useReducer(
+    const [currentTicket, updateCurrentTicket] = useReducer(
         (data, partialData) => ({
             ...data,
             ...partialData,
@@ -90,7 +90,7 @@ const Dashboard = () => {
             (ticket) => parseInt(ticket._id) === parseInt(currentTicketId)
         )
         if (!currentTicketData) return
-        updateCurentTicket({
+        updateCurrentTicket({
             type: currentTicketType,
             id: currentTicketId,
             data: currentTicketData,
