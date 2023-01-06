@@ -6,6 +6,7 @@ import axios from 'axios'
 import { useAuth } from '../contexts/AuthContext'
 import Navbar from './Navbar'
 import TicketList from './TicketList'
+import FilterDropdown from './FilterDropdown'
 
 const DATA_KEYS = Object.freeze({
     SF: 'SF',
@@ -70,10 +71,11 @@ const Dashboard = (props) => {
                 onClick={handleLogout}
                 authButtonText={error ? error : 'Log Out'}
             />
-            <TicketList tickets={tickets} />
             <Text pos="absolute" left="308px">
                 {location.pathname}
             </Text>
+            <FilterDropdown />
+            <TicketList tickets={tickets} />
         </>
     )
 }
