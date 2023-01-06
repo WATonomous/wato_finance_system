@@ -27,7 +27,6 @@ const TreeView = (props) => {
     let { SF, FI, PPR, UPR } = tickets
     useEffect(() => {
         setTree({})
-        //on path change or new ticket has been added
         if (SF.length === 0) return
 
         let id = ticketID
@@ -45,8 +44,6 @@ const TreeView = (props) => {
                 break
         }
         if (id !== -1) setTree(getAllChildren(id, tickets))
-        //search FIs to find if they have ticketID, return a list of FIs
-        //for each FIs, search PPR and UPR if they have have that FI, return list of PPR and a list of UPR
     }, [tickets, location])
 
     return (
