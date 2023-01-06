@@ -1,5 +1,6 @@
 import React from 'react'
 import {
+    Navigate,
     Route,
     createBrowserRouter,
     RouterProvider,
@@ -35,7 +36,8 @@ const router = createBrowserRouter(
                 <Route path="/PPR/:id" element={<Dashboard />} />
                 <Route path="/UPR/:id" element={<Dashboard />} />
             </Route>
-            <Route path="*" element={<NotFound />} />
+            <Route path="/notfound" element={<NotFound />} />
+            <Route path="*" element={<Navigate replace to="/notfound" />} />
         </Route>
     )
 )
