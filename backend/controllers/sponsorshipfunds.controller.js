@@ -74,7 +74,7 @@ const updateSponsorshipFund = async (req, res) => {
             id,
             updatedFields,
             {
-                new: false,
+                new: true,
             }
         )
         res.json(updated)
@@ -88,9 +88,11 @@ const deleteSponsorshipFund = async (req, res) => {
     try {
         const SFToDelete = await SponsorshipFund.findById(id)
         const { fi_links } = SFToDelete
-        await Promise.all(fi_links.map(async (fi_id) => {
-            return await cascadeDeleteFundingItem(fi_id)
-        }))
+        await Promise.all(
+            fi_links.map(async (fi_id) => {
+                return cascadeDeleteFundingItem(fi_id)
+            })
+        )
         const deleted = await SFToDelete.remove()
         res.json(deleted)
     } catch (err) {
