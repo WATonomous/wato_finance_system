@@ -10,7 +10,16 @@ import {
 } from '@chakra-ui/react'
 import { ChevronDownIcon } from '@chakra-ui/icons'
 
-const FilterDropdown = () => {
+const FilterDropdown = (props) => {
+    const { filter, setFilter } = props
+
+    const TICKET_TYPES = Object.freeze({
+        SF: 'SF',
+        FI: 'FI',
+        PPR: 'PPR',
+        UPR: 'UPR',
+    })
+
     return (
         <Box w="300px" p="16px" borderRight="1px solid #dedede">
             <Menu closeOnSelect={false}>
@@ -23,20 +32,21 @@ const FilterDropdown = () => {
                 </MenuButton>
                 <MenuList minWidth="240px">
                     <MenuOptionGroup
-                        defaultValue={['sf', 'fi', 'ppr', 'upr']}
+                        defaultValue={filter}
                         title="Ticket Type"
                         type="checkbox"
+                        onChange={(value) => setFilter(value)}
                     >
-                        <MenuItemOption value="sf">
+                        <MenuItemOption value={`${TICKET_TYPES.SF}`}>
                             Sponsorship Funds
                         </MenuItemOption>
-                        <MenuItemOption value="fi">
+                        <MenuItemOption value={`${TICKET_TYPES.FI}`}>
                             Funding Items
                         </MenuItemOption>
-                        <MenuItemOption value="ppr">
+                        <MenuItemOption value={`${TICKET_TYPES.PPR}`}>
                             Personal Purchase Requests
                         </MenuItemOption>
-                        <MenuItemOption value="upr">
+                        <MenuItemOption value={`${TICKET_TYPES.UPR}`}>
                             UW Finance Purchase Requests
                         </MenuItemOption>
                     </MenuOptionGroup>
