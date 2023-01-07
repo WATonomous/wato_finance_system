@@ -21,7 +21,7 @@ const FilterDropdown = (props) => {
     })
 
     return (
-        <Box w="300px" p="16px" borderRight="1px solid #dedede">
+        <Box w="100%" p="16px" borderRight="1px solid #dedede">
             <Menu closeOnSelect={false}>
                 <MenuButton
                     as={Button}

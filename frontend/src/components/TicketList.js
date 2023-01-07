@@ -32,12 +32,11 @@ const TicketList = (props) => {
         .filter((ticket) => filter.includes(ticket.type))
 
     return (
-        <Box>
+        <Box w="300px">
             <FilterDropdown filter={filter} setFilter={setFilter} />
             <VStack
-                pos="absolute"
-                left="0"
-                w="300px"
+                pos="relative"
+                w="100%"
                 h="calc(100vh - 80px)"
                 overflowY="scroll"
             >
