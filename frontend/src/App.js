@@ -1,5 +1,6 @@
 import React from 'react'
 import {
+    Navigate,
     Route,
     createBrowserRouter,
     RouterProvider,
@@ -14,11 +15,10 @@ import {
     PublicRoute,
 } from './contexts/CustomRoutes'
 
-import Login from './components/Login'
-import CreateUser from './components/CreateUser'
-import Dashboard from './components/Dashboard'
-import ClaimSummary from './components/ClaimSummary'
-import NotFound from './components/NotFound'
+import Login from './pages/Login'
+import Dashboard from './pages/Dashboard'
+import ClaimSummary from './pages/ClaimSummary'
+import NotFound from './pages/NotFound'
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -35,9 +35,9 @@ const router = createBrowserRouter(
                 <Route path="/FI/:id" element={<Dashboard />} />
                 <Route path="/PPR/:id" element={<Dashboard />} />
                 <Route path="/UPR/:id" element={<Dashboard />} />
-                <Route path="/user" element={<CreateUser />} />
             </Route>
-            <Route path="*" element={<NotFound />} />
+            <Route path="/notfound" element={<NotFound />} />
+            <Route path="*" element={<Navigate replace to="/notfound" />} />
         </Route>
     )
 )

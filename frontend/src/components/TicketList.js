@@ -32,7 +32,7 @@ const TicketList = (props) => {
         .filter((ticket) => filter.includes(ticket.type))
 
     return (
-        <Box w="300px">
+        <Box minW={{ base: '200px', lg: '280px', xl: '300px' }}>
             <FilterDropdown filter={filter} setFilter={setFilter} />
             <VStack
                 pos="relative"
@@ -57,7 +57,7 @@ const TicketList = (props) => {
                         >
                             <CardBody p="8px 16px">
                                 <Text>{code}</Text>
-                                <Text>{ticket.name}</Text>
+                                <Text noOfLines="1">{ticket.name}</Text>
                             </CardBody>
                         </Card>
                     )
