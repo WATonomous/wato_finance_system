@@ -9,17 +9,9 @@ import {
     MenuOptionGroup,
 } from '@chakra-ui/react'
 import { ChevronDownIcon } from '@chakra-ui/icons'
+import { TICKET_TYPES } from '../pages/Dashboard'
 
-const FilterDropdown = (props) => {
-    const { filter, setFilter } = props
-
-    const TICKET_TYPES = Object.freeze({
-        SF: 'SF',
-        FI: 'FI',
-        PPR: 'PPR',
-        UPR: 'UPR',
-    })
-
+const FilterDropdown = ({ filter, setFilter }) => {
     return (
         <Box w="100%" p="16px" borderRight="1px solid #dedede">
             <Menu closeOnSelect={false}>

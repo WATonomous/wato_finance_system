@@ -2,16 +2,10 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Box, Card, CardBody, Text, VStack } from '@chakra-ui/react'
 import FilterDropdown from './FilterDropdown'
+import { TICKET_TYPES } from '../pages/Dashboard'
 
 const TicketList = (props) => {
     const navigate = useNavigate()
-
-    const TICKET_TYPES = Object.freeze({
-        SF: 'SF',
-        FI: 'FI',
-        PPR: 'PPR',
-        UPR: 'UPR',
-    })
 
     const [filter, setFilter] = useState([
         TICKET_TYPES.SF,

@@ -13,7 +13,7 @@ import FIContentTable from '../components/TicketContent/FIContentTable'
 import PPRContentTable from '../components/TicketContent/PPRContentTable'
 import UPRContentTable from '../components/TicketContent/UPRContentTable'
 
-const DATA_KEYS = Object.freeze({
+export const TICKET_TYPES = Object.freeze({
     SF: 'SF',
     FI: 'FI',
     PPR: 'PPR',
@@ -42,19 +42,19 @@ const Dashboard = () => {
             ...partialData,
         }),
         {
-            [DATA_KEYS.SF]: [],
-            [DATA_KEYS.FI]: [],
-            [DATA_KEYS.PPR]: [],
-            [DATA_KEYS.UPR]: [],
+            [TICKET_TYPES.SF]: [],
+            [TICKET_TYPES.FI]: [],
+            [TICKET_TYPES.PPR]: [],
+            [TICKET_TYPES.UPR]: [],
         }
     )
 
     const getAllTickets = () => {
         const endpoints = {
-            [DATA_KEYS.SF]: 'http://localhost:5000/sponsorshipfunds/',
-            [DATA_KEYS.FI]: 'http://localhost:5000/fundingitems/',
-            [DATA_KEYS.PPR]: 'http://localhost:5000/personalpurchases/',
-            [DATA_KEYS.UPR]: 'http://localhost:5000/uwfinancepurchases/',
+            [TICKET_TYPES.SF]: 'http://localhost:5000/sponsorshipfunds/',
+            [TICKET_TYPES.FI]: 'http://localhost:5000/fundingitems/',
+            [TICKET_TYPES.PPR]: 'http://localhost:5000/personalpurchases/',
+            [TICKET_TYPES.UPR]: 'http://localhost:5000/uwfinancepurchases/',
         }
         axios
             .all(
@@ -77,7 +77,7 @@ const Dashboard = () => {
         const splitPath = location.pathname.split('/')
         if (
             splitPath.length !== 3 ||
-            !Object.values(DATA_KEYS).includes(splitPath[1])
+            !Object.values(TICKET_TYPES).includes(splitPath[1])
         ) {
             navigate('/notfound')
             return
@@ -85,7 +85,7 @@ const Dashboard = () => {
         const currentTicketType = splitPath[1]
         const currentTicketId = splitPath[2]
         const allTicketsWithCurrentTicketType =
-            allTickets[DATA_KEYS[currentTicketType]]
+            allTickets[TICKET_TYPES[currentTicketType]]
         const currentTicketData = allTicketsWithCurrentTicketType.find(
             (ticket) => parseInt(ticket._id) === parseInt(currentTicketId)
         )
@@ -101,13 +101,13 @@ const Dashboard = () => {
     const getCurrentTicketContentTable = () => {
         const ticketData = currentTicket.data
         switch (currentTicket.type) {
-            case DATA_KEYS.SF:
+            case TICKET_TYPES.SF:
                 return <SFContentTable ticketData={ticketData} />
-            case DATA_KEYS.FI:
+            case TICKET_TYPES.FI:
                 return <FIContentTable ticketData={ticketData} />
-            case DATA_KEYS.PPR:
+            case TICKET_TYPES.PPR:
                 return <PPRContentTable ticketData={ticketData} />
-            case DATA_KEYS.UPR:
+            case TICKET_TYPES.UPR:
                 return <UPRContentTable ticketData={ticketData} />
             default:
                 return null
