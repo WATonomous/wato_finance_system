@@ -20,7 +20,7 @@ const TicketList = (props) => {
         TICKET_TYPES.UPR,
     ])
 
-    const filteredTickets = Object.entries(props.tickets)
+    const filteredTickets = Object.entries(props.allTickets)
         .map(([ticketType, collection]) => {
             return collection.map((ticket) => ({
                 name: ticket.name,
