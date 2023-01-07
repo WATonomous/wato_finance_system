@@ -9,6 +9,7 @@ const fetch = require('node-fetch')
 
 const endpoint = 'http://localhost:5000'
 const numSponsorhipFundsToCreate = 2
+const minFundingAllocationForSponsorshipFunds = 1000
 const numFundingItemsToCreatePerSponsorshipFund = 2
 const numPersonalPurchasesToCreatePerFundingItem = 2
 const numUWFinancePurchasesToCreatePerFundingItem = 2
@@ -20,10 +21,10 @@ const lorem = new LoremIpsum({
     },
 })
 
-const generateRandomAmount = (max) => {
+const generateRandomAmount = (max, baseOffset = 0) => {
     const dollars = Math.floor(Math.random() * max)
     const cents = Math.floor(Math.random() * 100)
-    return dollars + cents / 100
+    return baseOffset + dollars + cents / 100
 }
 
 const getRandomNumberFromLength = (length) => {
@@ -74,14 +75,42 @@ const generateDummySF = () => {
         organization: 'WEEF',
         semester: 'Winter 2023',
         proposal_id: getRandomNumberFromLength(10),
-        funding_allocation: generateRandomAmount(100),
+        funding_allocation: generateRandomAmount(
+            minFundingAllocationForSponsorshipFunds,
+            minFundingAllocationForSponsorshipFunds
+        ),
         proposal_url: 'https://google.com',
         presentation_url: 'https://google.com',
         claim_deadline: '2024-12-25',
     }
 }
 
+const generateDummyFundingItem = () => {
+    const maxFundingAllocation =
+        minFundingAllocationForSponsorshipFunds /
+        numFundingItemsToCreatePerSponsorshipFund
+    return {
+        name: uniqueNamesGenerator({
+            dictionaries: [adjectives, colors, animals],
+            length: 3,
+            separator: '-',
+        }),
+        reporter_id: getRandomNumberFromLength(5),
+        funding_allocation: generateRandomAmount(
+            maxFundingAllocation / 2,
+            maxFundingAllocation / 2
+        ),
+        purchase_justification: lorem.generateSentences(1),
+    }
+}
+
 const generateDummyPersonalPurchase = () => {
+    const maxCost =
+        minFundingAllocationForSponsorshipFunds /
+        (numFundingItemsToCreatePerSponsorshipFund *
+            2 *
+            (numPersonalPurchasesToCreatePerFundingItem +
+                numUWFinancePurchasesToCreatePerFundingItem))
     return {
         reporter_id: getRandomNumberFromLength(5),
         status: 'SEEKING_APPROVAL',
@@ -92,7 +121,7 @@ const generateDummyPersonalPurchase = () => {
         }),
         purchase_url: 'https://www.google.com/',
         purchase_instructions: lorem.generateSentences(1),
-        cost: generateRandomAmount(20),
+        cost: generateRandomAmount(maxCost / 2, maxCost / 2),
         purchase_justification: lorem.generateSentences(1),
         pickup_instruction: lorem.generateSentences(1),
         finance_team_approval: false,
@@ -104,6 +133,12 @@ const generateDummyPersonalPurchase = () => {
 }
 
 const generateDummyUWFinancePurchaseRequest = () => {
+    const maxCost =
+        minFundingAllocationForSponsorshipFunds /
+        (numFundingItemsToCreatePerSponsorshipFund *
+            2 *
+            (numPersonalPurchasesToCreatePerFundingItem +
+                numUWFinancePurchasesToCreatePerFundingItem))
     return {
         reporter_id: getRandomNumberFromLength(5),
         status: 'SEEKING_APPROVAL',
@@ -114,7 +149,7 @@ const generateDummyUWFinancePurchaseRequest = () => {
         }),
         purchase_url: 'https://www.google.com/',
         purchase_instructions: lorem.generateSentences(1),
-        cost: generateRandomAmount(20),
+        cost: generateRandomAmount(maxCost / 2, maxCost / 2),
         purchase_justification: lorem.generateSentences(1),
         pickup_instruction: lorem.generateSentences(1),
         finance_team_approval: false,
@@ -122,19 +157,6 @@ const generateDummyUWFinancePurchaseRequest = () => {
         faculty_advisor_approval: false,
         requisition_number: getRandomNumberFromLength(10),
         po_number: getRandomNumberFromLength(8),
-    }
-}
-
-const generateDummyFundingItem = () => {
-    return {
-        name: uniqueNamesGenerator({
-            dictionaries: [adjectives, colors, animals],
-            length: 3,
-            separator: '-',
-        }),
-        reporter_id: getRandomNumberFromLength(5),
-        funding_allocation: generateRandomAmount(30),
-        purchase_justification: lorem.generateSentences(1),
     }
 }
 

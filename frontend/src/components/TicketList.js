@@ -5,7 +5,7 @@ import { Card, CardBody, Text, VStack } from '@chakra-ui/react'
 const TicketList = (props) => {
     const navigate = useNavigate()
 
-    const allTickets = Object.entries(props.tickets)
+    const allTickets = Object.entries(props.allTickets)
         .map(([ticketType, collection]) => {
             return collection.map((ticket) => ({
                 name: ticket.name,
@@ -17,9 +17,7 @@ const TicketList = (props) => {
 
     return (
         <VStack
-            pos="absolute"
-            left="0"
-            w="300px"
+            minW={{ base: '200px', lg: '280px', xl: '300px' }}
             h="calc(100vh - 80px)"
             overflowY="scroll"
         >
@@ -38,7 +36,7 @@ const TicketList = (props) => {
                     >
                         <CardBody p="8px 16px">
                             <Text>{code}</Text>
-                            <Text>{ticket.name}</Text>
+                            <Text noOfLines="1">{ticket.name}</Text>
                         </CardBody>
                     </Card>
                 )
