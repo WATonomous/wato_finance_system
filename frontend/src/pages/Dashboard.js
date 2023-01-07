@@ -171,9 +171,9 @@ const Dashboard = () => {
                         </Table>
                     </Box>
                     <Box w="100%">
-                        {/* <Heading mb="8px" fontSize="2xl">
+                        <Heading mb="8px" fontSize="2xl">
                             Ticket Tree
-                        </Heading> */}
+                        </Heading>
                         <TreeView tickets={allTickets} location={location} />
                     </Box>
                 </VStack>
