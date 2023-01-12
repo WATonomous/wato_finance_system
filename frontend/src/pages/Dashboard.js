@@ -1,6 +1,7 @@
 import React, { useEffect, useReducer } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Box, Heading, Flex, VStack, Center, Table } from '@chakra-ui/react'
+import TreeView from '../components/TreeView'
 import axios from 'axios'
 
 import Navbar from '../components/Navbar'
@@ -173,6 +174,7 @@ const Dashboard = () => {
                         <Heading mb="8px" fontSize="2xl">
                             Ticket Tree
                         </Heading>
+                        <TreeView tickets={allTickets} location={location} />
                     </Box>
                 </VStack>
             </Flex>
