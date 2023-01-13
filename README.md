@@ -72,6 +72,9 @@ REACT_APP_APP_ID=<YOUR_FIREBASE_API_ID>
 REACT_APP_BACKEND_URL=http://localhost:5000
 ```
 
+### Connect Backend to Project
+Select the gear next to the Project Overview screen, go to **Project Settings** > **Service Accounts** and generate a new private key. Paste the JSON file in the "backend" folder. Then add ``/backend/<file-name>.json`` to your ``.gitignore``.
+
 ### Enable Google OAuth
 
 1. In your Firebase Console, select Authentication on the left sidebarw
