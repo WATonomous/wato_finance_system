@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react'
+import React, { useEffect, useReducer, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Box, Heading, Flex, VStack, Center, Table } from '@chakra-ui/react'
 import axios from 'axios'
@@ -12,7 +12,7 @@ import SFContentTable from '../components/TicketContent/SFContentTable'
 import FIContentTable from '../components/TicketContent/FIContentTable'
 import PPRContentTable from '../components/TicketContent/PPRContentTable'
 import UPRContentTable from '../components/TicketContent/UPRContentTable'
-
+import ReporterInfoTip from '../components/ReporterInfoTip'
 export const TICKET_TYPES = Object.freeze({
     SF: 'SF',
     FI: 'FI',
@@ -23,7 +23,7 @@ export const TICKET_TYPES = Object.freeze({
 const Dashboard = () => {
     const navigate = useNavigate()
     const location = useLocation()
-
+    console.log(process.env.REACT_APP_BACKEND_URL)
     const [currentTicket, updateCurrentTicket] = useReducer(
         (data, partialData) => ({
             ...data,
@@ -35,6 +35,8 @@ const Dashboard = () => {
             data: {},
         }
     )
+
+    const [allUsers, setAllUsers] = useState({ users: [] })
 
     const [allTickets, updateAllTickets] = useReducer(
         (data, partialData) => ({
@@ -51,10 +53,10 @@ const Dashboard = () => {
 
     const getAllTickets = () => {
         const endpoints = {
-            [TICKET_TYPES.SF]: 'http://localhost:5000/sponsorshipfunds/',
-            [TICKET_TYPES.FI]: 'http://localhost:5000/fundingitems/',
-            [TICKET_TYPES.PPR]: 'http://localhost:5000/personalpurchases/',
-            [TICKET_TYPES.UPR]: 'http://localhost:5000/uwfinancepurchases/',
+            [TICKET_TYPES.SF]: `${process.env.REACT_APP_BACKEND_URL}/sponsorshipfunds/`,
+            [TICKET_TYPES.FI]: `${process.env.REACT_APP_BACKEND_URL}/fundingitems/`,
+            [TICKET_TYPES.PPR]: `${process.env.REACT_APP_BACKEND_URL}/personalpurchases/`,
+            [TICKET_TYPES.UPR]: `${process.env.REACT_APP_BACKEND_URL}/uwfinancepurchases/`,
         }
         axios
             .all(
@@ -68,8 +70,16 @@ const Dashboard = () => {
             })
     }
 
+    const getAllUsers = () => {
+        const endpoint = `${process.env.REACT_APP_BACKEND_URL}/users/`
+        axios.get(endpoint).then((response) => {
+            setAllUsers({ users: response.data })
+        })
+    }
+
     useEffect(() => {
         getAllTickets()
+        getAllUsers()
     }, [])
 
     useEffect(() => {
@@ -132,7 +142,12 @@ const Dashboard = () => {
         }
 
         return (
-            <Flex w="100%" h="calc(100vh - 80px)" overflowY="auto">
+            <Flex
+                w="100%"
+                h="calc(100vh - 80px)"
+                overflowY="auto"
+                // zIndex="tooltip"
+            >
                 <Flex
                     flexDir="column"
                     justifyContent="flex-start"
@@ -151,9 +166,13 @@ const Dashboard = () => {
                             Metadata
                         </Heading>
                         <Table>
-                            <TicketContentTableRow
+                            <ReporterInfoTip
+                                ticketData={ticketData}
                                 heading={'Reporter Id'}
-                                description={ticketData.reporter_id}
+                                reporter={allUsers.users.find(
+                                    (user) =>
+                                        user.uid === ticketData.reporter_id
+                                )}
                             />
                             <TicketContentTableRow
                                 heading={'Created at'}
@@ -181,11 +200,11 @@ const Dashboard = () => {
 
     return (
         <VStack spacing="0">
-            <Navbar />
             <Flex pos="absolute" top="80px" w="100%">
                 <TicketList allTickets={allTickets} />
                 {getMainContent()}
             </Flex>
+            <Navbar />
         </VStack>
     )
 }

@@ -43,7 +43,6 @@ const Navbar = () => {
             bgColor="deepskyblue"
             w="100%"
             h="80px"
-            zIndex="banner"
         >
             <Heading
                 lineHeight="48px"
