@@ -3,10 +3,89 @@ const SponsorshipFund = require('../models/sponsorshipfund.model')
 const PersonalPurchase = require('../models/personalpurchase.model')
 const UWFinancePurchase = require('../models/uwfinancepurchase.model')
 
-const { getUpdatedFundingItemsByIdList } = require('../helpers')
+// empty list arg queries for all Funding Items
+const getAnnotatedFundingItemsByIdList = async (idList = []) => {
+    if (idList.length === 0) {
+        idList = await FundingItem.distinct('_id')
+    }
+    const fundingItemList = await Promise.all(
+        idList.map(async (id) =>
+            FundingItem.aggregate([
+                {
+                    $match: {
+                        _id: parseInt(id),
+                    },
+                },
+                // map ppr_links and upr_links to documents via referenced collection
+                {
+                    $lookup: {
+                        from: 'personalpurchases',
+                        localField: 'ppr_links',
+                        foreignField: '_id',
+                        as: 'ppr_links',
+                    },
+                },
+                {
+                    $lookup: {
+                        from: 'uwfinancepurchases',
+                        localField: 'upr_links',
+                        foreignField: '_id',
+                        as: 'upr_links',
+                    },
+                },
+                {
+                    $set: {
+                        type: 'FI',
+                        code: {
+                            $concat: ['FI-', { $toString: '$_id' }],
+                        },
+                        path: {
+                            $concat: ['/FI/', { $toString: '$_id' }],
+                        },
+                        funding_spent: {
+                            $round: [
+                                {
+                                    $sum: [
+                                        {
+                                            $sum: '$ppr_links.cost',
+                                        },
+                                        {
+                                            $sum: '$upr_links.cost',
+                                        },
+                                    ],
+                                },
+                                2,
+                            ],
+                        },
+                        // map the documents back to their ids to preserve schema shape
+                        upr_links: {
+                            $map: {
+                                input: '$upr_links',
+                                as: 'uprDoc',
+                                in: '$$uprDoc._id',
+                            },
+                        },
+                        ppr_links: {
+                            $map: {
+                                input: '$ppr_links',
+                                as: 'pprDoc',
+                                in: '$$pprDoc._id',
+                            },
+                        },
+                    },
+                },
+            ])
+        )
+    )
+
+    // aggregate returns an array so fundingItemList
+    // will always be a list of one-elem lists:
+    // i.e. [[FI-1], [FI-2], ...] where FI-X is a FundingItem object
+    return fundingItemList.flat()
+}
 
 const getAllFundingItems = (_, res) => {
-    getUpdatedFundingItemsByIdList()
+    getAnnotatedFundingItemsByIdList()
         .then(async (fundingItems) => {
             res.json(fundingItems)
         })
@@ -14,7 +93,7 @@ const getAllFundingItems = (_, res) => {
 }
 
 const getFundingItem = (req, res) => {
-    getUpdatedFundingItemsByIdList([req.params.id])
+    getAnnotatedFundingItemsByIdList([req.params.id])
         .then((fundingItems) => {
             res.json(fundingItems[0])
         })
@@ -63,6 +142,7 @@ const cascadeDeleteFundingItem = async (id) => {
 }
 
 module.exports = {
+    getAnnotatedFundingItemsByIdList,
     getAllFundingItems,
     getFundingItem,
     createFundingItem,
