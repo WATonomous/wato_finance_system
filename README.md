@@ -74,7 +74,9 @@ REACT_APP_BACKEND_URL=http://localhost:5000
 
 ### Connect Backend to Project
 
-To be able to use `firebase-admin`, select the gear icon next to the Project Overview screen, go to **Project Settings** > **Service Accounts** and generate a new private key. Name the file `serviceAccountKey.json` and paste the JSON file in the "backend" folder. Then add `/backend/serviceAccountKey.json` to your `.gitignore`.
+1. To be able to use `firebase-admin`, select the gear icon next to the Project Overview screen
+2. Go to **Project Settings** > **Service Accounts** and generate a new private key
+3. Name the file `serviceAccountKey.json` and paste the JSON file in the "backend" folder
 
 ### Enable Google OAuth
 
