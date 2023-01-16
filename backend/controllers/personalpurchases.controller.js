@@ -43,8 +43,8 @@ const deletePersonalPurchase = async (req, res) => {
         await FundingItem.findByIdAndUpdate(PPRtoDelete.fi_link, {
             $pull: { ppr_links: PPRid },
         })
-        await PPRtoDelete.remove()
-        res.json('PersonalPurchase deleted.')
+        const deleted = await PPRtoDelete.remove()
+        res.json(deleted)
     } catch (err) {
         res.status(400).json('Error: ' + err)
     }

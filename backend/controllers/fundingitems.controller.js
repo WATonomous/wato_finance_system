@@ -1,5 +1,8 @@
 const FundingItem = require('../models/fundingitem.model')
 const SponsorshipFund = require('../models/sponsorshipfund.model')
+const PersonalPurchase = require('../models/personalpurchase.model')
+const UWFinancePurchase = require('../models/uwfinancepurchase.model')
+
 const { getUpdatedFundingItemsByIdList } = require('../helpers')
 
 const getAllFundingItems = (_, res) => {
@@ -41,16 +44,22 @@ const updateFundingItem = (req, res) => {
 
 const deleteFundingItem = async (req, res) => {
     try {
-        const FIid = req.params.id
-        const FItoDelete = await FundingItem.findById(FIid)
-        await SponsorshipFund.findByIdAndUpdate(FItoDelete.sf_link, {
-            $pull: { fi_links: FIid },
-        })
-        await FItoDelete.remove()
-        res.json('FundingItem deleted.')
+        const deleted = await cascadeDeleteFundingItem(req.params.id)
+        res.json(deleted)
     } catch (err) {
         res.status(400).json('Error: ' + err)
     }
+}
+
+const cascadeDeleteFundingItem = async (id) => {
+    const FIToDelete = await FundingItem.findById(id)
+    const { ppr_links, upr_links } = FIToDelete
+    await SponsorshipFund.findByIdAndUpdate(FIToDelete.sf_link, {
+        $pull: { fi_links: id },
+    })
+    await PersonalPurchase.deleteMany({ _id: { $in: ppr_links } })
+    await UWFinancePurchase.deleteMany({ _id: { $in: upr_links } })
+    return await FIToDelete.remove()
 }
 
 module.exports = {
@@ -59,4 +68,5 @@ module.exports = {
     createFundingItem,
     updateFundingItem,
     deleteFundingItem,
+    cascadeDeleteFundingItem,
 }
