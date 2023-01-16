@@ -88,11 +88,11 @@ const getAllChildren = async (req, res) => {
         fundingItems.map(async (fundingItem) => {
             const personalPurchases =
                 await getAnnotatedPersonalPurchasesByIdList(
-                    fundingItem.ppr_link
+                    fundingItem.ppr_links
                 )
             const uwFinancePurchases =
                 await getAnnotatedUWFinancePurchasesByIdList(
-                    fundingItem.upr_link
+                    fundingItem.upr_links
                 )
             return {
                 ...fundingItem,
