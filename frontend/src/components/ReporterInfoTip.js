@@ -1,16 +1,14 @@
 import React from 'react'
 import {
-    Td,
     Th,
     Tr,
     Text,
     Image,
-    Flex,
-    Center,
     Box,
     Popover,
     PopoverTrigger,
     PopoverContent,
+    HStack,
 } from '@chakra-ui/react'
 
 const ReporterInfoTip = (props) => {
@@ -42,11 +40,7 @@ const ReporterInfoTip = (props) => {
                     No Reporter
                 </Text>
             ) : (
-                <Popover
-                    trigger="hover"
-                    closeDelay={200}
-                    placement="bottom-start"
-                >
+                <Popover trigger="hover" closeDelay={200} placement="top-start">
                     <PopoverTrigger>
                         <Text
                             fontSize={{ base: 'sm', md: 'md' }}
@@ -60,23 +54,21 @@ const ReporterInfoTip = (props) => {
                             {reporter.displayName}
                         </Text>
                     </PopoverTrigger>
-                    <PopoverContent>
+                    <PopoverContent zIndex="tooltip" width="auto">
                         <Box px={4} py={4}>
-                            <Flex>
-                                <Center w="80px">
-                                    <Image
-                                        boxSize="60px"
-                                        objectFit="cover"
-                                        src={reporter.photoURL}
-                                        alt=""
-                                    />
-                                </Center>
+                            <HStack spacing="12px">
+                                <Image
+                                    boxSize="50px"
+                                    objectFit="cover"
+                                    src={reporter.photoURL}
+                                    alt="reporter photo"
+                                />
                                 <Box flex="1">
                                     <Text
                                         fontSize={{
-                                            base: 'md',
-                                            md: 'lg',
-                                            lg: 'xl',
+                                            base: 'sm',
+                                            md: 'md',
+                                            lg: 'lg',
                                         }}
                                         as="b"
                                         color="blue.600"
@@ -85,14 +77,14 @@ const ReporterInfoTip = (props) => {
                                     </Text>
                                     <br />
                                     <Text
-                                        fontSize={{ base: 'sm', md: 'md' }}
+                                        fontSize={{ base: 'xs', md: 'sm' }}
                                         as="u"
                                         color="gray.600"
                                     >
                                         {reporter.email}
                                     </Text>
                                 </Box>
-                            </Flex>
+                            </HStack>
                         </Box>
                     </PopoverContent>
                 </Popover>
