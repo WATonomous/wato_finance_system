@@ -2,12 +2,15 @@ import {
     getAuth,
     GoogleAuthProvider,
     onAuthStateChanged,
+    signInWithEmailAndPassword,
     signInWithPopup,
     signOut,
 } from 'firebase/auth'
 import React, { useContext, useEffect, useState } from 'react'
 import { useOutlet } from 'react-router-dom'
 import app from '../firebase'
+import { toast, ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 const AuthContext = React.createContext()
 
@@ -19,12 +22,23 @@ export const AuthProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState()
     const [loading, setLoading] = useState(true)
     const auth = getAuth(app)
-
+    const whitelist = ['311nich@gmail.com']
     const provider = new GoogleAuthProvider()
     provider.setCustomParameters({ prompt: 'select_account' })
 
     const login = () => {
         return signInWithPopup(auth, provider)
+            .then((result) => {
+                const { email } = result.user
+                if (whitelist.includes(email)) return
+                if (!email.endsWith('@watonomous.ca')) {
+                    signOut(auth)
+                    throw new Error('Invalid email domain')
+                }
+            })
+            .catch((error) => {
+                console.error(error)
+            })
     }
 
     const logout = () => {
@@ -33,10 +47,17 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (user) {
+                const email = user.email
+                if (
+                    !email.endsWith('@watonomous.ca') &&
+                    !whitelist.includes(email)
+                )
+                    return
+            }
             setCurrentUser(user)
             setLoading(false)
         })
-
         return unsubscribe
     }, [auth])
 

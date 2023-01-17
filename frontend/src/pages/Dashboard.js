@@ -1,9 +1,8 @@
 import React, { useEffect, useReducer, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { Text } from '@chakra-ui/react'
+import { Box, Heading, Flex, VStack, Center, Table } from '@chakra-ui/react'
 import axios from 'axios'
 
-import { useAuth } from '../contexts/AuthContext'
 import Navbar from '../components/Navbar'
 import TicketList from '../components/TicketList'
 import LoadingSpinner from '../components/LoadingSpinner'
@@ -14,7 +13,6 @@ import FIContentTable from '../components/TicketContent/FIContentTable'
 import PPRContentTable from '../components/TicketContent/PPRContentTable'
 import UPRContentTable from '../components/TicketContent/UPRContentTable'
 import ReporterInfoTip from '../components/ReporterInfoTip'
-
 export const TICKET_TYPES = Object.freeze({
     SF: 'SF',
     FI: 'FI',
@@ -23,8 +21,6 @@ export const TICKET_TYPES = Object.freeze({
 })
 
 const Dashboard = () => {
-    const [error, setError] = useState('')
-    const { logout } = useAuth()
     const navigate = useNavigate()
     const location = useLocation()
     const [currentTicket, updateCurrentTicket] = useReducer(
@@ -65,11 +61,12 @@ const Dashboard = () => {
             .all(
                 Object.values(endpoints).map((endpoint) => axios.get(endpoint))
             )
-            .then((responses) =>
+            .then((responses) => {
                 Object.keys(endpoints).forEach((key, index) => {
-                    updateTickets({ [key]: responses[index].data })
+                    updateAllTickets({ [key]: responses[index].data })
                 })
-            )
+                console.log('fetched all tickets')
+            })
     }
 
     const getAllUsers = () => {
@@ -84,12 +81,15 @@ const Dashboard = () => {
         getAllUsers()
     }, [])
 
-    const handleLogout = async () => {
-        try {
-            await logout()
-            navigate('/login')
-        } catch (err) {
-            setError(`Failed to log out, Error: ${err}`)
+    useEffect(() => {
+        if (location.pathname === '/') return
+        const splitPath = location.pathname.split('/')
+        if (
+            splitPath.length !== 3 ||
+            !Object.values(TICKET_TYPES).includes(splitPath[1])
+        ) {
+            navigate('/notfound')
+            return
         }
         const currentTicketType = splitPath[1]
         const currentTicketId = splitPath[2]
