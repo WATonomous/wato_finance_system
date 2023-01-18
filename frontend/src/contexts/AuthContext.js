@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState()
     const [loading, setLoading] = useState(true)
     const auth = getAuth(app)
-    const whitelist = ['311nich@gmail.com']
+    const whitelist = []
     const provider = new GoogleAuthProvider()
     provider.setCustomParameters({ prompt: 'select_account' })
 
