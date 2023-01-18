@@ -1,22 +1,57 @@
 const FundingItem = require('../models/fundingitem.model')
-const SponsorshipFund = require('../models/sponsorshipfund.model')
 const UWFinancePurchase = require('../models/uwfinancepurchase.model')
+const {
+    getAnnotatedSponsorshipFundsByIdList,
+} = require('./sponsorshipfunds.controller')
+
+// empty list arg queries for all Sponsorship Funds
+const getAnnotatedUWFinancePurchasesByIdList = async (idList = []) => {
+    if (idList.length === 0) {
+        idList = await UWFinancePurchase.distinct('_id')
+    }
+    const uwFinancePurchaseList = await Promise.all(
+        idList.map(async (id) => {
+            return UWFinancePurchase.aggregate([
+                {
+                    $match: {
+                        _id: parseInt(id),
+                    },
+                },
+                {
+                    $set: {
+                        type: 'UPR',
+                        code: {
+                            $concat: ['UPR-', { $toString: '$_id' }],
+                        },
+                        path: {
+                            $concat: ['/UPR/', { $toString: '$_id' }],
+                        },
+                    },
+                },
+            ])
+        })
+    )
+
+    // aggregate returns an array so uwFinancePurchaseList
+    // will always be a list of one-elem lists:
+    // i.e. [[UPR-1], [UPR-2], ...] where UPR-X is a UWFinancePurchase object
+    return uwFinancePurchaseList.flat()
+}
 
 const getAllUWFinancePurchases = (_, res) => {
-    UWFinancePurchase.find()
-        .then((UWFinancePurchase) => res.json(UWFinancePurchase))
+    getAnnotatedUWFinancePurchasesByIdList()
+        .then((uwFinancePurchases) => res.json(uwFinancePurchases))
         .catch((err) => res.status(400).json('Error: ' + err))
 }
 
 const getUWFinancePurchase = (req, res) => {
-    UWFinancePurchase.findById(req.params.id)
-        .then((UWFinancePurchase) => res.json(UWFinancePurchase))
+    getAnnotatedUWFinancePurchasesByIdList([req.params.id])
+        .then((uwFinancePurchases) => res.json(uwFinancePurchases[0]))
         .catch((err) => res.status(400).json('Error: ' + err))
 }
 
 const createNewUWFinancePurchase = async (req, res) => {
-    const { body } = req
-    const newUWFinancePurchase = new UWFinancePurchase(body)
+    const newUWFinancePurchase = new UWFinancePurchase(req.body)
     try {
         const newUPR = await newUWFinancePurchase.save()
         await FundingItem.findByIdAndUpdate(newUPR.fi_link, {
@@ -49,13 +84,17 @@ const deleteUWFinancePurchase = async (req, res) => {
 }
 
 const getSponsorshipFund = async (req, res) => {
-    const { id } = req.params
-    const uwFinancePurchase = await UWFinancePurchase.findById(id)
+    const uwFinancePurchase = await UWFinancePurchase.findById(req.params.id)
     const fundingItem = await FundingItem.findById(uwFinancePurchase?.fi_link)
-    res.json(await SponsorshipFund.findById(fundingItem?.sf_link))
+    getAnnotatedSponsorshipFundsByIdList([fundingItem?.sf_link])
+        .then((sponsorshipFunds) => {
+            res.json(sponsorshipFunds[0])
+        })
+        .catch((err) => res.status(400).json('Error: ' + err))
 }
 
 module.exports = {
+    getAnnotatedUWFinancePurchasesByIdList,
     getAllUWFinancePurchases,
     getUWFinancePurchase,
     createNewUWFinancePurchase,
