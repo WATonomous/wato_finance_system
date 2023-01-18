@@ -9,8 +9,6 @@ import {
 import React, { useContext, useEffect, useState } from 'react'
 import { useOutlet } from 'react-router-dom'
 import app from '../firebase'
-import { toast, ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
 
 const AuthContext = React.createContext()
 
