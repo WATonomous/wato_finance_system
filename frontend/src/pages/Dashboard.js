@@ -25,7 +25,6 @@ export const TICKET_TYPES = Object.freeze({
 const Dashboard = () => {
     const navigate = useNavigate()
     const location = useLocation()
-    console.log(process.env.REACT_APP_BACKEND_URL)
     const [currentTicket, updateCurrentTicket] = useReducer(
         (data, partialData) => ({
             ...data,

@@ -9,9 +9,12 @@ const TreeView = (props) => {
     const location = useLocation()
     const { tickets } = props
     const [tree, setTree] = useState({})
+
     const pathname = location.pathname.substring(1).split('/')
     const ticketType = pathname[0]
     const ticketID = parseInt(pathname[1])
+
+    console.log(tickets)
 
     const sortTickets = (ticketList) => {
         let sortedArr = ticketList.sort((a, b) => (a._id > b._id ? 1 : -1))
@@ -55,20 +58,20 @@ const TreeView = (props) => {
                 <Box bgColor="tomato" cursor="pointer">
                     <Text
                         as={
-                            ticketType === 'SF' && ticketID === tree._id
+                            ticketType === tree.type && ticketID === tree._id
                                 ? 'b'
                                 : ''
                         }
                         fontSize="xs"
-                        onClick={() => navigate(`/SF/${tree._id}`)}
+                        onClick={() => navigate(tree.path)}
                     >
-                        {`${TICKET_TYPES.SF} - ${tree.name}`}
+                        {`${tree.type} - ${tree.name}`}
                     </Text>
                 </Box>
 
                 {sortTickets(tree.fundingItems).map((fi) => {
                     return (
-                        <Box key={`${TICKET_TYPES.FI} - ${fi.name}`}>
+                        <Box key={fi.code}>
                             <Box
                                 pos="relative"
                                 left="4"
@@ -77,25 +80,21 @@ const TreeView = (props) => {
                             >
                                 <Text
                                     as={
-                                        ticketType === `${TICKET_TYPES.FI}` &&
+                                        ticketType === fi.type &&
                                         ticketID === fi._id
                                             ? 'b'
                                             : ''
                                     }
                                     fontSize="xs"
-                                    onClick={() =>
-                                        navigate(
-                                            `/${TICKET_TYPES.FI}/${fi._id}`
-                                        )
-                                    }
+                                    onClick={() => navigate(`${fi.path}`)}
                                 >
-                                    {`${TICKET_TYPES.FI} - ${fi.name}`}
+                                    {`${fi.type} - ${fi.name}`}
                                 </Text>
                             </Box>
                             {sortTickets(fi.personalPurchases).map((ppr) => {
                                 return (
                                     <Box
-                                        key={`${TICKET_TYPES.PPR} - ${ppr.name}`}
+                                        key={ppr.code}
                                         pos="relative"
                                         left="8"
                                         border="1px"
@@ -106,20 +105,17 @@ const TreeView = (props) => {
                                     >
                                         <Text
                                             as={
-                                                ticketType ===
-                                                    `${TICKET_TYPES.PPR}` &&
+                                                ticketType === ppr.type &&
                                                 ticketID === ppr._id
                                                     ? 'b'
                                                     : ''
                                             }
                                             fontSize="xs"
                                             onClick={() =>
-                                                navigate(
-                                                    `/${TICKET_TYPES.PPR}/${ppr._id}`
-                                                )
+                                                navigate(`${ppr.path}`)
                                             }
                                         >
-                                            {`${TICKET_TYPES.PPR} - ${ppr.name}`}
+                                            {`${ppr.type} - ${ppr.name}`}
                                         </Text>
                                     </Box>
                                 )
@@ -127,7 +123,7 @@ const TreeView = (props) => {
                             {sortTickets(fi.uwFinancePurchases).map((upr) => {
                                 return (
                                     <Box
-                                        key={`${TICKET_TYPES.UPR} - ${upr.name}`}
+                                        key={upr.code}
                                         pos="relative"
                                         left="8"
                                         border="1px"
@@ -138,20 +134,17 @@ const TreeView = (props) => {
                                     >
                                         <Text
                                             as={
-                                                ticketType ===
-                                                    `${TICKET_TYPES.UPR}` &&
+                                                ticketType === `${upr.type}` &&
                                                 ticketID === upr._id
                                                     ? 'b'
                                                     : ''
                                             }
                                             fontSize="xs"
                                             onClick={() =>
-                                                navigate(
-                                                    `/${TICKET_TYPES.UPR}/${upr._id}`
-                                                )
+                                                navigate(`${upr.path}`)
                                             }
                                         >
-                                            {`${TICKET_TYPES.UPR} - ${upr.name}`}
+                                            {`${upr.type} - ${upr.name}`}
                                         </Text>
                                     </Box>
                                 )
