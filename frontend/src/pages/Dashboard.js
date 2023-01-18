@@ -1,6 +1,7 @@
 import React, { useEffect, useReducer, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Box, Heading, Flex, VStack, Center, Table } from '@chakra-ui/react'
+import TreeView from '../components/TreeView'
 import axios from 'axios'
 
 import Navbar from '../components/Navbar'
@@ -13,6 +14,7 @@ import FIContentTable from '../components/TicketContent/FIContentTable'
 import PPRContentTable from '../components/TicketContent/PPRContentTable'
 import UPRContentTable from '../components/TicketContent/UPRContentTable'
 import ReporterInfoTip from '../components/ReporterInfoTip'
+
 export const TICKET_TYPES = Object.freeze({
     SF: 'SF',
     FI: 'FI',
@@ -23,7 +25,6 @@ export const TICKET_TYPES = Object.freeze({
 const Dashboard = () => {
     const navigate = useNavigate()
     const location = useLocation()
-    console.log(process.env.REACT_APP_BACKEND_URL)
     const [currentTicket, updateCurrentTicket] = useReducer(
         (data, partialData) => ({
             ...data,
@@ -192,6 +193,7 @@ const Dashboard = () => {
                         <Heading mb="8px" fontSize="2xl">
                             Ticket Tree
                         </Heading>
+                        <TreeView tickets={allTickets} location={location} />
                     </Box>
                 </VStack>
             </Flex>
