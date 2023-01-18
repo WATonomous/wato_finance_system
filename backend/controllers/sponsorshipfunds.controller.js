@@ -1,13 +1,65 @@
 const SponsorshipFund = require('../models/sponsorshipfund.model')
 const {
-    getUpdatedFundingItemsByIdList,
-    getPersonalPurchasesByFundingItem,
-    getUWFinancePurchasesByFundingItem,
-    getUpdatedSponsorshipFundsByIdList,
-} = require('../helpers.js')
+    cascadeDeleteFundingItem,
+    getAnnotatedFundingItemsByIdList,
+} = require('./fundingitems.controller')
+const {
+    getAnnotatedPersonalPurchasesByIdList,
+} = require('./personalpurchases.controller')
+const {
+    getAnnotatedUWFinancePurchasesByIdList,
+} = require('./uwfinancepurchases.controller')
+
+// empty list arg queries for all Sponsorship Funds
+const getAnnotatedSponsorshipFundsByIdList = async (idList = []) => {
+    if (idList.length === 0) {
+        idList = await SponsorshipFund.distinct('_id')
+    }
+    const sponsorshipFundList = await Promise.all(
+        idList.map(async (id) => {
+            const sponsorshipFund = await SponsorshipFund.findById(id)
+            let fundingSpent = 0
+            if (sponsorshipFund.fi_links.length > 0) {
+                const fundingItemList = await getAnnotatedFundingItemsByIdList(
+                    sponsorshipFund.fi_links
+                )
+                fundingSpent = fundingItemList
+                    .map((fundingItem) => fundingItem.funding_spent)
+                    .reduce((a, b) => a + b, 0)
+            }
+            return SponsorshipFund.aggregate([
+                {
+                    $match: {
+                        _id: parseInt(id),
+                    },
+                },
+                {
+                    $set: {
+                        type: 'SF',
+                        code: {
+                            $concat: ['SF-', { $toString: '$_id' }],
+                        },
+                        path: {
+                            $concat: ['/SF/', { $toString: '$_id' }],
+                        },
+                        funding_spent: fundingSpent,
+                        name: {
+                            $concat: ['$organization', ' - ', '$semester'],
+                        },
+                    },
+                },
+            ])
+        })
+    )
+
+    // aggregate returns an array so sponsorshipFundList
+    // will always be a list of one-elem lists:
+    // i.e. [[SF-1], [SF-2], ...] where SF-X is a SponsorshipFund object
+    return sponsorshipFundList.flat()
+}
 
 const getAllSponsorshipFunds = (_, res) => {
-    getUpdatedSponsorshipFundsByIdList()
+    getAnnotatedSponsorshipFundsByIdList()
         .then((sponsorshipFunds) => {
             res.json(sponsorshipFunds)
         })
@@ -16,13 +68,9 @@ const getAllSponsorshipFunds = (_, res) => {
 
 const getSponsorshipFund = (req, res) => {
     const { id } = req.params
-    getUpdatedSponsorshipFundsByIdList([id])
+    getAnnotatedSponsorshipFundsByIdList([id])
         .then((sponsorshipFunds) => {
-            if (!sponsorshipFunds) {
-                res.status(404)
-                throw new Error('Sponsorship Fund not found')
-            }
-            res.status(200).json(sponsorshipFunds[0])
+            res.json(sponsorshipFunds[0])
         })
         .catch((err) => res.status(400).json(err))
 }
@@ -31,19 +79,21 @@ const getSponsorshipFund = (req, res) => {
 const getAllChildren = async (req, res) => {
     const { id } = req.params
 
-    const sponsorshipFunds = await getUpdatedSponsorshipFundsByIdList([id])
+    const sponsorshipFunds = await getAnnotatedSponsorshipFundsByIdList([id])
     const sponsorshipFund = sponsorshipFunds[0]
-    const fundingItems = await getUpdatedFundingItemsByIdList(
+    const fundingItems = await getAnnotatedFundingItemsByIdList(
         sponsorshipFund.fi_links
     )
     const allSFChildren = await Promise.all(
         fundingItems.map(async (fundingItem) => {
-            const personalPurchases = await getPersonalPurchasesByFundingItem(
-                fundingItem
-            )
-            const uwFinancePurchases = await getUWFinancePurchasesByFundingItem(
-                fundingItem
-            )
+            const personalPurchases =
+                await getAnnotatedPersonalPurchasesByIdList(
+                    fundingItem.ppr_links
+                )
+            const uwFinancePurchases =
+                await getAnnotatedUWFinancePurchasesByIdList(
+                    fundingItem.upr_links
+                )
             return {
                 ...fundingItem,
                 personalPurchases,
@@ -64,43 +114,42 @@ const createSponsorshipFund = (req, res) => {
         .catch((err) => res.status(400).json('Error: ' + err))
 }
 
-const updateSponsorshipFund = (req, res) => {
+const updateSponsorshipFund = async (req, res) => {
     const { id } = req.params
     const updatedFields = req.body
-    SponsorshipFund.findById(id)
-        .then((sponsorshipFundToUpdate) => {
-            if (!sponsorshipFundToUpdate) {
-                res.status(404)
-                throw new Error('Sponsorship Fund not found')
+    try {
+        const updated = await SponsorshipFund.findByIdAndUpdate(
+            id,
+            updatedFields,
+            {
+                new: true,
             }
-            SponsorshipFund.findByIdAndUpdate(
-                sponsorshipFundToUpdate._id,
-                updatedFields,
-                {
-                    new: false,
-                }
-            )
-                .then(() => res.status(200).json(updatedFields))
-                .catch((err) => res.status(400).json(err))
-        })
-        .catch((err) => res.status(400).json(err))
+        )
+        res.json(updated)
+    } catch (err) {
+        res.status(400).json('Error: ' + err)
+    }
 }
 
-const deleteSponsorshipFund = (req, res) => {
+const deleteSponsorshipFund = async (req, res) => {
     const { id } = req.params
-    SponsorshipFund.findById(id)
-        .then((sponsorshipFundToDelete) => {
-            if (!sponsorshipFundToDelete) {
-                res.status(404)
-                throw new Error('Sponsorship Fund not found')
-            }
-            res.status(200).json(sponsorshipFundToDelete)
-            sponsorshipFundToDelete.remove()
-        })
-        .catch((err) => res.status(400).json(err))
+    try {
+        const SFToDelete = await SponsorshipFund.findById(id)
+        const { fi_links } = SFToDelete
+        await Promise.all(
+            fi_links.map(async (fi_id) => {
+                return cascadeDeleteFundingItem(fi_id)
+            })
+        )
+        const deleted = await SFToDelete.remove()
+        res.json(deleted)
+    } catch (err) {
+        res.status(400).json('Error: ' + err)
+    }
 }
 
 module.exports = {
+    getAnnotatedSponsorshipFundsByIdList,
     getAllSponsorshipFunds,
     createSponsorshipFund,
     getSponsorshipFund,

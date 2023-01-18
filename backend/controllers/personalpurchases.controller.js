@@ -1,23 +1,57 @@
 const PersonalPurchase = require('../models/personalpurchase.model')
 const FundingItem = require('../models/fundingitem.model')
-const SponsorshipFund = require('../models/sponsorshipfund.model')
+const {
+    getAnnotatedSponsorshipFundsByIdList,
+} = require('./sponsorshipfunds.controller')
+
+// empty list arg queries for all Sponsorship Funds
+const getAnnotatedPersonalPurchasesByIdList = async (idList = []) => {
+    if (idList.length === 0) {
+        idList = await PersonalPurchase.distinct('_id')
+    }
+    const personalPurchaseList = await Promise.all(
+        idList.map(async (id) => {
+            return PersonalPurchase.aggregate([
+                {
+                    $match: {
+                        _id: parseInt(id),
+                    },
+                },
+                {
+                    $set: {
+                        type: 'PPR',
+                        code: {
+                            $concat: ['PPR-', { $toString: '$_id' }],
+                        },
+                        path: {
+                            $concat: ['/PPR/', { $toString: '$_id' }],
+                        },
+                    },
+                },
+            ])
+        })
+    )
+
+    // aggregate returns an array so personalPurchaseList
+    // will always be a list of one-elem lists:
+    // i.e. [[PPR-1], [PPR-2], ...] where UPR-X is a PersonalPurchase object
+    return personalPurchaseList.flat()
+}
 
 const getAllPersonalPurchases = (_, res) => {
-    PersonalPurchase.find()
+    getAnnotatedPersonalPurchasesByIdList()
         .then((personalPurchases) => res.json(personalPurchases))
         .catch((err) => res.status(400).json('Error: ' + err))
 }
 
 const getPersonalPurchase = (req, res) => {
-    PersonalPurchase.findById(req.params.id)
-        .then((personalPurchase) => res.json(personalPurchase))
+    getAnnotatedPersonalPurchasesByIdList([req.params.id])
+        .then((personalPurchases) => res.json(personalPurchases[0]))
         .catch((err) => res.status(400).json('Error: ' + err))
 }
 
 const createPersonalPurchase = async (req, res) => {
-    const { body } = req
-    const newPersonalPurchase = new PersonalPurchase(body)
-
+    const newPersonalPurchase = new PersonalPurchase(req.body)
     try {
         const newPPR = await newPersonalPurchase.save()
         await FundingItem.findByIdAndUpdate(newPPR.fi_link, {
@@ -30,7 +64,6 @@ const createPersonalPurchase = async (req, res) => {
 }
 
 const updatePersonalPurchase = (req, res) => {
-    console.log(req.params.id)
     PersonalPurchase.findByIdAndUpdate(req.params.id, req.body)
         .then(() => res.json(req.body))
         .catch((err) => res.status(400).json('Error: ' + err))
@@ -43,20 +76,25 @@ const deletePersonalPurchase = async (req, res) => {
         await FundingItem.findByIdAndUpdate(PPRtoDelete.fi_link, {
             $pull: { ppr_links: PPRid },
         })
-        await PPRtoDelete.remove()
-        res.json('PersonalPurchase deleted.')
+        const deleted = await PPRtoDelete.remove()
+        res.json(deleted)
     } catch (err) {
         res.status(400).json('Error: ' + err)
     }
 }
+
 const getSponsorshipFund = async (req, res) => {
-    const { id } = req.params
-    const personalPurchase = await PersonalPurchase.findById(id)
+    const personalPurchase = await PersonalPurchase.findById(req.params.id)
     const fundingItem = await FundingItem.findById(personalPurchase.fi_link)
-    res.json(await SponsorshipFund.findById(fundingItem.sf_link))
+    getAnnotatedSponsorshipFundsByIdList([fundingItem?.sf_link])
+        .then((sponsorshipFunds) => {
+            res.json(sponsorshipFunds[0])
+        })
+        .catch((err) => res.status(400).json('Error: ' + err))
 }
 
 module.exports = {
+    getAnnotatedPersonalPurchasesByIdList,
     getAllPersonalPurchases,
     getPersonalPurchase,
     createPersonalPurchase,
