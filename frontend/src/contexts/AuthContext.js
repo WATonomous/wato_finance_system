@@ -9,6 +9,7 @@ import {
 import React, { useContext, useEffect, useState } from 'react'
 import { useOutlet } from 'react-router-dom'
 import app from '../firebase'
+import { useToast } from '@chakra-ui/react'
 
 const AuthContext = React.createContext()
 
@@ -23,6 +24,17 @@ export const AuthProvider = ({ children }) => {
     const whitelist = []
     const provider = new GoogleAuthProvider()
     provider.setCustomParameters({ prompt: 'select_account' })
+    const toast = useToast()
+
+    const showToast = () =>
+        toast({
+            title: 'Invalid email address',
+            description:
+                'Please use a Watonomous or whitelisted email address.',
+            status: 'error',
+            duration: 4000,
+            isClosable: true,
+        })
 
     const login = () => {
         return signInWithPopup(auth, provider)
@@ -31,6 +43,7 @@ export const AuthProvider = ({ children }) => {
                 if (whitelist.includes(email)) return
                 if (!email.endsWith('@watonomous.ca')) {
                     signOut(auth)
+                    showToast()
                     throw new Error('Invalid email domain')
                 }
             })
@@ -74,5 +87,6 @@ export const AuthProvider = ({ children }) => {
 
 export const AuthLayout = () => {
     const outlet = useOutlet()
+    const toast = useToast()
     return <AuthProvider>{outlet}</AuthProvider>
 }
