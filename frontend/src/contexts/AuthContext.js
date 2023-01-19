@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
         toast({
             title: 'Invalid email address',
             description:
-                'Please use a Watonomous or whitelisted email address.',
+                'Please use a WATonomous or whitelisted email address.',
             status: 'error',
             duration: 4000,
             isClosable: true,
