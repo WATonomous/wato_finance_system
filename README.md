@@ -72,6 +72,12 @@ REACT_APP_APP_ID=<YOUR_FIREBASE_API_ID>
 REACT_APP_BACKEND_URL=http://localhost:5000
 ```
 
+### Connect Backend to Project
+
+1. To be able to use `firebase-admin`, select the gear icon next to the Project Overview screen
+2. Go to **Project Settings** > **Service Accounts** and generate a new private key
+3. Name the file `serviceAccountKey.json` and paste the JSON file in the "backend" folder
+
 ### Enable Google OAuth
 
 1. In your Firebase Console, select Authentication on the left sidebarw

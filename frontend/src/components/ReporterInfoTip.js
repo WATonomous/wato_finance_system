@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react'
 
 const ReporterInfoTip = (props) => {
-    const { ticketData, heading, reporter } = props
+    const { heading, reporter } = props
 
     return (
         <Tr borderTopWidth="2px" borderBottomWidth="2px">

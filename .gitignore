@@ -2,6 +2,7 @@
 
 #Service Key
 /backend/serviceAccountKey.json
+
 # dependencies
 node_modules
 /.pnp
