@@ -7,8 +7,6 @@ const GOOGLE_SHEET_ID = process.env.GOOGLE_SHEET_ID
 const SHEET_ID = process.env.SHEET_ID
 const CLIENT_EMAIL = process.env.CLIENT_EMAIL
 const PRIVATE_KEY = process.env.PRIVATE_KEY
-// backend url
-const REACT_APP_BACKEND_URL = process.env.REACT_APP_BACKEND_URL
 
 const doc = new Gsheet.GoogleSpreadsheet(GOOGLE_SHEET_ID)
 
@@ -39,7 +37,7 @@ const readSpreadsheet = async () => {
 }
 
 const updateGroup = async () => {
-    const endpoint = `${REACT_APP_BACKEND_URL}/group/update`
+    const endpoint = `${process.env.REACT_APP_BACKEND_URL}/group/update`
     const newPairs = await readSpreadsheet()
     try {
         await axios.post(endpoint, newPairs)
