@@ -27,6 +27,7 @@ const readSpreadsheet = async () => {
         rows.forEach((row) => {
             pairs.push({
                 email: row['Email'],
+                watiam: row['WATIAM ID'],
                 title: row['Title'],
             })
         })
@@ -39,6 +40,7 @@ const readSpreadsheet = async () => {
 const updateGroup = async () => {
     const endpoint = `${process.env.REACT_APP_BACKEND_URL}/group/update`
     const newPairs = await readSpreadsheet()
+    console.log(newPairs)
     try {
         await axios.post(endpoint, newPairs)
         console.log('Updated google groups')

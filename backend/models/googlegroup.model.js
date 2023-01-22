@@ -4,6 +4,7 @@ const { Schema } = mongoose
 
 const GoogleGroupSchema = new Schema({
     email: { type: String },
+    watiam: { type: String },
     title: { type: String },
 })
 
