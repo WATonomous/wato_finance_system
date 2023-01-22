@@ -72,7 +72,6 @@ export const AuthProvider = ({ children }) => {
                     field: searchWithEmail ? userEmail : userWatiam,
                     useEmail: searchWithEmail,
                 })
-                console.log(retrievedGroup.data.title)
                 setCurrentUserGroup(retrievedGroup.data.title)
             } catch (err) {
                 console.log('Error: ' + err)
