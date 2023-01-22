@@ -1,25 +1,36 @@
 const GoogleGroup = require('../models/googlegroup.model')
 
-const getAllGoogleGroups = async (_, res) => {
+const getAllGoogleGroups = async () => {
     try {
-        const allPairs = await GoogleGroup.find()
         let result = []
+        const allPairs = await GoogleGroup.find()
         allPairs.map((pair) => result.push(pair))
+        console.log('Fetched all google group pairs')
         return result
+    } catch (err) {
+        console.log('Error: ' + err)
+    }
+}
+
+const getGoogleGroup = async (req, res) => {
+    const { field, useEmail } = req.body
+    try {
+        let userGroup = {}
+        if (useEmail) {
+            userGroup = await GoogleGroup.findOne({ email: field })
+        } else {
+            userGroup = await GoogleGroup.findOne({ watiam: field })
+        }
+        res.status(200).json(userGroup)
+        return userGroup
     } catch (err) {
         res.status(400).json('Error: ' + err)
     }
 }
 
-const getGoogleGroup = (req, res) => {
-    const { email } = req.body
-    GoogleGroup.findOne({ email })
-        .then(() => res.json(req.body))
-        .catch((err) => res.status(400).json('Error: ' + err))
-}
-
 const updateGoogleGroups = async (req, res) => {
     const newPairs = req.body
+
     const currentPairs = await getAllGoogleGroups()
 
     const currentEmails = currentPairs.map((pair) => pair.email)
@@ -55,7 +66,12 @@ const updateGoogleGroups = async (req, res) => {
                         bulkOps.push({
                             updateOne: {
                                 filter: { email: currentPair.email },
-                                update: { $set: { title: pair.title } },
+                                update: {
+                                    $set: {
+                                        watiam: pair.watiam,
+                                        title: pair.title,
+                                    },
+                                },
                             },
                         })
                     }
@@ -63,7 +79,7 @@ const updateGoogleGroups = async (req, res) => {
             })
         }
         await GoogleGroup.bulkWrite(bulkOps)
-        console.log('Update successful')
+        res.status(200).json('Update successful')
     } catch (err) {
         res.status(400).json('Error: ' + err)
     }
