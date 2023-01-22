@@ -8,6 +8,7 @@ import {
 import React, { useContext, useEffect, useState, useCallback } from 'react'
 import { useOutlet } from 'react-router-dom'
 import app from '../firebase'
+import axios from 'axios'
 import { useToast } from '@chakra-ui/react'
 
 const AuthContext = React.createContext()
@@ -20,6 +21,7 @@ const whitelist = ['test@test.com']
 
 export const AuthProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState()
+    const [currentUserGroup, setCurrentUserGroup] = useState()
     const [loading, setLoading] = useState(true)
     const auth = getAuth(app)
     const provider = new GoogleAuthProvider()
@@ -56,25 +58,52 @@ export const AuthProvider = ({ children }) => {
         return signOut(auth)
     }, [auth])
 
+    const setUserGroup = async (user) => {
+        if (user) {
+            const userEmail = user.email
+            const userWatiam = userEmail.substring(0, userEmail.indexOf('@'))
+            const endpoint = `${process.env.REACT_APP_BACKEND_URL}/group/`
+
+            let searchWithEmail = false
+            if (whitelist.includes(userEmail)) searchWithEmail = true //or else use watiam
+
+            try {
+                const retrievedGroup = await axios.post(endpoint, {
+                    field: searchWithEmail ? userEmail : userWatiam,
+                    useEmail: searchWithEmail,
+                })
+                console.log(retrievedGroup.data.title)
+                setCurrentUserGroup(retrievedGroup.data.title)
+            } catch (err) {
+                console.log('Error: ' + err)
+            }
+        }
+    }
+
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const email = user.email
                 console.log(email)
                 if (
                     !email.endsWith('@watonomous.ca') &&
                     !whitelist.includes(email)
-                )
-                    logout()
+                ) {
+                    await logout()
+                    return
+                }
             }
             setCurrentUser(user)
             setLoading(false)
+
+            await setUserGroup(user)
         })
         return unsubscribe
     }, [auth, logout])
 
     const providerState = {
         currentUser,
+        currentUserGroup,
         login,
         logout,
     }
