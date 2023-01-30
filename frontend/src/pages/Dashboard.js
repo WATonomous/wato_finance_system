@@ -1,6 +1,14 @@
 import React, { useEffect, useReducer, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { Box, Heading, Flex, VStack, Center, Table } from '@chakra-ui/react'
+import {
+    Box,
+    Heading,
+    Flex,
+    VStack,
+    Center,
+    Table,
+    Container,
+} from '@chakra-ui/react'
 import TreeView from '../components/TreeView'
 import axios from 'axios'
 
@@ -14,6 +22,7 @@ import FIContentTable from '../components/TicketContent/FIContentTable'
 import PPRContentTable from '../components/TicketContent/PPRContentTable'
 import UPRContentTable from '../components/TicketContent/UPRContentTable'
 import ReporterInfoTip from '../components/ReporterInfoTip'
+import RichTextEditor from '../components/RichTextEditor'
 
 export const TICKET_TYPES = Object.freeze({
     SF: 'SF',
@@ -196,6 +205,9 @@ const Dashboard = () => {
                         <TreeView tickets={allTickets} location={location} />
                     </Box>
                 </VStack>
+                <Container position="relative">
+                    <RichTextEditor />
+                </Container>
             </Flex>
         )
     }
