@@ -26,7 +26,8 @@ import {
     faAlignLeft,
 } from '@fortawesome/free-solid-svg-icons'
 import { HStack, Text, Container } from '@chakra-ui/react'
-
+import axios from 'axios'
+import { useAuth } from '../contexts/AuthContext'
 const HOTKEYS = {
     'mod+b': 'bold',
     'mod+i': 'italic',
@@ -50,12 +51,26 @@ const EditorButton = React.forwardRef(
     }
 )
 
-const RichTextExample = () => {
+const createComment = async (comment) => {
+    try {
+        const response = await axios.post(
+            `${process.env.REACT_APP_BACKEND_URL}/comments`,
+            comment
+        )
+        return response
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+const RichTextExample = (props) => {
+    const { ticketType, ticketId } = props
     const [value, setValue] = useState(initialValue)
     const renderElement = useCallback((props) => <Element {...props} />, [])
     const renderLeaf = useCallback((props) => <Leaf {...props} />, [])
     const editor = useMemo(() => withHistory(withReact(createEditor())), [])
-
+    const { currentUser } = useAuth()
+    console.log(currentUser)
     return (
         <Container border="2px solid #ccc" width="700px" p="4px">
             <Slate
@@ -151,7 +166,18 @@ const RichTextExample = () => {
                     />
                 </Container>
             </Slate>
-            <button onClick={() => console.log(editor)}>Log</button>
+            <button
+                onClick={() =>
+                    createComment({
+                        ticketType: ticketType,
+                        ticketId: parseInt(ticketId),
+                        commentBlob: JSON.stringify(editor),
+                        userEmail: currentUser.email,
+                    })
+                }
+            >
+                Log
+            </button>
         </Container>
     )
 }

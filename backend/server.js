@@ -29,6 +29,7 @@ const sponsorshipFundsRouter = require('./routes/sponsorshipfunds.routes')
 const personalPurchaseRouter = require('./routes/personalpurchases.routes')
 const UWFinancePurchaseRouter = require('./routes/uwfinancepurchases.routes')
 const usersRouter = require('./routes/users.routes')
+const commentRouter = require('./routes/comment.routes')
 
 app.use(express.json())
 
@@ -38,6 +39,7 @@ app.use('/emails', emailRouter)
 app.use('/sponsorshipfunds', sponsorshipFundsRouter)
 app.use('/uwfinancepurchases', UWFinancePurchaseRouter)
 app.use('/users', usersRouter)
+app.use('/comments', commentRouter)
 
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`)

@@ -8,6 +8,7 @@ import {
     Center,
     Table,
     Container,
+    HStack,
 } from '@chakra-ui/react'
 import TreeView from '../components/TreeView'
 import axios from 'axios'
@@ -34,6 +35,9 @@ export const TICKET_TYPES = Object.freeze({
 const Dashboard = () => {
     const navigate = useNavigate()
     const location = useLocation()
+    const [ticketType, setTicketType] = useState('')
+    const [ticketId, setTicketId] = useState('')
+
     const [currentTicket, updateCurrentTicket] = useReducer(
         (data, partialData) => ({
             ...data,
@@ -84,6 +88,7 @@ const Dashboard = () => {
         const endpoint = `${process.env.REACT_APP_BACKEND_URL}/users/`
         axios.get(endpoint).then((response) => {
             setAllUsers({ users: response.data })
+            console.log(response.data)
         })
     }
 
@@ -102,6 +107,9 @@ const Dashboard = () => {
             navigate('/notfound')
             return
         }
+        setTicketType(splitPath[1])
+        setTicketId(splitPath[2])
+
         const currentTicketType = splitPath[1]
         const currentTicketId = splitPath[2]
         const allTicketsWithCurrentTicketType =
@@ -152,63 +160,74 @@ const Dashboard = () => {
         }
 
         return (
-            <Flex
-                w="100%"
-                h="calc(100vh - 80px)"
-                overflowY="auto"
-                // zIndex="tooltip"
-            >
+            <Box w="100%" overflowY="auto">
                 <Flex
-                    flexDir="column"
-                    justifyContent="flex-start"
-                    h="max-content"
-                    w="60%"
-                    p="16px 24px"
+                // h="calc(100vh - 80px)"
+                // zIndex="tooltip"
                 >
-                    <Heading mb="16px" fontSize="3xl">
-                        {`${currentTicket.type}-${currentTicket.id}: ${ticketData.name}`}
-                    </Heading>
-                    {getCurrentTicketContentTable()}
+                    <Flex
+                        flexDir="column"
+                        justifyContent="flex-start"
+                        h="max-content"
+                        w="60%"
+                        p="16px 24px"
+                    >
+                        <Heading mb="16px" fontSize="3xl">
+                            {`${currentTicket.type}-${currentTicket.id}: ${ticketData.name}`}
+                        </Heading>
+                        {getCurrentTicketContentTable()}
+                    </Flex>
+                    <VStack
+                        w="40%"
+                        h="max-content"
+                        p="16px 24px 16px 0"
+                        gap="16px"
+                    >
+                        <Box w="100%">
+                            <Heading mb="8px" fontSize="2xl">
+                                Metadata
+                            </Heading>
+                            <Table>
+                                <ReporterInfoTip
+                                    ticketData={ticketData}
+                                    heading={'Reporter Id'}
+                                    reporter={allUsers.users.find(
+                                        (user) =>
+                                            user.uid === ticketData.reporter_id
+                                    )}
+                                />
+                                <TicketContentTableRow
+                                    heading={'Created at'}
+                                    description={getStandardizedDate(
+                                        ticketData.createdAt
+                                    )}
+                                />
+                                <TicketContentTableRow
+                                    heading={'Updated at'}
+                                    description={getStandardizedDate(
+                                        ticketData.updatedAt
+                                    )}
+                                />
+                            </Table>
+                        </Box>
+                        <Box w="100%">
+                            <Heading mb="8px" fontSize="2xl">
+                                Ticket Tree
+                            </Heading>
+                            <TreeView
+                                tickets={allTickets}
+                                location={location}
+                            />
+                        </Box>
+                    </VStack>
                 </Flex>
-                <VStack w="40%" h="max-content" p="16px 24px 16px 0" gap="16px">
-                    <Box w="100%">
-                        <Heading mb="8px" fontSize="2xl">
-                            Metadata
-                        </Heading>
-                        <Table>
-                            <ReporterInfoTip
-                                ticketData={ticketData}
-                                heading={'Reporter Id'}
-                                reporter={allUsers.users.find(
-                                    (user) =>
-                                        user.uid === ticketData.reporter_id
-                                )}
-                            />
-                            <TicketContentTableRow
-                                heading={'Created at'}
-                                description={getStandardizedDate(
-                                    ticketData.createdAt
-                                )}
-                            />
-                            <TicketContentTableRow
-                                heading={'Updated at'}
-                                description={getStandardizedDate(
-                                    ticketData.updatedAt
-                                )}
-                            />
-                        </Table>
-                    </Box>
-                    <Box w="100%">
-                        <Heading mb="8px" fontSize="2xl">
-                            Ticket Tree
-                        </Heading>
-                        <TreeView tickets={allTickets} location={location} />
-                    </Box>
-                </VStack>
-                <Container position="relative">
-                    <RichTextEditor />
+                <Container>
+                    <RichTextEditor
+                        ticketType={ticketType}
+                        ticketId={ticketId}
+                    />
                 </Container>
-            </Flex>
+            </Box>
         )
     }
 
