@@ -25,9 +25,10 @@ import {
     faAlignRight,
     faAlignLeft,
 } from '@fortawesome/free-solid-svg-icons'
-import { HStack, Text, Container } from '@chakra-ui/react'
+import { HStack, Text, Container, Heading } from '@chakra-ui/react'
 import axios from 'axios'
 import { useAuth } from '../contexts/AuthContext'
+import { Element, Leaf } from './RenderComment'
 const HOTKEYS = {
     'mod+b': 'bold',
     'mod+i': 'italic',
@@ -77,7 +78,6 @@ const RichTextExample = (props) => {
                 editor={editor}
                 value={value}
                 onChange={(value) => setValue(value)}
-                style={{ background: 'blue' }}
             >
                 <Container mb="4px" p="8px" borderBottom="2px solid #757575">
                     {/* <div style={{backgroundColor: "green"}}> */}
@@ -138,7 +138,7 @@ const RichTextExample = (props) => {
                         />
                         <BlockButton
                             format="right"
-                            iicon={<FontAwesomeIcon icon={faAlignRight} />}
+                            icon={<FontAwesomeIcon icon={faAlignRight} />}
                         />
                         <BlockButton
                             format="justify"
@@ -167,14 +167,16 @@ const RichTextExample = (props) => {
                 </Container>
             </Slate>
             <button
-                onClick={() =>
+                onClick={() => {
+                    console.log(value)
+                    console.log(editor)
                     createComment({
                         ticketType: ticketType,
                         ticketId: parseInt(ticketId),
-                        commentBlob: JSON.stringify(editor),
+                        commentBlob: JSON.stringify(value),
                         userEmail: currentUser.email,
                     })
-                }
+                }}
             >
                 Log
             </button>
@@ -250,74 +252,6 @@ const isMarkActive = (editor, format) => {
     return marks ? marks[format] === true : false
 }
 
-const Element = ({ attributes, children, element }) => {
-    const style = { textAlign: element.align }
-    switch (element.type) {
-        case 'block-quote':
-            return (
-                <blockquote style={style} {...attributes}>
-                    {children}
-                </blockquote>
-            )
-        case 'bulleted-list':
-            return (
-                <ul style={style} {...attributes}>
-                    {children}
-                </ul>
-            )
-        case 'heading-one':
-            return (
-                <h1 style={style} {...attributes}>
-                    {children}
-                </h1>
-            )
-        case 'heading-two':
-            return (
-                <h2 style={style} {...attributes}>
-                    {children}
-                </h2>
-            )
-        case 'list-item':
-            return (
-                <li style={style} {...attributes}>
-                    {children}
-                </li>
-            )
-        case 'numbered-list':
-            return (
-                <ol style={style} {...attributes}>
-                    {children}
-                </ol>
-            )
-        default:
-            return (
-                <p style={style} {...attributes}>
-                    {children}
-                </p>
-            )
-    }
-}
-
-const Leaf = ({ attributes, children, leaf }) => {
-    if (leaf.bold) {
-        children = <strong>{children}</strong>
-    }
-
-    if (leaf.code) {
-        children = <code>{children}</code>
-    }
-
-    if (leaf.italic) {
-        children = <em>{children}</em>
-    }
-
-    if (leaf.underline) {
-        children = <u>{children}</u>
-    }
-
-    return <span {...attributes}>{children}</span>
-}
-
 const BlockButton = ({ format, icon }) => {
     const editor = useSlate()
     return (
@@ -355,36 +289,43 @@ const MarkButton = ({ format, icon }) => {
 const initialValue = [
     {
         type: 'paragraph',
-        children: [
-            { text: 'This is editable ' },
-            { text: 'rich', bold: true },
-            { text: ' text, ' },
-            { text: 'much', italic: true },
-            { text: ' better than a ' },
-            { text: '<textarea>', code: true },
-            { text: '!' },
-        ],
-    },
-    {
-        type: 'paragraph',
-        children: [
-            {
-                text: "Since it's rich text, you can do things like turn a selection of text ",
-            },
-            { text: 'bold', bold: true },
-            {
-                text: ', or add a semantically rendered block quote in the middle of the page, like this:',
-            },
-        ],
-    },
-    {
-        type: 'block-quote',
-        children: [{ text: 'A wise quote.' }],
-    },
-    {
-        type: 'paragraph',
-        children: [{ text: 'Try it out for yourself!' }],
+        children: [{ text: '' }],
     },
 ]
+
+// [
+//     {
+//         type: 'paragraph',
+//         children: [
+//             { text: 'This is editable ' },
+//             { text: 'rich', bold: true },
+//             { text: ' text, ' },
+//             { text: 'much', italic: true },
+//             { text: ' better than a ' },
+//             { text: '<textarea>', code: true },
+//             { text: '!' },
+//         ],
+//     },
+//     {
+//         type: 'paragraph',
+//         children: [
+//             {
+//                 text: "Since it's rich text, you can do things like turn a selection of text ",
+//             },
+//             { text: 'bold', bold: true },
+//             {
+//                 text: ', or add a semantically rendered block quote in the middle of the page, like this:',
+//             },
+//         ],
+//     },
+//     {
+//         type: 'block-quote',
+//         children: [{ text: 'A wise quote.' }],
+//     },
+//     {
+//         type: 'paragraph',
+//         children: [{ text: 'Try it out for yourself!' }],
+//     },
+// ]
 
 export default RichTextExample

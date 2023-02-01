@@ -24,6 +24,7 @@ import PPRContentTable from '../components/TicketContent/PPRContentTable'
 import UPRContentTable from '../components/TicketContent/UPRContentTable'
 import ReporterInfoTip from '../components/ReporterInfoTip'
 import RichTextEditor from '../components/RichTextEditor'
+import CommentsDisplay from '../components/CommentsDisplay'
 
 export const TICKET_TYPES = Object.freeze({
     SF: 'SF',
@@ -226,6 +227,13 @@ const Dashboard = () => {
                         ticketType={ticketType}
                         ticketId={ticketId}
                     />
+                    {allUsers.users && allUsers.users.length > 0 && (
+                        <CommentsDisplay
+                            ticketType={ticketType}
+                            ticketId={ticketId}
+                            allUsers={allUsers}
+                        />
+                    )}
                 </Container>
             </Box>
         )
