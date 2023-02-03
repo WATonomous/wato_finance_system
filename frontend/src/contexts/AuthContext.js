@@ -2,7 +2,6 @@ import {
     getAuth,
     GoogleAuthProvider,
     onAuthStateChanged,
-    signInWithEmailAndPassword,
     signInWithPopup,
     signOut,
 } from 'firebase/auth'
@@ -87,6 +86,5 @@ export const AuthProvider = ({ children }) => {
 
 export const AuthLayout = () => {
     const outlet = useOutlet()
-    const toast = useToast()
     return <AuthProvider>{outlet}</AuthProvider>
 }
