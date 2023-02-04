@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Box, Card, CardBody, Text, VStack } from '@chakra-ui/react'
+import { Box, Card, CardBody, position, Text, VStack } from '@chakra-ui/react'
 import FilterDropdown from './FilterDropdown'
 import { TICKET_TYPES } from '../pages/Dashboard'
 
@@ -26,7 +26,7 @@ const TicketList = (props) => {
         .filter((ticket) => filter.includes(ticket.type))
 
     return (
-        <Box minW={{ base: '200px', lg: '280px', xl: '300px' }}>
+        <Box pos="fixed" minW={{ base: '200px', lg: '280px', xl: '300px' }}>
             <FilterDropdown filter={filter} setFilter={setFilter} />
             <VStack
                 pos="relative"

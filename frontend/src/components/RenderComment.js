@@ -1,5 +1,11 @@
 import React from 'react'
-import { Text, UnorderedList, OrderedList, ListItem } from '@chakra-ui/react'
+import {
+    Text,
+    UnorderedList,
+    OrderedList,
+    ListItem,
+    Box,
+} from '@chakra-ui/react'
 import { withHistory } from 'slate-history'
 import { Editable, Slate, withReact } from 'slate-react'
 import { createEditor } from 'slate'
@@ -12,14 +18,16 @@ export const CommentMessage = (props) => {
     const editor = useMemo(() => withHistory(withReact(createEditor())), [])
 
     return (
-        <Slate value={comment} editor={editor}>
-            <Editable
-                readOnly={true}
-                renderElement={renderElement}
-                renderLeaf={renderLeaf}
-                value={comment}
-            />
-        </Slate>
+        <Box position="relative" p="1em" rounded="lg">
+            <Slate value={comment} editor={editor}>
+                <Editable
+                    readOnly={true}
+                    renderElement={renderElement}
+                    renderLeaf={renderLeaf}
+                    value={comment}
+                />
+            </Slate>
+        </Box>
     )
 }
 

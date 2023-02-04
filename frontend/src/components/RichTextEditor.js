@@ -25,9 +25,8 @@ import {
     faAlignRight,
     faAlignLeft,
 } from '@fortawesome/free-solid-svg-icons'
-import { HStack, Text, Container, Heading } from '@chakra-ui/react'
+import { HStack, Text, Container, Heading, Box } from '@chakra-ui/react'
 import axios from 'axios'
-import { useAuth } from '../contexts/AuthContext'
 import { Element, Leaf } from './RenderComment'
 const HOTKEYS = {
     'mod+b': 'bold',
@@ -65,21 +64,21 @@ const createComment = async (comment) => {
 }
 
 const RichTextExample = (props) => {
-    const { ticketType, ticketId } = props
+    const { ticketType, ticketId, currentUser } = props
     const [value, setValue] = useState(initialValue)
     const renderElement = useCallback((props) => <Element {...props} />, [])
     const renderLeaf = useCallback((props) => <Leaf {...props} />, [])
     const editor = useMemo(() => withHistory(withReact(createEditor())), [])
-    const { currentUser } = useAuth()
-    console.log(currentUser)
     return (
-        <Container border="2px solid #ccc" width="700px" p="4px">
+        // center the editor
+
+        <Box border="2px solid #ccc" width="800px" p="4px">
             <Slate
                 editor={editor}
                 value={value}
                 onChange={(value) => setValue(value)}
             >
-                <Container mb="4px" p="8px" borderBottom="2px solid #757575">
+                <Box mb="4px" p="8px" borderBottom="2px solid #757575">
                     {/* <div style={{backgroundColor: "green"}}> */}
                     <HStack spacing="16px" bgColor="gray.50">
                         <MarkButton
@@ -146,12 +145,13 @@ const RichTextExample = (props) => {
                         />
                     </HStack>
                     {/* </div> */}
-                </Container>
-                <Container p="6px">
+                </Box>
+                <Box p="6px" border="2px solid #ccc">
                     <Editable
                         renderElement={renderElement}
                         renderLeaf={renderLeaf}
                         placeholder="Enter some rich text…"
+                        style={{ width: '800px' }}
                         spellCheck
                         autoFocus
                         onKeyDown={(event) => {
@@ -164,7 +164,7 @@ const RichTextExample = (props) => {
                             }
                         }}
                     />
-                </Container>
+                </Box>
             </Slate>
             <button
                 onClick={() => {
@@ -176,11 +176,12 @@ const RichTextExample = (props) => {
                         commentBlob: JSON.stringify(value),
                         userEmail: currentUser.email,
                     })
+                    window.location.reload()
                 }}
             >
                 Log
             </button>
-        </Container>
+        </Box>
     )
 }
 

@@ -9,6 +9,8 @@ import {
     Table,
     Container,
     HStack,
+    Text,
+    Image,
 } from '@chakra-ui/react'
 import TreeView from '../components/TreeView'
 import axios from 'axios'
@@ -25,7 +27,7 @@ import UPRContentTable from '../components/TicketContent/UPRContentTable'
 import ReporterInfoTip from '../components/ReporterInfoTip'
 import RichTextEditor from '../components/RichTextEditor'
 import CommentsDisplay from '../components/CommentsDisplay'
-
+import { useAuth } from '../contexts/AuthContext'
 export const TICKET_TYPES = Object.freeze({
     SF: 'SF',
     FI: 'FI',
@@ -39,6 +41,8 @@ const Dashboard = () => {
     const [ticketType, setTicketType] = useState('')
     const [ticketId, setTicketId] = useState('')
 
+    const { currentUser } = useAuth()
+    console.log(currentUser.email)
     const [currentTicket, updateCurrentTicket] = useReducer(
         (data, partialData) => ({
             ...data,
@@ -161,7 +165,7 @@ const Dashboard = () => {
         }
 
         return (
-            <Box w="100%" overflowY="auto">
+            <Box w="1000px" overflowY="auto" marginLeft="300px">
                 <Flex
                 // h="calc(100vh - 80px)"
                 // zIndex="tooltip"
@@ -222,19 +226,25 @@ const Dashboard = () => {
                         </Box>
                     </VStack>
                 </Flex>
-                <Container>
-                    <RichTextEditor
-                        ticketType={ticketType}
-                        ticketId={ticketId}
-                    />
-                    {allUsers.users && allUsers.users.length > 0 && (
-                        <CommentsDisplay
-                            ticketType={ticketType}
-                            ticketId={ticketId}
-                            allUsers={allUsers}
-                        />
-                    )}
-                </Container>
+                <Heading>Comment Section</Heading>
+                <Box marginLeft="30px">
+                    <Box>
+                        {allUsers.users && allUsers.users.length > 0 && (
+                            <CommentsDisplay
+                                ticketType={ticketType}
+                                ticketId={ticketId}
+                                allUsers={allUsers}
+                            />
+                        )}
+                        <Box marginLeft="55px">
+                            <RichTextEditor
+                                ticketType={ticketType}
+                                ticketId={ticketId}
+                                currentUser={currentUser}
+                            />
+                        </Box>
+                    </Box>
+                </Box>
             </Box>
         )
     }
