@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
     Text,
     UnorderedList,
@@ -13,20 +13,22 @@ import { useCallback, useMemo } from 'react'
 
 export const CommentMessage = (props) => {
     const { comment } = props
+
     const renderElement = useCallback((props) => <Element {...props} />, [])
     const renderLeaf = useCallback((props) => <Leaf {...props} />, [])
     const editor = useMemo(() => withHistory(withReact(createEditor())), [])
 
     return (
         <Box position="relative" p="1em" rounded="lg">
-            <Slate value={comment} editor={editor}>
+            {/* <Slate value={comment} editor={editor}>
                 <Editable
                     readOnly={true}
                     renderElement={renderElement}
                     renderLeaf={renderLeaf}
                     value={comment}
                 />
-            </Slate>
+            </Slate> */}
+            <Text>yup</Text>
         </Box>
     )
 }

@@ -2,7 +2,7 @@ import axios from 'axios'
 import React, { useEffect, useState, useCallback, useMemo } from 'react'
 import { Element, Leaf, CommentMessage } from './RenderComment'
 import { Box, HStack, Image, Flex, Text } from '@chakra-ui/react'
-
+import { DeleteIcon } from '@chakra-ui/icons'
 const CommentsDisplay = (props) => {
     const { ticketType, ticketId, allUsers } = props
     const [allComments, setAllComments] = useState([])
@@ -24,6 +24,7 @@ const CommentsDisplay = (props) => {
         })
         return comments
     }
+
     useEffect(() => {
         const fetchComments = async () => {
             try {
@@ -37,6 +38,19 @@ const CommentsDisplay = (props) => {
         }
         fetchComments().catch(console.error)
     }, [])
+
+    const deleteComment = async (commentID) => {
+        try {
+            const response = await axios.delete(
+                `${process.env.REACT_APP_BACKEND_URL}/comments/${commentID}`
+            )
+            setAllComments(
+                allComments.filter((comment) => comment._id !== commentID)
+            )
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     return (
         <div>
@@ -57,12 +71,9 @@ const CommentsDisplay = (props) => {
                 ) {
                     day = 'Yesterday at'
                 }
-
-                console.log(date)
-                console.log(user)
-                console.log(JSON.parse(comment.commentBlob))
                 return (
-                    <Flex marginBottom="20px">
+                    // A key is very important to ensure deletion happens to the correct div
+                    <Flex marginBottom="20px" key={commentID}>
                         <Image
                             borderRadius="full"
                             boxSize="35px"
@@ -93,16 +104,25 @@ const CommentsDisplay = (props) => {
                                 paddingY="1"
                                 bgColor="orange.200"
                                 roundedTop="10px"
+                                justifyContent="space-between"
                             >
-                                <Text as="b">{user.displayName}</Text>
-                                <Text fontSize="sm">
-                                    {' '}
-                                    {day +
-                                        ' ' +
-                                        time.substring(0, time.length - 6) +
-                                        time.substring(time.length - 3)}
-                                    {/* covers cases for 12:00 PM vs 4:00 PM */}
-                                </Text>
+                                <HStack>
+                                    <Text as="b">{user.displayName}</Text>
+                                    <Text fontSize="sm">
+                                        {' '}
+                                        {day +
+                                            ' ' +
+                                            time.substring(0, time.length - 6) +
+                                            time.substring(time.length - 3)}
+                                        {/* covers cases for 12:00 PM vs 4:00 PM */}
+                                    </Text>
+                                </HStack>
+                                <DeleteIcon
+                                    cursor="pointer"
+                                    onClick={() => {
+                                        deleteComment(commentID)
+                                    }}
+                                />
                             </HStack>
                             <CommentMessage
                                 comment={JSON.parse(comment.commentBlob)}

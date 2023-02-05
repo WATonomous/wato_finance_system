@@ -5,6 +5,7 @@ const { ObjectId } = mongoose.Schema.Types
 
 const CommentSchema = new Schema(
     {
+        _id: { type: String, required: true },
         ticketType: {
             type: String,
             required: true,

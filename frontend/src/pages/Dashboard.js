@@ -42,7 +42,6 @@ const Dashboard = () => {
     const [ticketId, setTicketId] = useState('')
 
     const { currentUser } = useAuth()
-    console.log(currentUser.email)
     const [currentTicket, updateCurrentTicket] = useReducer(
         (data, partialData) => ({
             ...data,
@@ -229,13 +228,13 @@ const Dashboard = () => {
                 <Heading>Comment Section</Heading>
                 <Box marginLeft="30px">
                     <Box>
-                        {allUsers.users && allUsers.users.length > 0 && (
+                        {/* {allUsers.users && allUsers.users.length > 0 && (
                             <CommentsDisplay
                                 ticketType={ticketType}
                                 ticketId={ticketId}
                                 allUsers={allUsers}
                             />
-                        )}
+                        )} */}
                         <Box marginLeft="55px">
                             <RichTextEditor
                                 ticketType={ticketType}
