@@ -52,7 +52,8 @@ const EditorButton = React.forwardRef(
 )
 
 const RichTextEditor = (props) => {
-    const { ticketType, ticketId, currentUser } = props
+    const { ticketType, ticketId, currentUser, allComments, setAllComments } =
+        props
     const [value, setValue] = useState(initialValue)
 
     const renderElement = useCallback((props) => <Element {...props} />, [])
@@ -60,16 +61,16 @@ const RichTextEditor = (props) => {
     const editor = useMemo(() => withHistory(withReact(createEditor())), [])
 
     const createComment = async (comment) => {
-        console.log(comment)
         try {
             const newId = await axios.get(
                 `${process.env.REACT_APP_BACKEND_URL}/comments/newid`
             )
-            console.log({ _id: newId, ...comment })
+            const newComment = { _id: newId.data._id, ...comment }
             const response = await axios.post(
                 `${process.env.REACT_APP_BACKEND_URL}/comments`,
-                { _id: newId.data, ...comment }
+                newComment
             )
+            setAllComments([...allComments, newComment])
             setValue(initialValue)
             return response
         } catch (error) {
@@ -79,7 +80,6 @@ const RichTextEditor = (props) => {
 
     return (
         // center the editor
-
         <Box border="2px solid #ccc" width="800px" p="4px">
             <Slate
                 editor={editor}
@@ -176,14 +176,13 @@ const RichTextEditor = (props) => {
             </Slate>
             <button
                 onClick={() => {
-                    console.log(value)
-                    console.log(editor)
                     createComment({
                         ticketType: ticketType,
                         ticketId: parseInt(ticketId),
                         commentBlob: JSON.stringify(value),
                         userEmail: currentUser.email,
                     })
+                    setValue(initialValue)
                 }}
             >
                 Log
@@ -219,7 +218,6 @@ const toggleBlock = (editor, format) => {
             type: isActive ? 'paragraph' : isList ? 'list-item' : format,
         }
     }
-    console.log(newProperties)
     Transforms.setNodes(editor, newProperties)
 
     if (!isActive && isList) {

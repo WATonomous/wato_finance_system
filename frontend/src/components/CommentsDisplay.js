@@ -4,49 +4,21 @@ import { Element, Leaf, CommentMessage } from './RenderComment'
 import { Box, HStack, Image, Flex, Text } from '@chakra-ui/react'
 import { DeleteIcon } from '@chakra-ui/icons'
 const CommentsDisplay = (props) => {
-    const { ticketType, ticketId, allUsers } = props
-    const [allComments, setAllComments] = useState([])
+    const { allUsers, allComments, setAllComments } = props
     const getUser = (email) => {
         const user = allUsers.users.find((user) => user.email === email)
         return user
     }
-
-    //mongoDB most likely already sorted by timestamp, but just in case
-    const sortMessagesByTimestamp = (comments) => {
-        comments.sort((a, b) => {
-            let dateA = new Date(a.createdAt)
-            let dateB = new Date(b.createdAt)
-            if (dateA.getTime() < dateB.getTime()) {
-                return -1
-            } else {
-                return 1
-            }
-        })
-        return comments
-    }
-
-    useEffect(() => {
-        const fetchComments = async () => {
-            try {
-                const response = await axios.get(
-                    `${process.env.REACT_APP_BACKEND_URL}/comments/${ticketType}/${ticketId}`
-                )
-                setAllComments(sortMessagesByTimestamp(response.data))
-            } catch (error) {
-                console.log(error)
-            }
-        }
-        fetchComments().catch(console.error)
-    }, [])
 
     const deleteComment = async (commentID) => {
         try {
             const response = await axios.delete(
                 `${process.env.REACT_APP_BACKEND_URL}/comments/${commentID}`
             )
-            setAllComments(
-                allComments.filter((comment) => comment._id !== commentID)
+            const newComments = allComments.filter(
+                (comment) => comment._id !== commentID
             )
+            setAllComments(newComments)
         } catch (error) {
             console.log(error)
         }
@@ -58,7 +30,9 @@ const CommentsDisplay = (props) => {
                 const user = getUser(comment.userEmail)
                 const commentID = comment._id
                 const today = new Date()
-                const date = new Date(comment.createdAt)
+                const date = comment.createdAt
+                    ? new Date(comment.createdAt)
+                    : today
                 let day = date.toLocaleDateString()
                 let time = date.toLocaleTimeString()
 

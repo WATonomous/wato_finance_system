@@ -17,7 +17,6 @@ const getAllCommentsForTicket = async (req, res) => {
 const createComment = async (req, res) => {
     const { body } = req
     const newComment = new Comment(body)
-    console.log(body)
     try {
         const result = await newComment.save()
         res.json(result)

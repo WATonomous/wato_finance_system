@@ -20,21 +20,19 @@ export const CommentMessage = (props) => {
 
     return (
         <Box position="relative" p="1em" rounded="lg">
-            {/* <Slate value={comment} editor={editor}>
+            <Slate value={comment} editor={editor}>
                 <Editable
                     readOnly={true}
                     renderElement={renderElement}
                     renderLeaf={renderLeaf}
                     value={comment}
                 />
-            </Slate> */}
-            <Text>yup</Text>
+            </Slate>
         </Box>
     )
 }
 
 export const Element = ({ children, element }) => {
-    console.log(children)
     switch (element.type) {
         case 'block-quote':
             return (

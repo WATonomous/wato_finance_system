@@ -25,9 +25,8 @@ import FIContentTable from '../components/TicketContent/FIContentTable'
 import PPRContentTable from '../components/TicketContent/PPRContentTable'
 import UPRContentTable from '../components/TicketContent/UPRContentTable'
 import ReporterInfoTip from '../components/ReporterInfoTip'
-import RichTextEditor from '../components/RichTextEditor'
-import CommentsDisplay from '../components/CommentsDisplay'
-import { useAuth } from '../contexts/AuthContext'
+
+import CommentSection from '../components/CommentSection'
 export const TICKET_TYPES = Object.freeze({
     SF: 'SF',
     FI: 'FI',
@@ -41,7 +40,6 @@ const Dashboard = () => {
     const [ticketType, setTicketType] = useState('')
     const [ticketId, setTicketId] = useState('')
 
-    const { currentUser } = useAuth()
     const [currentTicket, updateCurrentTicket] = useReducer(
         (data, partialData) => ({
             ...data,
@@ -227,22 +225,11 @@ const Dashboard = () => {
                 </Flex>
                 <Heading>Comment Section</Heading>
                 <Box marginLeft="30px">
-                    <Box>
-                        {/* {allUsers.users && allUsers.users.length > 0 && (
-                            <CommentsDisplay
-                                ticketType={ticketType}
-                                ticketId={ticketId}
-                                allUsers={allUsers}
-                            />
-                        )} */}
-                        <Box marginLeft="55px">
-                            <RichTextEditor
-                                ticketType={ticketType}
-                                ticketId={ticketId}
-                                currentUser={currentUser}
-                            />
-                        </Box>
-                    </Box>
+                    <CommentSection
+                        ticketType={ticketType}
+                        ticketId={ticketId}
+                        allUsers={allUsers}
+                    />
                 </Box>
             </Box>
         )
