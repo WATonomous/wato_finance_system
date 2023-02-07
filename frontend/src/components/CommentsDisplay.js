@@ -2,9 +2,14 @@ import axios from 'axios'
 import React, { useEffect, useState, useCallback, useMemo } from 'react'
 import { Element, Leaf, CommentMessage } from './RenderComment'
 import { Box, HStack, Image, Flex, Text } from '@chakra-ui/react'
-import { DeleteIcon } from '@chakra-ui/icons'
+import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
 const CommentsDisplay = (props) => {
     const { allUsers, allComments, setAllComments } = props
+
+    const [editComments, setEditComments] = useState(
+        Array(allComments.length).fill(false)
+    )
+
     const getUser = (email) => {
         const user = allUsers.users.find((user) => user.email === email)
         return user
@@ -12,7 +17,7 @@ const CommentsDisplay = (props) => {
 
     const deleteComment = async (commentID) => {
         try {
-            const response = await axios.delete(
+            await axios.delete(
                 `${process.env.REACT_APP_BACKEND_URL}/comments/${commentID}`
             )
             const newComments = allComments.filter(
@@ -26,22 +31,25 @@ const CommentsDisplay = (props) => {
 
     return (
         <div>
-            {allComments.map((comment) => {
+            {allComments.map((comment, i) => {
                 const user = getUser(comment.userEmail)
                 const commentID = comment._id
-                const today = new Date()
+                const currentTime = new Date()
                 const date = comment.createdAt
                     ? new Date(comment.createdAt)
-                    : today
+                    : currentTime
                 let day = date.toLocaleDateString()
                 let time = date.toLocaleTimeString()
 
-                if (date.toLocaleDateString() === today.toLocaleDateString()) {
+                if (
+                    date.toLocaleDateString() ===
+                    currentTime.toLocaleDateString()
+                ) {
                     day = 'Today at'
                 } else if (
-                    date.getFullYear() === today.getFullYear() &&
-                    date.getMonth() === today.getMonth() &&
-                    date.getDate() === today.getDate() - 1
+                    date.getFullYear() === currentTime.getFullYear() &&
+                    date.getMonth() === currentTime.getMonth() &&
+                    date.getDate() === currentTime.getDate() - 1
                 ) {
                     day = 'Yesterday at'
                 }
@@ -91,6 +99,16 @@ const CommentsDisplay = (props) => {
                                         {/* covers cases for 12:00 PM vs 4:00 PM */}
                                     </Text>
                                 </HStack>
+                                <EditIcon
+                                    cursor="pointer"
+                                    onClick={() => {
+                                        const newEditComments = [
+                                            ...editComments,
+                                        ]
+                                        newEditComments[i] = true
+                                        setEditComments(newEditComments)
+                                    }}
+                                />
                                 <DeleteIcon
                                     cursor="pointer"
                                     onClick={() => {
@@ -99,7 +117,10 @@ const CommentsDisplay = (props) => {
                                 />
                             </HStack>
                             <CommentMessage
-                                comment={JSON.parse(comment.commentBlob)}
+                                index={i}
+                                comment={comment}
+                                editComments={editComments}
+                                setEditComments={setEditComments}
                             />
                         </Box>
                     </Flex>

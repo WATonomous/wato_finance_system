@@ -10,24 +10,50 @@ import { withHistory } from 'slate-history'
 import { Editable, Slate, withReact } from 'slate-react'
 import { createEditor } from 'slate'
 import { useCallback, useMemo } from 'react'
-
+import { EditorComponent } from './RichTextEditor'
+import axios from 'axios'
 export const CommentMessage = (props) => {
-    const { comment } = props
+    const { index, comment, editComments, setEditComments } = props
 
     const renderElement = useCallback((props) => <Element {...props} />, [])
     const renderLeaf = useCallback((props) => <Leaf {...props} />, [])
     const editor = useMemo(() => withHistory(withReact(createEditor())), [])
+    const [value, setValue] = useState(JSON.parse(comment.commentBlob))
+    const isEdit = editComments[index]
 
+    const updateComment = async () => {
+        try {
+            await axios.put(
+                `${process.env.REACT_APP_BACKEND_URL}/comments/${comment._id}`,
+                {
+                    commentBlob: JSON.stringify(value),
+                }
+            )
+            const newEditComments = [...editComments]
+            newEditComments[index] = false
+            setEditComments(newEditComments)
+        } catch (error) {
+            console.log(error)
+        }
+    }
     return (
         <Box position="relative" p="1em" rounded="lg">
-            <Slate value={comment} editor={editor}>
-                <Editable
-                    readOnly={true}
-                    renderElement={renderElement}
-                    renderLeaf={renderLeaf}
-                    value={comment}
-                />
-            </Slate>
+            {isEdit && (
+                <Box>
+                    <EditorComponent value={value} setValue={setValue} />
+                    <button onClick={() => updateComment()}>update</button>
+                </Box>
+            )}
+            {!isEdit && (
+                <Slate value={value} editor={editor}>
+                    <Editable
+                        readOnly={true}
+                        renderElement={renderElement}
+                        renderLeaf={renderLeaf}
+                        value={value}
+                    />
+                </Slate>
+            )}
         </Box>
     )
 }

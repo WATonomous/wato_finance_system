@@ -35,18 +35,31 @@ const deleteCommentById = async (req, res) => {
     }
 }
 
+const updateCommentById = async (req, res) => {
+    const { id } = req.params
+    const { body } = req
+    console.log(body)
+    try {
+        const result = await Comment.updateOne(
+            { _id: id },
+            { $set: { commentBlob: body.commentBlob } }
+        )
+        console.log(result)
+        res.json(result)
+    } catch (err) {
+        res.status(400).json('Error: ' + err)
+    }
+}
+
 const createNewCommentId = (_, res) => {
     const newId = new ObjectId()
     res.send({ _id: newId.toString() })
 }
-// const updateComment = (req, res) => {
-//     const body = { ...req.body, _id: req.params.id }
-//     Comment.findByIdAndUpdate(req.params.id, body)
-// }
 
 module.exports = {
     getAllCommentsForTicket,
     createComment,
     deleteCommentById,
     createNewCommentId,
+    updateCommentById,
 }

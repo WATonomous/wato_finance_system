@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Box } from '@chakra-ui/react'
 import CommentsDisplay from './CommentsDisplay'
-import RichTextEditor from './RichTextEditor'
+import { RichTextEditor } from './RichTextEditor'
 import { useAuth } from '../contexts/AuthContext'
 import axios from 'axios'
 const CommentSection = (props) => {
@@ -39,13 +39,15 @@ const CommentSection = (props) => {
 
     return (
         <Box>
-            {allUsers.users && allUsers.users.length > 0 && (
-                <CommentsDisplay
-                    allUsers={allUsers}
-                    allComments={allComments}
-                    setAllComments={setAllComments}
-                />
-            )}
+            {allUsers.users &&
+                allUsers.users.length > 0 &&
+                allComments.length > 0 && ( //this is to prevent the component from rendering before the data is fetched
+                    <CommentsDisplay
+                        allUsers={allUsers}
+                        allComments={allComments}
+                        setAllComments={setAllComments}
+                    />
+                )}
             <Box marginLeft="55px">
                 <RichTextEditor
                     ticketType={ticketType}
