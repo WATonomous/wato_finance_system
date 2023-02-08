@@ -6,7 +6,7 @@ const getAllCommentsForTicket = async (req, res) => {
     try {
         const comments = await Comment.find({
             ticketType: ticketType,
-            tickedId: ticketId,
+            ticketId: ticketId,
         })
         res.json(comments)
     } catch (err) {
@@ -38,11 +38,10 @@ const deleteCommentById = async (req, res) => {
 const updateCommentById = async (req, res) => {
     const { id } = req.params
     const { body } = req
-    console.log(body)
     try {
         const result = await Comment.updateOne(
             { _id: id },
-            { $set: { commentBlob: body.commentBlob } }
+            { commentBlob: body.commentBlob }
         )
         console.log(result)
         res.json(result)

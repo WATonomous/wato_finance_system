@@ -26,7 +26,7 @@ import PPRContentTable from '../components/TicketContent/PPRContentTable'
 import UPRContentTable from '../components/TicketContent/UPRContentTable'
 import ReporterInfoTip from '../components/ReporterInfoTip'
 
-import CommentSection from '../components/CommentSection'
+import CommentSection from '../components/Comments/CommentSection'
 export const TICKET_TYPES = Object.freeze({
     SF: 'SF',
     FI: 'FI',
@@ -109,6 +109,7 @@ const Dashboard = () => {
             navigate('/notfound')
             return
         }
+        console.log('jey')
         setTicketType(splitPath[1])
         setTicketId(splitPath[2])
 

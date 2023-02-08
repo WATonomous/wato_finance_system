@@ -129,7 +129,7 @@ export const EditorComponent = React.forwardRef(({ value, setValue }, ref) => {
                     />
                 </HStack>
             </Box>
-            <Box p="6px" border="2px solid #ccc">
+            <Box p="6px">
                 <Editable
                     renderElement={renderElement}
                     renderLeaf={renderLeaf}

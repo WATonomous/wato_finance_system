@@ -2,26 +2,12 @@ import React, { useState, useEffect } from 'react'
 import { Box } from '@chakra-ui/react'
 import CommentsDisplay from './CommentsDisplay'
 import { RichTextEditor } from './RichTextEditor'
-import { useAuth } from '../contexts/AuthContext'
+import { useAuth } from '../../contexts/AuthContext'
 import axios from 'axios'
 const CommentSection = (props) => {
     const { currentUser } = useAuth()
     const { ticketType, ticketId, allUsers } = props
     const [allComments, setAllComments] = useState([])
-
-    //mongoDB most likely already sorted by timestamp, but just in case
-    const sortMessagesByTimestamp = (comments) => {
-        comments.sort((a, b) => {
-            let dateA = new Date(a.createdAt)
-            let dateB = new Date(b.createdAt)
-            if (dateA.getTime() < dateB.getTime()) {
-                return -1
-            } else {
-                return 1
-            }
-        })
-        return comments
-    }
 
     useEffect(() => {
         const fetchComments = async () => {
@@ -29,13 +15,14 @@ const CommentSection = (props) => {
                 const response = await axios.get(
                     `${process.env.REACT_APP_BACKEND_URL}/comments/${ticketType}/${ticketId}`
                 )
-                setAllComments(sortMessagesByTimestamp(response.data))
+                //mongoDB most likely already sorted by created timestamp
+                setAllComments(response.data)
             } catch (error) {
                 console.log(error)
             }
         }
         fetchComments().catch(console.error)
-    }, [])
+    }, [ticketType, ticketId])
 
     return (
         <Box>

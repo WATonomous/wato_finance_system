@@ -10,10 +10,9 @@ const CommentsDisplay = (props) => {
         Array(allComments.length).fill(false)
     )
 
-    const getUser = (email) => {
-        const user = allUsers.users.find((user) => user.email === email)
-        return user
-    }
+    useEffect(() => {
+        setEditComments(Array(allComments.length).fill(false))
+    }, [allComments])
 
     const deleteComment = async (commentID) => {
         try {
@@ -29,10 +28,19 @@ const CommentsDisplay = (props) => {
         }
     }
 
+    const [images, setImages] = useState([])
+    //not confirmed if this works, need further testing -> idea is to render the image url when it is used so it would display properly
+    const handleLoad = (url) => {
+        const newImages = [...images]
+        setImages(newImages.push(url))
+    }
+
     return (
         <div>
             {allComments.map((comment, i) => {
-                const user = getUser(comment.userEmail)
+                const user = allUsers.users.find(
+                    (user) => user.email === comment.userEmail
+                )
                 const commentID = comment._id
                 const currentTime = new Date()
                 const date = comment.createdAt
@@ -57,6 +65,9 @@ const CommentsDisplay = (props) => {
                     // A key is very important to ensure deletion happens to the correct div
                     <Flex marginBottom="20px" key={commentID}>
                         <Image
+                            onLoad={() => {
+                                handleLoad(user.photoURL)
+                            }}
                             borderRadius="full"
                             boxSize="35px"
                             src={user.photoURL}
