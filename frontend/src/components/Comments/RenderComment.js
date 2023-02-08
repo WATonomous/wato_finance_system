@@ -13,7 +13,8 @@ import { useCallback, useMemo } from 'react'
 import { EditorComponent } from './RichTextEditor'
 import axios from 'axios'
 export const CommentMessage = (props) => {
-    const { index, comment, editComments, setEditComments } = props
+    const { index, comment, editComments, setEditComments, edited, setEdited } =
+        props
 
     const renderElement = useCallback((props) => <Element {...props} />, [])
     const renderLeaf = useCallback((props) => <Leaf {...props} />, [])
@@ -32,6 +33,9 @@ export const CommentMessage = (props) => {
             const newEditComments = [...editComments]
             newEditComments[index] = false
             setEditComments(newEditComments)
+            const newEdited = [...edited]
+            newEdited[index] = true
+            setEdited(newEdited)
         } catch (error) {
             console.log(error)
         }

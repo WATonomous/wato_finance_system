@@ -163,7 +163,11 @@ export const RichTextEditor = (props) => {
             const newId = await axios.get(
                 `${process.env.REACT_APP_BACKEND_URL}/comments/newid`
             )
-            const newComment = { _id: newId.data._id, ...comment }
+            const newComment = {
+                _id: newId.data._id,
+                ...comment,
+                edited: false,
+            }
             const response = await axios.post(
                 `${process.env.REACT_APP_BACKEND_URL}/comments`,
                 newComment

@@ -41,7 +41,7 @@ const updateCommentById = async (req, res) => {
     try {
         const result = await Comment.updateOne(
             { _id: id },
-            { commentBlob: body.commentBlob }
+            { commentBlob: body.commentBlob, edited: true }
         )
         console.log(result)
         res.json(result)

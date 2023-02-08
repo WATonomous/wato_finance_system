@@ -14,6 +14,7 @@ const CommentSchema = new Schema(
         ticketId: { type: Number, required: true },
         commentBlob: { type: String, required: true }, //stringified JSON
         userEmail: { type: String, required: true },
+        edited: { type: Boolean, required: true },
     },
     {
         timestamps: true,

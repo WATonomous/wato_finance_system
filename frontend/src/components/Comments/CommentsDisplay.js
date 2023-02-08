@@ -10,8 +10,10 @@ const CommentsDisplay = (props) => {
         Array(allComments.length).fill(false)
     )
 
+    const [edited, setEdited] = useState([])
     useEffect(() => {
         setEditComments(Array(allComments.length).fill(false))
+        setEdited(allComments.map((comment) => comment.edited))
     }, [allComments])
 
     const deleteComment = async (commentID) => {
@@ -109,6 +111,9 @@ const CommentsDisplay = (props) => {
                                             time.substring(time.length - 3)}
                                         {/* covers cases for 12:00 PM vs 4:00 PM */}
                                     </Text>
+                                    <Text fontSize="sm" as="i">
+                                        {edited[i] ? '(edited)' : ''}
+                                    </Text>
                                 </HStack>
                                 <EditIcon
                                     cursor="pointer"
@@ -132,6 +137,8 @@ const CommentsDisplay = (props) => {
                                 comment={comment}
                                 editComments={editComments}
                                 setEditComments={setEditComments}
+                                edited={edited}
+                                setEdited={setEdited}
                             />
                         </Box>
                     </Flex>
