@@ -186,6 +186,7 @@ export const RichTextEditor = (props) => {
             <EditorComponent value={value} setValue={setValue} />
             <button
                 onClick={() => {
+                    console.log()
                     createComment({
                         ticketType: ticketType,
                         ticketId: parseInt(ticketId),
@@ -249,6 +250,8 @@ const isBlockActive = (editor, format, blockType = 'type') => {
     const { selection } = editor
     if (!selection) return false
 
+    console.log(editor)
+    console.log(selection)
     const [match] = Array.from(
         Editor.nodes(editor, {
             at: Editor.unhangRange(editor, selection),
@@ -258,6 +261,7 @@ const isBlockActive = (editor, format, blockType = 'type') => {
                 n[blockType] === format,
         })
     )
+    console.log('hey')
 
     return !!match
 }

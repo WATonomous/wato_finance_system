@@ -33,7 +33,7 @@ const CommentsDisplay = (props) => {
     const [images, setImages] = useState([])
     //not confirmed if this works, need further testing -> idea is to render the image url when it is used so it would display properly
     const handleLoad = (url) => {
-        const newImages = [...images]
+        const newImages = images.length > 0 ? [...images] : []
         setImages(newImages.push(url))
     }
 
