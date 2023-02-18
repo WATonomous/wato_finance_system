@@ -25,7 +25,7 @@ import {
     faAlignRight,
     faAlignLeft,
 } from '@fortawesome/free-solid-svg-icons'
-import { HStack, Text, Container, Heading, Box } from '@chakra-ui/react'
+import { HStack, Text, Box } from '@chakra-ui/react'
 import axios from 'axios'
 import { Element, Leaf } from './RenderComment'
 const HOTKEYS = {
@@ -51,112 +51,116 @@ const EditorButton = React.forwardRef(
     }
 )
 
-export const EditorComponent = React.forwardRef(({ value, setValue }, ref) => {
-    const renderElement = useCallback((props) => <Element {...props} />, [])
-    const renderLeaf = useCallback((props) => <Leaf {...props} />, [])
-    const editor = useMemo(() => withHistory(withReact(createEditor())), [])
-    return (
-        <Slate
-            editor={editor}
-            value={value}
-            onChange={(value) => setValue(value)}
-            ref={ref}
-        >
-            <Box mb="4px" p="8px" borderBottom="2px solid #757575">
-                {/* <div style={{backgroundColor: "green"}}> */}
-                <HStack spacing="16px" bgColor="gray.50">
-                    <MarkButton
-                        format="bold"
-                        icon={<FontAwesomeIcon icon={faBold} />}
-                    />
-                    <MarkButton
-                        format="italic"
-                        icon={<FontAwesomeIcon icon={faItalic} />}
-                    />
-                    <MarkButton
-                        format="underline"
-                        icon={<FontAwesomeIcon icon={faUnderline} />}
-                    />
-                    <MarkButton
-                        format="code"
-                        icon={<FontAwesomeIcon icon={faCode} />}
-                    />
-                    <BlockButton
-                        format="heading-one"
-                        icon={
-                            <Text as="span">
-                                <FontAwesomeIcon icon={faHeading} />
-                                <FontAwesomeIcon icon={fa1} />
-                            </Text>
-                        }
-                    />
-                    <BlockButton
-                        format="heading-two"
-                        icon={
-                            <Text as="span">
-                                <FontAwesomeIcon icon={faHeading} />
-                                <FontAwesomeIcon icon={fa2} />
-                            </Text>
-                        }
-                    />
-                    <BlockButton
-                        format="block-quote"
-                        icon={<FontAwesomeIcon icon={faQuoteLeft} />}
-                    />
-                    <BlockButton
-                        format="numbered-list"
-                        icon={<FontAwesomeIcon icon={faListOl} />}
-                    />
-                    <BlockButton
-                        format="bulleted-list"
-                        icon={<FontAwesomeIcon icon={faList} />}
-                    />
-                    <BlockButton
-                        format="left"
-                        icon={<FontAwesomeIcon icon={faAlignLeft} />}
-                    />
-                    <BlockButton
-                        format="center"
-                        icon={<FontAwesomeIcon icon={faAlignCenter} />}
-                    />
-                    <BlockButton
-                        format="right"
-                        icon={<FontAwesomeIcon icon={faAlignRight} />}
-                    />
-                    <BlockButton
-                        format="justify"
-                        icon={<FontAwesomeIcon icon={faAlignJustify} />}
-                    />
-                </HStack>
-            </Box>
-            <Box p="6px">
-                <Editable
-                    renderElement={renderElement}
-                    renderLeaf={renderLeaf}
-                    placeholder="Enter some rich text…"
-                    style={{ width: '800px' }}
-                    spellCheck
-                    autoFocus
-                    onKeyDown={(event) => {
-                        for (const hotkey in HOTKEYS) {
-                            if (isHotkey(hotkey, event)) {
-                                event.preventDefault()
-                                const mark = HOTKEYS[hotkey]
-                                toggleMark(editor, mark)
+export const EditorComponent = React.forwardRef(
+    ({ value, setValue, editor }, ref) => {
+        const renderElement = useCallback((props) => <Element {...props} />, [])
+        const renderLeaf = useCallback((props) => <Leaf {...props} />, [])
+
+        return (
+            <Slate
+                editor={editor}
+                value={value}
+                onChange={(value) => setValue(value)}
+                ref={ref}
+            >
+                <Box mb="4px" p="8px" borderBottom="2px solid #757575">
+                    {/* <div style={{backgroundColor: "green"}}> */}
+                    <HStack spacing="16px" bgColor="gray.50">
+                        <MarkButton
+                            format="bold"
+                            icon={<FontAwesomeIcon icon={faBold} />}
+                        />
+                        <MarkButton
+                            format="italic"
+                            icon={<FontAwesomeIcon icon={faItalic} />}
+                        />
+                        <MarkButton
+                            format="underline"
+                            icon={<FontAwesomeIcon icon={faUnderline} />}
+                        />
+                        <MarkButton
+                            format="code"
+                            icon={<FontAwesomeIcon icon={faCode} />}
+                        />
+                        <BlockButton
+                            format="heading-one"
+                            icon={
+                                <Text as="span">
+                                    <FontAwesomeIcon icon={faHeading} />
+                                    <FontAwesomeIcon icon={fa1} />
+                                </Text>
                             }
-                        }
-                    }}
-                />
-            </Box>
-        </Slate>
-    )
-})
+                        />
+                        <BlockButton
+                            format="heading-two"
+                            icon={
+                                <Text as="span">
+                                    <FontAwesomeIcon icon={faHeading} />
+                                    <FontAwesomeIcon icon={fa2} />
+                                </Text>
+                            }
+                        />
+                        <BlockButton
+                            format="block-quote"
+                            icon={<FontAwesomeIcon icon={faQuoteLeft} />}
+                        />
+                        <BlockButton
+                            format="numbered-list"
+                            icon={<FontAwesomeIcon icon={faListOl} />}
+                        />
+                        <BlockButton
+                            format="bulleted-list"
+                            icon={<FontAwesomeIcon icon={faList} />}
+                        />
+                        <BlockButton
+                            format="left"
+                            icon={<FontAwesomeIcon icon={faAlignLeft} />}
+                        />
+                        <BlockButton
+                            format="center"
+                            icon={<FontAwesomeIcon icon={faAlignCenter} />}
+                        />
+                        <BlockButton
+                            format="right"
+                            icon={<FontAwesomeIcon icon={faAlignRight} />}
+                        />
+                        <BlockButton
+                            format="justify"
+                            icon={<FontAwesomeIcon icon={faAlignJustify} />}
+                        />
+                    </HStack>
+                </Box>
+                <Box p="6px">
+                    <Editable
+                        renderElement={renderElement}
+                        renderLeaf={renderLeaf}
+                        placeholder="Enter some rich text…"
+                        style={{ width: '800px' }}
+                        spellCheck
+                        autoFocus
+                        onKeyDown={(event) => {
+                            for (const hotkey in HOTKEYS) {
+                                if (isHotkey(hotkey, event)) {
+                                    event.preventDefault()
+                                    const mark = HOTKEYS[hotkey]
+                                    toggleMark(editor, mark)
+                                }
+                            }
+                        }}
+                    />
+                </Box>
+            </Slate>
+        )
+    }
+)
 
 export const RichTextEditor = (props) => {
     const { ticketType, ticketId, currentUser, allComments, setAllComments } =
         props
-
     const [value, setValue] = useState(initialValue)
+    const [editor, setEditor] = useState(
+        withHistory(withReact(createEditor({ children: initialValue })))
+    )
 
     const createComment = async (comment) => {
         try {
@@ -173,7 +177,7 @@ export const RichTextEditor = (props) => {
                 newComment
             )
             setAllComments([...allComments, newComment])
-            setValue(initialValue)
+            // setValue(initialValue)
             return response
         } catch (error) {
             console.log(error)
@@ -183,17 +187,20 @@ export const RichTextEditor = (props) => {
     return (
         // center the editor
         <Box border="2px solid #ccc" width="800px" p="4px">
-            <EditorComponent value={value} setValue={setValue} />
+            <EditorComponent
+                value={value}
+                setValue={setValue}
+                editor={editor}
+            />
             <button
                 onClick={() => {
-                    console.log()
                     createComment({
                         ticketType: ticketType,
                         ticketId: parseInt(ticketId),
                         commentBlob: JSON.stringify(value),
                         userEmail: currentUser.email,
                     })
-                    setValue(initialValue)
+                    // setValue(initialValue)
                 }}
             >
                 Log
@@ -250,8 +257,6 @@ const isBlockActive = (editor, format, blockType = 'type') => {
     const { selection } = editor
     if (!selection) return false
 
-    console.log(editor)
-    console.log(selection)
     const [match] = Array.from(
         Editor.nodes(editor, {
             at: Editor.unhangRange(editor, selection),
@@ -261,7 +266,6 @@ const isBlockActive = (editor, format, blockType = 'type') => {
                 n[blockType] === format,
         })
     )
-    console.log('hey')
 
     return !!match
 }

@@ -44,7 +44,11 @@ export const CommentMessage = (props) => {
         <Box position="relative" p="1em" rounded="lg">
             {isEdit && (
                 <Box>
-                    <EditorComponent value={value} setValue={setValue} />
+                    <EditorComponent
+                        value={value}
+                        setValue={setValue}
+                        editor={editor}
+                    />
                     <button onClick={() => updateComment()}>update</button>
                 </Box>
             )}
