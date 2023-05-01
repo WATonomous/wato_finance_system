@@ -5,7 +5,7 @@ import {
     signInWithPopup,
     signOut,
 } from 'firebase/auth'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState, useCallback } from 'react'
 import { useOutlet } from 'react-router-dom'
 import app from '../firebase'
 import { useToast } from '@chakra-ui/react'
@@ -15,12 +15,13 @@ const AuthContext = React.createContext()
 export const useAuth = () => {
     return useContext(AuthContext)
 }
+// TODO: move this somewhere else. will be used specifically for finance coordinator
+const whitelist = ['test@test.com']
 
 export const AuthProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState()
     const [loading, setLoading] = useState(true)
     const auth = getAuth(app)
-    const whitelist = []
     const provider = new GoogleAuthProvider()
     provider.setCustomParameters({ prompt: 'select_account' })
     const toast = useToast()
@@ -51,34 +52,35 @@ export const AuthProvider = ({ children }) => {
             })
     }
 
-    const logout = () => {
+    const logout = useCallback(() => {
         return signOut(auth)
-    }
+    }, [auth])
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
                 const email = user.email
+                console.log(email)
                 if (
                     !email.endsWith('@watonomous.ca') &&
                     !whitelist.includes(email)
                 )
-                    return
+                    logout()
             }
             setCurrentUser(user)
             setLoading(false)
         })
         return unsubscribe
-    }, [auth])
+    }, [auth, logout])
 
-    const value = {
+    const providerState = {
         currentUser,
         login,
         logout,
     }
 
     return (
-        <AuthContext.Provider value={value}>
+        <AuthContext.Provider value={providerState}>
             {!loading && children}
         </AuthContext.Provider>
     )
