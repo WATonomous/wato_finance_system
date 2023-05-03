@@ -2,6 +2,7 @@ const FundingItem = require('../models/fundingitem.model')
 const SponsorshipFund = require('../models/sponsorshipfund.model')
 const PersonalPurchase = require('../models/personalpurchase.model')
 const UWFinancePurchase = require('../models/uwfinancepurchase.model')
+const Constants = require('../models/constants')
 
 // empty list arg queries for all Funding Items
 const getAnnotatedFundingItemsByIdList = async (idList = []) => {
@@ -16,13 +17,13 @@ const getAnnotatedFundingItemsByIdList = async (idList = []) => {
                         _id: parseInt(id),
                     },
                 },
-                // map ppr_links and upr_links to documents via referenced collection
+                // load ppr and upr documents as temp variables via links to referenced collection
                 {
                     $lookup: {
                         from: 'personalpurchases',
                         localField: 'ppr_links',
                         foreignField: '_id',
-                        as: 'ppr_links',
+                        as: 'ppr_docs',
                     },
                 },
                 {
@@ -30,7 +31,40 @@ const getAnnotatedFundingItemsByIdList = async (idList = []) => {
                         from: 'uwfinancepurchases',
                         localField: 'upr_links',
                         foreignField: '_id',
-                        as: 'upr_links',
+                        as: 'upr_docs',
+                    },
+                },
+                // filter documents by status (only include docs that count towards funding_spent)
+                {
+                    $set: {
+                        ppr_docs: {
+                            $filter: {
+                                input: '$ppr_docs',
+                                as: 'ppr_doc',
+                                cond: {
+                                    $in: [
+                                        '$$ppr_doc.status',
+                                        Constants.PPR_STATUS_FUNDING_SPENT,
+                                    ],
+                                },
+                            },
+                        },
+                    },
+                },
+                {
+                    $set: {
+                        upr_docs: {
+                            $filter: {
+                                input: '$upr_docs',
+                                as: 'upr_doc',
+                                cond: {
+                                    $in: [
+                                        '$$upr_doc.status',
+                                        Constants.UPR_STATUS_FUNDING_SPENT,
+                                    ],
+                                },
+                            },
+                        },
                     },
                 },
                 {
@@ -47,32 +81,20 @@ const getAnnotatedFundingItemsByIdList = async (idList = []) => {
                                 {
                                     $sum: [
                                         {
-                                            $sum: '$ppr_links.cost',
+                                            $sum: '$ppr_docs.cost',
                                         },
                                         {
-                                            $sum: '$upr_links.cost',
+                                            $sum: '$upr_docs.cost',
                                         },
                                     ],
                                 },
                                 2,
                             ],
                         },
-                        // map the documents back to their ids to preserve schema shape
-                        upr_links: {
-                            $map: {
-                                input: '$upr_links',
-                                as: 'uprDoc',
-                                in: '$$uprDoc._id',
-                            },
-                        },
-                        ppr_links: {
-                            $map: {
-                                input: '$ppr_links',
-                                as: 'pprDoc',
-                                in: '$$pprDoc._id',
-                            },
-                        },
                     },
+                },
+                {
+                    $unset: ['ppr_docs', 'upr_docs'],
                 },
             ])
         )
