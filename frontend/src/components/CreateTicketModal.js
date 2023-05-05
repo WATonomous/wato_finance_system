@@ -42,8 +42,7 @@ export function CreateTicketModal({ isOpen, onClose }) {
                 return <Text as="i">Select a ticket type to get started</Text>
         }
     }
-    const createTicket = async (e) => {
-        const formDetails = e
+    const createTicket = async (formValues) => {
         const endpoints = {
             sf: '/sponsorshipfunds',
             fi: '/fundingitems',
@@ -52,19 +51,19 @@ export function CreateTicketModal({ isOpen, onClose }) {
         }
         try {
             const payload = {
-                ...formDetails,
+                ...formValues,
                 reporter_id: auth.currentUser.uid,
             }
-            payload.status = 'SEEKING_APPROVAL'
             if (ticketType === 'upr' || ticketType === 'ppr') {
+                payload.status = 'SEEKING_APPROVAL'
             } else if (ticketType === 'sf') {
                 payload.status = 'ALLOCATED'
             }
             console.log(payload)
             await axiosPreset.post(endpoints[ticketType], payload)
             onClose()
-        } catch (e) {
-            console.log(e)
+        } catch (err) {
+            console.log(err)
         }
     }
     return (
