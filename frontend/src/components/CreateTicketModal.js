@@ -25,13 +25,18 @@ import {
 
 export function CreateTicketModal({ isOpen, onClose }) {
     const [ticketType, setTicketType] = useState('')
-    const { register, handleSubmit } = useForm()
+    const { control, register, handleSubmit } = useForm()
     const auth = useAuth(app)
 
     const displayTicketType = () => {
         switch (ticketType) {
             case 'sf':
-                return <SponsorshipFundForm register={register} />
+                return (
+                    <SponsorshipFundForm
+                        register={register}
+                        control={control}
+                    />
+                )
             case 'fi':
                 return <FundingItemForm register={register} />
             case 'ppr':
@@ -59,7 +64,6 @@ export function CreateTicketModal({ isOpen, onClose }) {
             } else if (ticketType === 'sf') {
                 payload.status = 'ALLOCATED'
             }
-            console.log(payload)
             await axiosPreset.post(endpoints[ticketType], payload)
             onClose()
         } catch (err) {
@@ -67,10 +71,10 @@ export function CreateTicketModal({ isOpen, onClose }) {
         }
     }
     return (
-        <Modal isOpen={isOpen} onClose={onClose} onCancel={onClose} size="xl">
+        <Modal isOpen={isOpen} onClose={onClose} onCancel={onClose} size="lg">
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>Modal Title</ModalHeader>
+                <ModalHeader>Create Ticket</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                     <FormLabel>Ticket Type</FormLabel>
@@ -79,6 +83,7 @@ export function CreateTicketModal({ isOpen, onClose }) {
                         placeholder="Ticket Type"
                         onChange={(e) => setTicketType(e.target.value)}
                         margin="10px 0 10px"
+                        size="sm"
                     >
                         <option value="sf">Sponsorship Fund</option>
                         <option value="fi">Funding Item</option>

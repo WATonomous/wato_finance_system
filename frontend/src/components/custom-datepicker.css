@@ -1,0 +1,8 @@
+.custom-date-picker {
+    border: 1px solid rgb(219, 219, 219);
+    border-radius: var(--chakra-radii-sm);
+    height: var(--chakra-sizes-8);
+    font-size: var(--chakra-fontSizes-sm);
+    width: 100%;
+    padding-inline-start: var(--chakra-space-3);
+}

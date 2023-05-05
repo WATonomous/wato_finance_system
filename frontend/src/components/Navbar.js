@@ -53,7 +53,7 @@ const Navbar = () => {
                 WATonomous Finance System
             </Heading>
             <Spacer />
-            <Button variant="md" onClick={onOpen}>
+            <Button onClick={onOpen} colorScheme="green" mr="20px">
                 Create New Ticket
             </Button>
             <Button
