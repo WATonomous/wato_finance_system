@@ -14,7 +14,6 @@ const PersonalPurchaseSchema = new Schema(
         fi_link: { type: Number, ref: 'FundingItem', required: true },
         name: { type: String, required: true },
         purchase_url: { type: String, required: true },
-        purchase_instructions: { type: String, required: true },
         cost: { type: Number, required: true },
         purchase_justification: { type: String, required: true },
         pickup_instruction: { type: String },

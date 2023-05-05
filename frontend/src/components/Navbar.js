@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Button, Flex, Heading, Spacer } from '@chakra-ui/react'
+import { Button, Flex, Heading, Spacer, useDisclosure } from '@chakra-ui/react'
 import { useAuth } from '../contexts/AuthContext'
-
+import { CreateTicketModal } from './CreateTicketModal'
 const Navbar = () => {
     const navigate = useNavigate()
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
     const { currentUser, login, logout } = useAuth()
+    const { isOpen, onOpen, onClose } = useDisclosure()
 
     const handleLogin = async () => {
         setLoading(true)
@@ -52,12 +53,16 @@ const Navbar = () => {
                 WATonomous Finance System
             </Heading>
             <Spacer />
+            <Button onClick={onOpen} colorScheme="green" mr="20px">
+                Create New Ticket
+            </Button>
             <Button
                 onClick={currentUser ? handleLogout : handleLogin}
                 disabled={loading}
             >
                 {error ? error : currentUser ? 'Log Out' : 'Log In'}
             </Button>
+            {isOpen && <CreateTicketModal isOpen={isOpen} onClose={onClose} />}
         </Flex>
     )
 }
