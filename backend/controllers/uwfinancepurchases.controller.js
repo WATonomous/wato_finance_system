@@ -2,42 +2,8 @@ const FundingItem = require('../models/fundingitem.model')
 const UWFinancePurchase = require('../models/uwfinancepurchase.model')
 const {
     getAnnotatedSponsorshipFundsByIdList,
-} = require('./sponsorshipfunds.controller')
-
-// empty list arg queries for all Sponsorship Funds
-const getAnnotatedUWFinancePurchasesByIdList = async (idList = []) => {
-    if (idList.length === 0) {
-        idList = await UWFinancePurchase.distinct('_id')
-    }
-    const uwFinancePurchaseList = await Promise.all(
-        idList.map(async (id) => {
-            return UWFinancePurchase.aggregate([
-                {
-                    $match: {
-                        _id: parseInt(id),
-                    },
-                },
-                {
-                    $set: {
-                        type: 'UPR',
-                        code: {
-                            $concat: ['UPR-', { $toString: '$_id' }],
-                        },
-                        path: {
-                            $concat: ['/UPR/', { $toString: '$_id' }],
-                        },
-                    },
-                },
-            ])
-        })
-    )
-
-    // aggregate returns an array so uwFinancePurchaseList
-    // will always be a list of one-elem lists:
-    // i.e. [[UPR-1], [UPR-2], ...] where UPR-X is a UWFinancePurchase object
-    return uwFinancePurchaseList.flat()
-}
-
+    getAnnotatedUWFinancePurchasesByIdList,
+} = require('./annotatedGetters')
 const getAllUWFinancePurchases = (_, res) => {
     getAnnotatedUWFinancePurchasesByIdList()
         .then((uwFinancePurchases) => res.json(uwFinancePurchases))
