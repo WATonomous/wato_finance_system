@@ -44,7 +44,7 @@ export function CreateTicketModal({ isOpen, onClose }) {
             case 'upr':
                 return <UWFinancePurchaseForm register={register} />
             default:
-                return <Text as="i">Select a ticket type to get started</Text>
+                return null
         }
     }
     const createTicket = async (formValues) => {
@@ -78,21 +78,19 @@ export function CreateTicketModal({ isOpen, onClose }) {
                 <ModalCloseButton />
                 <ModalBody>
                     <FormLabel>Ticket Type</FormLabel>
-
                     <Select
-                        placeholder="Ticket Type"
+                        placeholder="Select a ticket type"
                         onChange={(e) => setTicketType(e.target.value)}
-                        margin="10px 0 10px"
+                        margin="10px 0"
                         size="sm"
                     >
-                        <option value="sf">Sponsorship Fund</option>
-                        <option value="fi">Funding Item</option>
-                        <option value="ppr">Personal Purchase</option>
                         <option value="upr">UW Finance Purchase</option>
+                        <option value="ppr">Personal Purchase</option>
+                        <option value="fi">Funding Item</option>
+                        <option value="sf">Sponsorship Fund</option>
                     </Select>
                     {displayTicketType()}
                 </ModalBody>
-
                 <ModalFooter>
                     <Button colorScheme="red" mr={3} onClick={onClose}>
                         Close
