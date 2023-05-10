@@ -1,62 +1,11 @@
 const SponsorshipFund = require('../models/sponsorshipfund.model')
+const { cascadeDeleteFundingItem } = require('./fundingitems.controller')
 const {
-    cascadeDeleteFundingItem,
     getAnnotatedFundingItemsByIdList,
-} = require('./fundingitems.controller')
-const {
     getAnnotatedPersonalPurchasesByIdList,
-} = require('./personalpurchases.controller')
-const {
     getAnnotatedUWFinancePurchasesByIdList,
-} = require('./uwfinancepurchases.controller')
-
-// empty list arg queries for all Sponsorship Funds
-const getAnnotatedSponsorshipFundsByIdList = async (idList = []) => {
-    if (idList.length === 0) {
-        idList = await SponsorshipFund.distinct('_id')
-    }
-    const sponsorshipFundList = await Promise.all(
-        idList.map(async (id) => {
-            const sponsorshipFund = await SponsorshipFund.findById(id)
-            let fundingSpent = 0
-            if (sponsorshipFund.fi_links.length > 0) {
-                const fundingItemList = await getAnnotatedFundingItemsByIdList(
-                    sponsorshipFund.fi_links
-                )
-                fundingSpent = fundingItemList
-                    .map((fundingItem) => fundingItem.funding_spent)
-                    .reduce((a, b) => a + b, 0)
-            }
-            return SponsorshipFund.aggregate([
-                {
-                    $match: {
-                        _id: parseInt(id),
-                    },
-                },
-                {
-                    $set: {
-                        type: 'SF',
-                        code: {
-                            $concat: ['SF-', { $toString: '$_id' }],
-                        },
-                        path: {
-                            $concat: ['/SF/', { $toString: '$_id' }],
-                        },
-                        funding_spent: fundingSpent,
-                        name: {
-                            $concat: ['$organization', ' - ', '$semester'],
-                        },
-                    },
-                },
-            ])
-        })
-    )
-
-    // aggregate returns an array so sponsorshipFundList
-    // will always be a list of one-elem lists:
-    // i.e. [[SF-1], [SF-2], ...] where SF-X is a SponsorshipFund object
-    return sponsorshipFundList.flat()
-}
+    getAnnotatedSponsorshipFundsByIdList,
+} = require('./annotatedGetters')
 
 const getAllSponsorshipFunds = (_, res) => {
     getAnnotatedSponsorshipFundsByIdList()
