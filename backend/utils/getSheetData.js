@@ -4,7 +4,7 @@ const axios = require('axios')
 
 // Config variables
 const GOOGLE_SHEET_ID = process.env.GOOGLE_SHEET_ID
-const SHEET_ID = process.env.SHEET_ID
+const SHEET_TAB_ID = process.env.SHEET_TAB_ID
 const SERVICE_ACCOUNT_EMAIL = process.env.SERVICE_ACCOUNT_EMAIL
 const SERVICE_ACCOUNT_PRIVATE_KEY = process.env.SERVICE_ACCOUNT_PRIVATE_KEY
 const doc = new Gsheet.GoogleSpreadsheet(GOOGLE_SHEET_ID)
@@ -22,7 +22,7 @@ const readSpreadsheet = async () => {
         // loads document properties and worksheets
         await doc.loadInfo()
 
-        const sheet = doc.sheetsById[SHEET_ID]
+        const sheet = doc.sheetsById[SHEET_TAB_ID]
         const rows = await sheet.getRows()
 
         return rows.map((row) => ({
