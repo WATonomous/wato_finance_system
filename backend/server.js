@@ -47,7 +47,6 @@ app.listen(port, () => {
 
 const cron = require('node-cron')
 cron.schedule('0 */15 * * * *', async () => {
-    //run some function every 15 mins
-    console.log('cron run')
+    //read from the member spreadsheet and update the database every 15 mins
     await updateGroup()
 })

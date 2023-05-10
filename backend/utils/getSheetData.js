@@ -5,16 +5,19 @@ const axios = require('axios')
 // Config variables
 const GOOGLE_SHEET_ID = process.env.GOOGLE_SHEET_ID
 const SHEET_ID = process.env.SHEET_ID
-const CLIENT_EMAIL = process.env.CLIENT_EMAIL
-const PRIVATE_KEY = process.env.PRIVATE_KEY
-
+const SERVICE_ACCOUNT_EMAIL = process.env.SERVICE_ACCOUNT_EMAIL
+const SERVICE_ACCOUNT_PRIVATE_KEY = process.env.SERVICE_ACCOUNT_PRIVATE_KEY
 const doc = new Gsheet.GoogleSpreadsheet(GOOGLE_SHEET_ID)
+
+const EMAIL_HEADER_NAME = 'UW Email'
+const WATIAM_HEADER_NAME = 'WATIAM ID'
+const TITLE_HEADER_NAME = 'Title'
 
 const readSpreadsheet = async () => {
     try {
         await doc.useServiceAccountAuth({
-            client_email: CLIENT_EMAIL,
-            private_key: PRIVATE_KEY,
+            client_email: SERVICE_ACCOUNT_EMAIL,
+            private_key: SERVICE_ACCOUNT_PRIVATE_KEY,
         })
         // loads document properties and worksheets
         await doc.loadInfo()
@@ -22,16 +25,11 @@ const readSpreadsheet = async () => {
         const sheet = doc.sheetsById[SHEET_ID]
         const rows = await sheet.getRows()
 
-        const pairs = []
-
-        rows.forEach((row) => {
-            pairs.push({
-                email: row['Email'],
-                watiam: row['WATIAM ID'],
-                title: row['Title'],
-            })
-        })
-        return pairs
+        return rows.map((row) => ({
+            email: row[EMAIL_HEADER_NAME],
+            watiam: row[WATIAM_HEADER_NAME],
+            title: row[TITLE_HEADER_NAME],
+        }))
     } catch (e) {
         console.error('Error: ', e)
     }
@@ -39,9 +37,9 @@ const readSpreadsheet = async () => {
 
 const updateGroup = async () => {
     const endpoint = `${process.env.REACT_APP_BACKEND_URL}/group/update`
-    const newPairs = await readSpreadsheet()
+    const pairs = await readSpreadsheet()
     try {
-        await axios.post(endpoint, newPairs)
+        await axios.post(endpoint, pairs)
         console.log('Updated google groups')
     } catch (err) {
         console.error(err)

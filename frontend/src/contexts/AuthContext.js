@@ -63,8 +63,7 @@ export const AuthProvider = ({ children }) => {
             const userWatiam = userEmail.substring(0, userEmail.indexOf('@'))
             const endpoint = `${process.env.REACT_APP_BACKEND_URL}/group/`
 
-            let searchWithEmail = false
-            if (whitelist.includes(userEmail)) searchWithEmail = true //or else use watiam
+            const searchWithEmail = whitelist.includes(userEmail) //or else use watiam
 
             try {
                 const retrievedGroup = await axios.post(endpoint, {
