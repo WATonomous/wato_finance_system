@@ -5,7 +5,7 @@ import {
     signInWithPopup,
     signOut,
 } from 'firebase/auth'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState, useCallback } from 'react'
 import { useOutlet } from 'react-router-dom'
 import app from '../firebase'
 import axios from 'axios'
@@ -16,13 +16,14 @@ const AuthContext = React.createContext()
 export const useAuth = () => {
     return useContext(AuthContext)
 }
+// TODO: move this somewhere else. will be used specifically for finance coordinator
+const whitelist = ['test@test.com']
 
 export const AuthProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState()
     const [currentUserGroup, setCurrentUserGroup] = useState()
     const [loading, setLoading] = useState(true)
     const auth = getAuth(app)
-    const whitelist = []
     const provider = new GoogleAuthProvider()
     provider.setCustomParameters({ prompt: 'select_account' })
     const toast = useToast()
@@ -53,9 +54,9 @@ export const AuthProvider = ({ children }) => {
             })
     }
 
-    const logout = () => {
+    const logout = useCallback(() => {
         return signOut(auth)
-    }
+    }, [auth])
 
     const setUserGroup = async (user) => {
         if (user) {
@@ -63,7 +64,8 @@ export const AuthProvider = ({ children }) => {
             const userWatiam = userEmail.substring(0, userEmail.indexOf('@'))
             const endpoint = `${process.env.REACT_APP_BACKEND_URL}/group/`
 
-            const searchWithEmail = whitelist.includes(userEmail) //or else use watiam
+            let searchWithEmail = false
+            if (whitelist.includes(userEmail)) searchWithEmail = true //or else use watiam
 
             try {
                 const retrievedGroup = await axios.post(endpoint, {
@@ -81,22 +83,24 @@ export const AuthProvider = ({ children }) => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const email = user.email
+                console.log(email)
                 if (
                     !email.endsWith('@watonomous.ca') &&
                     !whitelist.includes(email)
-                )
+                ) {
+                    await logout()
                     return
+                }
             }
             setCurrentUser(user)
             setLoading(false)
 
             await setUserGroup(user)
         })
-
         return unsubscribe
-    }, [auth])
+    }, [auth, logout])
 
-    const value = {
+    const providerState = {
         currentUser,
         currentUserGroup,
         login,
@@ -104,7 +108,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     return (
-        <AuthContext.Provider value={value}>
+        <AuthContext.Provider value={providerState}>
             {!loading && children}
         </AuthContext.Provider>
     )
