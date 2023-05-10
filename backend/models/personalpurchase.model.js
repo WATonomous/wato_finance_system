@@ -16,7 +16,6 @@ const PersonalPurchaseSchema = new Schema(
         purchase_url: { type: String, required: true },
         cost: { type: Number, required: true },
         purchase_justification: { type: String, required: true },
-        pickup_instruction: { type: String },
         finance_team_approval: { type: Boolean, default: false },
         team_captain_approval: { type: Boolean, default: false },
         faculty_advisor_approval: { type: Boolean, default: false },

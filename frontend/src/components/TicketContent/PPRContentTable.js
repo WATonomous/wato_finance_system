@@ -26,20 +26,12 @@ const PPRContentTable = (props) => {
                         description={ticketData.purchase_url}
                     />
                     <TicketContentTableRow
-                        heading={'Purchase Instructions'}
-                        description={ticketData.purchase_instructions}
-                    />
-                    <TicketContentTableRow
                         heading={'Purchase Order Number'}
                         description={ticketData.po_number}
                     />
                     <TicketContentTableRow
                         heading={'Requisition Number'}
                         description={ticketData.requisition_number}
-                    />
-                    <TicketContentTableRow
-                        heading={'Pick-up Instructions'}
-                        description={ticketData.pickup_instruction}
                     />
                     <TicketContentTableRow
                         heading={'Funding Item Link'}
