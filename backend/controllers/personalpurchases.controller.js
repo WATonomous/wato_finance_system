@@ -3,40 +3,7 @@ const FundingItem = require('../models/fundingitem.model')
 const {
     getAnnotatedSponsorshipFundsByIdList,
 } = require('./sponsorshipfunds.controller')
-
-// empty list arg queries for all Sponsorship Funds
-const getAnnotatedPersonalPurchasesByIdList = async (idList = []) => {
-    if (idList.length === 0) {
-        idList = await PersonalPurchase.distinct('_id')
-    }
-    const personalPurchaseList = await Promise.all(
-        idList.map(async (id) => {
-            return PersonalPurchase.aggregate([
-                {
-                    $match: {
-                        _id: parseInt(id),
-                    },
-                },
-                {
-                    $set: {
-                        type: 'PPR',
-                        code: {
-                            $concat: ['PPR-', { $toString: '$_id' }],
-                        },
-                        path: {
-                            $concat: ['/PPR/', { $toString: '$_id' }],
-                        },
-                    },
-                },
-            ])
-        })
-    )
-
-    // aggregate returns an array so personalPurchaseList
-    // will always be a list of one-elem lists:
-    // i.e. [[PPR-1], [PPR-2], ...] where UPR-X is a PersonalPurchase object
-    return personalPurchaseList.flat()
-}
+const { getAnnotatedPersonalPurchasesByIdList } = require('./annotatedGetters')
 
 const getAllPersonalPurchases = (_, res) => {
     getAnnotatedPersonalPurchasesByIdList()
