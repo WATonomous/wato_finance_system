@@ -50,10 +50,10 @@ const UPRContentTable = (props) => {
             <Table>
                 <Tbody>
                     <TicketContentTableRow
-                        heading={'Finance Team Approval'}
+                        heading={'Director Approval'}
                         description={
                             <Checkbox
-                                isChecked={ticketData.finance_team_approval}
+                                isChecked={ticketData.director_approval}
                             />
                         }
                     />
