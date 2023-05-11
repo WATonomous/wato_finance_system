@@ -25,7 +25,7 @@ import {
 
 export function CreateTicketModal({ isOpen, onClose }) {
     const [ticketType, setTicketType] = useState('')
-    const { control, register, handleSubmit } = useForm()
+    const { control, register, handleSubmit, reset } = useForm()
     const auth = useAuth(app)
 
     const displayTicketType = () => {
@@ -80,7 +80,10 @@ export function CreateTicketModal({ isOpen, onClose }) {
                     <FormLabel>Ticket Type</FormLabel>
                     <Select
                         placeholder="Select a ticket type"
-                        onChange={(e) => setTicketType(e.target.value)}
+                        onChange={(e) => {
+                            reset()
+                            setTicketType(e.target.value)
+                        }}
                         margin="10px 0"
                         size="sm"
                     >
