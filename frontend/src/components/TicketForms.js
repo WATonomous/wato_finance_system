@@ -324,14 +324,6 @@ export const PersonalPurchaseForm = ({ register }) => {
                     advisor and financial coordinator can approve it.
                 </FormHelperText>
             </FormControl>
-            <FormControl>
-                <FormLabel mt="10px">Pickup Instructions </FormLabel>
-                <Input
-                    id="pickup_instruction"
-                    {...register('pickup_instruction')}
-                    size="sm"
-                />
-            </FormControl>
         </>
     )
 }
