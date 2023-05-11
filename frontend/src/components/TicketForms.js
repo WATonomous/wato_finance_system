@@ -8,6 +8,7 @@ import {
     InputLeftElement,
     Select,
     Flex,
+    Textarea,
 } from '@chakra-ui/react'
 import { Controller } from 'react-hook-form'
 import DatePicker from 'react-datepicker'
@@ -165,7 +166,7 @@ export const FundingItemForm = ({ register }) => {
 
             <FormControl>
                 <FormLabel mt="10px">Purchase Justification</FormLabel>
-                <Input
+                <Textarea
                     id="purchase_justification"
                     {...register('purchase_justification', {
                         required: 'This is required',
@@ -230,7 +231,7 @@ export const UWFinancePurchaseForm = ({ register }) => {
                 />
 
                 <FormLabel mt="10px">Purchase Instructions </FormLabel>
-                <Input
+                <Textarea
                     id="purchase_instructions"
                     {...register('purchase_instructions')}
                     size="sm"
@@ -240,7 +241,7 @@ export const UWFinancePurchaseForm = ({ register }) => {
                 </FormHelperText>
 
                 <FormLabel mt="10px">Purchase Justification</FormLabel>
-                <Input
+                <Textarea
                     id="purchase_justification"
                     {...register('purchase_justification', {
                         required: 'This is required',
@@ -254,7 +255,7 @@ export const UWFinancePurchaseForm = ({ register }) => {
             </FormControl>
             <FormControl>
                 <FormLabel mt="10px">Pickup Instructions </FormLabel>
-                <Input
+                <Textarea
                     id="pickup_instruction"
                     {...register('pickup_instruction')}
                     size="sm"
@@ -312,7 +313,7 @@ export const PersonalPurchaseForm = ({ register }) => {
                 />
 
                 <FormLabel mt="10px">Purchase Justification</FormLabel>
-                <Input
+                <Textarea
                     id="purchase_justification"
                     {...register('purchase_justification', {
                         required: 'This is required',
