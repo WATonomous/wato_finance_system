@@ -25,6 +25,15 @@ MAILJET_SECRET_KEY=<YOUR_MAILJET_SECRET_KEY>
 FINANCE_EMAIL=<EMAIL_WHERE_YOU_WANT_TO_SEND_FROM>
 ```
 
+In order to run the cron that updates the db from the WATO members spreadsheet, please contact Victor or Anson for the following variables you will add in your `.env`
+
+```
+GOOGLE_SHEET_ID=<WATO_MEMBERS_SPREADSHEET_ID>
+SHEET_TAB_ID=<WATO_MEMBERS_SPREADSHEET_TAB_ID>
+SERVICE_ACCOUNT_EMAIL=<DISCORD_AUTOMATION_SERVICE_ACCOUNT>
+SERVICE_ACCOUNT_PRIVATE_KEY=<DISCORD_AUTOMATION_SERVICE_ACCOUNT_PRIVATE_KEY>
+```
+
 To start the server, run
 
 ```

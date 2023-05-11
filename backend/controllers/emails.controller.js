@@ -7,7 +7,6 @@ const mailjet = Mailjet.apiConnect(
 
 const createEmail = async (req, res) => {
     const { body: emailDetail } = req
-    console.log(emailDetail)
     const mailRequest = mailjet.post('send', { version: 'v3.1' }).request({
         Messages: [
             {
