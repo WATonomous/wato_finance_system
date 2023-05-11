@@ -39,10 +39,11 @@ app.use('/emails', emailRouter)
 app.use('/sponsorshipfunds', sponsorshipFundsRouter)
 app.use('/uwfinancepurchases', UWFinancePurchaseRouter)
 app.use('/users', usersRouter)
-app.use('/group', groupRouter)
+app.use('/googlegroups', groupRouter)
 
-app.listen(port, () => {
+app.listen(port, async () => {
     console.log(`Server is running on port: ${port}`)
+    await updateGroup()
 })
 
 const cron = require('node-cron')

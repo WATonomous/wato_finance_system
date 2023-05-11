@@ -9,9 +9,8 @@ const SERVICE_ACCOUNT_EMAIL = process.env.SERVICE_ACCOUNT_EMAIL
 const SERVICE_ACCOUNT_PRIVATE_KEY = process.env.SERVICE_ACCOUNT_PRIVATE_KEY
 const doc = new Gsheet.GoogleSpreadsheet(GOOGLE_SHEET_ID)
 
-const EMAIL_HEADER_NAME = 'UW Email'
-const WATIAM_HEADER_NAME = 'WATIAM ID'
-const TITLE_HEADER_NAME = 'Title'
+const EMAIL_HEADER_NAME = 'UW email*'
+const TITLE_HEADER_NAME = 'Title*'
 
 const readSpreadsheet = async () => {
     try {
@@ -27,7 +26,6 @@ const readSpreadsheet = async () => {
 
         return rows.map((row) => ({
             email: row[EMAIL_HEADER_NAME],
-            watiam: row[WATIAM_HEADER_NAME],
             title: row[TITLE_HEADER_NAME],
         }))
     } catch (e) {
@@ -36,10 +34,13 @@ const readSpreadsheet = async () => {
 }
 
 const updateGroup = async () => {
-    const endpoint = `${process.env.REACT_APP_BACKEND_URL}/group/update`
     const pairs = await readSpreadsheet()
     try {
-        await axios.post(endpoint, pairs)
+        const cleanedPairs = pairs.filter((pair) => pair.title)
+        await axios.post(
+            `${process.env.REACT_APP_BACKEND_URL}/googlegroups/update`,
+            cleanedPairs
+        )
         console.log('Updated google groups')
     } catch (err) {
         console.error(err)

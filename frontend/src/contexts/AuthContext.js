@@ -62,16 +62,12 @@ export const AuthProvider = ({ children }) => {
         if (user) {
             const userEmail = user.email
             const userWatiam = userEmail.substring(0, userEmail.indexOf('@'))
-            const endpoint = `${process.env.REACT_APP_BACKEND_URL}/group/`
-
-            let searchWithEmail = false
-            if (whitelist.includes(userEmail)) searchWithEmail = true //or else use watiam
-
+            const searchWithEmail = whitelist.includes(userEmail)
             try {
-                const retrievedGroup = await axios.post(endpoint, {
-                    field: searchWithEmail ? userEmail : userWatiam,
-                    useEmail: searchWithEmail,
-                })
+                const identifier = searchWithEmail ? userEmail : userWatiam
+                const retrievedGroup = await axios.get(
+                    `${process.env.REACT_APP_BACKEND_URL}/googlegroups/${identifier}`
+                )
                 setCurrentUserGroup(retrievedGroup.data.title)
             } catch (err) {
                 console.log('Error: ' + err)
