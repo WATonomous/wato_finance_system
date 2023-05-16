@@ -3,8 +3,7 @@ import React from 'react'
 import { getFormattedCurrency } from '../../utils/utils'
 import TicketContentTableRow from './TicketContentTableRow'
 
-const PPRContentTable = (props) => {
-    const { ticketData } = props
+const PPRContentTable = ({ ticketData }) => {
     return (
         <VStack>
             <Table>
