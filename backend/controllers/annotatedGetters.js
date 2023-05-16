@@ -135,6 +135,33 @@ const getAnnotatedFundingItemsByIdList = async (idList = []) => {
                         },
                     },
                 },
+                // filter documents by status (only include docs that count towards amount_reimbursed)
+                {
+                    $set: {
+                        ppr_docs_reimbursed: {
+                            $filter: {
+                                input: '$ppr_docs',
+                                as: 'ppr_doc',
+                                cond: {
+                                    $eq: ['$$ppr_doc.status', 'REIMBURSED'],
+                                },
+                            },
+                        },
+                    },
+                },
+                {
+                    $set: {
+                        upr_docs_reimbursed: {
+                            $filter: {
+                                input: '$upr_docs',
+                                as: 'upr_doc',
+                                cond: {
+                                    $eq: ['$$upr_doc.status', 'REIMBURSED'],
+                                },
+                            },
+                        },
+                    },
+                },
                 {
                     $set: {
                         type: 'FI',
@@ -159,10 +186,30 @@ const getAnnotatedFundingItemsByIdList = async (idList = []) => {
                                 2,
                             ],
                         },
+                        amount_reimbursed: {
+                            $round: [
+                                {
+                                    $sum: [
+                                        {
+                                            $sum: '$ppr_docs_reimbursed.cost',
+                                        },
+                                        {
+                                            $sum: '$upr_docs_reimbursed.cost',
+                                        },
+                                    ],
+                                },
+                                2,
+                            ],
+                        },
                     },
                 },
                 {
-                    $unset: ['ppr_docs', 'upr_docs'],
+                    $unset: [
+                        'ppr_docs',
+                        'upr_docs',
+                        'ppr_docs_reimbursed',
+                        'upr_docs_reimbursed',
+                    ],
                 },
             ])
         )
@@ -183,12 +230,16 @@ const getAnnotatedSponsorshipFundsByIdList = async (idList = []) => {
         idList.map(async (id) => {
             const sponsorshipFund = await SponsorshipFund.findById(id)
             let fundingSpent = 0
+            let amountReimbursed = 0
             if (sponsorshipFund.fi_links.length > 0) {
                 const fundingItemList = await getAnnotatedFundingItemsByIdList(
                     sponsorshipFund.fi_links
                 )
                 fundingSpent = fundingItemList
                     .map((fundingItem) => fundingItem.funding_spent)
+                    .reduce((a, b) => a + b, 0)
+                amountReimbursed = fundingItemList
+                    .map((fundingItem) => fundingItem.amount_reimbursed)
                     .reduce((a, b) => a + b, 0)
             }
             return SponsorshipFund.aggregate([
@@ -207,6 +258,7 @@ const getAnnotatedSponsorshipFundsByIdList = async (idList = []) => {
                             $concat: ['/SF/', { $toString: '$_id' }],
                         },
                         funding_spent: fundingSpent,
+                        amount_reimbursed: amountReimbursed,
                         name: {
                             $concat: ['$organization', ' - ', '$semester'],
                         },

@@ -111,6 +111,7 @@ const Dashboard = () => {
 
     const getCurrentTicketContentTable = () => {
         const ticketData = currentTicket.data
+
         switch (currentTicket.type) {
             case TICKET_TYPES.SF:
                 return <SFContentTable ticketData={ticketData} />
