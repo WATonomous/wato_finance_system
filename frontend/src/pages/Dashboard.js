@@ -1,6 +1,14 @@
 import React, { useEffect, useReducer, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { Box, Heading, Flex, VStack, Center, Table } from '@chakra-ui/react'
+import {
+    Box,
+    Heading,
+    Flex,
+    VStack,
+    Center,
+    Table,
+    Tbody,
+} from '@chakra-ui/react'
 import TreeView from '../components/TreeView'
 import axios from 'axios'
 
@@ -168,26 +176,28 @@ const Dashboard = () => {
                             Metadata
                         </Heading>
                         <Table>
-                            <ReporterInfoTip
-                                ticketData={ticketData}
-                                heading={'Reporter Id'}
-                                reporter={allUsers.users.find(
-                                    (user) =>
-                                        user.uid === ticketData.reporter_id
-                                )}
-                            />
-                            <TicketContentTableRow
-                                heading={'Created at'}
-                                description={getStandardizedDate(
-                                    ticketData.createdAt
-                                )}
-                            />
-                            <TicketContentTableRow
-                                heading={'Updated at'}
-                                description={getStandardizedDate(
-                                    ticketData.updatedAt
-                                )}
-                            />
+                            <Tbody>
+                                <ReporterInfoTip
+                                    ticketData={ticketData}
+                                    heading={'Reporter Id'}
+                                    reporter={allUsers.users.find(
+                                        (user) =>
+                                            user.uid === ticketData.reporter_id
+                                    )}
+                                />
+                                <TicketContentTableRow
+                                    heading={'Created at'}
+                                    description={getStandardizedDate(
+                                        ticketData.createdAt
+                                    )}
+                                />
+                                <TicketContentTableRow
+                                    heading={'Updated at'}
+                                    description={getStandardizedDate(
+                                        ticketData.updatedAt
+                                    )}
+                                />
+                            </Tbody>
                         </Table>
                     </Box>
                     <Box w="100%">

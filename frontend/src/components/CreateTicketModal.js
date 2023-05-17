@@ -8,7 +8,6 @@ import {
     ModalBody,
     ModalCloseButton,
     Button,
-    Text,
     Select,
     FormLabel,
 } from '@chakra-ui/react'

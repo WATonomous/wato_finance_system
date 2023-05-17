@@ -9,6 +9,7 @@ import {
     PopoverTrigger,
     PopoverContent,
     HStack,
+    Td,
 } from '@chakra-ui/react'
 
 const ReporterInfoTip = (props) => {
@@ -29,7 +30,7 @@ const ReporterInfoTip = (props) => {
             </Th>
 
             {!reporter ? (
-                <Text
+                <Td
                     fontSize={{ base: 'sm', md: 'md' }}
                     p={{
                         base: '4px 4px',
@@ -38,7 +39,7 @@ const ReporterInfoTip = (props) => {
                     }}
                 >
                     No Reporter
-                </Text>
+                </Td>
             ) : (
                 <Popover trigger="hover" closeDelay={200} placement="top-start">
                     <PopoverTrigger>

@@ -31,7 +31,7 @@ const TicketList = (props) => {
             <VStack
                 pos="relative"
                 w="100%"
-                h="calc(100vh - 80px)"
+                h="calc(100vh - 152px)"
                 overflowY="scroll"
             >
                 {filteredTickets.map((ticket) => {
