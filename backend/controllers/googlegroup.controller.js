@@ -1,5 +1,14 @@
 const GoogleGroup = require('../models/googlegroup.model')
 
+const getAllGoogleGroupsControl = async (_, res) => {
+    try {
+        const allPairs = await getAllGoogleGroups()
+        await res.status(200).json(allPairs)
+    } catch (err) {
+        console.log('Error: ' + err)
+    }
+}
+
 const getAllGoogleGroups = async () => {
     try {
         const allPairs = await GoogleGroup.find()
@@ -77,4 +86,8 @@ const updateGoogleGroups = async (req, res) => {
     }
 }
 
-module.exports = { getAllGoogleGroups, getGoogleGroup, updateGoogleGroups }
+module.exports = {
+    getAllGoogleGroupsControl,
+    getGoogleGroup,
+    updateGoogleGroups,
+}
