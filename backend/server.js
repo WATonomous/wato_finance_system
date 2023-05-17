@@ -43,6 +43,7 @@ app.use('/googlegroups', groupRouter)
 
 app.listen(port, async () => {
     console.log(`Server is running on port: ${port}`)
+    await updateGroup()
 })
 
 const cron = require('node-cron')
