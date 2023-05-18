@@ -11,7 +11,7 @@ const UPRContentTable = ({ ticketData, updateUPRInAllTickets }) => {
 
     return (
         <VStack>
-            <Table>
+            <Table mb="12px">
                 <Tbody>
                     <TicketContentTableRow
                         heading={'Status'}
@@ -44,10 +44,6 @@ const UPRContentTable = ({ ticketData, updateUPRInAllTickets }) => {
                     <TicketContentTableRow
                         heading={'Pick-up Instructions'}
                         description={ticketData.pickup_instruction}
-                    />
-                    <TicketContentTableRow
-                        heading={'Funding Item Link'}
-                        description={ticketData.fi_link}
                     />
                 </Tbody>
             </Table>

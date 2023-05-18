@@ -44,10 +44,6 @@ const SFContentTable = (props) => {
                             ticketData.claim_deadline
                         )}
                     />
-                    <TicketContentTableRow
-                        heading={'Funding Item Links'}
-                        description={ticketData.fi_links.join(', ')}
-                    />
                 </Tbody>
             </Table>
         </VStack>

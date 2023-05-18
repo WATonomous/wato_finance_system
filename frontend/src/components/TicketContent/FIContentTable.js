@@ -25,18 +25,6 @@ const FIContentTable = (props) => {
                         heading={'Purchase Justification'}
                         description={ticketData.purchase_justification}
                     />
-                    <TicketContentTableRow
-                        heading={'Sponsorship Fund Link'}
-                        description={ticketData.sf_link}
-                    />
-                    <TicketContentTableRow
-                        heading={'Personal Purchase Links'}
-                        description={ticketData.ppr_links.join(', ')}
-                    />
-                    <TicketContentTableRow
-                        heading={'UW Finance Purchase Links'}
-                        description={ticketData.upr_links.join(', ')}
-                    />
                 </Tbody>
             </Table>
         </VStack>

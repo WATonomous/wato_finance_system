@@ -11,7 +11,7 @@ const PPRContentTable = ({ ticketData, updatePPRInAllTickets }) => {
 
     return (
         <VStack>
-            <Table>
+            <Table mb="12px">
                 <Tbody>
                     <TicketContentTableRow
                         heading={'Status'}
@@ -36,10 +36,6 @@ const PPRContentTable = ({ ticketData, updatePPRInAllTickets }) => {
                     <TicketContentTableRow
                         heading={'Requisition Number'}
                         description={ticketData.requisition_number}
-                    />
-                    <TicketContentTableRow
-                        heading={'Funding Item Link'}
-                        description={ticketData.fi_link}
                     />
                 </Tbody>
             </Table>
