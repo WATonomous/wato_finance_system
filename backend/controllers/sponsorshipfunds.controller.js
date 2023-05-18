@@ -98,7 +98,6 @@ const deleteSponsorshipFund = async (req, res) => {
 }
 
 module.exports = {
-    getAnnotatedSponsorshipFundsByIdList,
     getAllSponsorshipFunds,
     createSponsorshipFund,
     getSponsorshipFund,

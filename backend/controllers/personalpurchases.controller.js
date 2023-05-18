@@ -1,9 +1,9 @@
 const PersonalPurchase = require('../models/personalpurchase.model')
 const FundingItem = require('../models/fundingitem.model')
 const {
+    getAnnotatedPersonalPurchasesByIdList,
     getAnnotatedSponsorshipFundsByIdList,
-} = require('./sponsorshipfunds.controller')
-const { getAnnotatedPersonalPurchasesByIdList } = require('./annotatedGetters')
+} = require('./annotatedGetters')
 const { getGoogleGroup } = require('./googlegroup.controller')
 const {
     FACULTY_ADVISOR_EMAILS,
@@ -95,7 +95,6 @@ const getSponsorshipFund = async (req, res) => {
 }
 
 module.exports = {
-    getAnnotatedPersonalPurchasesByIdList,
     getAllPersonalPurchases,
     getPersonalPurchase,
     createPersonalPurchase,
