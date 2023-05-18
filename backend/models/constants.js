@@ -33,6 +33,10 @@ const UPR_STATUS_FUNDING_SPENT = [
     'REIMBURSED',
 ]
 
+const FACULTY_ADVISOR_EMAILS = ['drayside@uwaterloo.ca']
+const TEAM_CAPTAIN_TITLES = ['Team Captain']
+const DIRECTOR_TITLES = ['Admin', 'Director']
+
 module.exports = {
     ENDOWMENT_FUNDS,
     SF_STATUS,
@@ -40,4 +44,7 @@ module.exports = {
     PPR_STATUS_FUNDING_SPENT,
     UPR_STATUS,
     UPR_STATUS_FUNDING_SPENT,
+    FACULTY_ADVISOR_EMAILS,
+    TEAM_CAPTAIN_TITLES,
+    DIRECTOR_TITLES,
 }

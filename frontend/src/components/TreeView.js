@@ -14,8 +14,6 @@ const TreeView = (props) => {
     const ticketType = pathname[0]
     const ticketID = parseInt(pathname[1])
 
-    console.log(tickets)
-
     const sortTickets = (ticketList) => {
         let sortedArr = ticketList.sort((a, b) => (a._id > b._id ? 1 : -1))
         return sortedArr
