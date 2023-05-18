@@ -41,6 +41,7 @@ const Dashboard = () => {
         {
             type: '',
             id: 0,
+            code: '',
             data: {},
         }
     )
@@ -128,8 +129,9 @@ const Dashboard = () => {
         )
         if (!currentTicketData) return
         updateCurrentTicket({
-            type: currentTicketType,
+            type: currentTicketData.type,
             id: currentTicketId,
+            code: currentTicketData.code,
             data: currentTicketData,
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -201,6 +203,15 @@ const Dashboard = () => {
                 <VStack w="40%" h="max-content" p="16px 24px 16px 0" gap="16px">
                     <Box w="100%">
                         <Heading mb="8px" fontSize="2xl">
+                            Ticket Tree
+                        </Heading>
+                        <TreeView
+                            allTickets={allTickets}
+                            currentTicket={currentTicket}
+                        />
+                    </Box>
+                    <Box w="100%" mt="12px">
+                        <Heading mb="8px" fontSize="2xl">
                             Metadata
                         </Heading>
                         <Table>
@@ -215,24 +226,20 @@ const Dashboard = () => {
                                 />
                                 <TicketContentTableRow
                                     heading={'Created at'}
+                                    headingWidth="150px"
                                     description={getStandardizedDate(
                                         ticketData.createdAt
                                     )}
                                 />
                                 <TicketContentTableRow
                                     heading={'Updated at'}
+                                    headingWidth="150px"
                                     description={getStandardizedDate(
                                         ticketData.updatedAt
                                     )}
                                 />
                             </Tbody>
                         </Table>
-                    </Box>
-                    <Box w="100%">
-                        <Heading mb="8px" fontSize="2xl">
-                            Ticket Tree
-                        </Heading>
-                        <TreeView tickets={allTickets} location={location} />
                     </Box>
                 </VStack>
             </Flex>
