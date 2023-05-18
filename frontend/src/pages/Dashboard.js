@@ -69,6 +69,15 @@ const Dashboard = () => {
         updateAllTickets({ [TICKET_TYPES.PPR]: newPPRs })
     }
 
+    const updateUPRInAllTickets = (newUPR) => {
+        const uprIndex = allTickets[TICKET_TYPES.UPR]
+            .map((upr) => upr._id)
+            .indexOf(newUPR._id)
+        let newUPRs = allTickets[TICKET_TYPES.UPR]
+        newUPRs[uprIndex] = newUPR
+        updateAllTickets({ [TICKET_TYPES.UPR]: newUPRs })
+    }
+
     const getAllTickets = () => {
         const endpoints = {
             [TICKET_TYPES.SF]: `${process.env.REACT_APP_BACKEND_URL}/sponsorshipfunds/`,
@@ -142,7 +151,12 @@ const Dashboard = () => {
                     />
                 )
             case TICKET_TYPES.UPR:
-                return <UPRContentTable ticketData={ticketData} />
+                return (
+                    <UPRContentTable
+                        ticketData={ticketData}
+                        updateUPRInAllTickets={updateUPRInAllTickets}
+                    />
+                )
             default:
                 return null
         }
