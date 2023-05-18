@@ -6,6 +6,9 @@ router.route('/').post(UWFinancePurchasesController.createNewUWFinancePurchase)
 router.route('/:id').get(UWFinancePurchasesController.getUWFinancePurchase)
 router.route('/:id').put(UWFinancePurchasesController.updateUWFinancePurchase)
 router
+    .route('/updateapprovals/:id')
+    .put(UWFinancePurchasesController.updateApprovalsUWFinancePurchase)
+router
     .route('/:id')
     .delete(UWFinancePurchasesController.deleteUWFinancePurchase)
 router

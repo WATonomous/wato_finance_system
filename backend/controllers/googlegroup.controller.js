@@ -18,15 +18,24 @@ const getAllGoogleGroups = async () => {
     }
 }
 
-const getGoogleGroup = async (req, res) => {
+const getGoogleGroupControl = async (req, res) => {
     const { identifier } = req.params
+    try {
+        const userGroup = await getGoogleGroup(identifier)
+        res.status(200).json(userGroup)
+    } catch (err) {
+        res.status(400).json('Error: ' + err)
+    }
+}
+
+const getGoogleGroup = async (identifier) => {
     try {
         const userGroup = await GoogleGroup.findOne({
             $or: [{ email: identifier }, { watiam: identifier }],
         })
-        res.status(200).json(userGroup)
+        return userGroup
     } catch (err) {
-        res.status(400).json('Error: ' + err)
+        console.log('Error: ' + err)
     }
 }
 
@@ -88,6 +97,8 @@ const updateGoogleGroups = async (req, res) => {
 
 module.exports = {
     getAllGoogleGroupsControl,
+    getAllGoogleGroups,
+    getGoogleGroupControl,
     getGoogleGroup,
     updateGoogleGroups,
 }

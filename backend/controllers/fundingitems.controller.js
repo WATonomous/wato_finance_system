@@ -62,7 +62,6 @@ const cascadeDeleteFundingItem = async (id) => {
 }
 
 module.exports = {
-    getAnnotatedFundingItemsByIdList,
     getAllFundingItems,
     getFundingItem,
     createFundingItem,

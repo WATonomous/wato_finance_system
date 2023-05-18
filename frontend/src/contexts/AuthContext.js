@@ -10,6 +10,11 @@ import { useOutlet } from 'react-router-dom'
 import app from '../firebase'
 import axios from 'axios'
 import { useToast } from '@chakra-ui/react'
+import {
+    FACULTY_ADVISOR_EMAILS,
+    TEAM_CAPTAIN_TITLES,
+    DIRECTOR_TITLES,
+} from '../constants'
 
 const AuthContext = React.createContext()
 
@@ -22,6 +27,10 @@ const whitelist = ['test@test.com']
 export const AuthProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState()
     const [currentUserGroup, setCurrentUserGroup] = useState()
+    const [currentIdentifier, setCurrentIdentifier] = useState()
+    const [isDirector, setIsDirector] = useState()
+    const [isTeamCaptain, setIsTeamCaptain] = useState()
+    const [isFacultyAdvisor, setIsFacultyAdvisor] = useState()
     const [loading, setLoading] = useState(true)
     const auth = getAuth(app)
     const provider = new GoogleAuthProvider()
@@ -65,10 +74,26 @@ export const AuthProvider = ({ children }) => {
             const searchWithEmail = whitelist.includes(userEmail)
             try {
                 const identifier = searchWithEmail ? userEmail : userWatiam
+                setCurrentIdentifier(identifier)
+
                 const retrievedGroup = await axios.get(
                     `${process.env.REACT_APP_BACKEND_URL}/googlegroups/${identifier}`
                 )
                 setCurrentUserGroup(retrievedGroup.data.title)
+
+                const _isFacultyAdvisor =
+                    FACULTY_ADVISOR_EMAILS.includes(identifier)
+                setIsFacultyAdvisor(_isFacultyAdvisor)
+
+                const _isTeamCaptain =
+                    _isFacultyAdvisor ||
+                    TEAM_CAPTAIN_TITLES.includes(retrievedGroup.data.title)
+                setIsTeamCaptain(_isTeamCaptain)
+
+                const _isDirector =
+                    _isTeamCaptain ||
+                    DIRECTOR_TITLES.includes(retrievedGroup.data.title)
+                setIsDirector(_isDirector)
             } catch (err) {
                 console.log('Error: ' + err)
             }
@@ -99,6 +124,10 @@ export const AuthProvider = ({ children }) => {
     const providerState = {
         currentUser,
         currentUserGroup,
+        currentIdentifier,
+        isDirector,
+        isTeamCaptain,
+        isFacultyAdvisor,
         login,
         logout,
     }

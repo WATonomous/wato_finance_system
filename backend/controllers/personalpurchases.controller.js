@@ -1,9 +1,15 @@
 const PersonalPurchase = require('../models/personalpurchase.model')
 const FundingItem = require('../models/fundingitem.model')
 const {
+    getAnnotatedPersonalPurchasesByIdList,
     getAnnotatedSponsorshipFundsByIdList,
-} = require('./sponsorshipfunds.controller')
-const { getAnnotatedPersonalPurchasesByIdList } = require('./annotatedGetters')
+} = require('./annotatedGetters')
+const { getGoogleGroup } = require('./googlegroup.controller')
+const {
+    FACULTY_ADVISOR_EMAILS,
+    TEAM_CAPTAIN_TITLES,
+    DIRECTOR_TITLES,
+} = require('../models/constants')
 
 const getAllPersonalPurchases = (_, res) => {
     getAnnotatedPersonalPurchasesByIdList()
@@ -36,6 +42,34 @@ const updatePersonalPurchase = (req, res) => {
         .catch((err) => res.status(400).json('Error: ' + err))
 }
 
+const updateApprovalsPersonalPurchase = async (req, res) => {
+    const { ticket_data, approval_type, identifier } = req.body
+
+    const currentGoogleGroup = await getGoogleGroup(identifier)
+
+    const isFacultyAdvisor = FACULTY_ADVISOR_EMAILS.includes(identifier)
+    const isTeamCaptain =
+        isFacultyAdvisor ||
+        TEAM_CAPTAIN_TITLES.includes(currentGoogleGroup.title)
+    const isDirector =
+        isTeamCaptain || DIRECTOR_TITLES.includes(currentGoogleGroup.title)
+
+    const canUpdateApproval =
+        (approval_type === 'faculty_advisor_approval' && isFacultyAdvisor) ||
+        (approval_type === 'team_captain_approval' && isTeamCaptain) ||
+        (approval_type === 'director_approval' && isDirector)
+
+    // TODO: If this is the last approval, transition status to 'READY_TO_BUY' and auto send email
+
+    if (canUpdateApproval) {
+        PersonalPurchase.findByIdAndUpdate(req.params.id, ticket_data)
+            .then(() => res.json(req.body))
+            .catch((err) => res.status(400).json('Error: ' + err))
+    } else {
+        res.status(403).json('Error: Permission Denied')
+    }
+}
+
 const deletePersonalPurchase = async (req, res) => {
     try {
         const PPRid = req.params.id
@@ -61,11 +95,11 @@ const getSponsorshipFund = async (req, res) => {
 }
 
 module.exports = {
-    getAnnotatedPersonalPurchasesByIdList,
     getAllPersonalPurchases,
     getPersonalPurchase,
     createPersonalPurchase,
     updatePersonalPurchase,
+    updateApprovalsPersonalPurchase,
     deletePersonalPurchase,
     getSponsorshipFund,
 }
