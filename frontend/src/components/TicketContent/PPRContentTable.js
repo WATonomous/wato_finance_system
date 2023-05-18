@@ -110,7 +110,8 @@ const PPRContentTable = ({ ticketData, updatePPRInAllTickets }) => {
                                     }
                                     const payload = {
                                         ticket_data: newTicketData,
-                                        approval_type: 'faculty_advisor_approval',
+                                        approval_type:
+                                            'faculty_advisor_approval',
                                         identifier: auth.currentIdentifier,
                                     }
                                     await axiosPreset.put(
