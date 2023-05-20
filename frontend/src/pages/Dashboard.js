@@ -8,6 +8,8 @@ import {
     Center,
     Table,
     Tbody,
+    Button,
+    Text,
 } from '@chakra-ui/react'
 import TreeView from '../components/TreeView'
 import axios from 'axios'
@@ -204,6 +206,11 @@ const Dashboard = () => {
                     <Heading mb="16px" fontSize="3xl">
                         {`${currentTicket.type}-${currentTicket.id}: ${ticketData.name}`}
                     </Heading>
+                    <Flex flexDir="row" mb="12px">
+                        <Button size="sm">
+                            <Text>Delete</Text>
+                        </Button>
+                    </Flex>
                     {getCurrentTicketContentTable()}
                 </Flex>
                 <VStack w="40%" h="max-content" p="16px 24px 16px 0" gap="16px">
@@ -252,11 +259,11 @@ const Dashboard = () => {
 
     return (
         <VStack spacing="0">
+            <Navbar />
             <Flex pos="absolute" top="80px" w="100%">
                 <TicketList allTickets={allTickets} />
                 {getMainContent()}
             </Flex>
-            <Navbar />
         </VStack>
     )
 }
