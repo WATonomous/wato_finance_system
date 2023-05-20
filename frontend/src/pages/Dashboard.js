@@ -116,11 +116,11 @@ const Dashboard = () => {
         }
 
         const currentTicketType = splitPath[1]
-        const currentTicketId = splitPath[2]
+        const currentTicketId = parseInt(splitPath[2])
         const allTicketsWithCurrentTicketType =
             allTickets[TICKET_TYPES[currentTicketType]]
         const currentTicketData = allTicketsWithCurrentTicketType.find(
-            (ticket) => parseInt(ticket._id) === parseInt(currentTicketId)
+            (ticket) => ticket._id === currentTicketId
         )
         const isAllTicketsEmpty =
             Object.keys(TICKET_TYPES)

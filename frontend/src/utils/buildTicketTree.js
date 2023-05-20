@@ -6,7 +6,7 @@ const buildTicketTree = (currentTicket, allTickets) => {
 
     // Special Case: WATO Cash
     if (currentTicket.data.sf_link === -1) {
-        const WATOCashTicketID = parseInt(currentTicket.id)
+        const WATOCashTicketID = currentTicket.id
         const personalPurchases = PPR.filter(
             (ppr) => ppr.fi_link === WATOCashTicketID
         )
@@ -16,7 +16,7 @@ const buildTicketTree = (currentTicket, allTickets) => {
         return { ...currentTicket.data, personalPurchases, uwFinancePurchases }
     }
 
-    const ticketID = parseInt(currentTicket.id)
+    const ticketID = currentTicket.id
     let sf_id = ticketID
 
     switch (currentTicket.type) {
