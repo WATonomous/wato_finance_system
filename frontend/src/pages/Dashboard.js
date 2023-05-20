@@ -23,6 +23,7 @@ import PPRContentTable from '../components/TicketContent/PPRContentTable'
 import UPRContentTable from '../components/TicketContent/UPRContentTable'
 import ReporterInfoTip from '../components/ReporterInfoTip'
 import { TICKET_TYPES } from '../constants'
+import buildTicketTree from '../utils/buildTicketTree'
 
 const Dashboard = () => {
     const navigate = useNavigate()
@@ -39,6 +40,8 @@ const Dashboard = () => {
             data: {},
         }
     )
+
+    const [currentTree, setCurrentTree] = useState({})
 
     const [allUsers, setAllUsers] = useState({ users: [] })
 
@@ -122,14 +125,16 @@ const Dashboard = () => {
             (ticket) => parseInt(ticket._id) === parseInt(currentTicketId)
         )
         if (!currentTicketData) return
-        updateCurrentTicket({
+
+        const newCurrentTicket = {
             type: currentTicketData.type,
             id: currentTicketId,
             code: currentTicketData.code,
             data: currentTicketData,
-        })
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [location.pathname, allTickets])
+        }
+        updateCurrentTicket(newCurrentTicket)
+        setCurrentTree(buildTicketTree(newCurrentTicket, allTickets))
+    }, [location.pathname, allTickets, navigate])
 
     const getCurrentTicketContentTable = () => {
         const ticketData = currentTicket.data
@@ -200,8 +205,8 @@ const Dashboard = () => {
                             Ticket Tree
                         </Heading>
                         <TreeView
-                            allTickets={allTickets}
                             currentTicket={currentTicket}
+                            currentTree={currentTree}
                         />
                     </Box>
                     <Box w="100%" mt="12px">
