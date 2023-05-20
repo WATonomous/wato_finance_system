@@ -36,7 +36,11 @@ const TicketList = ({ allTickets }) => {
             <FilterDropdown filter={filter} setFilter={setFilter} />
 
             {isAllTicketsEmpty ? (
-                <Center w="100%" h="calc(100vh - 152px)" border="1px solid #dedede">
+                <Center
+                    w="100%"
+                    h="calc(100vh - 152px)"
+                    border="1px solid #dedede"
+                >
                     <LoadingSpinner />
                 </Center>
             ) : (
