@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { Text, Box, Stack } from '@chakra-ui/react'
 import getAllChildren from '../utils/getAllChildren'
-import { TICKET_TYPES } from '../pages/Dashboard'
+import { TICKET_TYPES } from '../constants'
 
 const TreeView = ({ allTickets, currentTicket }) => {
     const navigate = useNavigate()

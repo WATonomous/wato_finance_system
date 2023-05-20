@@ -22,13 +22,7 @@ import FIContentTable from '../components/TicketContent/FIContentTable'
 import PPRContentTable from '../components/TicketContent/PPRContentTable'
 import UPRContentTable from '../components/TicketContent/UPRContentTable'
 import ReporterInfoTip from '../components/ReporterInfoTip'
-
-export const TICKET_TYPES = Object.freeze({
-    SF: 'SF',
-    FI: 'FI',
-    PPR: 'PPR',
-    UPR: 'UPR',
-})
+import { TICKET_TYPES } from '../constants'
 
 const Dashboard = () => {
     const navigate = useNavigate()

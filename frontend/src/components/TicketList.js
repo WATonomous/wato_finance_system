@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Box, Card, CardBody, Center, Text, VStack } from '@chakra-ui/react'
 import FilterDropdown from './FilterDropdown'
-import { TICKET_TYPES } from '../pages/Dashboard'
+import { TICKET_TYPES } from '../constants'
 import LoadingSpinner from './LoadingSpinner'
 
 const TicketList = ({ allTickets }) => {
