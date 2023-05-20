@@ -28,6 +28,8 @@ import buildTicketTree from '../utils/buildTicketTree'
 const Dashboard = () => {
     const navigate = useNavigate()
     const location = useLocation()
+    const [allUsers, setAllUsers] = useState({ users: [] })
+    const [currentTree, setCurrentTree] = useState({})
     const [currentTicket, updateCurrentTicket] = useReducer(
         (data, partialData) => ({
             ...data,
@@ -40,11 +42,6 @@ const Dashboard = () => {
             data: {},
         }
     )
-
-    const [currentTree, setCurrentTree] = useState({})
-
-    const [allUsers, setAllUsers] = useState({ users: [] })
-
     const [allTickets, updateAllTickets] = useReducer(
         (data, partialData) => ({
             ...data,
@@ -117,6 +114,7 @@ const Dashboard = () => {
             navigate('/notfound')
             return
         }
+
         const currentTicketType = splitPath[1]
         const currentTicketId = splitPath[2]
         const allTicketsWithCurrentTicketType =
@@ -124,7 +122,16 @@ const Dashboard = () => {
         const currentTicketData = allTicketsWithCurrentTicketType.find(
             (ticket) => parseInt(ticket._id) === parseInt(currentTicketId)
         )
-        if (!currentTicketData) return
+        const isAllTicketsEmpty =
+            Object.keys(TICKET_TYPES)
+                .map((type) => allTickets[type])
+                .flat().length === 0
+        if (!currentTicketData) {
+            if (!isAllTicketsEmpty) {
+                navigate('/notfound')
+            }
+            return
+        }
 
         const newCurrentTicket = {
             type: currentTicketData.type,
