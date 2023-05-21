@@ -9,8 +9,8 @@ import {
     MenuOptionGroup,
 } from '@chakra-ui/react'
 import { ChevronDownIcon } from '@chakra-ui/icons'
-import { TICKET_TYPES } from '../pages/Dashboard'
 import { useSearchParams } from 'react-router-dom'
+import { TICKET_TYPES } from '../constants'
 
 const FilterDropdown = ({ filter, setFilter }) => {
     const [searchParams, setSearchParams] = useSearchParams()
