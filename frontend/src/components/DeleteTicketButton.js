@@ -5,6 +5,7 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogOverlay,
+    Box,
     Button,
     Flex,
     Text,
@@ -26,9 +27,7 @@ const DeleteTicketAlertDialog = ({
             currentTicket.type === TICKET_TYPES.PPR ||
             currentTicket.type === TICKET_TYPES.UPR
         ) {
-            return (
-                <Text m="16px 0">{`• ${currentTicket.codename}`}</Text>
-            )
+            return <Text m="16px 0">{`• ${currentTicket.codename}`}</Text>
         }
 
         if (currentTicket.type === TICKET_TYPES.FI) {
@@ -39,10 +38,16 @@ const DeleteTicketAlertDialog = ({
                 <Flex flexDir="column" m="16px 0">
                     <Text>{`• ${currentTicket.codename}`}</Text>
                     {FITree.personalPurchases.map((ppr) => (
-                        <Text pl="24px">{`• ${ppr.codename}`}</Text>
+                        <Text
+                            key={ppr.code}
+                            pl="24px"
+                        >{`• ${ppr.codename}`}</Text>
                     ))}
                     {FITree.uwFinancePurchases.map((upr) => (
-                        <Text pl="24px">{`• ${upr.codename}`}</Text>
+                        <Text
+                            key={upr.code}
+                            pl="24px"
+                        >{`• ${upr.codename}`}</Text>
                     ))}
                 </Flex>
             )
@@ -53,15 +58,21 @@ const DeleteTicketAlertDialog = ({
             <Flex flexDir="column" m="16px 0">
                 <Text>{`• ${currentTicket.codename}`}</Text>
                 {currentTree.fundingItems.map((fi) => (
-                    <>
+                    <Box key={fi.code}>
                         <Text pl="24px">{`• ${fi.codename}`}</Text>
                         {fi.personalPurchases.map((ppr) => (
-                            <Text pl="48px">{`• ${ppr.codename}`}</Text>
+                            <Text
+                                key={ppr.code}
+                                pl="48px"
+                            >{`• ${ppr.codename}`}</Text>
                         ))}
                         {fi.uwFinancePurchases.map((upr) => (
-                            <Text pl="48px">{`• ${upr.codename}`}</Text>
+                            <Text
+                                key={upr.code}
+                                pl="48px"
+                            >{`• ${upr.codename}`}</Text>
                         ))}
-                    </>
+                    </Box>
                 ))}
             </Flex>
         )
