@@ -27,7 +27,7 @@ const DeleteTicketAlertDialog = ({
             currentTicket.type === TICKET_TYPES.UPR
         ) {
             return (
-                <Text m="16px 0">{`• ${currentTicket.code}: ${currentTicket.data.name}`}</Text>
+                <Text m="16px 0">{`• ${currentTicket.codename}`}</Text>
             )
         }
 
@@ -37,12 +37,12 @@ const DeleteTicketAlertDialog = ({
             )
             return (
                 <Flex flexDir="column" m="16px 0">
-                    <Text>{`• ${currentTicket.code}: ${currentTicket.data.name}`}</Text>
+                    <Text>{`• ${currentTicket.codename}`}</Text>
                     {FITree.personalPurchases.map((ppr) => (
-                        <Text pl="24px">{`• ${ppr.code}: ${ppr.name}`}</Text>
+                        <Text pl="24px">{`• ${ppr.codename}`}</Text>
                     ))}
                     {FITree.uwFinancePurchases.map((upr) => (
-                        <Text pl="24px">{`• ${upr.code}: ${upr.name}`}</Text>
+                        <Text pl="24px">{`• ${upr.codename}`}</Text>
                     ))}
                 </Flex>
             )
@@ -51,15 +51,15 @@ const DeleteTicketAlertDialog = ({
         // SF
         return (
             <Flex flexDir="column" m="16px 0">
-                <Text>{`• ${currentTicket.code}: ${currentTicket.data.name}`}</Text>
+                <Text>{`• ${currentTicket.codename}`}</Text>
                 {currentTree.fundingItems.map((fi) => (
                     <>
-                        <Text pl="24px">{`• ${fi.code}: ${fi.name}`}</Text>
+                        <Text pl="24px">{`• ${fi.codename}`}</Text>
                         {fi.personalPurchases.map((ppr) => (
-                            <Text pl="48px">{`• ${ppr.code}: ${ppr.name}`}</Text>
+                            <Text pl="48px">{`• ${ppr.codename}`}</Text>
                         ))}
                         {fi.uwFinancePurchases.map((upr) => (
-                            <Text pl="48px">{`• ${upr.code}: ${upr.name}`}</Text>
+                            <Text pl="48px">{`• ${upr.codename}`}</Text>
                         ))}
                     </>
                 ))}

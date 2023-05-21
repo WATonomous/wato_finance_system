@@ -23,7 +23,7 @@ const TreeView = ({ currentTicket, currentTree }) => {
                     fontWeight={currentTicket.code === fi.code ? '800' : '600'}
                     fontSize="xs"
                 >
-                    {`${fi.code}: ${fi.name}`}
+                    {fi.codename}
                 </Text>
             </Box>
             {sortTickets(fi.personalPurchases).map((ppr) => {
@@ -43,7 +43,7 @@ const TreeView = ({ currentTicket, currentTree }) => {
                             }
                             fontSize="xs"
                         >
-                            {`${ppr.code}: ${ppr.name}`}
+                            {ppr.codename}
                         </Text>
                     </Box>
                 )
@@ -65,7 +65,7 @@ const TreeView = ({ currentTicket, currentTree }) => {
                             }
                             fontSize="xs"
                         >
-                            {`${upr.code}: ${upr.name}`}
+                            {upr.codename}
                         </Text>
                     </Box>
                 )
@@ -101,7 +101,7 @@ const TreeView = ({ currentTicket, currentTree }) => {
                     }
                     fontSize="xs"
                 >
-                    {`${currentTree.code}: ${currentTree.name}`}
+                    {currentTree.codename}
                 </Text>
             </Box>
             {sortTickets(currentTree.fundingItems).map(getFundingItemTree)}

@@ -23,6 +23,14 @@ const getAnnotatedUWFinancePurchasesByIdList = async (idList = []) => {
                         code: {
                             $concat: ['UPR-', { $toString: '$_id' }],
                         },
+                        codename: {
+                            $concat: [
+                                'UPR-',
+                                { $toString: '$_id' },
+                                ': ',
+                                '$name',
+                            ],
+                        },
                         path: {
                             $concat: ['/UPR/', { $toString: '$_id' }],
                         },
@@ -56,6 +64,14 @@ const getAnnotatedPersonalPurchasesByIdList = async (idList = []) => {
                         type: 'PPR',
                         code: {
                             $concat: ['PPR-', { $toString: '$_id' }],
+                        },
+                        codename: {
+                            $concat: [
+                                'PPR-',
+                                { $toString: '$_id' },
+                                ': ',
+                                '$name',
+                            ],
                         },
                         path: {
                             $concat: ['/PPR/', { $toString: '$_id' }],
@@ -168,6 +184,14 @@ const getAnnotatedFundingItemsByIdList = async (idList = []) => {
                         code: {
                             $concat: ['FI-', { $toString: '$_id' }],
                         },
+                        codename: {
+                            $concat: [
+                                'FI-',
+                                { $toString: '$_id' },
+                                ': ',
+                                '$name',
+                            ],
+                        },
                         path: {
                             $concat: ['/FI/', { $toString: '$_id' }],
                         },
@@ -253,6 +277,16 @@ const getAnnotatedSponsorshipFundsByIdList = async (idList = []) => {
                         type: 'SF',
                         code: {
                             $concat: ['SF-', { $toString: '$_id' }],
+                        },
+                        codename: {
+                            $concat: [
+                                'SF-',
+                                { $toString: '$_id' },
+                                ': ',
+                                '$organization',
+                                ' - ',
+                                '$semester',
+                            ],
                         },
                         path: {
                             $concat: ['/SF/', { $toString: '$_id' }],

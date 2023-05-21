@@ -46,10 +46,11 @@ const Dashboard = () => {
             ...partialData,
         }),
         {
+            data: {},
             type: '',
             id: 0,
             code: '',
-            data: {},
+            codename: '',
         }
     )
     const [allTickets, updateAllTickets] = useReducer(
@@ -144,10 +145,11 @@ const Dashboard = () => {
         }
 
         const newCurrentTicket = {
+            data: currentTicketData,
             type: currentTicketData.type,
             id: currentTicketId,
             code: currentTicketData.code,
-            data: currentTicketData,
+            codename: currentTicketData.codename,
         }
         updateCurrentTicket(newCurrentTicket)
         setCurrentTree(buildTicketTree(newCurrentTicket, allTickets))
@@ -212,7 +214,7 @@ const Dashboard = () => {
                     p="16px 24px"
                 >
                     <Heading mb="16px" fontSize="3xl">
-                        {`${currentTicket.type}-${currentTicket.id}: ${ticketData.name}`}
+                        {`${currentTicket.codename}`}
                     </Heading>
                     <Flex flexDir="row" mb="12px">
                         {/* Do not display delete button for WATO Cash */}
