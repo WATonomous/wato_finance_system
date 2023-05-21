@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import usePreserveParamsNavigate from '../hooks/usePreserveParamsNavigate'
 import { Box, Card, CardBody, Center, Text, VStack } from '@chakra-ui/react'
 import FilterDropdown from './FilterDropdown'
 import { useSearchParams } from 'react-router-dom'
@@ -7,9 +7,8 @@ import { TICKET_TYPES } from '../constants'
 import LoadingSpinner from './LoadingSpinner'
 
 const TicketList = ({ allTickets }) => {
-    const navigate = useNavigate()
+    const preserveParamsNavigate = usePreserveParamsNavigate()
     const [searchParams, _] = useSearchParams()
-    console.log(searchParams)
     const tickettypes = searchParams.get('tickettypes')
 
     const [filter, setFilter] = useState(
@@ -68,9 +67,7 @@ const TicketList = ({ allTickets }) => {
                             borderRadius="0"
                             mt="0 !important"
                             onClick={() =>
-                                navigate(
-                                    `${ticket.path}?tickettypes=${tickettypes}`
-                                )
+                                preserveParamsNavigate(`${ticket.path}`)
                             }
                             cursor="pointer"
                         >
