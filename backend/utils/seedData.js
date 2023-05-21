@@ -56,6 +56,7 @@ const createCashFund = async () => {
     const cashFund = {
         name: 'WATO Cash',
         // sf_link and reporter_id are required, set to a dummy value
+        // on the frontend, sf_link === -1 is an identifier for WATO Cash
         sf_link: -1,
         reporter_id: -1,
         funding_allocation: 0,

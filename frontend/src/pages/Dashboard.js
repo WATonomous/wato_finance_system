@@ -10,6 +10,7 @@ import {
     Tbody,
     Button,
     Text,
+    useDisclosure,
 } from '@chakra-ui/react'
 import TreeView from '../components/TreeView'
 import axios from 'axios'
@@ -26,10 +27,17 @@ import UPRContentTable from '../components/TicketContent/UPRContentTable'
 import ReporterInfoTip from '../components/ReporterInfoTip'
 import { TICKET_TYPES } from '../constants'
 import buildTicketTree from '../utils/buildTicketTree'
+import DeleteTicketAlertDialog from '../components/DeleteTicketButton'
 
 const Dashboard = () => {
     const navigate = useNavigate()
     const location = useLocation()
+    const {
+        isOpen: isDeleteTicketOpen,
+        onOpen: onOpenDeleteTicket,
+        onClose: onCloseDeleteTicket,
+    } = useDisclosure()
+
     const [allUsers, setAllUsers] = useState({ users: [] })
     const [currentTree, setCurrentTree] = useState({})
     const [currentTicket, updateCurrentTicket] = useReducer(
@@ -207,9 +215,16 @@ const Dashboard = () => {
                         {`${currentTicket.type}-${currentTicket.id}: ${ticketData.name}`}
                     </Heading>
                     <Flex flexDir="row" mb="12px">
-                        <Button size="sm">
-                            <Text>Delete</Text>
-                        </Button>
+                        {/* Do not display delete button for WATO Cash */}
+                        {currentTicket.data.sf_link !== -1 && (
+                            <Button
+                                size="sm"
+                                colorScheme="red"
+                                onClick={onOpenDeleteTicket}
+                            >
+                                <Text>Delete</Text>
+                            </Button>
+                        )}
                     </Flex>
                     {getCurrentTicketContentTable()}
                 </Flex>
@@ -257,6 +272,10 @@ const Dashboard = () => {
         )
     }
 
+    const handleDeleteCurrentTicket = () => {
+        console.log('delete current ticket')
+    }
+
     return (
         <VStack spacing="0">
             <Navbar />
@@ -264,6 +283,15 @@ const Dashboard = () => {
                 <TicketList allTickets={allTickets} />
                 {getMainContent()}
             </Flex>
+            {isDeleteTicketOpen && (
+                <DeleteTicketAlertDialog
+                    isOpen={isDeleteTicketOpen}
+                    onClose={onCloseDeleteTicket}
+                    onDelete={handleDeleteCurrentTicket}
+                    currentTicket={currentTicket}
+                    currentTree={currentTree}
+                />
+            )}
         </VStack>
     )
 }
