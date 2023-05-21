@@ -9,7 +9,7 @@ import {
     MenuOptionGroup,
 } from '@chakra-ui/react'
 import { ChevronDownIcon } from '@chakra-ui/icons'
-import { TICKET_TYPES } from '../pages/Dashboard'
+import { TICKET_TYPES } from '../constants'
 
 const FilterDropdown = ({ filter, setFilter }) => {
     return (

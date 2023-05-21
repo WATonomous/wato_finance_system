@@ -22,17 +22,14 @@ import FIContentTable from '../components/TicketContent/FIContentTable'
 import PPRContentTable from '../components/TicketContent/PPRContentTable'
 import UPRContentTable from '../components/TicketContent/UPRContentTable'
 import ReporterInfoTip from '../components/ReporterInfoTip'
-
-export const TICKET_TYPES = Object.freeze({
-    SF: 'SF',
-    FI: 'FI',
-    PPR: 'PPR',
-    UPR: 'UPR',
-})
+import { TICKET_TYPES } from '../constants'
+import buildTicketTree from '../utils/buildTicketTree'
 
 const Dashboard = () => {
     const navigate = useNavigate()
     const location = useLocation()
+    const [allUsers, setAllUsers] = useState({ users: [] })
+    const [currentTree, setCurrentTree] = useState({})
     const [currentTicket, updateCurrentTicket] = useReducer(
         (data, partialData) => ({
             ...data,
@@ -45,9 +42,6 @@ const Dashboard = () => {
             data: {},
         }
     )
-
-    const [allUsers, setAllUsers] = useState({ users: [] })
-
     const [allTickets, updateAllTickets] = useReducer(
         (data, partialData) => ({
             ...data,
@@ -120,22 +114,34 @@ const Dashboard = () => {
             navigate('/notfound')
             return
         }
+
         const currentTicketType = splitPath[1]
-        const currentTicketId = splitPath[2]
+        const currentTicketId = parseInt(splitPath[2])
         const allTicketsWithCurrentTicketType =
             allTickets[TICKET_TYPES[currentTicketType]]
         const currentTicketData = allTicketsWithCurrentTicketType.find(
-            (ticket) => parseInt(ticket._id) === parseInt(currentTicketId)
+            (ticket) => ticket._id === currentTicketId
         )
-        if (!currentTicketData) return
-        updateCurrentTicket({
+        const isAllTicketsEmpty =
+            Object.keys(TICKET_TYPES)
+                .map((type) => allTickets[type])
+                .flat().length === 0
+        if (!currentTicketData) {
+            if (!isAllTicketsEmpty) {
+                navigate('/notfound')
+            }
+            return
+        }
+
+        const newCurrentTicket = {
             type: currentTicketData.type,
             id: currentTicketId,
             code: currentTicketData.code,
             data: currentTicketData,
-        })
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [location.pathname, allTickets])
+        }
+        updateCurrentTicket(newCurrentTicket)
+        setCurrentTree(buildTicketTree(newCurrentTicket, allTickets))
+    }, [location.pathname, allTickets, navigate])
 
     const getCurrentTicketContentTable = () => {
         const ticketData = currentTicket.data
@@ -206,8 +212,8 @@ const Dashboard = () => {
                             Ticket Tree
                         </Heading>
                         <TreeView
-                            allTickets={allTickets}
                             currentTicket={currentTicket}
+                            currentTree={currentTree}
                         />
                     </Box>
                     <Box w="100%" mt="12px">
