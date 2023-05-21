@@ -214,7 +214,7 @@ const Dashboard = () => {
                     p="16px 24px"
                 >
                     <Heading mb="16px" fontSize="3xl">
-                        {`${currentTicket.codename}`}
+                        {currentTicket.codename}
                     </Heading>
                     <Flex flexDir="row" mb="12px">
                         {/* Do not display delete button for WATO Cash */}
