@@ -10,8 +10,11 @@ import {
 } from '@chakra-ui/react'
 import { ChevronDownIcon } from '@chakra-ui/icons'
 import { TICKET_TYPES } from '../pages/Dashboard'
+import { useSearchParams } from 'react-router-dom'
 
 const FilterDropdown = ({ filter, setFilter }) => {
+    const [searchParams, setSearchParams] = useSearchParams()
+
     return (
         <Box w="100%" p="16px" borderRight="1px solid #dedede">
             <Menu closeOnSelect={false}>
@@ -27,7 +30,21 @@ const FilterDropdown = ({ filter, setFilter }) => {
                         defaultValue={filter}
                         title="Ticket Type"
                         type="checkbox"
-                        onChange={(value) => setFilter(value)}
+                        onChange={(value) => {
+                            setFilter(value)
+                            // if all filters are selected, no need to have any query params
+                            if (
+                                value.length ===
+                                Object.keys(TICKET_TYPES).length
+                            ) {
+                                searchParams.delete('tickettypes')
+                                setSearchParams(searchParams)
+                            } else {
+                                setSearchParams({
+                                    tickettypes: value.join(','),
+                                })
+                            }
+                        }}
                     >
                         <MenuItemOption value={`${TICKET_TYPES.SF}`}>
                             Sponsorship Funds

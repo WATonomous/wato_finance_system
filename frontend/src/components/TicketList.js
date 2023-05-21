@@ -3,16 +3,24 @@ import { useNavigate } from 'react-router-dom'
 import { Box, Card, CardBody, Text, VStack } from '@chakra-ui/react'
 import FilterDropdown from './FilterDropdown'
 import { TICKET_TYPES } from '../pages/Dashboard'
+import { useSearchParams } from 'react-router-dom'
 
 const TicketList = (props) => {
     const navigate = useNavigate()
+    const [searchParams, _] = useSearchParams()
+    console.log(searchParams)
+    const tickettypes = searchParams.get('tickettypes')
 
-    const [filter, setFilter] = useState([
-        TICKET_TYPES.SF,
-        TICKET_TYPES.FI,
-        TICKET_TYPES.PPR,
-        TICKET_TYPES.UPR,
-    ])
+    const [filter, setFilter] = useState(
+        tickettypes
+            ? tickettypes.split(',')
+            : [
+                  TICKET_TYPES.SF,
+                  TICKET_TYPES.FI,
+                  TICKET_TYPES.PPR,
+                  TICKET_TYPES.UPR,
+              ]
+    )
 
     const filteredTickets = Object.entries(props.allTickets)
         .map(([ticketType, collection]) => {
@@ -45,7 +53,9 @@ const TicketList = (props) => {
                             borderRadius="0"
                             mt="0 !important"
                             onClick={() =>
-                                navigate(`/${ticket.type}/${ticket.id}`)
+                                navigate(
+                                    `/${ticket.type}/${ticket.id}?tickettypes=${tickettypes}`
+                                )
                             }
                             cursor="pointer"
                         >
