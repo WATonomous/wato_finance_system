@@ -67,7 +67,11 @@ const TicketList = ({ allTickets }) => {
                             borderBottom="1px solid #dedede"
                             borderRadius="0"
                             mt="0 !important"
-                            onClick={() => navigate(`${ticket.path}?tickettypes=${tickettypes}`)}
+                            onClick={() =>
+                                navigate(
+                                    `${ticket.path}?tickettypes=${tickettypes}`
+                                )
+                            }
                             cursor="pointer"
                         >
                             <CardBody p="8px 16px">
