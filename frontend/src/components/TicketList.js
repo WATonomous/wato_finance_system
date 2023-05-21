@@ -37,9 +37,10 @@ const TicketList = ({ allTickets }) => {
     const filteredTickets = Object.entries(allTickets)
         .map(([ticketType, collection]) => {
             return collection.map((ticket) => ({
-                name: ticket.name,
                 type: ticketType,
-                id: ticket._id,
+                code: ticket.code,
+                path: ticket.path,
+                name: ticket.name,
             }))
         })
         .flat()
@@ -50,22 +51,19 @@ const TicketList = ({ allTickets }) => {
             <FilterDropdown filter={filter} setFilter={setFilter} />
             <VStack w="100%" h="calc(100vh - 152px)" overflowY="scroll">
                 {filteredTickets.map((ticket) => {
-                    const code = `${ticket.type}-${ticket.id}`
                     return (
                         <Card
-                            key={code}
+                            key={ticket.code}
                             w="100%"
                             borderTop="1px solid #dedede"
                             borderBottom="1px solid #dedede"
                             borderRadius="0"
                             mt="0 !important"
-                            onClick={() =>
-                                navigate(`/${ticket.type}/${ticket.id}`)
-                            }
+                            onClick={() => navigate(ticket.path)}
                             cursor="pointer"
                         >
                             <CardBody p="8px 16px">
-                                <Text>{code}</Text>
+                                <Text>{ticket.code}</Text>
                                 <Text noOfLines="1">{ticket.name}</Text>
                             </CardBody>
                         </Card>

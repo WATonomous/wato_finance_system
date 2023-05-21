@@ -8,6 +8,9 @@ import {
     Center,
     Table,
     Tbody,
+    Button,
+    Text,
+    useDisclosure,
 } from '@chakra-ui/react'
 import TreeView from '../components/TreeView'
 import axios from 'axios'
@@ -24,10 +27,17 @@ import UPRContentTable from '../components/TicketContent/UPRContentTable'
 import ReporterInfoTip from '../components/ReporterInfoTip'
 import { TICKET_TYPES } from '../constants'
 import buildTicketTree from '../utils/buildTicketTree'
+import DeleteTicketAlertDialog from '../components/DeleteTicketButton'
 
 const Dashboard = () => {
     const navigate = useNavigate()
     const location = useLocation()
+    const {
+        isOpen: isDeleteTicketOpen,
+        onOpen: onOpenDeleteTicket,
+        onClose: onCloseDeleteTicket,
+    } = useDisclosure()
+
     const [allUsers, setAllUsers] = useState({ users: [] })
     const [currentTree, setCurrentTree] = useState({})
     const [currentTicket, updateCurrentTicket] = useReducer(
@@ -36,10 +46,11 @@ const Dashboard = () => {
             ...partialData,
         }),
         {
+            data: {},
             type: '',
             id: 0,
             code: '',
-            data: {},
+            codename: '',
         }
     )
     const [allTickets, updateAllTickets] = useReducer(
@@ -134,10 +145,11 @@ const Dashboard = () => {
         }
 
         const newCurrentTicket = {
+            data: currentTicketData,
             type: currentTicketData.type,
             id: currentTicketId,
             code: currentTicketData.code,
-            data: currentTicketData,
+            codename: currentTicketData.codename,
         }
         updateCurrentTicket(newCurrentTicket)
         setCurrentTree(buildTicketTree(newCurrentTicket, allTickets))
@@ -202,8 +214,20 @@ const Dashboard = () => {
                     p="16px 24px"
                 >
                     <Heading mb="16px" fontSize="3xl">
-                        {`${currentTicket.type}-${currentTicket.id}: ${ticketData.name}`}
+                        {currentTicket.codename}
                     </Heading>
+                    <Flex flexDir="row" mb="12px">
+                        {/* Do not display delete button for WATO Cash */}
+                        {currentTicket.data.sf_link !== -1 && (
+                            <Button
+                                size="sm"
+                                colorScheme="red"
+                                onClick={onOpenDeleteTicket}
+                            >
+                                <Text>Delete</Text>
+                            </Button>
+                        )}
+                    </Flex>
                     {getCurrentTicketContentTable()}
                 </Flex>
                 <VStack w="40%" h="max-content" p="16px 24px 16px 0" gap="16px">
@@ -250,13 +274,29 @@ const Dashboard = () => {
         )
     }
 
+    const handleDeleteCurrentTicket = () => {
+        console.log('delete current ticket')
+        // TODO: add backend call to delete ticket
+        // maybe implement soft-delete with mongoose plugin
+        // redirect to homepage after delete
+    }
+
     return (
         <VStack spacing="0">
+            <Navbar />
             <Flex pos="absolute" top="80px" w="100%">
                 <TicketList allTickets={allTickets} />
                 {getMainContent()}
             </Flex>
-            <Navbar />
+            {isDeleteTicketOpen && (
+                <DeleteTicketAlertDialog
+                    isOpen={isDeleteTicketOpen}
+                    onClose={onCloseDeleteTicket}
+                    onDelete={handleDeleteCurrentTicket}
+                    currentTicket={currentTicket}
+                    currentTree={currentTree}
+                />
+            )}
         </VStack>
     )
 }
