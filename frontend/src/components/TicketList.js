@@ -37,9 +37,10 @@ const TicketList = ({ allTickets }) => {
     const filteredTickets = Object.entries(allTickets)
         .map(([ticketType, collection]) => {
             return collection.map((ticket) => ({
-                name: ticket.name,
                 type: ticketType,
-                id: ticket._id,
+                code: ticket.code,
+                path: ticket.path,
+                name: ticket.name,
             }))
         })
         .flat()
