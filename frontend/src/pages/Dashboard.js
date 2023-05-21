@@ -276,6 +276,9 @@ const Dashboard = () => {
 
     const handleDeleteCurrentTicket = () => {
         console.log('delete current ticket')
+        // TODO: add backend call to delete ticket
+        // maybe implement soft-delete with mongoose plugin
+        // redirect to homepage after delete
     }
 
     return (
