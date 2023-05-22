@@ -1,9 +1,10 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Text, Box, Stack } from '@chakra-ui/react'
+import usePreserveParamsNavigate from '../hooks/usePreserveParamsNavigate'
 
 const TreeView = ({ currentTicket, currentTree }) => {
-    const navigate = useNavigate()
+    const preserveParamsNavigate = usePreserveParamsNavigate()
 
     const sortTickets = (ticketList) => {
         return ticketList.sort((a, b) => (a._id > b._id ? 1 : -1))
@@ -17,7 +18,7 @@ const TreeView = ({ currentTicket, currentTree }) => {
                 p="4px 8px"
                 borderRadius="8px"
                 cursor="pointer"
-                onClick={() => navigate(`${fi.path}`)}
+                onClick={() => preserveParamsNavigate(fi.path)}
             >
                 <Text
                     fontWeight={currentTicket.code === fi.code ? '800' : '600'}
@@ -35,7 +36,7 @@ const TreeView = ({ currentTicket, currentTree }) => {
                         p="4px 8px"
                         borderRadius="8px"
                         cursor="pointer"
-                        onClick={() => navigate(`${ppr.path}`)}
+                        onClick={() => preserveParamsNavigate(ppr.path)}
                     >
                         <Text
                             fontWeight={
@@ -57,7 +58,7 @@ const TreeView = ({ currentTicket, currentTree }) => {
                         p="4px 8px"
                         borderRadius="8px"
                         cursor="pointer"
-                        onClick={() => navigate(`${upr.path}`)}
+                        onClick={() => preserveParamsNavigate(upr.path)}
                     >
                         <Text
                             fontWeight={
@@ -93,7 +94,7 @@ const TreeView = ({ currentTicket, currentTree }) => {
                 mr="20%"
                 borderRadius="8px"
                 cursor="pointer"
-                onClick={() => navigate(currentTree.path)}
+                onClick={() => preserveParamsNavigate(currentTree.path)}
             >
                 <Text
                     fontWeight={

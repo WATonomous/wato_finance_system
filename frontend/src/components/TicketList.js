@@ -1,19 +1,26 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import usePreserveParamsNavigate from '../hooks/usePreserveParamsNavigate'
 import { Box, Card, CardBody, Center, Text, VStack } from '@chakra-ui/react'
 import FilterDropdown from './FilterDropdown'
+import { useSearchParams } from 'react-router-dom'
 import { TICKET_TYPES } from '../constants'
 import LoadingSpinner from './LoadingSpinner'
 
 const TicketList = ({ allTickets }) => {
-    const navigate = useNavigate()
+    const preserveParamsNavigate = usePreserveParamsNavigate()
+    const [searchParams, _] = useSearchParams()
+    const tickettypes = searchParams.get('tickettypes')
 
-    const [filter, setFilter] = useState([
-        TICKET_TYPES.SF,
-        TICKET_TYPES.FI,
-        TICKET_TYPES.PPR,
-        TICKET_TYPES.UPR,
-    ])
+    const [filter, setFilter] = useState(
+        tickettypes
+            ? tickettypes.split(',')
+            : [
+                  TICKET_TYPES.SF,
+                  TICKET_TYPES.FI,
+                  TICKET_TYPES.PPR,
+                  TICKET_TYPES.UPR,
+              ]
+    )
 
     if (
         Object.keys(TICKET_TYPES)
@@ -59,7 +66,7 @@ const TicketList = ({ allTickets }) => {
                             borderBottom="1px solid #dedede"
                             borderRadius="0"
                             mt="0 !important"
-                            onClick={() => navigate(ticket.path)}
+                            onClick={() => preserveParamsNavigate(ticket.path)}
                             cursor="pointer"
                         >
                             <CardBody p="8px 16px">
