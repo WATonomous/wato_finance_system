@@ -18,7 +18,7 @@ const TreeView = ({ currentTicket, currentTree }) => {
                 p="4px 8px"
                 borderRadius="8px"
                 cursor="pointer"
-                onClick={() => preserveParamsNavigate(`${fi.path}`)}
+                onClick={() => preserveParamsNavigate(fi.path)}
             >
                 <Text
                     fontWeight={currentTicket.code === fi.code ? '800' : '600'}
@@ -36,7 +36,7 @@ const TreeView = ({ currentTicket, currentTree }) => {
                         p="4px 8px"
                         borderRadius="8px"
                         cursor="pointer"
-                        onClick={() => preserveParamsNavigate(`${ppr.path}`)}
+                        onClick={() => preserveParamsNavigate(ppr.path)}
                     >
                         <Text
                             fontWeight={
@@ -58,7 +58,7 @@ const TreeView = ({ currentTicket, currentTree }) => {
                         p="4px 8px"
                         borderRadius="8px"
                         cursor="pointer"
-                        onClick={() => preserveParamsNavigate(`${upr.path}`)}
+                        onClick={() => preserveParamsNavigate(upr.path)}
                     >
                         <Text
                             fontWeight={

@@ -66,9 +66,7 @@ const TicketList = ({ allTickets }) => {
                             borderBottom="1px solid #dedede"
                             borderRadius="0"
                             mt="0 !important"
-                            onClick={() =>
-                                preserveParamsNavigate(`${ticket.path}`)
-                            }
+                            onClick={() => preserveParamsNavigate(ticket.path)}
                             cursor="pointer"
                         >
                             <CardBody p="8px 16px">
