@@ -47,7 +47,7 @@ const deleteUsers = async (currentEmails, newEmails) => {
     await GoogleGroup.deleteMany({
         filter: { email: { $in: emailsToDelete } },
     })
-    console.log('Deletion successful')
+    console.log('User Cleanup Successful')
 }
 
 const upsertUsers = async (currentEmails, newPairs) => {
@@ -68,7 +68,7 @@ const upsertUsers = async (currentEmails, newPairs) => {
         })
     })
     await GoogleGroup.bulkWrite(bulkOps)
-    console.log('Update successful')
+    console.log('Updating users successful')
 }
 
 const updateGoogleGroups = async (req, res) => {
