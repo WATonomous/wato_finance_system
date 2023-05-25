@@ -5,8 +5,7 @@ const mailjet = Mailjet.apiConnect(
     process.env.MAILJET_SECRET_KEY
 )
 
-const createEmail = async (req, res) => {
-    const { body: emailDetail } = req
+const createEmail = async (emailDetail) => {
     const mailRequest = mailjet.post('send', { version: 'v3.1' }).request({
         Messages: [
             {
