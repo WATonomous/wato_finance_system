@@ -19,6 +19,7 @@ const DeleteTicketAlertDialog = ({
     onDelete,
     currentTicket,
     currentTree,
+    disabled,
 }) => {
     const cancelRef = React.useRef()
 
@@ -83,6 +84,7 @@ const DeleteTicketAlertDialog = ({
             isOpen={isOpen}
             leastDestructiveRef={cancelRef}
             onClose={onClose}
+            disabled={disabled}
         >
             <AlertDialogOverlay>
                 <AlertDialogContent>
@@ -105,7 +107,6 @@ const DeleteTicketAlertDialog = ({
                         <Button
                             colorScheme="red"
                             onClick={() => {
-                                onClose()
                                 onDelete()
                             }}
                             ml={3}

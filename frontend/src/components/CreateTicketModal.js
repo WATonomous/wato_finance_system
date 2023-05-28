@@ -21,6 +21,7 @@ import {
     SponsorshipFundForm,
     UWFinancePurchaseForm,
 } from './TicketForms'
+import { TICKET_ENDPOINTS, TICKET_TYPES } from '../constants'
 
 export function CreateTicketModal({ isOpen, onClose }) {
     const [ticketType, setTicketType] = useState('')
@@ -47,23 +48,20 @@ export function CreateTicketModal({ isOpen, onClose }) {
         }
     }
     const createTicket = async (formValues) => {
-        const endpoints = {
-            sf: '/sponsorshipfunds',
-            fi: '/fundingitems',
-            ppr: '/personalpurchases',
-            upr: '/uwfinancepurchases',
-        }
         try {
             const payload = {
                 ...formValues,
                 reporter_id: auth.currentUser.uid,
             }
-            if (ticketType === 'upr' || ticketType === 'ppr') {
+            if (
+                ticketType === TICKET_TYPES.UPR ||
+                ticketType === TICKET_TYPES.PPR
+            ) {
                 payload.status = 'SEEKING_APPROVAL'
-            } else if (ticketType === 'sf') {
+            } else if (ticketType === TICKET_TYPES.SF) {
                 payload.status = 'ALLOCATED'
             }
-            await axiosPreset.post(endpoints[ticketType], payload)
+            await axiosPreset.post(TICKET_ENDPOINTS[ticketType], payload)
             onClose()
         } catch (err) {
             console.log(err)
@@ -86,10 +84,16 @@ export function CreateTicketModal({ isOpen, onClose }) {
                         margin="10px 0"
                         size="sm"
                     >
-                        <option value="upr">UW Finance Purchase</option>
-                        <option value="ppr">Personal Purchase</option>
-                        <option value="fi">Funding Item</option>
-                        <option value="sf">Sponsorship Fund</option>
+                        <option value={TICKET_TYPES.UPR}>
+                            UW Finance Purchase
+                        </option>
+                        <option value={TICKET_TYPES.PPR}>
+                            Personal Purchase
+                        </option>
+                        <option value={TICKET_TYPES.FI}>Funding Item</option>
+                        <option value={TICKET_TYPES.SF}>
+                            Sponsorship Fund
+                        </option>
                     </Select>
                     {displayTicketType()}
                 </ModalBody>

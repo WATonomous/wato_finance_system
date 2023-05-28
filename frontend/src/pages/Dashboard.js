@@ -25,9 +25,10 @@ import FIContentTable from '../components/TicketContent/FIContentTable'
 import PPRContentTable from '../components/TicketContent/PPRContentTable'
 import UPRContentTable from '../components/TicketContent/UPRContentTable'
 import ReporterInfoTip from '../components/ReporterInfoTip'
-import { TICKET_TYPES } from '../constants'
+import { TICKET_ENDPOINTS, TICKET_TYPES } from '../constants'
 import buildTicketTree from '../utils/buildTicketTree'
 import DeleteTicketAlertDialog from '../components/DeleteTicketButton'
+import { axiosPreset } from '../axiosConfig'
 
 const Dashboard = () => {
     const navigate = useNavigate()
@@ -37,6 +38,7 @@ const Dashboard = () => {
         onOpen: onOpenDeleteTicket,
         onClose: onCloseDeleteTicket,
     } = useDisclosure()
+    const [isDeleteTicketDisabled, setIsDeleteTicketDisabled] = useState(false)
 
     const [allUsers, setAllUsers] = useState({ users: [] })
     const [currentTree, setCurrentTree] = useState({})
@@ -84,23 +86,20 @@ const Dashboard = () => {
         updateAllTickets({ [TICKET_TYPES.UPR]: newUPRs })
     }
 
-    const getAllTickets = () => {
-        const endpoints = {
-            [TICKET_TYPES.SF]: `${process.env.REACT_APP_BACKEND_URL}/sponsorshipfunds/`,
-            [TICKET_TYPES.FI]: `${process.env.REACT_APP_BACKEND_URL}/fundingitems/`,
-            [TICKET_TYPES.PPR]: `${process.env.REACT_APP_BACKEND_URL}/personalpurchases/`,
-            [TICKET_TYPES.UPR]: `${process.env.REACT_APP_BACKEND_URL}/uwfinancepurchases/`,
-        }
-        axios
-            .all(
-                Object.values(endpoints).map((endpoint) => axios.get(endpoint))
+    const getAllTickets = async () => {
+        const data = await axios.all(
+            Object.values(TICKET_ENDPOINTS).map((endpoint) =>
+                axiosPreset.get(endpoint)
             )
-            .then((responses) => {
-                Object.keys(endpoints).forEach((key, index) => {
-                    updateAllTickets({ [key]: responses[index].data })
+        )
+        await Promise.all(
+            data.map((response, index) => {
+                return updateAllTickets({
+                    [Object.keys(TICKET_ENDPOINTS)[index]]: response.data,
                 })
-                console.log('fetched all tickets')
             })
+        )
+        console.log('fetched all tickets')
     }
 
     const getAllUsers = () => {
@@ -274,11 +273,22 @@ const Dashboard = () => {
         )
     }
 
-    const handleDeleteCurrentTicket = () => {
-        console.log('delete current ticket')
+    const handleDeleteCurrentTicket = async () => {
         // TODO: add backend call to delete ticket
         // maybe implement soft-delete with mongoose plugin
         // redirect to homepage after delete
+        const ticketPathSegment = TICKET_ENDPOINTS[currentTicket.type]
+        try {
+            setIsDeleteTicketDisabled(true)
+            await axiosPreset.delete(`${ticketPathSegment}/${currentTicket.id}`)
+            await getAllTickets()
+            navigate('/')
+            onCloseDeleteTicket()
+        } catch (err) {
+            console.log(err)
+        } finally {
+            setIsDeleteTicketDisabled(false)
+        }
     }
 
     return (
@@ -291,6 +301,7 @@ const Dashboard = () => {
             {isDeleteTicketOpen && (
                 <DeleteTicketAlertDialog
                     isOpen={isDeleteTicketOpen}
+                    disabled={isDeleteTicketDisabled}
                     onClose={onCloseDeleteTicket}
                     onDelete={handleDeleteCurrentTicket}
                     currentTicket={currentTicket}

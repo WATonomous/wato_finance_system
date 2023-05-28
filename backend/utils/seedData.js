@@ -13,6 +13,8 @@ const numFundingItemsToCreatePerSponsorshipFund = 2
 const numPersonalPurchasesToCreatePerFundingItem = 2
 const numUWFinancePurchasesToCreatePerFundingItem = 2
 
+const backend_url = process.env.BACKEND_URL || 'http://localhost:5000'
+
 const lorem = new LoremIpsum({
     wordsPerSentence: {
         max: 16,
@@ -61,7 +63,7 @@ const createCashFund = async () => {
         reporter_id: -1,
         funding_allocation: 0,
     }
-    await fetch(`${process.env.REACT_APP_BACKEND_URL}/fundingitems`, {
+    await fetch(`${backend_url}/fundingitems`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(cashFund),
@@ -165,14 +167,11 @@ const createSponsorshipFunds = async () => {
     }
     return Promise.all(
         sponsorshipFundsData.map(async (sponsorshipFund) => {
-            const res = await fetch(
-                `${process.env.REACT_APP_BACKEND_URL}/sponsorshipfunds`,
-                {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(sponsorshipFund),
-                }
-            )
+            const res = await fetch(`${backend_url}/sponsorshipfunds`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(sponsorshipFund),
+            })
             const data = await res.json()
             return data._id
         })
@@ -191,14 +190,11 @@ const createFundingItems = async (sf_ids) => {
     }
     return Promise.all(
         fundingItemsData.map(async (fundingItem) => {
-            const res = await fetch(
-                `${process.env.REACT_APP_BACKEND_URL}/fundingitems`,
-                {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(fundingItem),
-                }
-            )
+            const res = await fetch(`${backend_url}/fundingitems`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(fundingItem),
+            })
             const data = await res.json()
             return data._id
         })
@@ -217,14 +213,11 @@ const createPersonalPurchases = async (fi_ids) => {
     }
     return Promise.all(
         personalPurchases.map(async (personalPurchase) => {
-            const res = await fetch(
-                `${process.env.REACT_APP_BACKEND_URL}/personalpurchases`,
-                {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(personalPurchase),
-                }
-            )
+            const res = await fetch(`${backend_url}/personalpurchases`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(personalPurchase),
+            })
             const data = await res.json()
             return data._id
         })
@@ -243,14 +236,11 @@ const createUWFinancePurchases = async (fi_ids) => {
     }
     return Promise.all(
         uwFinancePurchases.map(async (uwFinancePurchase) => {
-            const res = await fetch(
-                `${process.env.REACT_APP_BACKEND_URL}/uwfinancepurchases`,
-                {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(uwFinancePurchase),
-                }
-            )
+            const res = await fetch(`${backend_url}/uwfinancepurchases`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(uwFinancePurchase),
+            })
             const data = await res.json()
             return data._id
         })
