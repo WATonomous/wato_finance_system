@@ -23,25 +23,26 @@ import {
 } from './TicketForms'
 import { TICKET_ENDPOINTS, TICKET_TYPES } from '../constants'
 
-export function CreateTicketModal({ isOpen, onClose }) {
+export function CreateTicketModal({ isOpen, onClose, getAllTickets }) {
     const [ticketType, setTicketType] = useState('')
     const { control, register, handleSubmit, reset } = useForm()
+    const [isCreateTicketLoading, setIsCreateTicketLoading] = useState(false)
     const auth = useAuth(app)
 
     const displayTicketType = () => {
         switch (ticketType) {
-            case 'sf':
+            case TICKET_TYPES.SF:
                 return (
                     <SponsorshipFundForm
                         register={register}
                         control={control}
                     />
                 )
-            case 'fi':
+            case TICKET_TYPES.FI:
                 return <FundingItemForm register={register} />
-            case 'ppr':
+            case TICKET_TYPES.PPR:
                 return <PersonalPurchaseForm register={register} />
-            case 'upr':
+            case TICKET_TYPES.UPR:
                 return <UWFinancePurchaseForm register={register} />
             default:
                 return null
@@ -49,6 +50,7 @@ export function CreateTicketModal({ isOpen, onClose }) {
     }
     const createTicket = async (formValues) => {
         try {
+            setIsCreateTicketLoading(true)
             const payload = {
                 ...formValues,
                 reporter_id: auth.currentUser.uid,
@@ -62,13 +64,22 @@ export function CreateTicketModal({ isOpen, onClose }) {
                 payload.status = 'ALLOCATED'
             }
             await axiosPreset.post(TICKET_ENDPOINTS[ticketType], payload)
+            await getAllTickets()
             onClose()
         } catch (err) {
             console.log(err)
+        } finally {
+            setIsCreateTicketLoading(false)
         }
     }
     return (
-        <Modal isOpen={isOpen} onClose={onClose} onCancel={onClose} size="lg">
+        <Modal
+            closeOnOverlayClick={false}
+            isOpen={isOpen}
+            onClose={onClose}
+            onCancel={onClose}
+            size="lg"
+        >
             <ModalOverlay />
             <ModalContent>
                 <ModalHeader>Create Ticket</ModalHeader>
@@ -83,6 +94,7 @@ export function CreateTicketModal({ isOpen, onClose }) {
                         }}
                         margin="10px 0"
                         size="sm"
+                        isDisabled={isCreateTicketLoading}
                     >
                         <option value={TICKET_TYPES.UPR}>
                             UW Finance Purchase
@@ -102,6 +114,7 @@ export function CreateTicketModal({ isOpen, onClose }) {
                         Close
                     </Button>
                     <Button
+                        isLoading={isCreateTicketLoading}
                         colorScheme="blue"
                         onClick={handleSubmit(createTicket)}
                     >

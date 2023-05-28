@@ -293,7 +293,7 @@ const Dashboard = () => {
 
     return (
         <VStack spacing="0">
-            <Navbar />
+            <Navbar getAllTickets={getAllTickets} />
             <Flex pos="absolute" top="80px" w="100%">
                 <TicketList allTickets={allTickets} />
                 {getMainContent()}

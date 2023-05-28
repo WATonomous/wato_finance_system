@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import usePreserveParamsNavigate from '../hooks/usePreserveParamsNavigate'
 import { Box, Card, CardBody, Center, Text, VStack } from '@chakra-ui/react'
 import FilterDropdown from './FilterDropdown'
@@ -7,10 +7,11 @@ import { TICKET_TYPES } from '../constants'
 import LoadingSpinner from './LoadingSpinner'
 
 const TicketList = ({ allTickets }) => {
+    const [isLoading, setIsLoading] = useState(false)
     const preserveParamsNavigate = usePreserveParamsNavigate()
     const [searchParams, _] = useSearchParams()
     const tickettypes = searchParams.get('tickettypes')
-
+    const [filteredTickets, setFilteredTickets] = useState([])
     const [filter, setFilter] = useState(
         tickettypes
             ? tickettypes.split(',')
@@ -22,11 +23,32 @@ const TicketList = ({ allTickets }) => {
               ]
     )
 
-    if (
-        Object.keys(TICKET_TYPES)
-            .map((type) => allTickets[type])
-            .flat().length === 0
-    ) {
+    useEffect(() => {
+        if (
+            Object.keys(TICKET_TYPES)
+                .map((type) => allTickets[type])
+                .flat().length === 0
+        ) {
+            setIsLoading(true)
+            return
+        }
+
+        setIsLoading(false)
+        const newFilteredTickets = Object.entries(allTickets)
+            .map(([ticketType, collection]) => {
+                return collection.map((ticket) => ({
+                    type: ticketType,
+                    code: ticket.code,
+                    path: ticket.path,
+                    name: ticket.name,
+                }))
+            })
+            .flat()
+            .filter((ticket) => filter.includes(ticket.type))
+        setFilteredTickets(newFilteredTickets)
+    }, [allTickets, filter])
+
+    if (isLoading) {
         return (
             <Box minW={{ base: '200px', lg: '280px', xl: '300px' }}>
                 <FilterDropdown filter={filter} setFilter={setFilter} />
@@ -40,18 +62,6 @@ const TicketList = ({ allTickets }) => {
             </Box>
         )
     }
-
-    const filteredTickets = Object.entries(allTickets)
-        .map(([ticketType, collection]) => {
-            return collection.map((ticket) => ({
-                type: ticketType,
-                code: ticket.code,
-                path: ticket.path,
-                name: ticket.name,
-            }))
-        })
-        .flat()
-        .filter((ticket) => filter.includes(ticket.type))
 
     return (
         <Box minW={{ base: '200px', lg: '280px', xl: '300px' }}>
