@@ -87,18 +87,18 @@ const Dashboard = () => {
     }
 
     const getAllTickets = async () => {
-        const endpoints = {
-            [TICKET_TYPES.SF]: `${process.env.REACT_APP_BACKEND_URL}/sponsorshipfunds/`,
-            [TICKET_TYPES.FI]: `${process.env.REACT_APP_BACKEND_URL}/fundingitems/`,
-            [TICKET_TYPES.PPR]: `${process.env.REACT_APP_BACKEND_URL}/personalpurchases/`,
-            [TICKET_TYPES.UPR]: `${process.env.REACT_APP_BACKEND_URL}/uwfinancepurchases/`,
-        }
         const data = await axios.all(
-            Object.values(endpoints).map((endpoint) => axios.get(endpoint))
+            Object.values(TICKET_ENDPOINTS).map((endpoint) =>
+                axiosPreset.get(endpoint)
+            )
         )
-        data.forEach((response, index) => {
-            updateAllTickets({ [Object.keys(endpoints)[index]]: response.data })
-        })
+        await Promise.all(
+            data.map((response, index) => {
+                return updateAllTickets({
+                    [Object.keys(TICKET_ENDPOINTS)[index]]: response.data,
+                })
+            })
+        )
         console.log('fetched all tickets')
     }
 
@@ -286,6 +286,8 @@ const Dashboard = () => {
             onCloseDeleteTicket()
         } catch (err) {
             console.log(err)
+        } finally {
+            setIsDeleteTicketDisabled(false)
         }
     }
 
