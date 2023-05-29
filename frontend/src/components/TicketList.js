@@ -6,8 +6,7 @@ import { useSearchParams } from 'react-router-dom'
 import { TICKET_TYPES } from '../constants'
 import LoadingSpinner from './LoadingSpinner'
 
-const TicketList = ({ allTickets }) => {
-    const [isLoading, setIsLoading] = useState(false)
+const TicketList = ({ allTickets, isLoading }) => {
     const preserveParamsNavigate = usePreserveParamsNavigate()
     const [searchParams, _] = useSearchParams()
     const tickettypes = searchParams.get('tickettypes')
@@ -24,16 +23,6 @@ const TicketList = ({ allTickets }) => {
     )
 
     useEffect(() => {
-        if (
-            Object.keys(TICKET_TYPES)
-                .map((type) => allTickets[type])
-                .flat().length === 0
-        ) {
-            setIsLoading(true)
-            return
-        }
-
-        setIsLoading(false)
         const newFilteredTickets = Object.entries(allTickets)
             .map(([ticketType, collection]) => {
                 return collection.map((ticket) => ({

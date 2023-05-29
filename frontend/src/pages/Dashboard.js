@@ -33,6 +33,7 @@ import { axiosPreset } from '../axiosConfig'
 const Dashboard = () => {
     const navigate = useNavigate()
     const location = useLocation()
+    const [isLoading, setIsLoading] = useState(true)
     const {
         isOpen: isDeleteTicketOpen,
         onOpen: onOpenDeleteTicket,
@@ -87,6 +88,7 @@ const Dashboard = () => {
     }
 
     const getAllTickets = async () => {
+        setIsLoading(true)
         const data = await axios.all(
             Object.values(TICKET_ENDPOINTS).map((endpoint) =>
                 axiosPreset.get(endpoint)
@@ -100,6 +102,7 @@ const Dashboard = () => {
             })
         )
         console.log('fetched all tickets')
+        setIsLoading(false)
     }
 
     const getAllUsers = () => {
@@ -132,12 +135,9 @@ const Dashboard = () => {
         const currentTicketData = allTicketsWithCurrentTicketType.find(
             (ticket) => ticket._id === currentTicketId
         )
-        const isAllTicketsEmpty =
-            Object.keys(TICKET_TYPES)
-                .map((type) => allTickets[type])
-                .flat().length === 0
+
         if (!currentTicketData) {
-            if (!isAllTicketsEmpty) {
+            if (!isLoading) {
                 navigate('/notfound')
             }
             return
@@ -152,7 +152,7 @@ const Dashboard = () => {
         }
         updateCurrentTicket(newCurrentTicket)
         setCurrentTree(buildTicketTree(newCurrentTicket, allTickets))
-    }, [location.pathname, allTickets, navigate])
+    }, [location.pathname, allTickets, isLoading, navigate])
 
     const getCurrentTicketContentTable = () => {
         const ticketData = currentTicket.data
@@ -190,7 +190,7 @@ const Dashboard = () => {
             )
         }
         const ticketData = currentTicket.data
-        if (!currentTicket.id || !ticketData) {
+        if (isLoading) {
             return (
                 <Center w="100%">
                     <LoadingSpinner />
@@ -295,7 +295,7 @@ const Dashboard = () => {
         <VStack spacing="0">
             <Navbar getAllTickets={getAllTickets} />
             <Flex pos="absolute" top="80px" w="100%">
-                <TicketList allTickets={allTickets} />
+                <TicketList allTickets={allTickets} isLoading={isLoading} />
                 {getMainContent()}
             </Flex>
             {isDeleteTicketOpen && (
