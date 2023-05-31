@@ -59,15 +59,25 @@ const updateApprovalsPersonalPurchase = async (req, res) => {
         (approval_type === 'team_captain_approval' && isTeamCaptain) ||
         (approval_type === 'director_approval' && isDirector)
 
-    // TODO: If this is the last approval, transition status to 'READY_TO_BUY' and auto send email
-
-    if (canUpdateApproval) {
-        PersonalPurchase.findByIdAndUpdate(req.params.id, ticket_data)
-            .then(() => res.json(req.body))
-            .catch((err) => res.status(400).json('Error: ' + err))
-    } else {
+    if (!canUpdateApproval) {
         res.status(403).json('Error: Permission Denied')
+        return
     }
+    const personalPurchase = PersonalPurchase.findByIdAndUpdate(
+        req.params.id,
+        ticket_data
+    )
+    const completedApprovals =
+        personalPurchase.team_captain_approval &&
+        personalPurchase.faculty_advisor_approval &&
+        personalPurchase.director_approval
+
+    if (completedApprovals) {
+        personalPurchase.findByIdAndUpdate(req.params.id, {
+            status: 'READY_TO_BUY',
+        })
+    }
+    res.json(req.body)
 }
 
 const deletePersonalPurchase = async (req, res) => {
