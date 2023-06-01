@@ -32,7 +32,9 @@ const DeleteTicketAlertDialog = ({
         // redirect to homepage after delete
         try {
             setIsDisabled(true)
-            await axiosPreset.delete(`${TICKET_ENDPOINTS[currentTicket.type]}/${currentTicket.id}`)
+            await axiosPreset.delete(
+                `${TICKET_ENDPOINTS[currentTicket.type]}/${currentTicket.id}`
+            )
             await getAllTickets()
             navigate('/')
             onClose()

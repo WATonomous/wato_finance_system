@@ -50,17 +50,18 @@ const Dashboard = () => {
 
     const auth = useAuth(app)
     const [allUsers, setAllUsers] = useState({ users: [] })
+    const [isCurrentTicketReporter, setIsCurrentTicketOwner] = useState(false)
     const [currentTree, setCurrentTree] = useRecoilState(currentTreeState)
     const [currentTicket, setCurrentTicket] = useRecoilState(currentTicketState)
     const [allTickets, setAllTickets] = useRecoilState(allTicketsState)
 
     const partialUpdateAllTickets = (ticketType, ticketId, newData) => {
-        const localIndex = allTickets[ticketType]
+        const newTickets = allTickets[ticketType].slice()
+        const localIndex = newTickets
             .map((ticket) => ticket._id)
             .indexOf(ticketId)
-        const newTickets = allTickets[ticketType]
         newTickets[localIndex] = { ...newTickets[localIndex], ...newData }
-        setAllTickets({ ...allTickets, ...{ [ticketType]: newTickets } })
+        setAllTickets({ ...allTickets, [ticketType]: newTickets })
     }
 
     const getAllTickets = useCallback(async () => {
@@ -203,15 +204,16 @@ const Dashboard = () => {
                     </Heading>
                     <Flex flexDir="row" mb="12px">
                         {/* Do not display delete button for WATO Cash */}
-                        {currentTicket.data.sf_link !== -1 && (
-                            <Button
-                                size="sm"
-                                colorScheme="red"
-                                onClick={onOpenDeleteTicket}
-                            >
-                                <Text>Delete</Text>
-                            </Button>
-                        )}
+                        {currentTicket.data.sf_link !== -1 &&
+                            (isCurrentTicketReporter || auth.isDirector) && (
+                                <Button
+                                    size="sm"
+                                    colorScheme="red"
+                                    onClick={onOpenDeleteTicket}
+                                >
+                                    <Text>Delete</Text>
+                                </Button>
+                            )}
                     </Flex>
                     {getCurrentTicketContentTable()}
                 </Flex>
