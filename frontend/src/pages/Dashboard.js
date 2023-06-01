@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from 'react'
+import React, { useCallback, useEffect, useReducer, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import {
     Box,
@@ -29,6 +29,12 @@ import { TICKET_ENDPOINTS, TICKET_TYPES } from '../constants'
 import buildTicketTree from '../utils/buildTicketTree'
 import DeleteTicketAlertDialog from '../components/DeleteTicketButton'
 import { axiosPreset } from '../axiosConfig'
+import { useRecoilState } from 'recoil'
+import {
+    allTicketsState,
+    currentTicketState,
+    currentTreeState,
+} from '../state/atoms'
 
 const Dashboard = () => {
     const navigate = useNavigate()
@@ -42,32 +48,9 @@ const Dashboard = () => {
     const [isDeleteTicketDisabled, setIsDeleteTicketDisabled] = useState(false)
 
     const [allUsers, setAllUsers] = useState({ users: [] })
-    const [currentTree, setCurrentTree] = useState({})
-    const [currentTicket, updateCurrentTicket] = useReducer(
-        (data, partialData) => ({
-            ...data,
-            ...partialData,
-        }),
-        {
-            data: {},
-            type: '',
-            id: 0,
-            code: '',
-            codename: '',
-        }
-    )
-    const [allTickets, updateAllTickets] = useReducer(
-        (data, partialData) => ({
-            ...data,
-            ...partialData,
-        }),
-        {
-            [TICKET_TYPES.SF]: [],
-            [TICKET_TYPES.FI]: [],
-            [TICKET_TYPES.PPR]: [],
-            [TICKET_TYPES.UPR]: [],
-        }
-    )
+    const [currentTree, setCurrentTree] = useRecoilState(currentTreeState)
+    const [currentTicket, setCurrentTicket] = useRecoilState(currentTicketState)
+    const [allTickets, setAllTickets] = useRecoilState(allTicketsState)
 
     const updatePPRInAllTickets = (newPPR) => {
         const pprIndex = allTickets[TICKET_TYPES.PPR]
@@ -75,7 +58,7 @@ const Dashboard = () => {
             .indexOf(newPPR._id)
         let newPPRs = allTickets[TICKET_TYPES.PPR]
         newPPRs[pprIndex] = newPPR
-        updateAllTickets({ [TICKET_TYPES.PPR]: newPPRs })
+        setAllTickets({ ...allTickets, ...{ [TICKET_TYPES.PPR]: newPPRs } })
     }
 
     const updateUPRInAllTickets = (newUPR) => {
@@ -84,26 +67,25 @@ const Dashboard = () => {
             .indexOf(newUPR._id)
         let newUPRs = allTickets[TICKET_TYPES.UPR]
         newUPRs[uprIndex] = newUPR
-        updateAllTickets({ [TICKET_TYPES.UPR]: newUPRs })
+        setAllTickets({ ...allTickets, ...{ [TICKET_TYPES.UPR]: newUPRs } })
     }
 
-    const getAllTickets = async () => {
+    const getAllTickets = useCallback(async () => {
         setIsLoading(true)
         const data = await axios.all(
             Object.values(TICKET_ENDPOINTS).map((endpoint) =>
                 axiosPreset.get(endpoint)
             )
         )
-        await Promise.all(
-            data.map((response, index) => {
-                return updateAllTickets({
-                    [Object.keys(TICKET_ENDPOINTS)[index]]: response.data,
-                })
-            })
-        )
-        console.log('fetched all tickets')
+        const allTickets = data.reduce((acc, response, index) => {
+            return {
+                ...acc,
+                [Object.keys(TICKET_ENDPOINTS)[index]]: response.data,
+            }
+        }, {})
+        setAllTickets(allTickets)
         setIsLoading(false)
-    }
+    }, [setAllTickets])
 
     const getAllUsers = () => {
         const endpoint = `${process.env.REACT_APP_BACKEND_URL}/users/`
@@ -115,7 +97,7 @@ const Dashboard = () => {
     useEffect(() => {
         getAllTickets()
         getAllUsers()
-    }, [])
+    }, [getAllTickets])
 
     useEffect(() => {
         if (location.pathname === '/') return
@@ -150,9 +132,17 @@ const Dashboard = () => {
             code: currentTicketData.code,
             codename: currentTicketData.codename,
         }
-        updateCurrentTicket(newCurrentTicket)
+        setCurrentTicket(newCurrentTicket)
         setCurrentTree(buildTicketTree(newCurrentTicket, allTickets))
-    }, [location.pathname, allTickets, isLoading, navigate])
+        // todo: figure out why this is a squiggly
+    }, [
+        location.pathname,
+        allTickets,
+        isLoading,
+        navigate,
+        setCurrentTicket,
+        setCurrentTree,
+    ])
 
     const getCurrentTicketContentTable = () => {
         const ticketData = currentTicket.data
@@ -234,10 +224,7 @@ const Dashboard = () => {
                         <Heading mb="8px" fontSize="2xl">
                             Ticket Tree
                         </Heading>
-                        <TreeView
-                            currentTicket={currentTicket}
-                            currentTree={currentTree}
-                        />
+                        <TreeView />
                     </Box>
                     <Box w="100%" mt="12px">
                         <Heading mb="8px" fontSize="2xl">
