@@ -5,9 +5,26 @@ import TicketContentTableRow from './TicketContentTableRow'
 import app from '../../firebase'
 import { useAuth } from '../../contexts/AuthContext'
 import { axiosPreset } from '../../axiosConfig'
+import { TICKET_ENDPOINTS } from '../../constants'
 
-const UPRContentTable = ({ ticketData, updateUPRInAllTickets }) => {
+const UPRContentTable = ({ ticketData, partialUpdateAllTickets }) => {
     const auth = useAuth(app)
+
+    const handleUpdateApproval = (approval_level) => async () => {
+        const newTicketData = {
+            [approval_level]: !ticketData[approval_level],
+        }
+        const payload = {
+            ticket_data: newTicketData,
+            approval_type: approval_level,
+            identifier: auth.currentIdentifier,
+        }
+        await axiosPreset.patch(
+            `${TICKET_ENDPOINTS.UPR}/updateapprovals/${ticketData._id}`,
+            payload
+        )
+        partialUpdateAllTickets(ticketData.type, ticketData._id, newTicketData)
+    }
 
     return (
         <VStack>
@@ -54,23 +71,9 @@ const UPRContentTable = ({ ticketData, updateUPRInAllTickets }) => {
                         description={
                             <Checkbox
                                 disabled={!auth.isDirector}
-                                onChange={async () => {
-                                    const newTicketData = {
-                                        ...ticketData,
-                                        director_approval:
-                                            !ticketData.director_approval,
-                                    }
-                                    const payload = {
-                                        ticket_data: newTicketData,
-                                        approval_type: 'director_approval',
-                                        identifier: auth.currentIdentifier,
-                                    }
-                                    await axiosPreset.put(
-                                        `/uwfinancepurchases/updateapprovals/${ticketData._id}`,
-                                        payload
-                                    )
-                                    updateUPRInAllTickets(newTicketData)
-                                }}
+                                onChange={handleUpdateApproval(
+                                    'director_approval'
+                                )}
                                 isChecked={ticketData.director_approval}
                             />
                         }
@@ -80,23 +83,9 @@ const UPRContentTable = ({ ticketData, updateUPRInAllTickets }) => {
                         description={
                             <Checkbox
                                 disabled={!auth.isTeamCaptain}
-                                onChange={async () => {
-                                    const newTicketData = {
-                                        ...ticketData,
-                                        team_captain_approval:
-                                            !ticketData.team_captain_approval,
-                                    }
-                                    const payload = {
-                                        ticket_data: newTicketData,
-                                        approval_type: 'team_captain_approval',
-                                        identifier: auth.currentIdentifier,
-                                    }
-                                    await axiosPreset.put(
-                                        `/uwfinancepurchases/updateapprovals/${ticketData._id}`,
-                                        payload
-                                    )
-                                    updateUPRInAllTickets(newTicketData)
-                                }}
+                                onChange={handleUpdateApproval(
+                                    'team_captain_approval'
+                                )}
                                 isChecked={ticketData.team_captain_approval}
                             />
                         }
@@ -106,24 +95,9 @@ const UPRContentTable = ({ ticketData, updateUPRInAllTickets }) => {
                         description={
                             <Checkbox
                                 disabled={!auth.isFacultyAdvisor}
-                                onChange={async () => {
-                                    const newTicketData = {
-                                        ...ticketData,
-                                        faculty_advisor_approval:
-                                            !ticketData.faculty_advisor_approval,
-                                    }
-                                    const payload = {
-                                        ticket_data: newTicketData,
-                                        approval_type:
-                                            'faculty_advisor_approval',
-                                        identifier: auth.currentIdentifier,
-                                    }
-                                    await axiosPreset.put(
-                                        `/uwfinancepurchases/updateapprovals/${ticketData._id}`,
-                                        payload
-                                    )
-                                    updateUPRInAllTickets(newTicketData)
-                                }}
+                                onChange={handleUpdateApproval(
+                                    'faculty_advisor_approval'
+                                )}
                                 isChecked={ticketData.faculty_advisor_approval}
                             />
                         }

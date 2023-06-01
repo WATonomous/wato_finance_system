@@ -4,10 +4,10 @@ const UWFinancePurchasesController = require('../controllers/uwfinancepurchases.
 router.route('/').get(UWFinancePurchasesController.getAllUWFinancePurchases)
 router.route('/').post(UWFinancePurchasesController.createNewUWFinancePurchase)
 router.route('/:id').get(UWFinancePurchasesController.getUWFinancePurchase)
-router.route('/:id').put(UWFinancePurchasesController.updateUWFinancePurchase)
+router.route('/:id').patch(UWFinancePurchasesController.updateUWFinancePurchase)
 router
     .route('/updateapprovals/:id')
-    .put(UWFinancePurchasesController.updateApprovalsUWFinancePurchase)
+    .patch(UWFinancePurchasesController.updateApprovalsUWFinancePurchase)
 router
     .route('/:id')
     .delete(UWFinancePurchasesController.deleteUWFinancePurchase)

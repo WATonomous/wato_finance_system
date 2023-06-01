@@ -7,7 +7,7 @@ router.route('/:id').get(SponsorshipFundsController.getSponsorshipFund)
 router
     .route('/getallchildren/:id')
     .get(SponsorshipFundsController.getAllChildren)
-router.route('/:id').put(SponsorshipFundsController.updateSponsorshipFund)
+router.route('/:id').patch(SponsorshipFundsController.updateSponsorshipFund)
 router.route('/:id').delete(SponsorshipFundsController.deleteSponsorshipFund)
 
 module.exports = router
