@@ -17,11 +17,7 @@ import { axiosPreset } from '../axiosConfig'
 import { useRecoilValue } from 'recoil'
 import { currentTicketState, currentTreeState } from '../state/atoms'
 
-const DeleteTicketAlertDialog = ({
-    isOpen,
-    onClose,
-    getAllTickets,
-}) => {
+const DeleteTicketAlertDialog = ({ isOpen, onClose, getAllTickets }) => {
     const navigate = useNavigate()
     const currentTicket = useRecoilValue(currentTicketState)
     const currentTree = useRecoilValue(currentTreeState)
