@@ -104,7 +104,6 @@ export const AuthProvider = ({ children }) => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const email = user.email
-                console.log(email)
                 if (
                     !email.endsWith('@watonomous.ca') &&
                     !whitelist.includes(email)
