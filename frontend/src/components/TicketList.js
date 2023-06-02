@@ -8,7 +8,7 @@ import LoadingSpinner from './LoadingSpinner'
 
 const TicketList = ({ allTickets, isLoading }) => {
     const preserveParamsNavigate = usePreserveParamsNavigate()
-    const [searchParams, _] = useSearchParams()
+    const [searchParams] = useSearchParams()
     const tickettypes = searchParams.get('tickettypes')
     const [filteredTickets, setFilteredTickets] = useState([])
     const [filter, setFilter] = useState(
