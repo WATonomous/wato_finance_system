@@ -27,9 +27,9 @@ import UPRContentTable from '../components/TicketContent/UPRContentTable'
 import ReporterInfoTip from '../components/ReporterInfoTip'
 import { TICKET_ENDPOINTS, TICKET_TYPES } from '../constants'
 import buildTicketTree from '../utils/buildTicketTree'
-import DeleteTicketAlertDialog from '../components/DeleteTicketButton'
+import DeleteTicketAlertDialog from '../components/DeleteTicketAlertDialog'
 import { axiosPreset } from '../axiosConfig'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useSetRecoilState } from 'recoil'
 import {
     allTicketsState,
     currentTicketState,
@@ -51,7 +51,7 @@ const Dashboard = () => {
     const auth = useAuth(app)
     const [allUsers, setAllUsers] = useState({ users: [] })
     const [isCurrentTicketReporter, setIsCurrentTicketOwner] = useState(false)
-    const [currentTree, setCurrentTree] = useRecoilState(currentTreeState)
+    const setCurrentTree = useSetRecoilState(currentTreeState)
     const [currentTicket, setCurrentTicket] = useRecoilState(currentTicketState)
     const [allTickets, setAllTickets] = useRecoilState(allTicketsState)
 
@@ -267,8 +267,6 @@ const Dashboard = () => {
                 <DeleteTicketAlertDialog
                     isOpen={isDeleteTicketOpen}
                     onClose={onCloseDeleteTicket}
-                    currentTicket={currentTicket}
-                    currentTree={currentTree}
                     getAllTickets={getAllTickets}
                 />
             )}
