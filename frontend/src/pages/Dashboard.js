@@ -134,7 +134,6 @@ const Dashboard = () => {
         }
         setCurrentTicket(newCurrentTicket)
         setCurrentTree(buildTicketTree(newCurrentTicket, allTickets))
-        // todo: figure out why this is a squiggly
     }, [
         location.pathname,
         allTickets,

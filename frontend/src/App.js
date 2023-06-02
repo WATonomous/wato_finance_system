@@ -14,13 +14,7 @@ import {
     LoggedInRedirect,
     PublicRoute,
 } from './contexts/CustomRoutes'
-import {
-    RecoilRoot,
-    atom,
-    selector,
-    useRecoilState,
-    useRecoilValue,
-} from 'recoil'
+import { RecoilRoot } from 'recoil'
 
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
