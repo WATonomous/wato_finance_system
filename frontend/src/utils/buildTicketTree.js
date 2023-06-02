@@ -5,18 +5,18 @@ const buildTicketTree = (currentTicket, allTickets) => {
     if (!currentTicket || allTickets[currentTicket.type].length === 0) return {}
 
     // Special Case: WATO Cash
-    if (currentTicket.data.sf_link === -1) {
-        const WATOCashTicketID = currentTicket.id
+    if (currentTicket.sf_link === -1) {
+        const WATOCashTicketID = currentTicket._id
         const personalPurchases = PPR.filter(
             (ppr) => ppr.fi_link === WATOCashTicketID
         )
         const uwFinancePurchases = UPR.filter(
             (upr) => upr.fi_link === WATOCashTicketID
         )
-        return { ...currentTicket.data, personalPurchases, uwFinancePurchases }
+        return { ...currentTicket, personalPurchases, uwFinancePurchases }
     }
 
-    const ticketID = currentTicket.id
+    const ticketID = currentTicket._id
     let sf_id = ticketID
 
     switch (currentTicket.type) {

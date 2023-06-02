@@ -117,15 +117,8 @@ const Dashboard = () => {
             return
         }
 
-        const newCurrentTicket = {
-            data: currentTicketData,
-            type: currentTicketData.type,
-            id: currentTicketId,
-            code: currentTicketData.code,
-            codename: currentTicketData.codename,
-        }
-        setCurrentTicket(newCurrentTicket)
-        setCurrentTree(buildTicketTree(newCurrentTicket, allTickets))
+        setCurrentTicket(currentTicketData)
+        setCurrentTree(buildTicketTree(currentTicketData, allTickets))
         setIsCurrentTicketOwner(
             currentTicketData.reporter_id === auth.currentUser.uid
         )
@@ -140,7 +133,7 @@ const Dashboard = () => {
     ])
 
     const getCurrentTicketContentTable = () => {
-        const ticketData = currentTicket.data
+        const ticketData = currentTicket
 
         switch (currentTicket.type) {
             case TICKET_TYPES.SF:
@@ -174,7 +167,7 @@ const Dashboard = () => {
                 </Center>
             )
         }
-        const ticketData = currentTicket.data
+        const ticketData = currentTicket
         if (isLoading) {
             return (
                 <Center w="100%">
@@ -202,7 +195,7 @@ const Dashboard = () => {
                     </Heading>
                     <Flex flexDir="row" mb="12px">
                         {/* Do not display delete button for WATO Cash */}
-                        {currentTicket.data.sf_link !== -1 &&
+                        {currentTicket.sf_link !== -1 &&
                             (isCurrentTicketReporter || auth.isDirector) && (
                                 <Button
                                     size="sm"

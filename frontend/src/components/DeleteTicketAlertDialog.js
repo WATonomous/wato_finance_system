@@ -35,7 +35,7 @@ const DeleteTicketAlertDialog = ({
         try {
             setIsDisabled(true)
             await axiosPreset.delete(
-                `${TICKET_ENDPOINTS[currentTicket.type]}/${currentTicket.id}`
+                `${TICKET_ENDPOINTS[currentTicket.type]}/${currentTicket._id}`
             )
             await getAllTickets()
             navigate('/')
@@ -57,7 +57,7 @@ const DeleteTicketAlertDialog = ({
 
         if (currentTicket.type === TICKET_TYPES.FI) {
             const FITree = currentTree.fundingItems.find(
-                (fi) => fi._id === currentTicket.id
+                (fi) => fi._id === currentTicket._id
             )
             return (
                 <Flex flexDir="column" m="16px 0">
