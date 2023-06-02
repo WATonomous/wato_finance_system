@@ -106,11 +106,9 @@ const Dashboard = () => {
 
         const currentTicketType = splitPath[1]
         const currentTicketId = parseInt(splitPath[2])
-        const allTicketsWithCurrentTicketType =
-            allTickets[TICKET_TYPES[currentTicketType]]
-        const currentTicketData = allTicketsWithCurrentTicketType.find(
-            (ticket) => ticket._id === currentTicketId
-        )
+        const currentTicketData = allTickets[
+            TICKET_TYPES[currentTicketType]
+        ].find((ticket) => ticket._id === currentTicketId)
 
         if (!currentTicketData) {
             if (!isLoading) {
@@ -262,7 +260,7 @@ const Dashboard = () => {
         <VStack spacing="0">
             <Navbar getAllTickets={getAllTickets} />
             <Flex pos="absolute" top="80px" w="100%">
-                <TicketList allTickets={allTickets} isLoading={isLoading} />
+                <TicketList isLoading={isLoading} />
                 {getMainContent()}
             </Flex>
             {isDeleteTicketOpen && (
