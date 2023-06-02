@@ -6,6 +6,7 @@ const {
 } = require('./annotatedGetters')
 const { getGoogleGroup } = require('./googlegroup.controller')
 const {
+    APPROVAL_LEVELS,
     FACULTY_ADVISOR_EMAILS,
     TEAM_CAPTAIN_TITLES,
     DIRECTOR_TITLES,
@@ -55,11 +56,13 @@ const updateApprovalsUWFinancePurchase = async (req, res) => {
         isTeamCaptain || DIRECTOR_TITLES.includes(currentGoogleGroup.title)
 
     const canUpdateApproval =
-        (approval_type === 'faculty_advisor_approval' && isFacultyAdvisor) ||
-        (approval_type === 'team_captain_approval' && isTeamCaptain) ||
-        (approval_type === 'director_approval' && isDirector)
+        (approval_type === APPROVAL_LEVELS.faculty_advisor_approval &&
+            isFacultyAdvisor) ||
+        (approval_type === APPROVAL_LEVELS.team_captain_approval &&
+            isTeamCaptain) ||
+        (approval_type === APPROVAL_LEVELS.director_approval && isDirector)
 
-    // TODO: If this is the last approval, transition status to 'READY_TO_BUY' and auto send email
+    // TODO: If this is the last approval, transition status to 'SENT_TO_COORDINATOR' and auto send email
 
     if (canUpdateApproval) {
         UWFinancePurchase.findByIdAndUpdate(req.params.id, ticket_data)

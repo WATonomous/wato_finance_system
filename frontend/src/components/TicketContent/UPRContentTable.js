@@ -5,7 +5,7 @@ import TicketContentTableRow from './TicketContentTableRow'
 import app from '../../firebase'
 import { useAuth } from '../../contexts/AuthContext'
 import { axiosPreset } from '../../axiosConfig'
-import { TICKET_ENDPOINTS } from '../../constants'
+import { TICKET_ENDPOINTS, APPROVAL_LEVELS } from '../../constants'
 
 const UPRContentTable = ({ ticketData, partialUpdateAllTickets }) => {
     const auth = useAuth(app)
@@ -72,7 +72,7 @@ const UPRContentTable = ({ ticketData, partialUpdateAllTickets }) => {
                             <Checkbox
                                 disabled={!auth.isDirector}
                                 onChange={handleUpdateApproval(
-                                    'director_approval'
+                                    APPROVAL_LEVELS.director_approval
                                 )}
                                 isChecked={ticketData.director_approval}
                             />
@@ -84,7 +84,7 @@ const UPRContentTable = ({ ticketData, partialUpdateAllTickets }) => {
                             <Checkbox
                                 disabled={!auth.isTeamCaptain}
                                 onChange={handleUpdateApproval(
-                                    'team_captain_approval'
+                                    APPROVAL_LEVELS.team_captain_approval
                                 )}
                                 isChecked={ticketData.team_captain_approval}
                             />
@@ -96,7 +96,7 @@ const UPRContentTable = ({ ticketData, partialUpdateAllTickets }) => {
                             <Checkbox
                                 disabled={!auth.isFacultyAdvisor}
                                 onChange={handleUpdateApproval(
-                                    'faculty_advisor_approval'
+                                    APPROVAL_LEVELS.faculty_advisor_approval
                                 )}
                                 isChecked={ticketData.faculty_advisor_approval}
                             />

@@ -33,7 +33,12 @@ const UPR_STATUS_FUNDING_SPENT = [
     'REIMBURSED',
 ]
 
-const FACULTY_ADVISOR_EMAILS = ['drayside@uwaterloo.ca']
+const APPROVAL_LEVELS = Object.freeze({
+    director_approval: 'director_approval',
+    team_captain_approval: 'team_captain_approval',
+    faculty_advisor_approval: 'faculty_advisor_approval',
+})
+
 const TEAM_CAPTAIN_TITLES = ['Team Captain']
 const DIRECTOR_TITLES = ['Admin', 'Director']
 
@@ -44,6 +49,7 @@ module.exports = {
     PPR_STATUS_FUNDING_SPENT,
     UPR_STATUS,
     UPR_STATUS_FUNDING_SPENT,
+    APPROVAL_LEVELS,
     FACULTY_ADVISOR_EMAILS,
     TEAM_CAPTAIN_TITLES,
     DIRECTOR_TITLES,

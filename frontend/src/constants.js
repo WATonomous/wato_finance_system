@@ -12,6 +12,11 @@ export const TICKET_ENDPOINTS = Object.freeze({
     UPR: '/uwfinancepurchases',
 })
 
-export const FACULTY_ADVISOR_EMAILS = ['drayside@uwaterloo.ca']
+export const APPROVAL_LEVELS = Object.freeze({
+    director_approval: 'director_approval',
+    team_captain_approval: 'team_captain_approval',
+    faculty_advisor_approval: 'faculty_advisor_approval',
+})
+
 export const TEAM_CAPTAIN_TITLES = ['Team Captain']
 export const DIRECTOR_TITLES = ['Admin', 'Director']
