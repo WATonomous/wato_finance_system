@@ -1,13 +1,16 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
 import { Text, Box, Stack } from '@chakra-ui/react'
 import usePreserveParamsNavigate from '../hooks/usePreserveParamsNavigate'
+import { useRecoilValue } from 'recoil'
+import { currentTicketState, currentTreeState } from '../state/atoms'
 
-const TreeView = ({ currentTicket, currentTree }) => {
+const TreeView = () => {
+    const currentTicket = useRecoilValue(currentTicketState)
+    const currentTree = useRecoilValue(currentTreeState)
     const preserveParamsNavigate = usePreserveParamsNavigate()
 
     const sortTickets = (ticketList) => {
-        return ticketList.sort((a, b) => (a._id > b._id ? 1 : -1))
+        return [...ticketList].sort((a, b) => (a._id > b._id ? 1 : -1))
     }
 
     const getFundingItemTree = (fi) => (
