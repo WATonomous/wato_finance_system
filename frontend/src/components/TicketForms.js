@@ -16,27 +16,27 @@ import 'react-datepicker/dist/react-datepicker.css'
 import './custom-datepicker.css'
 
 const AVAILABLE_YEARS = [
-    'W19',
-    'S19',
-    'F19',
-    'W20',
-    'S20',
-    'F20',
-    'W21',
-    'S21',
-    'F21',
-    'W22',
-    'S22',
-    'F22',
-    'W23',
-    'S23',
-    'F23',
-    'W24',
-    'S24',
-    'F24',
-    'W25',
-    'S25',
-    'F25',
+    'Winter 2019',
+    'Spring 2019',
+    'Fall 2019',
+    'Winter 2020',
+    'Spring 2020',
+    'Fall 2020',
+    'Winter 2021',
+    'Spring 2021',
+    'Fall 2021',
+    'Winter 2022',
+    'Spring 2022',
+    'Fall 2022',
+    'Winter 2023',
+    'Spring 2023',
+    'Fall 2023',
+    'Winter 2024',
+    'Spring 2024',
+    'Fall 2024',
+    'Winter 2025',
+    'Spring 2025',
+    'Fall 2025',
 ]
 
 const ENDOWMENT_FUNDS = {
@@ -113,6 +113,13 @@ export const SponsorshipFundForm = ({ register, control }) => {
                 />
             </FormControl>
             <FormControl>
+                <FormLabel mt="10px">Proposal ID</FormLabel>
+                <Input
+                    id="proposal_id"
+                    {...register('proposal_id')}
+                    size="sm"
+                />
+
                 <FormLabel mt="10px">Proposal URL</FormLabel>
                 <Input
                     id="proposal_url"
@@ -131,7 +138,7 @@ export const SponsorshipFundForm = ({ register, control }) => {
     )
 }
 
-export const FundingItemForm = ({ register }) => {
+export const FundingItemForm = ({ register, showSFLink }) => {
     return (
         <>
             <FormControl isRequired>
@@ -157,11 +164,22 @@ export const FundingItemForm = ({ register }) => {
                     />
                 </InputGroup>
 
-                <FormLabel mt="10px">Parent Sponsorship Fund </FormLabel>
-                <InputGroup size="sm">
-                    <InputLeftElement justifyContent="right" children="SF-" />
-                    <Input h="1.95rem" id="sf_link" {...register('sf_link')} />
-                </InputGroup>
+                {showSFLink && (
+                    <>
+                        <FormLabel mt="10px">Parent Sponsorship Fund</FormLabel>
+                        <InputGroup size="sm">
+                            <InputLeftElement
+                                justifyContent="right"
+                                children="SF-"
+                            />
+                            <Input
+                                h="1.95rem"
+                                id="sf_link"
+                                {...register('sf_link')}
+                            />
+                        </InputGroup>
+                    </>
+                )}
             </FormControl>
 
             <FormControl>
@@ -182,7 +200,7 @@ export const FundingItemForm = ({ register }) => {
     )
 }
 
-export const UWFinancePurchaseForm = ({ register }) => {
+export const UWFinancePurchaseForm = ({ register, showFILink }) => {
     return (
         <>
             <FormControl isRequired>
@@ -208,18 +226,25 @@ export const UWFinancePurchaseForm = ({ register }) => {
                     />
                 </InputGroup>
 
-                <FormLabel mt="10px">Funding Item Link</FormLabel>
-                <InputGroup size="sm">
-                    <InputLeftElement justifyContent="right" children="FI-" />
-                    <Input
-                        id="fi_link"
-                        h="1.95rem"
-                        {...register('fi_link', {
-                            required: 'This is required',
-                        })}
-                        size="sm"
-                    />
-                </InputGroup>
+                {showFILink && (
+                    <>
+                        <FormLabel mt="10px">Funding Item Link</FormLabel>
+                        <InputGroup size="sm">
+                            <InputLeftElement
+                                justifyContent="right"
+                                children="FI-"
+                            />
+                            <Input
+                                id="fi_link"
+                                h="1.95rem"
+                                {...register('fi_link', {
+                                    required: 'This is required',
+                                })}
+                                size="sm"
+                            />
+                        </InputGroup>
+                    </>
+                )}
 
                 <FormLabel mt="10px">Purchase URL </FormLabel>
                 <Input
@@ -265,7 +290,7 @@ export const UWFinancePurchaseForm = ({ register }) => {
     )
 }
 
-export const PersonalPurchaseForm = ({ register }) => {
+export const PersonalPurchaseForm = ({ register, showFILink }) => {
     return (
         <>
             <FormControl isRequired>
@@ -291,17 +316,24 @@ export const PersonalPurchaseForm = ({ register }) => {
                     />
                 </InputGroup>
 
-                <FormLabel mt="10px">Funding Item Link</FormLabel>
-                <InputGroup size="sm">
-                    <InputLeftElement justifyContent="right" children="FI-" />
-                    <Input
-                        id="fi_link"
-                        h="1.95rem"
-                        {...register('fi_link', {
-                            required: 'This is required',
-                        })}
-                    />
-                </InputGroup>
+                {showFILink && (
+                    <>
+                        <FormLabel mt="10px">Funding Item Link</FormLabel>
+                        <InputGroup size="sm">
+                            <InputLeftElement
+                                justifyContent="right"
+                                children="FI-"
+                            />
+                            <Input
+                                id="fi_link"
+                                h="1.95rem"
+                                {...register('fi_link', {
+                                    required: 'This is required',
+                                })}
+                            />
+                        </InputGroup>
+                    </>
+                )}
 
                 <FormLabel mt="10px">Purchase URL </FormLabel>
                 <Input
