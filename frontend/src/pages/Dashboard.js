@@ -19,9 +19,11 @@ import Navbar from '../components/Navbar'
 import TicketList from '../components/TicketList'
 import LoadingSpinner from '../components/LoadingSpinner'
 import { getStandardizedDate } from '../utils/utils'
+import { useAuth } from '../contexts/AuthContext'
+import app from '../firebase'
+import FIContentTable from '../components/TicketContent/FIContentTable'
 import TicketContentTableRow from '../components/TicketContent/TicketContentTableRow'
 import SFContentTable from '../components/TicketContent/SFContentTable'
-import FIContentTable from '../components/TicketContent/FIContentTable'
 import PPRContentTable from '../components/TicketContent/PPRContentTable'
 import UPRContentTable from '../components/TicketContent/UPRContentTable'
 import ReporterInfoTip from '../components/ReporterInfoTip'
@@ -35,9 +37,8 @@ import {
     currentTicketState,
     currentTreeState,
 } from '../state/atoms'
-import { useAuth } from '../contexts/AuthContext'
-import app from '../firebase'
 import { UpdateTicketModal } from '../components/UpdateTicketModal'
+import AdminContentTable from '../components/TicketContent/AdminContentTable'
 
 const Dashboard = () => {
     const navigate = useNavigate()
@@ -219,6 +220,7 @@ const Dashboard = () => {
                                 </Button>
                             </Flex>
                         )}
+                    {auth.isAdmin && <AdminContentTable />}
                     {getCurrentTicketContentTable()}
                 </Flex>
                 <VStack w="40%" h="max-content" p="16px 24px 16px 0" gap="16px">

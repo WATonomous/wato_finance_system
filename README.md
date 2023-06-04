@@ -95,6 +95,12 @@ REACT_APP_BACKEND_URL=http://localhost:5000
 4. Set Project support email to your own email
 5. Select Save and ensure that the Google Provider has the Enabled Status
 
+### Changing authorization for debugging
+
+1. If you would like to change your authorization for debugging, set `REACT_APP_AUTH_OVERRIDE=ADMIN | TEAM_CAPTAIN | DIRECTOR`. Note that this will only reflect on the frontend. TODO: add tooling to support authorization overrides on the backend
+
+### Starting the app
+
 To start the frontend, in a different terminal run
 
 ```

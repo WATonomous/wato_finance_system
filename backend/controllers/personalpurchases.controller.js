@@ -48,10 +48,9 @@ const updateApprovalsPersonalPurchase = async (req, res) => {
 
     const currentGoogleGroup = await getGoogleGroup(identifier)
 
-    const isFacultyAdvisor = FACULTY_ADVISOR_EMAILS.includes(identifier)
+    const isAdmin = FACULTY_ADVISOR_EMAILS.includes(identifier)
     const isTeamCaptain =
-        isFacultyAdvisor ||
-        TEAM_CAPTAIN_TITLES.includes(currentGoogleGroup.title)
+        isAdmin || TEAM_CAPTAIN_TITLES.includes(currentGoogleGroup.title)
     const isDirector =
         isTeamCaptain || DIRECTOR_TITLES.includes(currentGoogleGroup.title)
 
