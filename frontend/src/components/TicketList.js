@@ -5,10 +5,13 @@ import FilterDropdown from './FilterDropdown'
 import { useSearchParams } from 'react-router-dom'
 import { TICKET_TYPES } from '../constants'
 import LoadingSpinner from './LoadingSpinner'
+import { useRecoilValue } from 'recoil'
+import { allTicketsState } from '../state/atoms'
 
-const TicketList = ({ allTickets, isLoading }) => {
+const TicketList = ({ isLoading }) => {
+    const allTickets = useRecoilValue(allTicketsState)
     const preserveParamsNavigate = usePreserveParamsNavigate()
-    const [searchParams, _] = useSearchParams()
+    const [searchParams] = useSearchParams()
     const tickettypes = searchParams.get('tickettypes')
     const [filteredTickets, setFilteredTickets] = useState([])
     const [filter, setFilter] = useState(

@@ -85,7 +85,8 @@ const TreeView = () => {
         return <Text>No tree to display</Text>
 
     // Special Case: WATO Cash
-    if (currentTicket.data.sf_link === -1) {
+    // OR UPR/PPR with fi_link to WATO Cash
+    if (currentTree.sf_link === -1) {
         return <Stack>{getFundingItemTree(currentTree)}</Stack>
     }
 

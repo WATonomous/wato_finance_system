@@ -19,7 +19,6 @@ const currentTreeState = atom({
 const currentTicketState = atom({
     key: 'currentTicket',
     default: {
-        data: {},
         type: '',
         id: 0,
         code: '',

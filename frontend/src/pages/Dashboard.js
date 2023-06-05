@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useReducer, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import {
     Box,
@@ -27,14 +27,16 @@ import UPRContentTable from '../components/TicketContent/UPRContentTable'
 import ReporterInfoTip from '../components/ReporterInfoTip'
 import { TICKET_ENDPOINTS, TICKET_TYPES } from '../constants'
 import buildTicketTree from '../utils/buildTicketTree'
-import DeleteTicketAlertDialog from '../components/DeleteTicketButton'
+import DeleteTicketAlertDialog from '../components/DeleteTicketAlertDialog'
 import { axiosPreset } from '../axiosConfig'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useSetRecoilState } from 'recoil'
 import {
     allTicketsState,
     currentTicketState,
     currentTreeState,
 } from '../state/atoms'
+import { useAuth } from '../contexts/AuthContext'
+import app from '../firebase'
 
 const Dashboard = () => {
     const navigate = useNavigate()
@@ -45,29 +47,21 @@ const Dashboard = () => {
         onOpen: onOpenDeleteTicket,
         onClose: onCloseDeleteTicket,
     } = useDisclosure()
-    const [isDeleteTicketDisabled, setIsDeleteTicketDisabled] = useState(false)
 
+    const auth = useAuth(app)
     const [allUsers, setAllUsers] = useState({ users: [] })
-    const [currentTree, setCurrentTree] = useRecoilState(currentTreeState)
+    const [isCurrentTicketReporter, setIsCurrentTicketOwner] = useState(false)
+    const setCurrentTree = useSetRecoilState(currentTreeState)
     const [currentTicket, setCurrentTicket] = useRecoilState(currentTicketState)
     const [allTickets, setAllTickets] = useRecoilState(allTicketsState)
 
-    const updatePPRInAllTickets = (newPPR) => {
-        const pprIndex = allTickets[TICKET_TYPES.PPR]
-            .map((ppr) => ppr._id)
-            .indexOf(newPPR._id)
-        let newPPRs = allTickets[TICKET_TYPES.PPR]
-        newPPRs[pprIndex] = newPPR
-        setAllTickets({ ...allTickets, ...{ [TICKET_TYPES.PPR]: newPPRs } })
-    }
-
-    const updateUPRInAllTickets = (newUPR) => {
-        const uprIndex = allTickets[TICKET_TYPES.UPR]
-            .map((upr) => upr._id)
-            .indexOf(newUPR._id)
-        let newUPRs = allTickets[TICKET_TYPES.UPR]
-        newUPRs[uprIndex] = newUPR
-        setAllTickets({ ...allTickets, ...{ [TICKET_TYPES.UPR]: newUPRs } })
+    const partialUpdateAllTickets = (ticketType, ticketId, newData) => {
+        const newTickets = allTickets[ticketType].slice()
+        const localIndex = newTickets
+            .map((ticket) => ticket._id)
+            .indexOf(ticketId)
+        newTickets[localIndex] = { ...newTickets[localIndex], ...newData }
+        setAllTickets({ ...allTickets, [ticketType]: newTickets })
     }
 
     const getAllTickets = useCallback(async () => {
@@ -112,11 +106,9 @@ const Dashboard = () => {
 
         const currentTicketType = splitPath[1]
         const currentTicketId = parseInt(splitPath[2])
-        const allTicketsWithCurrentTicketType =
-            allTickets[TICKET_TYPES[currentTicketType]]
-        const currentTicketData = allTicketsWithCurrentTicketType.find(
-            (ticket) => ticket._id === currentTicketId
-        )
+        const currentTicketData = allTickets[
+            TICKET_TYPES[currentTicketType]
+        ].find((ticket) => ticket._id === currentTicketId)
 
         if (!currentTicketData) {
             if (!isLoading) {
@@ -125,15 +117,11 @@ const Dashboard = () => {
             return
         }
 
-        const newCurrentTicket = {
-            data: currentTicketData,
-            type: currentTicketData.type,
-            id: currentTicketId,
-            code: currentTicketData.code,
-            codename: currentTicketData.codename,
-        }
-        setCurrentTicket(newCurrentTicket)
-        setCurrentTree(buildTicketTree(newCurrentTicket, allTickets))
+        setCurrentTicket(currentTicketData)
+        setCurrentTree(buildTicketTree(currentTicketData, allTickets))
+        setIsCurrentTicketOwner(
+            currentTicketData.reporter_id === auth.currentUser.uid
+        )
     }, [
         location.pathname,
         allTickets,
@@ -141,10 +129,11 @@ const Dashboard = () => {
         navigate,
         setCurrentTicket,
         setCurrentTree,
+        auth.currentUser.uid,
     ])
 
     const getCurrentTicketContentTable = () => {
-        const ticketData = currentTicket.data
+        const ticketData = currentTicket
 
         switch (currentTicket.type) {
             case TICKET_TYPES.SF:
@@ -155,14 +144,14 @@ const Dashboard = () => {
                 return (
                     <PPRContentTable
                         ticketData={ticketData}
-                        updatePPRInAllTickets={updatePPRInAllTickets}
+                        partialUpdateAllTickets={partialUpdateAllTickets}
                     />
                 )
             case TICKET_TYPES.UPR:
                 return (
                     <UPRContentTable
                         ticketData={ticketData}
-                        updateUPRInAllTickets={updateUPRInAllTickets}
+                        partialUpdateAllTickets={partialUpdateAllTickets}
                     />
                 )
             default:
@@ -178,7 +167,7 @@ const Dashboard = () => {
                 </Center>
             )
         }
-        const ticketData = currentTicket.data
+        const ticketData = currentTicket
         if (isLoading) {
             return (
                 <Center w="100%">
@@ -206,15 +195,16 @@ const Dashboard = () => {
                     </Heading>
                     <Flex flexDir="row" mb="12px">
                         {/* Do not display delete button for WATO Cash */}
-                        {currentTicket.data.sf_link !== -1 && (
-                            <Button
-                                size="sm"
-                                colorScheme="red"
-                                onClick={onOpenDeleteTicket}
-                            >
-                                <Text>Delete</Text>
-                            </Button>
-                        )}
+                        {currentTicket.sf_link !== -1 &&
+                            (isCurrentTicketReporter || auth.isDirector) && (
+                                <Button
+                                    size="sm"
+                                    colorScheme="red"
+                                    onClick={onOpenDeleteTicket}
+                                >
+                                    <Text>Delete</Text>
+                                </Button>
+                            )}
                     </Flex>
                     {getCurrentTicketContentTable()}
                 </Flex>
@@ -259,39 +249,18 @@ const Dashboard = () => {
         )
     }
 
-    const handleDeleteCurrentTicket = async () => {
-        // TODO: add backend call to delete ticket
-        // maybe implement soft-delete with mongoose plugin
-        // redirect to homepage after delete
-        const ticketPathSegment = TICKET_ENDPOINTS[currentTicket.type]
-        try {
-            setIsDeleteTicketDisabled(true)
-            await axiosPreset.delete(`${ticketPathSegment}/${currentTicket.id}`)
-            await getAllTickets()
-            navigate('/')
-            onCloseDeleteTicket()
-        } catch (err) {
-            console.log(err)
-        } finally {
-            setIsDeleteTicketDisabled(false)
-        }
-    }
-
     return (
         <VStack spacing="0">
             <Navbar getAllTickets={getAllTickets} />
             <Flex pos="absolute" top="80px" w="100%">
-                <TicketList allTickets={allTickets} isLoading={isLoading} />
+                <TicketList isLoading={isLoading} />
                 {getMainContent()}
             </Flex>
             {isDeleteTicketOpen && (
                 <DeleteTicketAlertDialog
                     isOpen={isDeleteTicketOpen}
-                    disabled={isDeleteTicketDisabled}
                     onClose={onCloseDeleteTicket}
-                    onDelete={handleDeleteCurrentTicket}
-                    currentTicket={currentTicket}
-                    currentTree={currentTree}
+                    getAllTickets={getAllTickets}
                 />
             )}
         </VStack>

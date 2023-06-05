@@ -26,7 +26,7 @@ import { TICKET_ENDPOINTS, TICKET_TYPES } from '../constants'
 export function CreateTicketModal({ isOpen, onClose, getAllTickets }) {
     const [ticketType, setTicketType] = useState('')
     const { control, register, handleSubmit, reset } = useForm()
-    const [isCreateTicketLoading, setIsCreateTicketLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
     const auth = useAuth(app)
 
     const displayTicketType = () => {
@@ -50,7 +50,7 @@ export function CreateTicketModal({ isOpen, onClose, getAllTickets }) {
     }
     const createTicket = async (formValues) => {
         try {
-            setIsCreateTicketLoading(true)
+            setIsLoading(true)
             const payload = {
                 ...formValues,
                 reporter_id: auth.currentUser.uid,
@@ -69,7 +69,7 @@ export function CreateTicketModal({ isOpen, onClose, getAllTickets }) {
         } catch (err) {
             console.log(err)
         } finally {
-            setIsCreateTicketLoading(false)
+            setIsLoading(false)
         }
     }
     return (
@@ -94,7 +94,7 @@ export function CreateTicketModal({ isOpen, onClose, getAllTickets }) {
                         }}
                         margin="10px 0"
                         size="sm"
-                        isDisabled={isCreateTicketLoading}
+                        isDisabled={isLoading}
                     >
                         <option value={TICKET_TYPES.UPR}>
                             UW Finance Purchase
@@ -114,7 +114,7 @@ export function CreateTicketModal({ isOpen, onClose, getAllTickets }) {
                         Close
                     </Button>
                     <Button
-                        isLoading={isCreateTicketLoading}
+                        isLoading={isLoading}
                         colorScheme="blue"
                         onClick={handleSubmit(createTicket)}
                     >

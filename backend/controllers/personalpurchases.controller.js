@@ -6,6 +6,7 @@ const {
 } = require('./annotatedGetters')
 const { getGoogleGroup } = require('./googlegroup.controller')
 const {
+    APPROVAL_LEVELS,
     FACULTY_ADVISOR_EMAILS,
     TEAM_CAPTAIN_TITLES,
     DIRECTOR_TITLES,
@@ -55,9 +56,11 @@ const updateApprovalsPersonalPurchase = async (req, res) => {
         isTeamCaptain || DIRECTOR_TITLES.includes(currentGoogleGroup.title)
 
     const canUpdateApproval =
-        (approval_type === 'faculty_advisor_approval' && isFacultyAdvisor) ||
-        (approval_type === 'team_captain_approval' && isTeamCaptain) ||
-        (approval_type === 'director_approval' && isDirector)
+        (approval_type === APPROVAL_LEVELS.faculty_advisor_approval &&
+            isFacultyAdvisor) ||
+        (approval_type === APPROVAL_LEVELS.team_captain_approval &&
+            isTeamCaptain) ||
+        (approval_type === APPROVAL_LEVELS.director_approval && isDirector)
 
     if (!canUpdateApproval) {
         res.status(403).json('Error: Permission Denied')

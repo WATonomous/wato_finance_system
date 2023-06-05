@@ -4,35 +4,33 @@ const buildTicketTree = (currentTicket, allTickets) => {
     const { SF, FI, PPR, UPR } = allTickets
     if (!currentTicket || allTickets[currentTicket.type].length === 0) return {}
 
+    let sf_id = currentTicket._id
+    if (currentTicket.type === TICKET_TYPES.FI) {
+        sf_id = currentTicket.sf_link
+    } else if (
+        currentTicket.type === TICKET_TYPES.UPR ||
+        currentTicket.type === TICKET_TYPES.PPR
+    ) {
+        sf_id = FI.find(
+            (ticket) => ticket._id === currentTicket.fi_link
+        ).sf_link
+    }
+
     // Special Case: WATO Cash
-    if (currentTicket.data.sf_link === -1) {
-        const WATOCashTicketID = currentTicket.id
+    // SF should never have id of -1
+    if (sf_id === -1) {
+        const WATOCashTicketID =
+            currentTicket.type === TICKET_TYPES.FI
+                ? currentTicket._id
+                : currentTicket.fi_link
+        const WATOCASHTicket = FI.find((fi) => fi._id === WATOCashTicketID)
         const personalPurchases = PPR.filter(
             (ppr) => ppr.fi_link === WATOCashTicketID
         )
         const uwFinancePurchases = UPR.filter(
             (upr) => upr.fi_link === WATOCashTicketID
         )
-        return { ...currentTicket.data, personalPurchases, uwFinancePurchases }
-    }
-
-    const ticketID = currentTicket.id
-    let sf_id = ticketID
-
-    switch (currentTicket.type) {
-        case TICKET_TYPES.FI:
-            sf_id = FI.find((ticket) => ticket._id === ticketID).sf_link
-            break
-        case TICKET_TYPES.PPR:
-            const ppr = PPR.find((ticket) => ticket._id === ticketID)
-            sf_id = FI.find((ticket) => ticket._id === ppr.fi_link).sf_link
-            break
-        case TICKET_TYPES.UPR:
-            const upr = UPR.find((ticket) => ticket._id === ticketID)
-            sf_id = FI.find((ticket) => ticket._id === upr.fi_link).sf_link
-            break
-        default:
-            break
+        return { ...WATOCASHTicket, personalPurchases, uwFinancePurchases }
     }
 
     const sponsorshipFund = SF.find((sf) => sf._id === sf_id)

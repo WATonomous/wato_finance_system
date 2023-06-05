@@ -10,18 +10,38 @@ import {
     Flex,
     Text,
 } from '@chakra-ui/react'
-import React from 'react'
-import { TICKET_TYPES } from '../constants'
+import React, { useState } from 'react'
+import { TICKET_ENDPOINTS, TICKET_TYPES } from '../constants'
+import { useNavigate } from 'react-router-dom'
+import { axiosPreset } from '../axiosConfig'
+import { useRecoilValue } from 'recoil'
+import { currentTicketState, currentTreeState } from '../state/atoms'
 
-const DeleteTicketAlertDialog = ({
-    isOpen,
-    onClose,
-    onDelete,
-    currentTicket,
-    currentTree,
-    disabled,
-}) => {
+const DeleteTicketAlertDialog = ({ isOpen, onClose, getAllTickets }) => {
+    const navigate = useNavigate()
+    const currentTicket = useRecoilValue(currentTicketState)
+    const currentTree = useRecoilValue(currentTreeState)
+    const [isDisabled, setIsDisabled] = useState(false)
     const cancelRef = React.useRef()
+
+    const handleDeleteCurrentTicket = async () => {
+        // TODO: add backend call to delete ticket
+        // maybe implement soft-delete with mongoose plugin
+        // redirect to homepage after delete
+        try {
+            setIsDisabled(true)
+            await axiosPreset.delete(
+                `${TICKET_ENDPOINTS[currentTicket.type]}/${currentTicket._id}`
+            )
+            await getAllTickets()
+            navigate('/')
+            onClose()
+        } catch (err) {
+            console.log(err)
+        } finally {
+            setIsDisabled(false)
+        }
+    }
 
     const getCascadeDeleteTicketCodenames = () => {
         if (
@@ -33,7 +53,7 @@ const DeleteTicketAlertDialog = ({
 
         if (currentTicket.type === TICKET_TYPES.FI) {
             const FITree = currentTree.fundingItems.find(
-                (fi) => fi._id === currentTicket.id
+                (fi) => fi._id === currentTicket._id
             )
             return (
                 <Flex flexDir="column" m="16px 0">
@@ -84,7 +104,7 @@ const DeleteTicketAlertDialog = ({
             isOpen={isOpen}
             leastDestructiveRef={cancelRef}
             onClose={onClose}
-            disabled={disabled}
+            disabled={isDisabled}
         >
             <AlertDialogOverlay>
                 <AlertDialogContent>
@@ -106,9 +126,7 @@ const DeleteTicketAlertDialog = ({
                         </Button>
                         <Button
                             colorScheme="red"
-                            onClick={() => {
-                                onDelete()
-                            }}
+                            onClick={handleDeleteCurrentTicket}
                             ml={3}
                         >
                             Delete
