@@ -38,8 +38,11 @@ import {
     currentTreeState,
 } from '../state/atoms'
 import { UpdateTicketModal } from '../components/UpdateTicketModal'
-import AdminContentTable from '../components/TicketContent/AdminContentTable'
 
+import UPRAdminContentTable from '../components/TicketContent/UPRAdminContentTable'
+import SFAdminContentTable from '../components/TicketContent/SFAdminContentTable'
+import PPRAdminContentTable from '../components/TicketContent/PPRAdminContentTable'
+import FIAdminContentTable from '../components/TicketContent/FIAdminContentTable'
 const Dashboard = () => {
     const navigate = useNavigate()
     const location = useLocation()
@@ -144,22 +147,39 @@ const Dashboard = () => {
 
         switch (currentTicket.type) {
             case TICKET_TYPES.SF:
-                return <SFContentTable ticketData={ticketData} />
+                return (
+                    <>
+                        {auth.isAdmin && <SFAdminContentTable />}
+                        <SFContentTable ticketData={ticketData} />
+                    </>
+                )
             case TICKET_TYPES.FI:
-                return <FIContentTable ticketData={ticketData} />
+                return (
+                    <>
+                        {auth.isAdmin && <FIAdminContentTable />}
+                        <FIContentTable ticketData={ticketData} />
+                    </>
+                )
+
             case TICKET_TYPES.PPR:
                 return (
-                    <PPRContentTable
-                        ticketData={ticketData}
-                        partialUpdateAllTickets={partialUpdateAllTickets}
-                    />
+                    <>
+                        {auth.isAdmin && <PPRAdminContentTable />}
+                        <PPRContentTable
+                            ticketData={ticketData}
+                            partialUpdateAllTickets={partialUpdateAllTickets}
+                        />
+                    </>
                 )
             case TICKET_TYPES.UPR:
                 return (
-                    <UPRContentTable
-                        ticketData={ticketData}
-                        partialUpdateAllTickets={partialUpdateAllTickets}
-                    />
+                    <>
+                        {auth.isAdmin && <UPRAdminContentTable />}
+                        <UPRContentTable
+                            ticketData={ticketData}
+                            partialUpdateAllTickets={partialUpdateAllTickets}
+                        />
+                    </>
                 )
             default:
                 return null

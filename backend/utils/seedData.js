@@ -127,8 +127,6 @@ const generateDummyPersonalPurchase = () => {
         director_approval: false,
         team_captain_approval: false,
         faculty_advisor_approval: false,
-        requisition_number: getRandomNumberFromLength(10),
-        po_number: getRandomNumberFromLength(8),
     }
 }
 

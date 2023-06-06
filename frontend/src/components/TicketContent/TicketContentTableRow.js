@@ -23,11 +23,7 @@ const TicketContentTableRow = ({ heading, value, onChange }) => {
                     lg: '12px 24px',
                 }}
             >
-                {onChange ? (
-                    <Input onChange={onChange} defaultValue={value} />
-                ) : (
-                    value
-                )}
+                {onChange ? <Input onChange={onChange} value={value} /> : value}
             </Td>
         </Tr>
     )
