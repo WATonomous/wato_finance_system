@@ -246,13 +246,13 @@ const Dashboard = () => {
                                 />
                                 <TicketContentTableRow
                                     heading={'Created at'}
-                                    description={getStandardizedDate(
+                                    value={getStandardizedDate(
                                         ticketData.createdAt
                                     )}
                                 />
                                 <TicketContentTableRow
                                     heading={'Updated at'}
-                                    description={getStandardizedDate(
+                                    value={getStandardizedDate(
                                         ticketData.updatedAt
                                     )}
                                 />

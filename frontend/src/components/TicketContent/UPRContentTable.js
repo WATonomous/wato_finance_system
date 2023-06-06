@@ -32,35 +32,35 @@ const UPRContentTable = ({ ticketData, partialUpdateAllTickets }) => {
                 <Tbody>
                     <TicketContentTableRow
                         heading={'Status'}
-                        description={ticketData.status}
+                        value={ticketData.status}
                     />
                     <TicketContentTableRow
                         heading={'Cost'}
-                        description={getFormattedCurrency(ticketData.cost)}
+                        value={getFormattedCurrency(ticketData.cost)}
                     />
                     <TicketContentTableRow
                         heading={'Purchase Justification'}
-                        description={ticketData.purchase_justification}
+                        value={ticketData.purchase_justification}
                     />
                     <TicketContentTableRow
                         heading={'Purchase URL'}
-                        description={ticketData.purchase_url}
+                        value={ticketData.purchase_url}
                     />
                     <TicketContentTableRow
                         heading={'Purchase Instructions'}
-                        description={ticketData.purchase_instructions}
+                        value={ticketData.purchase_instructions}
                     />
                     <TicketContentTableRow
                         heading={'Purchase Order Number'}
-                        description={ticketData.po_number}
+                        value={ticketData.po_number}
                     />
                     <TicketContentTableRow
                         heading={'Requisition Number'}
-                        description={ticketData.requisition_number}
+                        value={ticketData.requisition_number}
                     />
                     <TicketContentTableRow
                         heading={'Pick-up Instructions'}
-                        description={ticketData.pickup_instruction}
+                        value={ticketData.pickup_instruction}
                     />
                 </Tbody>
             </Table>
@@ -68,7 +68,7 @@ const UPRContentTable = ({ ticketData, partialUpdateAllTickets }) => {
                 <Tbody>
                     <TicketContentTableRow
                         heading={'Director Approval'}
-                        description={
+                        value={
                             <Checkbox
                                 disabled={!auth.isDirector}
                                 onChange={handleUpdateApproval(
@@ -80,7 +80,7 @@ const UPRContentTable = ({ ticketData, partialUpdateAllTickets }) => {
                     />
                     <TicketContentTableRow
                         heading={'Team Captain Approval'}
-                        description={
+                        value={
                             <Checkbox
                                 disabled={!auth.isTeamCaptain}
                                 onChange={handleUpdateApproval(
@@ -92,7 +92,7 @@ const UPRContentTable = ({ ticketData, partialUpdateAllTickets }) => {
                     />
                     <TicketContentTableRow
                         heading={'Faculty Advisor Approval'}
-                        description={
+                        value={
                             <Checkbox
                                 disabled={!auth.isFacultyAdvisor}
                                 onChange={handleUpdateApproval(

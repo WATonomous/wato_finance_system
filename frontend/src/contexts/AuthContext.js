@@ -85,6 +85,7 @@ export const AuthProvider = ({ children }) => {
                 if (process.env?.REACT_APP_AUTH_OVERRIDE) {
                     _isAdmin = process.env.REACT_APP_AUTH_OVERRIDE === 'ADMIN'
 
+                    console.log('isAdmin: ' + _isAdmin)
                     _isTeamCaptain =
                         process.env.REACT_APP_AUTH_OVERRIDE ===
                             'TEAM_CAPTAIN' || _isAdmin
@@ -94,18 +95,18 @@ export const AuthProvider = ({ children }) => {
                         _isTeamCaptain
                 } else {
                     _isAdmin = FACULTY_ADVISOR_EMAILS.includes(identifier)
-                    setisAdmin(_isAdmin)
 
                     _isTeamCaptain =
                         _isAdmin ||
                         TEAM_CAPTAIN_TITLES.includes(retrievedGroup.data.title)
-                    setIsTeamCaptain(_isTeamCaptain)
 
                     _isDirector =
                         _isTeamCaptain ||
                         DIRECTOR_TITLES.includes(retrievedGroup.data.title)
-                    setIsDirector(_isDirector)
                 }
+                setisAdmin(_isAdmin)
+                setIsDirector(_isDirector)
+                setIsTeamCaptain(_isTeamCaptain)
             } catch (err) {
                 console.log('Error: ' + err)
             }

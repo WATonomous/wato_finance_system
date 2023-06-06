@@ -32,27 +32,27 @@ const PPRContentTable = ({ ticketData, partialUpdateAllTickets }) => {
                 <Tbody>
                     <TicketContentTableRow
                         heading={'Status'}
-                        description={ticketData.status}
+                        value={ticketData.status}
                     />
                     <TicketContentTableRow
                         heading={'Cost'}
-                        description={getFormattedCurrency(ticketData.cost)}
+                        value={getFormattedCurrency(ticketData.cost)}
                     />
                     <TicketContentTableRow
                         heading={'Purchase Justification'}
-                        description={ticketData.purchase_justification}
+                        value={ticketData.purchase_justification}
                     />
                     <TicketContentTableRow
                         heading={'Purchase URL'}
-                        description={ticketData.purchase_url}
+                        value={ticketData.purchase_url}
                     />
                     <TicketContentTableRow
                         heading={'Purchase Order Number'}
-                        description={ticketData.po_number}
+                        value={ticketData.po_number}
                     />
                     <TicketContentTableRow
                         heading={'Requisition Number'}
-                        description={ticketData.requisition_number}
+                        value={ticketData.requisition_number}
                     />
                 </Tbody>
             </Table>
@@ -60,7 +60,7 @@ const PPRContentTable = ({ ticketData, partialUpdateAllTickets }) => {
                 <Tbody>
                     <TicketContentTableRow
                         heading={'Director Approval'}
-                        description={
+                        value={
                             <Checkbox
                                 disabled={!auth.isDirector}
                                 onChange={handleUpdateApproval(
@@ -72,7 +72,7 @@ const PPRContentTable = ({ ticketData, partialUpdateAllTickets }) => {
                     />
                     <TicketContentTableRow
                         heading={'Team Captain Approval'}
-                        description={
+                        value={
                             <Checkbox
                                 disabled={!auth.isTeamCaptain}
                                 onChange={handleUpdateApproval(
@@ -84,7 +84,7 @@ const PPRContentTable = ({ ticketData, partialUpdateAllTickets }) => {
                     />
                     <TicketContentTableRow
                         heading={'Faculty Advisor Approval'}
-                        description={
+                        value={
                             <Checkbox
                                 disabled={!auth.isFacultyAdvisor}
                                 onChange={handleUpdateApproval(

@@ -38,12 +38,12 @@ const UPRAdminContentTable = () => {
                 <Tbody>
                     <TicketContentTableRow
                         heading={'Requisition Number'}
-                        value={ticketData.requisition_number}
+                        value={ticketData?.requisition_number}
                         onChange={changeReqNumber}
                     />
                     <TicketContentTableRow
                         heading={'PO Number'}
-                        value={ticketData.po_number}
+                        value={ticketData?.po_number}
                         onChange={changePoNumber}
                     />
                 </Tbody>

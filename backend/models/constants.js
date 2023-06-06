@@ -42,6 +42,7 @@ const APPROVAL_LEVELS = Object.freeze({
 const FACULTY_ADVISOR_EMAILS = ['drayside@uwaterloo.ca']
 const TEAM_CAPTAIN_TITLES = ['Team Captain']
 const DIRECTOR_TITLES = ['Admin', 'Director']
+const FACULTY_ADVISOR_EMAILS = ['drayside@uwaterloo.ca']
 
 module.exports = {
     ENDOWMENT_FUNDS,
