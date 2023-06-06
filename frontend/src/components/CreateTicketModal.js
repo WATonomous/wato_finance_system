@@ -39,11 +39,11 @@ export function CreateTicketModal({ isOpen, onClose, getAllTickets }) {
                     />
                 )
             case TICKET_TYPES.FI:
-                return <FundingItemForm register={register} />
+                return <FundingItemForm register={register} showSFLink />
             case TICKET_TYPES.PPR:
-                return <PersonalPurchaseForm register={register} />
+                return <PersonalPurchaseForm register={register} showFILink />
             case TICKET_TYPES.UPR:
-                return <UWFinancePurchaseForm register={register} />
+                return <UWFinancePurchaseForm register={register} showFILink />
             default:
                 return null
         }

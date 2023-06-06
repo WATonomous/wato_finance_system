@@ -37,6 +37,7 @@ import {
 } from '../state/atoms'
 import { useAuth } from '../contexts/AuthContext'
 import app from '../firebase'
+import { UpdateTicketModal } from '../components/UpdateTicketModal'
 
 const Dashboard = () => {
     const navigate = useNavigate()
@@ -46,6 +47,12 @@ const Dashboard = () => {
         isOpen: isDeleteTicketOpen,
         onOpen: onOpenDeleteTicket,
         onClose: onCloseDeleteTicket,
+    } = useDisclosure()
+
+    const {
+        isOpen: isUpdateTicketOpen,
+        onOpen: onOpenUpdateTicket,
+        onClose: onCloseUpdateTicket,
     } = useDisclosure()
 
     const auth = useAuth(app)
@@ -116,7 +123,6 @@ const Dashboard = () => {
             }
             return
         }
-
         setCurrentTicket(currentTicketData)
         setCurrentTree(buildTicketTree(currentTicketData, allTickets))
         setIsCurrentTicketOwner(
@@ -193,10 +199,17 @@ const Dashboard = () => {
                     <Heading mb="16px" fontSize="3xl">
                         {currentTicket.codename}
                     </Heading>
-                    <Flex flexDir="row" mb="12px">
-                        {/* Do not display delete button for WATO Cash */}
-                        {currentTicket.sf_link !== -1 &&
-                            (isCurrentTicketReporter || auth.isDirector) && (
+                    {/* Do not display update/delete button for WATO Cash */}
+                    {currentTicket.sf_link !== -1 &&
+                        (isCurrentTicketReporter || auth.isDirector) && (
+                            <Flex flexDir="row" mb="12px" gap="16px">
+                                <Button
+                                    size="sm"
+                                    colorScheme="cyan"
+                                    onClick={onOpenUpdateTicket}
+                                >
+                                    <Text>Update</Text>
+                                </Button>
                                 <Button
                                     size="sm"
                                     colorScheme="red"
@@ -204,8 +217,8 @@ const Dashboard = () => {
                                 >
                                     <Text>Delete</Text>
                                 </Button>
-                            )}
-                    </Flex>
+                            </Flex>
+                        )}
                     {getCurrentTicketContentTable()}
                 </Flex>
                 <VStack w="40%" h="max-content" p="16px 24px 16px 0" gap="16px">
@@ -260,6 +273,13 @@ const Dashboard = () => {
                 <DeleteTicketAlertDialog
                     isOpen={isDeleteTicketOpen}
                     onClose={onCloseDeleteTicket}
+                    getAllTickets={getAllTickets}
+                />
+            )}
+            {isUpdateTicketOpen && (
+                <UpdateTicketModal
+                    isOpen={isUpdateTicketOpen}
+                    onClose={onCloseUpdateTicket}
                     getAllTickets={getAllTickets}
                 />
             )}
