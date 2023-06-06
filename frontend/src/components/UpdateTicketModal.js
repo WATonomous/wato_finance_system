@@ -61,7 +61,9 @@ export function UpdateTicketModal({ isOpen, onClose, getAllTickets }) {
         try {
             setIsLoading(true)
             const payload = Object.keys(formValues)
-                .filter((key) => Object.keys(formState.dirtyFields).includes(key))
+                .filter((key) =>
+                    Object.keys(formState.dirtyFields).includes(key)
+                )
                 .reduce((cur, key) => {
                     return Object.assign(cur, { [key]: formValues[key] })
                 }, {})
@@ -92,9 +94,7 @@ export function UpdateTicketModal({ isOpen, onClose, getAllTickets }) {
             <ModalContent>
                 <ModalHeader>Update Ticket</ModalHeader>
                 <ModalCloseButton />
-                <ModalBody>
-                    {displayTicketType()}
-                </ModalBody>
+                <ModalBody>{displayTicketType()}</ModalBody>
                 <ModalFooter>
                     <Button colorScheme="red" mr={3} onClick={onClose}>
                         Close
