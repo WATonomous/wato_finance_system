@@ -71,8 +71,6 @@ export function UpdateTicketModal({ isOpen, onClose, getAllTickets }) {
                 `${TICKET_ENDPOINTS[currentTicket.type]}/${currentTicket._id}`,
                 payload
             )
-            // not working rn, some components not rerendering
-            // partialUpdateAllTickets(currentTicket.type, currentTicket._id, payload)
             await getAllTickets()
             onClose()
         } catch (err) {
