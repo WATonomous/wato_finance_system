@@ -72,7 +72,9 @@ export const SponsorshipFundForm = ({ register, control }) => {
                         <Select
                             id="semester"
                             placeholder="Select a semester"
-                            {...register('semester')}
+                            {...register('semester', {
+                                required: 'This is required',
+                            })}
                             size="sm"
                         >
                             {AVAILABLE_YEARS.map((year) => {
@@ -175,7 +177,9 @@ export const FundingItemForm = ({ register, showSFLink }) => {
                             <Input
                                 h="1.95rem"
                                 id="sf_link"
-                                {...register('sf_link')}
+                                {...register('sf_link', {
+                                    required: 'This is required',
+                                })}
                             />
                         </InputGroup>
                     </>
@@ -186,9 +190,7 @@ export const FundingItemForm = ({ register, showSFLink }) => {
                 <FormLabel mt="10px">Purchase Justification</FormLabel>
                 <Textarea
                     id="purchase_justification"
-                    {...register('purchase_justification', {
-                        required: 'This is required',
-                    })}
+                    {...register('purchase_justification')}
                     size="sm"
                 />
                 <FormHelperText>
@@ -258,7 +260,9 @@ export const UWFinancePurchaseForm = ({ register, showFILink }) => {
                 <FormLabel mt="10px">Purchase Instructions </FormLabel>
                 <Textarea
                     id="purchase_instructions"
-                    {...register('purchase_instructions')}
+                    {...register('purchase_instructions', {
+                        required: 'This is required',
+                    })}
                     size="sm"
                 />
                 <FormHelperText>
