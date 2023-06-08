@@ -11,19 +11,17 @@ const FIContentTable = (props) => {
                 <Tbody>
                     <TicketContentTableRow
                         heading={'Funding Allocation'}
-                        description={getFormattedCurrency(
+                        value={getFormattedCurrency(
                             ticketData.funding_allocation
                         )}
                     />
                     <TicketContentTableRow
                         heading={'Funding Spent'}
-                        description={getFormattedCurrency(
-                            ticketData.funding_spent
-                        )}
+                        value={getFormattedCurrency(ticketData.funding_spent)}
                     />
                     <TicketContentTableRow
                         heading={'Purchase Justification'}
-                        description={ticketData.purchase_justification}
+                        value={ticketData.purchase_justification}
                     />
                 </Tbody>
             </Table>

@@ -1,7 +1,7 @@
 import React from 'react'
-import { Td, Th, Tr } from '@chakra-ui/react'
+import { Input, Td, Th, Tr } from '@chakra-ui/react'
 
-const TicketContentTableRow = (props) => {
+const TicketContentTableRow = ({ heading, value, onChange }) => {
     return (
         <Tr borderTopWidth="2px" borderBottomWidth="2px">
             <Th
@@ -13,7 +13,7 @@ const TicketContentTableRow = (props) => {
                     lg: '12px 24px',
                 }}
             >
-                {props.heading}
+                {heading}
             </Th>
             <Td
                 fontSize={{ base: 'sm', md: 'md' }}
@@ -23,7 +23,7 @@ const TicketContentTableRow = (props) => {
                     lg: '12px 24px',
                 }}
             >
-                {props.description}
+                {onChange ? <Input onChange={onChange} value={value} /> : value}
             </Td>
         </Tr>
     )

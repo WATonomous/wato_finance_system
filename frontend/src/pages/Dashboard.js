@@ -19,9 +19,11 @@ import Navbar from '../components/Navbar'
 import TicketList from '../components/TicketList'
 import LoadingSpinner from '../components/LoadingSpinner'
 import { getStandardizedDate } from '../utils/utils'
+import { useAuth } from '../contexts/AuthContext'
+import app from '../firebase'
+import FIContentTable from '../components/TicketContent/FIContentTable'
 import TicketContentTableRow from '../components/TicketContent/TicketContentTableRow'
 import SFContentTable from '../components/TicketContent/SFContentTable'
-import FIContentTable from '../components/TicketContent/FIContentTable'
 import PPRContentTable from '../components/TicketContent/PPRContentTable'
 import UPRContentTable from '../components/TicketContent/UPRContentTable'
 import ReporterInfoTip from '../components/ReporterInfoTip'
@@ -35,10 +37,12 @@ import {
     currentTicketState,
     currentTreeState,
 } from '../state/atoms'
-import { useAuth } from '../contexts/AuthContext'
-import app from '../firebase'
 import { UpdateTicketModal } from '../components/UpdateTicketModal'
 
+import UPRAdminContentTable from '../components/TicketContent/UPRAdminContentTable'
+import SFAdminContentTable from '../components/TicketContent/SFAdminContentTable'
+import PPRAdminContentTable from '../components/TicketContent/PPRAdminContentTable'
+import FIAdminContentTable from '../components/TicketContent/FIAdminContentTable'
 const Dashboard = () => {
     const navigate = useNavigate()
     const location = useLocation()
@@ -143,22 +147,39 @@ const Dashboard = () => {
 
         switch (currentTicket.type) {
             case TICKET_TYPES.SF:
-                return <SFContentTable ticketData={ticketData} />
+                return (
+                    <>
+                        {auth.isAdmin && <SFAdminContentTable />}
+                        <SFContentTable ticketData={ticketData} />
+                    </>
+                )
             case TICKET_TYPES.FI:
-                return <FIContentTable ticketData={ticketData} />
+                return (
+                    <>
+                        {auth.isAdmin && <FIAdminContentTable />}
+                        <FIContentTable ticketData={ticketData} />
+                    </>
+                )
+
             case TICKET_TYPES.PPR:
                 return (
-                    <PPRContentTable
-                        ticketData={ticketData}
-                        partialUpdateAllTickets={partialUpdateAllTickets}
-                    />
+                    <>
+                        {auth.isAdmin && <PPRAdminContentTable />}
+                        <PPRContentTable
+                            ticketData={ticketData}
+                            partialUpdateAllTickets={partialUpdateAllTickets}
+                        />
+                    </>
                 )
             case TICKET_TYPES.UPR:
                 return (
-                    <UPRContentTable
-                        ticketData={ticketData}
-                        partialUpdateAllTickets={partialUpdateAllTickets}
-                    />
+                    <>
+                        {auth.isAdmin && <UPRAdminContentTable />}
+                        <UPRContentTable
+                            ticketData={ticketData}
+                            partialUpdateAllTickets={partialUpdateAllTickets}
+                        />
+                    </>
                 )
             default:
                 return null
@@ -244,13 +265,13 @@ const Dashboard = () => {
                                 />
                                 <TicketContentTableRow
                                     heading={'Created at'}
-                                    description={getStandardizedDate(
+                                    value={getStandardizedDate(
                                         ticketData.createdAt
                                     )}
                                 />
                                 <TicketContentTableRow
                                     heading={'Updated at'}
-                                    description={getStandardizedDate(
+                                    value={getStandardizedDate(
                                         ticketData.updatedAt
                                     )}
                                 />

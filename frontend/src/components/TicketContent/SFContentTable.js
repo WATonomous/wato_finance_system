@@ -12,37 +12,33 @@ const SFContentTable = (props) => {
                 <Tbody>
                     <TicketContentTableRow
                         heading={'Status'}
-                        description={ticketData.status}
+                        value={ticketData.status}
                     />
                     <TicketContentTableRow
                         heading={'Funding Allocation'}
-                        description={getFormattedCurrency(
+                        value={getFormattedCurrency(
                             ticketData.funding_allocation
                         )}
                     />
                     <TicketContentTableRow
                         heading={'Funding Spent'}
-                        description={getFormattedCurrency(
-                            ticketData.funding_spent
-                        )}
+                        value={getFormattedCurrency(ticketData.funding_spent)}
                     />
                     <TicketContentTableRow
                         heading={'Proposal Id'}
-                        description={ticketData.proposal_id}
+                        value={ticketData.proposal_id}
                     />
                     <TicketContentTableRow
                         heading={'Proposal URL'}
-                        description={ticketData.proposal_url}
+                        value={ticketData.proposal_url}
                     />
                     <TicketContentTableRow
                         heading={'Presentation URL'}
-                        description={ticketData.presentation_url}
+                        value={ticketData.presentation_url}
                     />
                     <TicketContentTableRow
                         heading={'Claim Deadline'}
-                        description={getStandardizedDate(
-                            ticketData.claim_deadline
-                        )}
+                        value={getStandardizedDate(ticketData.claim_deadline)}
                     />
                 </Tbody>
             </Table>

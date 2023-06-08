@@ -11,7 +11,7 @@ import app from '../firebase'
 import axios from 'axios'
 import { useToast } from '@chakra-ui/react'
 import {
-    FACULTY_ADVISOR_EMAILS,
+    ADMIN_IDENTIFIERS,
     TEAM_CAPTAIN_TITLES,
     DIRECTOR_TITLES,
 } from '../constants'
@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
     const [currentIdentifier, setCurrentIdentifier] = useState()
     const [isDirector, setIsDirector] = useState()
     const [isTeamCaptain, setIsTeamCaptain] = useState()
-    const [isFacultyAdvisor, setIsFacultyAdvisor] = useState()
+    const [isAdmin, setIsAdmin] = useState()
     const [loading, setLoading] = useState(true)
     const auth = getAuth(app)
     const provider = new GoogleAuthProvider()
@@ -81,19 +81,31 @@ export const AuthProvider = ({ children }) => {
                 )
                 setCurrentUserGroup(retrievedGroup.data.title)
 
-                const _isFacultyAdvisor =
-                    FACULTY_ADVISOR_EMAILS.includes(identifier)
-                setIsFacultyAdvisor(_isFacultyAdvisor)
+                let _isAdmin, _isTeamCaptain, _isDirector
+                if (process.env?.REACT_APP_AUTH_OVERRIDE) {
+                    _isAdmin = process.env.REACT_APP_AUTH_OVERRIDE === 'ADMIN'
 
-                const _isTeamCaptain =
-                    _isFacultyAdvisor ||
-                    TEAM_CAPTAIN_TITLES.includes(retrievedGroup.data.title)
-                setIsTeamCaptain(_isTeamCaptain)
+                    _isTeamCaptain =
+                        process.env.REACT_APP_AUTH_OVERRIDE ===
+                            'TEAM_CAPTAIN' || _isAdmin
 
-                const _isDirector =
-                    _isTeamCaptain ||
-                    DIRECTOR_TITLES.includes(retrievedGroup.data.title)
+                    _isDirector =
+                        process.env.REACT_APP_AUTH_OVERRIDE === 'DIRECTOR' ||
+                        _isTeamCaptain
+                } else {
+                    _isAdmin = ADMIN_IDENTIFIERS.includes(identifier)
+
+                    _isTeamCaptain =
+                        _isAdmin ||
+                        TEAM_CAPTAIN_TITLES.includes(retrievedGroup.data.title)
+
+                    _isDirector =
+                        _isTeamCaptain ||
+                        DIRECTOR_TITLES.includes(retrievedGroup.data.title)
+                }
+                setIsAdmin(_isAdmin)
                 setIsDirector(_isDirector)
+                setIsTeamCaptain(_isTeamCaptain)
             } catch (err) {
                 console.log('Error: ' + err)
             }
@@ -126,7 +138,7 @@ export const AuthProvider = ({ children }) => {
         currentIdentifier,
         isDirector,
         isTeamCaptain,
-        isFacultyAdvisor,
+        isAdmin,
         login,
         logout,
     }

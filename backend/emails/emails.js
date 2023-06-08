@@ -144,7 +144,7 @@ const NewApprovedPurchaseRequest = (purchaseRequestIssueDetails) => {
         triggerIssueKey,
         reporter,
         triggerIssueSummary,
-        faculty_advisor_approval,
+        admin_approval,
         request_funding_amount,
         purchase_link,
         purchase_instructions,
@@ -160,7 +160,7 @@ const NewApprovedPurchaseRequest = (purchaseRequestIssueDetails) => {
             WATO Internal Reference ID: ${triggerIssueKey} <br />
             Team member name: ${reporter.displayName} <br />
             Summary: ${triggerIssueSummary} <br />
-            Faculty Advisor Approval: ${faculty_advisor_approval} <br />
+            Faculty Advisor Approval: ${admin_approval} <br />
             Estimated Cost: ${request_funding_amount} <br />
             CAD Purchase Link: ${purchase_link} <br />
             Purchase Instructions: ${purchase_instructions} <br />

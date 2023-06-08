@@ -126,9 +126,7 @@ const generateDummyPersonalPurchase = () => {
         purchase_justification: lorem.generateSentences(1),
         director_approval: false,
         team_captain_approval: false,
-        faculty_advisor_approval: false,
-        requisition_number: getRandomNumberFromLength(10),
-        po_number: getRandomNumberFromLength(8),
+        admin_approval: false,
     }
 }
 
@@ -154,7 +152,7 @@ const generateDummyUWFinancePurchaseRequest = () => {
         pickup_instruction: lorem.generateSentences(1),
         director_approval: false,
         team_captain_approval: false,
-        faculty_advisor_approval: false,
+        admin_approval: false,
         requisition_number: getRandomNumberFromLength(10),
         po_number: getRandomNumberFromLength(8),
     }
