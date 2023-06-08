@@ -36,12 +36,12 @@ const UPR_STATUS_FUNDING_SPENT = [
 const APPROVAL_LEVELS = Object.freeze({
     director_approval: 'director_approval',
     team_captain_approval: 'team_captain_approval',
-    admin_approval: 'ADMIN_approval',
+    admin_approval: 'admin_approval',
 })
 
-const ADMIN_EMAILS = ['drayside@uwaterloo.ca']
+const ADMIN_IDENTIFIERS = ['drayside@uwaterloo.ca', 'v2zheng', 'jw4he']
 const TEAM_CAPTAIN_TITLES = ['Team Captain']
-const DIRECTOR_TITLES = ['Admin', 'Director']
+const DIRECTOR_TITLES = ['Director']
 
 module.exports = {
     ENDOWMENT_FUNDS,
@@ -51,7 +51,7 @@ module.exports = {
     UPR_STATUS,
     UPR_STATUS_FUNDING_SPENT,
     APPROVAL_LEVELS,
-    ADMIN_EMAILS,
+    ADMIN_IDENTIFIERS,
     TEAM_CAPTAIN_TITLES,
     DIRECTOR_TITLES,
 }

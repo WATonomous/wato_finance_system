@@ -83,14 +83,14 @@ const PPRContentTable = ({ ticketData, partialUpdateAllTickets }) => {
                         }
                     />
                     <TicketContentTableRow
-                        heading={'Admin Approval'}
+                        heading={'Faculty Advisor Approval'}
                         value={
                             <Checkbox
                                 disabled={!auth.isAdmin}
                                 onChange={handleUpdateApproval(
                                     APPROVAL_LEVELS.admin_approval
                                 )}
-                                isChecked={ticketData.ADMIN_approval}
+                                isChecked={ticketData.admin_approval}
                             />
                         }
                     />

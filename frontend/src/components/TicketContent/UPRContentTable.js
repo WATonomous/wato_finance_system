@@ -91,7 +91,7 @@ const UPRContentTable = ({ ticketData, partialUpdateAllTickets }) => {
                         }
                     />
                     <TicketContentTableRow
-                        heading={'Admin Approval'}
+                        heading={'Faculty Advisor Approval'}
                         value={
                             <Checkbox
                                 disabled={!auth.isAdmin}

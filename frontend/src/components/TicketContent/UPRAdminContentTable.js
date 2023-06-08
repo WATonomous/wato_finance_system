@@ -26,10 +26,8 @@ const UPRAdminContentTable = () => {
 
     const saveFields = async () => {
         const payload = {
-            ticket_data: {
-                requisition_number: ticketData.requisition_number,
-                po_number: ticketData.po_number,
-            },
+            requisition_number: ticketData.requisition_number,
+            po_number: ticketData.po_number,
         }
         await axiosPreset.patch(
             `${TICKET_ENDPOINTS.UPR}/${ticketData._id}`,

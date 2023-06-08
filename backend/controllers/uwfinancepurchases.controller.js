@@ -7,7 +7,7 @@ const {
 const { getGoogleGroup } = require('./googlegroup.controller')
 const {
     APPROVAL_LEVELS,
-    ADMIN_EMAILS,
+    ADMIN_IDENTIFIERS,
     TEAM_CAPTAIN_TITLES,
     DIRECTOR_TITLES,
 } = require('../models/constants')
@@ -48,7 +48,7 @@ const updateApprovalsUWFinancePurchase = async (req, res) => {
 
     const currentGoogleGroup = await getGoogleGroup(identifier)
 
-    const isAdmin = ADMIN_EMAILS.includes(identifier)
+    const isAdmin = ADMIN_IDENTIFIERS.includes(identifier)
     const isTeamCaptain =
         isAdmin || TEAM_CAPTAIN_TITLES.includes(currentGoogleGroup.title)
     const isDirector =

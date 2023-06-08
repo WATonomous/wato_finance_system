@@ -15,9 +15,9 @@ export const TICKET_ENDPOINTS = Object.freeze({
 export const APPROVAL_LEVELS = Object.freeze({
     director_approval: 'director_approval',
     team_captain_approval: 'team_captain_approval',
-    ADMIN_approval: 'ADMIN_approval',
+    admin_approval: 'admin_approval',
 })
 
-export const ADMIN_EMAILS = ['drayside@uwaterloo.ca']
+export const ADMIN_IDENTIFIERS = ['drayside@uwaterloo.ca', 'v2zheng', 'jw4he']
 export const TEAM_CAPTAIN_TITLES = ['Team Captain']
-export const DIRECTOR_TITLES = ['Admin', 'Director']
+export const DIRECTOR_TITLES = ['Director']
