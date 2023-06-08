@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
     const [currentIdentifier, setCurrentIdentifier] = useState()
     const [isDirector, setIsDirector] = useState()
     const [isTeamCaptain, setIsTeamCaptain] = useState()
-    const [isAdmin, setisAdmin] = useState()
+    const [isAdmin, setIsAdmin] = useState()
     const [loading, setLoading] = useState(true)
     const auth = getAuth(app)
     const provider = new GoogleAuthProvider()
@@ -103,7 +103,7 @@ export const AuthProvider = ({ children }) => {
                         _isTeamCaptain ||
                         DIRECTOR_TITLES.includes(retrievedGroup.data.title)
                 }
-                setisAdmin(_isAdmin)
+                setIsAdmin(_isAdmin)
                 setIsDirector(_isDirector)
                 setIsTeamCaptain(_isTeamCaptain)
             } catch (err) {

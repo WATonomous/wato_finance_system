@@ -97,7 +97,7 @@ REACT_APP_BACKEND_URL=http://localhost:5000
 
 ### Changing authorization for debugging
 
-1. If you would like to change your authorization for debugging, set `REACT_APP_AUTH_OVERRIDE=ADMIN | TEAM_CAPTAIN | DIRECTOR`. Note that this will only reflect on the frontend. TODO: add tooling to support authorization overrides on the backend
+1. If you would like to change your authorization for debugging, set `REACT_APP_AUTH_OVERRIDE=ADMIN | TEAM_CAPTAIN | DIRECTOR` in the frontend env, and `AUTH_OVERRIDE=ADMIN | TEAM_CAPTAIN | DIRECTOR` in the backend env.
 
 ### Starting the app
 

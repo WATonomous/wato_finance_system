@@ -4,13 +4,8 @@ const {
     getAnnotatedPersonalPurchasesByIdList,
     getAnnotatedSponsorshipFundsByIdList,
 } = require('./annotatedGetters')
-const { getGoogleGroup } = require('./googlegroup.controller')
-const {
-    APPROVAL_LEVELS,
-    ADMIN_IDENTIFIERS,
-    TEAM_CAPTAIN_TITLES,
-    DIRECTOR_TITLES,
-} = require('../models/constants')
+const { APPROVAL_LEVELS } = require('../models/constants')
+const { getAuthRoles } = require('./getAuthRoles')
 
 const getAllPersonalPurchases = (_, res) => {
     getAnnotatedPersonalPurchasesByIdList()
@@ -46,13 +41,9 @@ const updatePersonalPurchase = (req, res) => {
 const updateApprovalsPersonalPurchase = async (req, res) => {
     const { ticket_data, approval_type, identifier } = req.body
 
-    const currentGoogleGroup = await getGoogleGroup(identifier)
-
-    const isAdmin = ADMIN_IDENTIFIERS.includes(identifier)
-    const isTeamCaptain =
-        isAdmin || TEAM_CAPTAIN_TITLES.includes(currentGoogleGroup.title)
-    const isDirector =
-        isTeamCaptain || DIRECTOR_TITLES.includes(currentGoogleGroup.title)
+    const { isAdmin, isTeamCaptain, isDirector } = await getAuthRoles(
+        identifier
+    )
 
     const canUpdateApproval =
         (approval_type === APPROVAL_LEVELS.admin_approval && isAdmin) ||
