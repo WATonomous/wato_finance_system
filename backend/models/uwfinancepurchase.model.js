@@ -20,7 +20,7 @@ const UWFinancePurchaseSchema = new Schema(
         pickup_instruction: { type: String },
         director_approval: { type: Boolean, default: false },
         team_captain_approval: { type: Boolean, default: false },
-        faculty_advisor_approval: { type: Boolean, default: false },
+        ADMIN_approval: { type: Boolean, default: false },
         requisition_number: { type: String },
         po_number: { type: String },
     },

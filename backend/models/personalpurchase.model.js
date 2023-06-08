@@ -18,7 +18,7 @@ const PersonalPurchaseSchema = new Schema(
         purchase_justification: { type: String, required: true },
         director_approval: { type: Boolean, default: false },
         team_captain_approval: { type: Boolean, default: false },
-        faculty_advisor_approval: { type: Boolean, default: false },
+        ADMIN_approval: { type: Boolean, default: false },
     },
     {
         _id: false,

@@ -240,7 +240,6 @@ const Dashboard = () => {
                                 </Button>
                             </Flex>
                         )}
-                    {auth.isAdmin && <AdminContentTable />}
                     {getCurrentTicketContentTable()}
                 </Flex>
                 <VStack w="40%" h="max-content" p="16px 24px 16px 0" gap="16px">

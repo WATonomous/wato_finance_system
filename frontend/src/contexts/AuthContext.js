@@ -11,7 +11,7 @@ import app from '../firebase'
 import axios from 'axios'
 import { useToast } from '@chakra-ui/react'
 import {
-    FACULTY_ADVISOR_EMAILS,
+    ADMIN_EMAILS,
     TEAM_CAPTAIN_TITLES,
     DIRECTOR_TITLES,
 } from '../constants'
@@ -94,7 +94,7 @@ export const AuthProvider = ({ children }) => {
                         process.env.REACT_APP_AUTH_OVERRIDE === 'DIRECTOR' ||
                         _isTeamCaptain
                 } else {
-                    _isAdmin = FACULTY_ADVISOR_EMAILS.includes(identifier)
+                    _isAdmin = ADMIN_EMAILS.includes(identifier)
 
                     _isTeamCaptain =
                         _isAdmin ||

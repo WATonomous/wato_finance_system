@@ -7,7 +7,7 @@ const {
 const { getGoogleGroup } = require('./googlegroup.controller')
 const {
     APPROVAL_LEVELS,
-    FACULTY_ADVISOR_EMAILS,
+    ADMIN_EMAILS,
     TEAM_CAPTAIN_TITLES,
     DIRECTOR_TITLES,
 } = require('../models/constants')
@@ -48,15 +48,14 @@ const updateApprovalsPersonalPurchase = async (req, res) => {
 
     const currentGoogleGroup = await getGoogleGroup(identifier)
 
-    const isAdmin = FACULTY_ADVISOR_EMAILS.includes(identifier)
+    const isAdmin = ADMIN_EMAILS.includes(identifier)
     const isTeamCaptain =
         isAdmin || TEAM_CAPTAIN_TITLES.includes(currentGoogleGroup.title)
     const isDirector =
         isTeamCaptain || DIRECTOR_TITLES.includes(currentGoogleGroup.title)
 
     const canUpdateApproval =
-        (approval_type === APPROVAL_LEVELS.faculty_advisor_approval &&
-            isFacultyAdvisor) ||
+        (approval_type === APPROVAL_LEVELS.admin_approval && isAdmin) ||
         (approval_type === APPROVAL_LEVELS.team_captain_approval &&
             isTeamCaptain) ||
         (approval_type === APPROVAL_LEVELS.director_approval && isDirector)
@@ -71,7 +70,7 @@ const updateApprovalsPersonalPurchase = async (req, res) => {
     )
     const completedApprovals =
         personalPurchase.team_captain_approval &&
-        personalPurchase.faculty_advisor_approval &&
+        personalPurchase.ADMIN_approval &&
         personalPurchase.director_approval
 
     if (completedApprovals) {
