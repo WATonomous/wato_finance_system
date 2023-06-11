@@ -1,18 +1,18 @@
 const {
-    getAllGoogleGroupsControl,
-    getGoogleGroupControl,
+    getAllGoogleGroups,
+    getGoogleGroup,
     updateGoogleGroups,
 } = require('../service/googlegroup.service')
 
 const getAllGoogleGroupsController = async (_, res) => {
-    return getAllGoogleGroupsControl()
-        .then((allPairs) => res.status(200).json(allPairs))
+    return getAllGoogleGroups()
+        .then((userGroups) => res.status(200).json(userGroups))
         .catch((error) => res.status(500).json(error))
 }
 
 const getGoogleGroupController = async (req, res) => {
     const { identifier } = req.params
-    return getGoogleGroupControl(identifier)
+    return getGoogleGroup(identifier)
         .then((userGroup) => res.status(200).json(userGroup))
         .catch((error) => res.status(500).json(error))
 }

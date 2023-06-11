@@ -1,15 +1,7 @@
 const GoogleGroup = require('../models/googlegroup.model')
 
-const getAllGoogleGroupsControl = async (_, res) => {
-    return getAllGoogleGroups()
-}
-
 const getAllGoogleGroups = async () => {
     return GoogleGroup.find()
-}
-
-const getGoogleGroupControl = async (identifier) => {
-    return getGoogleGroup(identifier)
 }
 
 const getGoogleGroup = async (identifier) => {
@@ -71,9 +63,7 @@ const updateGoogleGroups = async (body) => {
 }
 
 module.exports = {
-    getAllGoogleGroupsControl,
     getAllGoogleGroups,
-    getGoogleGroupControl,
     getGoogleGroup,
     updateGoogleGroups,
 }
