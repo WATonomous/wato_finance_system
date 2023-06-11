@@ -1,13 +1,23 @@
 const router = require('express').Router()
-const SponsorshipFundsController = require('../controllers/sponsorshipfunds.controller')
+const SponsorshipFundsController = require('../controller/sponsorshipfunds.controller')
 
-router.route('/').get(SponsorshipFundsController.getAllSponsorshipFunds)
-router.route('/').post(SponsorshipFundsController.createSponsorshipFund)
-router.route('/:id').get(SponsorshipFundsController.getSponsorshipFund)
+router
+    .route('/')
+    .get(SponsorshipFundsController.getAllSponsorshipFundsController)
+router
+    .route('/')
+    .post(SponsorshipFundsController.createSponsorshipFundController)
+router
+    .route('/:id')
+    .get(SponsorshipFundsController.getSponsorshipFundController)
 router
     .route('/getallchildren/:id')
-    .get(SponsorshipFundsController.getAllChildren)
-router.route('/:id').patch(SponsorshipFundsController.updateSponsorshipFund)
-router.route('/:id').delete(SponsorshipFundsController.deleteSponsorshipFund)
+    .get(SponsorshipFundsController.getAllChildrenController)
+router
+    .route('/:id')
+    .patch(SponsorshipFundsController.updateSponsorshipFundController)
+router
+    .route('/:id')
+    .delete(SponsorshipFundsController.deleteSponsorshipFundController)
 
 module.exports = router

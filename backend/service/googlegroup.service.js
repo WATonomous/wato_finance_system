@@ -1,42 +1,21 @@
 const GoogleGroup = require('../models/googlegroup.model')
 
 const getAllGoogleGroupsControl = async (_, res) => {
-    try {
-        const allPairs = await getAllGoogleGroups()
-        await res.status(200).json(allPairs)
-    } catch (err) {
-        console.log('Error: ' + err)
-    }
+    return getAllGoogleGroups()
 }
 
 const getAllGoogleGroups = async () => {
-    try {
-        const allPairs = await GoogleGroup.find()
-        return allPairs
-    } catch (err) {
-        console.log('Error: ' + err)
-    }
+    return GoogleGroup.find()
 }
 
-const getGoogleGroupControl = async (req, res) => {
-    const { identifier } = req.params
-    try {
-        const userGroup = await getGoogleGroup(identifier)
-        res.status(200).json(userGroup)
-    } catch (err) {
-        res.status(400).json('Error: ' + err)
-    }
+const getGoogleGroupControl = async (identifier) => {
+    return getGoogleGroup(identifier)
 }
 
 const getGoogleGroup = async (identifier) => {
-    try {
-        const userGroup = await GoogleGroup.findOne({
-            $or: [{ email: identifier }, { watiam: identifier }],
-        })
-        return userGroup
-    } catch (err) {
-        console.log('Error: ' + err)
-    }
+    return await GoogleGroup.findOne({
+        $or: [{ email: identifier }, { watiam: identifier }],
+    })
 }
 
 const deleteUsers = async (currentEmails, newEmails) => {
@@ -50,7 +29,7 @@ const deleteUsers = async (currentEmails, newEmails) => {
     console.log('User Cleanup Successful')
 }
 
-const upsertUsers = async (currentEmails, newPairs) => {
+const upsertUsers = async (newPairs) => {
     const bulkOps = []
     //update existing documents or add new ones
     newPairs.forEach((pair) => {
@@ -71,8 +50,8 @@ const upsertUsers = async (currentEmails, newPairs) => {
     console.log('Updating users successful')
 }
 
-const updateGoogleGroups = async (req, res) => {
-    const userDetails = req.body
+const updateGoogleGroups = async (body) => {
+    const userDetails = body
     const newUserDetails = userDetails.map((user) => {
         const { email } = user
         const userWatiam = email.substring(0, email.indexOf('@'))
@@ -87,12 +66,8 @@ const updateGoogleGroups = async (req, res) => {
     const currentEmails = currentGroups.map((group) => group.email)
     // new emails comes directly from our sheet, which is our source of truth
     const newEmails = newUserDetails.map((pair) => pair.email)
-    try {
-        await deleteUsers(currentEmails, newEmails)
-        await upsertUsers(currentEmails, newUserDetails)
-    } catch (err) {
-        res.status(400).json('Error: ' + err)
-    }
+    await deleteUsers(currentEmails, newEmails)
+    await upsertUsers(currentEmails, newUserDetails)
 }
 
 module.exports = {

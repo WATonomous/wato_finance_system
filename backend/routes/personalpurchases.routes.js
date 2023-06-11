@@ -1,16 +1,28 @@
 const router = require('express').Router()
-const PersonalPurchasesController = require('../controllers/personalpurchases.controller')
+const PersonalPurchasesController = require('../controller/personalpurchases.controller')
 
-router.route('/').get(PersonalPurchasesController.getAllPersonalPurchases)
-router.route('/').post(PersonalPurchasesController.createPersonalPurchase)
-router.route('/:id').get(PersonalPurchasesController.getPersonalPurchase)
-router.route('/:id').patch(PersonalPurchasesController.updatePersonalPurchase)
+router
+    .route('/')
+    .get(PersonalPurchasesController.getAllPersonalPurchasesController)
+router
+    .route('/')
+    .post(PersonalPurchasesController.createPersonalPurchaseController)
+router
+    .route('/:id')
+    .get(PersonalPurchasesController.getPersonalPurchaseController)
+router
+    .route('/:id')
+    .patch(PersonalPurchasesController.updatePersonalPurchaseController)
 router
     .route('/updateapprovals/:id')
-    .patch(PersonalPurchasesController.updateApprovalsPersonalPurchase)
-router.route('/:id').delete(PersonalPurchasesController.deletePersonalPurchase)
+    .patch(
+        PersonalPurchasesController.updateApprovalsPersonalPurchaseController
+    )
+router
+    .route('/:id')
+    .delete(PersonalPurchasesController.deletePersonalPurchaseController)
 router
     .route('/getsponsorshipfund/:id')
-    .get(PersonalPurchasesController.getSponsorshipFund)
+    .get(PersonalPurchasesController.getSponsorshipFundController)
 
 module.exports = router

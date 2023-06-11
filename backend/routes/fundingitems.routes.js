@@ -1,10 +1,10 @@
 const router = require('express').Router()
-const FundingItemsController = require('../controllers/fundingitems.controller')
+const FundingItemsHandler = require('../controller/fundingitems.controller')
 
-router.route('/').get(FundingItemsController.getAllFundingItems)
-router.route('/').post(FundingItemsController.createFundingItem)
-router.route('/:id').get(FundingItemsController.getFundingItem)
-router.route('/:id').patch(FundingItemsController.updateFundingItem)
-router.route('/:id').delete(FundingItemsController.deleteFundingItem)
+router.route('/').get(FundingItemsHandler.getAllFundingItemsController)
+router.route('/').post(FundingItemsHandler.createFundingItemController)
+router.route('/:id').get(FundingItemsHandler.getFundingItemController)
+router.route('/:id').patch(FundingItemsHandler.updateFundingItemController)
+router.route('/:id').delete(FundingItemsHandler.deleteFundingItemController)
 
 module.exports = router

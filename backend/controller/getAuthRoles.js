@@ -1,6 +1,6 @@
-const { getGoogleGroup } = require('./googlegroup.controller')
+const { getGoogleGroup } = require('../service/googlegroup.service')
 
-export const getAuthRoles = async (identifier) => {
+const getAuthRoles = async (identifier) => {
     const currentGoogleGroup = await getGoogleGroup(identifier)
 
     let isAdmin, isTeamCaptain, isDirector
@@ -23,4 +23,8 @@ export const getAuthRoles = async (identifier) => {
         isTeamCaptain,
         isDirector,
     }
+}
+
+module.exports = {
+    getAuthRoles,
 }
