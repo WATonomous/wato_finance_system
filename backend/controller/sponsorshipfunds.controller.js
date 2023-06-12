@@ -10,7 +10,7 @@ const {
 const getAllSponsorshipFundsController = (_, res) => {
     getAllSponsorshipFunds()
         .then((sponsorshipFunds) => {
-            res.json(sponsorshipFunds)
+            res.status(200).json(sponsorshipFunds)
         })
         .catch((err) => res.status(400).json(err))
 }
@@ -18,7 +18,7 @@ const getAllSponsorshipFundsController = (_, res) => {
 const getSponsorshipFundController = (req, res) => {
     getSponsorshipFund(req.params.id)
         .then((sponsorshipFunds) => {
-            res.json(sponsorshipFunds[0])
+            res.status(200).json(sponsorshipFunds[0])
         })
         .catch((err) => res.status(400).json(err))
 }
@@ -27,14 +27,14 @@ const getSponsorshipFundController = (req, res) => {
 const getAllChildrenController = async (req, res) => {
     getAllChildren(req.params.id)
         .then((sponsorshipFund) => {
-            res.json(sponsorshipFund)
+            res.status(200).json(sponsorshipFund)
         })
         .catch((err) => res.status(400).json(err))
 }
 
 const createSponsorshipFundController = (req, res) => {
     createSponsorshipFund(req.body)
-        .then((newSF) => res.json(newSF))
+        .then((newSF) => res.status(200).json(newSF))
         .catch((err) => res.status(400).json(err))
 }
 
@@ -42,14 +42,14 @@ const updateSponsorshipFundController = async (req, res) => {
     const { id } = req.params
     const { updatedFields } = req.body
     updateSponsorshipFund(id, updatedFields)
-        .then((updatedSF) => res.json(updatedSF))
+        .then((updatedSF) => res.status(200).json(updatedSF))
         .catch((err) => res.status(400).json(err))
 }
 
 const deleteSponsorshipFundController = async (req, res) => {
     const { id } = req.params
     deleteSponsorshipFund(id)
-        .then((deleted) => res.json(deleted))
+        .then((deleted) => res.status(200).json(deleted))
         .catch((err) => res.status(400).json(err))
 }
 

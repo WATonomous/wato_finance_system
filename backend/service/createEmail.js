@@ -26,7 +26,7 @@ const createEmail = async (emailDetail) => {
     })
     try {
         await mailRequest
-        res.json(`successfully sent email!`)
+        res.status(200).json(`successfully sent email!`)
     } catch (err) {
         res.status(500).send(`Uh oh bad email!: ${err}`)
     }

@@ -13,26 +13,26 @@ const {
 const getAllUWFinancePurchasesController = (_, res) => {
     getAllUWFinancePurchases()
         .then((uwFinancePurchases) => {
-            res.json(uwFinancePurchases)
+            res.status(200).json(uwFinancePurchases)
         })
         .catch((err) => res.status(400).json('Error: ' + err))
 }
 
 const getUWFinancePurchaseController = (req, res) => {
     getUWFinancePurchase(req.params.id)
-        .then((uwFinancePurchase) => res.json(uwFinancePurchase))
+        .then((uwFinancePurchase) => res.status(200).json(uwFinancePurchase))
         .catch((err) => res.status(400).json('Error: ' + err))
 }
 
 const createNewUWFinancePurchaseController = async (req, res) => {
     createNewUWFinancePurchase(req.body)
-        .then((newUPR) => res.json(newUPR))
+        .then((newUPR) => res.status(200).json(newUPR))
         .catch((err) => res.status(400).json('Error: ' + err))
 }
 
 const updateUWFinancePurchaseController = (req, res) => {
     updateUWFinancePurchase(req.params.id, req.body)
-        .then(() => res.json(req.body))
+        .then(() => res.status(200).json(req.body))
         .catch((err) => res.status(400).json('Error: ' + err))
 }
 
@@ -51,7 +51,7 @@ const updateApprovalsUWFinancePurchaseController = async (req, res) => {
     if (canUpdateApproval) {
         return updateApprovalsUWFinancePurchase(ticket_data)
             .then((uwFinancePurchase) => {
-                res.json(uwFinancePurchase)
+                res.status(200).json(uwFinancePurchase)
             })
             .catch((err) => res.status(400).json('Error: ' + err))
     }
@@ -60,14 +60,14 @@ const updateApprovalsUWFinancePurchaseController = async (req, res) => {
 
 const deleteUWFinancePurchaseController = async (req, res) => {
     deleteUWFinancePurchase(req.params.id)
-        .then((deleted) => res.json(deleted))
+        .then((deleted) => res.status(200).json(deleted))
         .catch((err) => res.status(400).json('Error: ' + err))
 }
 
 const getSponsorshipFundController = async (req, res) => {
     getSponsorshipFund(req.params.id)
         .then((sponsorshipFund) => {
-            res.json(sponsorshipFund)
+            res.status(200).json(sponsorshipFund)
         })
         .catch((err) => res.status(400).json('Error: ' + err))
 }
