@@ -50,7 +50,7 @@ const updateApprovalsPersonalPurchaseController = async (req, res) => {
         return
     }
 
-    updateApprovalsPersonalPurchase(ticket_data)
+    updateApprovalsPersonalPurchase(req.params.id, ticket_data)
         .then((personalpurchase) => {
             res.status(200).json(personalpurchase)
         })

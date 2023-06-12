@@ -49,7 +49,7 @@ const updateApprovalsUWFinancePurchaseController = async (req, res) => {
         (approval_type === APPROVAL_LEVELS.director_approval && isDirector)
 
     if (canUpdateApproval) {
-        return updateApprovalsUWFinancePurchase(ticket_data)
+        return updateApprovalsUWFinancePurchase(req.params.id, ticket_data)
             .then((uwFinancePurchase) => {
                 res.status(200).json(uwFinancePurchase)
             })

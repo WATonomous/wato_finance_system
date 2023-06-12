@@ -1,4 +1,9 @@
 const { getGoogleGroup } = require('../service/googlegroup.service')
+const {
+    ADMIN_IDENTIFIERS,
+    TEAM_CAPTAIN_TITLES,
+    DIRECTOR_TITLES,
+} = require('../models/constants')
 
 const getAuthRoles = async (identifier) => {
     const currentGoogleGroup = await getGoogleGroup(identifier)

@@ -33,9 +33,9 @@ const updateUWFinancePurchase = (id, body) => {
     })
 }
 
-const updateApprovalsUWFinancePurchase = (ticket_data) => {
+const updateApprovalsUWFinancePurchase = (id, ticket_data) => {
     const newUWFinancePurchase = UWFinancePurchase.findByIdAndUpdate(
-        req.params.id,
+        id,
         ticket_data,
         {
             new: true,
@@ -48,7 +48,7 @@ const updateApprovalsUWFinancePurchase = (ticket_data) => {
 
     if (completedApprovals) {
         return UWFinancePurchase.findByIdAndUpdate(
-            req.params.id,
+            id,
             {
                 status: 'READY_TO_BUY',
             },

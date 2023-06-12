@@ -33,9 +33,9 @@ const updatePersonalPurchase = (id, body) => {
     })
 }
 
-const updateApprovalsPersonalPurchase = (ticket_data) => {
+const updateApprovalsPersonalPurchase = (id, ticket_data) => {
     const personalPurchase = PersonalPurchase.findByIdAndUpdate(
-        req.params.id,
+        id,
         ticket_data,
         {
             new: true,
@@ -48,7 +48,7 @@ const updateApprovalsPersonalPurchase = (ticket_data) => {
 
     if (completedApprovals) {
         return personalPurchase.findByIdAndUpdate(
-            req.params.id,
+            id,
             {
                 status: 'READY_TO_BUY',
             },
@@ -65,7 +65,7 @@ const updateApprovalsPersonalPurchase = (ticket_data) => {
 const deletePersonalPurchase = async (id) => {
     const PPRtoDelete = await PersonalPurchase.findById(id)
     await FundingItem.findByIdAndUpdate(PPRtoDelete.fi_link, {
-        $pull: { ppr_links: PPRid },
+        $pull: { ppr_links: id },
     })
     return PPRtoDelete.remove()
 }
