@@ -16,19 +16,30 @@ const getUWFinancePurchase = (id) => {
 const createNewUWFinancePurchase = async (body) => {
     const newUWFinancePurchase = new UWFinancePurchase(body)
     const newUPR = await newUWFinancePurchase.save()
-    return await FundingItem.findByIdAndUpdate(newUPR.fi_link, {
-        $push: { upr_links: newUPR._id },
-    })
+    return FundingItem.findByIdAndUpdate(
+        newUPR.fi_link,
+        {
+            $push: { upr_links: newUPR._id },
+        },
+        {
+            new: true,
+        }
+    )
 }
 
 const updateUWFinancePurchase = (id, body) => {
-    return UWFinancePurchase.findByIdAndUpdate(id, body)
+    return UWFinancePurchase.findByIdAndUpdate(id, body, {
+        new: true,
+    })
 }
 
-const updateApprovalsUWFinancePurchase = async (ticket_data) => {
+const updateApprovalsUWFinancePurchase = (ticket_data) => {
     const newUWFinancePurchase = UWFinancePurchase.findByIdAndUpdate(
         req.params.id,
-        ticket_data
+        ticket_data,
+        {
+            new: true,
+        }
     )
     const completedApprovals =
         newUWFinancePurchase.team_captain_approval &&
@@ -36,14 +47,20 @@ const updateApprovalsUWFinancePurchase = async (ticket_data) => {
         newUWFinancePurchase.director_approval
 
     if (completedApprovals) {
-        return UWFinancePurchase.findByIdAndUpdate(req.params.id, {
-            status: 'READY_TO_BUY',
-        })
+        return UWFinancePurchase.findByIdAndUpdate(
+            req.params.id,
+            {
+                status: 'READY_TO_BUY',
+            },
+            {
+                new: true,
+            }
+        )
     }
 
     // TODO: If this is the last approval, transition status to 'SENT_TO_COORDINATOR' and auto send email
 
-    return UWFinancePurchase.findByIdAndUpdate(req.params.id, ticket_data)
+    return newUWFinancePurchase
 }
 
 const deleteUWFinancePurchase = async (id) => {
@@ -51,13 +68,13 @@ const deleteUWFinancePurchase = async (id) => {
     await FundingItem.findByIdAndUpdate(UPRtoDelete.fi_link, {
         $pull: { upr_links: id },
     })
-    return await UPRtoDelete.remove()
+    return UPRtoDelete.remove()
 }
 
 const getSponsorshipFund = async (id) => {
     const uwFinancePurchase = await UWFinancePurchase.findById(id)
     const fundingItem = await FundingItem.findById(uwFinancePurchase?.fi_link)
-    return await getAnnotatedSponsorshipFundsByIdList([fundingItem?.sf_link])[0]
+    return getAnnotatedSponsorshipFundsByIdList([fundingItem?.sf_link])[0]
 }
 
 module.exports = {

@@ -24,7 +24,7 @@ const getUWFinancePurchaseController = (req, res) => {
         .catch((err) => res.status(500).json('Error: ' + err))
 }
 
-const createNewUWFinancePurchaseController = async (req, res) => {
+const createNewUWFinancePurchaseController = (req, res) => {
     createNewUWFinancePurchase(req.body)
         .then((newUPR) => res.status(200).json(newUPR))
         .catch((err) => res.status(500).json('Error: ' + err))
@@ -32,7 +32,7 @@ const createNewUWFinancePurchaseController = async (req, res) => {
 
 const updateUWFinancePurchaseController = (req, res) => {
     updateUWFinancePurchase(req.params.id, req.body)
-        .then(() => res.status(200).json(req.body))
+        .then((updatedUPR) => res.status(200).json(updatedUPR))
         .catch((err) => res.status(500).json('Error: ' + err))
 }
 
@@ -58,13 +58,13 @@ const updateApprovalsUWFinancePurchaseController = async (req, res) => {
     res.status(403).json('Error: Permission Denied')
 }
 
-const deleteUWFinancePurchaseController = async (req, res) => {
+const deleteUWFinancePurchaseController = (req, res) => {
     deleteUWFinancePurchase(req.params.id)
         .then((deleted) => res.status(200).json(deleted))
         .catch((err) => res.status(500).json('Error: ' + err))
 }
 
-const getSponsorshipFundController = async (req, res) => {
+const getSponsorshipFundController = (req, res) => {
     getSponsorshipFund(req.params.id)
         .then((sponsorshipFund) => {
             res.status(200).json(sponsorshipFund)

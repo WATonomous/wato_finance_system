@@ -1,11 +1,11 @@
 const GoogleGroup = require('../models/googlegroup.model')
 
-const getAllGoogleGroups = async () => {
+const getAllGoogleGroups = () => {
     return GoogleGroup.find()
 }
 
-const getGoogleGroup = async (identifier) => {
-    return await GoogleGroup.findOne({
+const getGoogleGroup = (identifier) => {
+    return GoogleGroup.findOne({
         $or: [{ email: identifier }, { watiam: identifier }],
     })
 }
@@ -59,7 +59,7 @@ const updateGoogleGroups = async (body) => {
     // new emails comes directly from our sheet, which is our source of truth
     const newEmails = newUserDetails.map((pair) => pair.email)
     await deleteUsers(currentEmails, newEmails)
-    await upsertUsers(currentEmails, newUserDetails)
+    await upsertUsers(newUserDetails)
 }
 
 module.exports = {

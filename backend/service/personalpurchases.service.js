@@ -16,19 +16,30 @@ const getPersonalPurchase = (id) => {
 const createPersonalPurchase = async (body) => {
     const newPersonalPurchase = new PersonalPurchase(body)
     const newPPR = await newPersonalPurchase.save()
-    return FundingItem.findByIdAndUpdate(newPPR.fi_link, {
-        $push: { ppr_links: newPPR._id },
-    })
+    return FundingItem.findByIdAndUpdate(
+        newPPR.fi_link,
+        {
+            $push: { ppr_links: newPPR._id },
+        },
+        {
+            new: true,
+        }
+    )
 }
 
 const updatePersonalPurchase = (id, body) => {
-    return PersonalPurchase.findByIdAndUpdate(id, body)
+    return PersonalPurchase.findByIdAndUpdate(id, body, {
+        new: true,
+    })
 }
 
-const updateApprovalsPersonalPurchase = async (ticket_data) => {
+const updateApprovalsPersonalPurchase = (ticket_data) => {
     const personalPurchase = PersonalPurchase.findByIdAndUpdate(
         req.params.id,
-        ticket_data
+        ticket_data,
+        {
+            new: true,
+        }
     )
     const completedApprovals =
         personalPurchase.team_captain_approval &&
@@ -36,9 +47,15 @@ const updateApprovalsPersonalPurchase = async (ticket_data) => {
         personalPurchase.director_approval
 
     if (completedApprovals) {
-        return personalPurchase.findByIdAndUpdate(req.params.id, {
-            status: 'READY_TO_BUY',
-        })
+        return personalPurchase.findByIdAndUpdate(
+            req.params.id,
+            {
+                status: 'READY_TO_BUY',
+            },
+            {
+                new: true,
+            }
+        )
     }
 
     // TODO: Transition status to 'SENT_TO_COORDINATOR' and auto send email

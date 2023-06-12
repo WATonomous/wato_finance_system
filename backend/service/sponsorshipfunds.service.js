@@ -48,8 +48,8 @@ const createSponsorshipFund = (body) => {
     return newSponsorshipFund.save()
 }
 
-const updateSponsorshipFund = async (id, updatedFieldFields) => {
-    return await SponsorshipFund.findByIdAndUpdate(id, updatedFields, {
+const updateSponsorshipFund = (id, body) => {
+    return SponsorshipFund.findByIdAndUpdate(id, body, {
         new: true,
     })
 }
@@ -62,8 +62,7 @@ const deleteSponsorshipFund = async (id) => {
             return cascadeDeleteFundingItem(fi_id)
         })
     )
-    const deleted = await SFToDelete.remove()
-    return deleted
+    return SFToDelete.remove()
 }
 
 module.exports = {

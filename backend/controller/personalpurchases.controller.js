@@ -21,15 +21,15 @@ const getPersonalPurchaseController = (req, res) => {
         .catch((err) => res.status(500).json('Error: ' + err))
 }
 
-const createPersonalPurchaseController = async (req, res) => {
-    return createPersonalPurchase(req.body)
+const createPersonalPurchaseController = (req, res) => {
+    createPersonalPurchase(req.body)
         .then((newPPR) => res.status(200).json(newPPR))
         .catch((err) => res.status(500).json('Error: ' + err))
 }
 
 const updatePersonalPurchaseController = (req, res) => {
     updatePersonalPurchase(req.params.id, req.body)
-        .then(() => res.status(200).json(req.body))
+        .then((updatedPPR) => res.status(200).json(updatedPPR))
         .catch((err) => res.status(500).json('Error: ' + err))
 }
 
@@ -50,21 +50,21 @@ const updateApprovalsPersonalPurchaseController = async (req, res) => {
         return
     }
 
-    return updateApprovalsPersonalPurchase(ticket_data)
+    updateApprovalsPersonalPurchase(ticket_data)
         .then((personalpurchase) => {
             res.status(200).json(personalpurchase)
         })
         .catch((err) => res.status(500).json('Error: ' + err))
 }
 
-const deletePersonalPurchaseController = async (req, res) => {
-    return deletePersonalPurchase(req.params.id)
+const deletePersonalPurchaseController = (req, res) => {
+    deletePersonalPurchase(req.params.id)
         .then((deleted) => res.status(200).json(deleted))
         .catch((err) => res.status(500).json('Error: ' + err))
 }
 
 const getSponsorshipFundController = async (req, res) => {
-    return getSponsorshipFund(req.params.id)
+    getSponsorshipFund(req.params.id)
         .then((sponsorshipFund) => res.status(200).json(sponsorshipFund))
         .catch((err) => res.status(500).json('Error: ' + err))
 }

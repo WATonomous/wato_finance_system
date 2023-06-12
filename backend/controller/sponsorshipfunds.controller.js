@@ -38,17 +38,14 @@ const createSponsorshipFundController = (req, res) => {
         .catch((err) => res.status(500).json('Error: ' + err))
 }
 
-const updateSponsorshipFundController = async (req, res) => {
-    const { id } = req.params
-    const { updatedFields } = req.body
-    updateSponsorshipFund(id, updatedFields)
+const updateSponsorshipFundController = (req, res) => {
+    updateSponsorshipFund(req.params.id, req.body)
         .then((updatedSF) => res.status(200).json(updatedSF))
         .catch((err) => res.status(500).json('Error: ' + err))
 }
 
-const deleteSponsorshipFundController = async (req, res) => {
-    const { id } = req.params
-    deleteSponsorshipFund(id)
+const deleteSponsorshipFundController = (req, res) => {
+    deleteSponsorshipFund(req.params.id)
         .then((deleted) => res.status(200).json(deleted))
         .catch((err) => res.status(500).json('Error: ' + err))
 }

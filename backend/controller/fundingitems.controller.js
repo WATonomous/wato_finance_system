@@ -22,7 +22,7 @@ const getFundingItemController = (req, res) => {
         .catch((err) => res.status(500).json('Error: ' + err))
 }
 
-const createFundingItemController = async (req, res) => {
+const createFundingItemController = (req, res) => {
     createFundingItem(req.body)
         .then((newFI) => res.status(200).json(newFI))
         .catch((err) => res.status(500).json('Error: ' + err))
@@ -30,11 +30,11 @@ const createFundingItemController = async (req, res) => {
 
 const updateFundingItemController = (req, res) => {
     updateFundingItem(req.params.id, req.body)
-        .then(() => res.status(200).json(req.body))
+        .then((updatedFI) => res.status(200).json(updatedFI))
         .catch((err) => res.status(500).json('Error: ' + err))
 }
 
-const deleteFundingItemController = async (req, res) => {
+const deleteFundingItemController = (req, res) => {
     deleteFundingItem(req.params.id)
         .then((deleted) => res.status(200).json(deleted))
         .catch((err) => res.status(500).json('Error: ' + err))
