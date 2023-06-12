@@ -14,6 +14,7 @@ import { Controller } from 'react-hook-form'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import './custom-datepicker.css'
+import { ENDOWMENT_FUNDS } from '../constants'
 
 const AVAILABLE_YEARS = [
     'Winter 2019',
@@ -39,12 +40,6 @@ const AVAILABLE_YEARS = [
     'Fall 2025',
 ]
 
-const ENDOWMENT_FUNDS = {
-    MEF: 'MEF',
-    WEEF: 'WEEF',
-    ENGSOC: 'EngSoc',
-    DEAN_OF_ENG: 'Dean of Eng',
-}
 export const SponsorshipFundForm = ({ register, control }) => {
     return (
         <>
@@ -60,9 +55,9 @@ export const SponsorshipFundForm = ({ register, control }) => {
                             })}
                             size="sm"
                         >
-                            {Object.keys(ENDOWMENT_FUNDS).map((fund) => (
+                            {ENDOWMENT_FUNDS.map((fund) => (
                                 <option value={fund} key={fund}>
-                                    {ENDOWMENT_FUNDS[fund]}
+                                    {fund}
                                 </option>
                             ))}
                         </Select>

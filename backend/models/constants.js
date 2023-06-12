@@ -2,7 +2,7 @@
 // FI = funding item
 // PPR = personal purchase request
 // UPR = UW finance purchase request
-const ENDOWMENT_FUNDS = ['MEF', 'WEEF', 'ENGSOC', 'DEAN_OF_ENG']
+const ENDOWMENT_FUNDS = ['MEF', 'WEEF', 'EngSoc', 'Dean of Eng']
 const SF_STATUS = ['ALLOCATED', 'CLAIM_SUBMITTED', 'REIMBURSED']
 const PPR_STATUS = [
     'SEEKING_APPROVAL',
