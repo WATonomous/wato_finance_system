@@ -21,3 +21,5 @@ export const APPROVAL_LEVELS = Object.freeze({
 export const ADMIN_IDENTIFIERS = ['drayside@uwaterloo.ca', 'v2zheng', 'jw4he']
 export const TEAM_CAPTAIN_TITLES = ['Team Captain']
 export const DIRECTOR_TITLES = ['Director']
+
+export const ENDOWMENT_FUNDS = ['MEF', 'WEEF', 'EngSoc', 'Dean of Eng']
