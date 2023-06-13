@@ -1,8 +1,8 @@
 const router = require('express').Router()
-const GoogleGroup = require('../controllers/googlegroup.controller')
+const GoogleGroup = require('../controller/googlegroup.controller')
 
-router.route('/').get(GoogleGroup.getAllGoogleGroupsControl)
-router.route('/:identifier').get(GoogleGroup.getGoogleGroupControl)
-router.route('/update').post(GoogleGroup.updateGoogleGroups)
+router.route('/').get(GoogleGroup.getAllGoogleGroupsController)
+router.route('/:identifier').get(GoogleGroup.getGoogleGroupController)
+router.route('/update').post(GoogleGroup.updateGoogleGroupsController)
 
 module.exports = router

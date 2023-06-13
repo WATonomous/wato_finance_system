@@ -1,18 +1,28 @@
 const router = require('express').Router()
-const UWFinancePurchasesController = require('../controllers/uwfinancepurchases.controller')
+const UWFinancePurchasesController = require('../controller/uwfinancepurchases.controller')
 
-router.route('/').get(UWFinancePurchasesController.getAllUWFinancePurchases)
-router.route('/').post(UWFinancePurchasesController.createNewUWFinancePurchase)
-router.route('/:id').get(UWFinancePurchasesController.getUWFinancePurchase)
-router.route('/:id').patch(UWFinancePurchasesController.updateUWFinancePurchase)
 router
-    .route('/updateapprovals/:id')
-    .patch(UWFinancePurchasesController.updateApprovalsUWFinancePurchase)
+    .route('/')
+    .get(UWFinancePurchasesController.getAllUWFinancePurchasesController)
+router
+    .route('/')
+    .post(UWFinancePurchasesController.createNewUWFinancePurchaseController)
 router
     .route('/:id')
-    .delete(UWFinancePurchasesController.deleteUWFinancePurchase)
+    .get(UWFinancePurchasesController.getUWFinancePurchaseController)
+router
+    .route('/:id')
+    .patch(UWFinancePurchasesController.updateUWFinancePurchaseController)
+router
+    .route('/updateapprovals/:id')
+    .patch(
+        UWFinancePurchasesController.updateApprovalsUWFinancePurchaseController
+    )
+router
+    .route('/:id')
+    .delete(UWFinancePurchasesController.deleteUWFinancePurchaseController)
 router
     .route('/getsponsorshipfund/:id')
-    .get(UWFinancePurchasesController.getSponsorshipFund)
+    .get(UWFinancePurchasesController.getSponsorshipFundController)
 
 module.exports = router
