@@ -11,8 +11,8 @@ const getAllGoogleGroupsController = async (_, res) => {
 }
 
 const getGoogleGroupController = async (req, res) => {
-    const { identifier } = req.params
-    return getGoogleGroup(identifier)
+    const { email } = req.params
+    return getGoogleGroup(email)
         .then((userGroup) => res.status(200).json(userGroup))
         .catch((error) => res.status(500).json(error))
 }

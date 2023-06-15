@@ -60,7 +60,8 @@ const Dashboard = () => {
 
     const auth = useAuth()
     const [allUsers, setAllUsers] = useState({ users: [] })
-    const [isCurrentTicketReporter, setIsCurrentTicketOwner] = useState(false)
+    const [isCurrentTicketReporter, setIsCurrentTicketReporter] =
+        useState(false)
     const setCurrentTree = useSetRecoilState(currentTreeState)
     const [currentTicket, setCurrentTicket] = useRecoilState(currentTicketState)
     const [allTickets, setAllTickets] = useRecoilState(allTicketsState)
@@ -128,7 +129,7 @@ const Dashboard = () => {
         }
         setCurrentTicket(currentTicketData)
         setCurrentTree(buildTicketTree(currentTicketData, allTickets))
-        setIsCurrentTicketOwner(
+        setIsCurrentTicketReporter(
             currentTicketData.reporter_id === auth.currentUser.uid
         )
     }, [

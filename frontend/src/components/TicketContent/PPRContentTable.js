@@ -16,7 +16,7 @@ const PPRContentTable = ({ ticketData, partialUpdateAllTickets }) => {
         const payload = {
             ticket_data: newTicketData,
             approval_type: approval_level,
-            identifier: auth.currentIdentifier,
+            user_uid: auth.currentUser.uid,
         }
         await axiosPreset.patch(
             `${TICKET_ENDPOINTS.PPR}/updateapprovals/${ticketData._id}`,

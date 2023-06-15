@@ -5,12 +5,14 @@ const getAllGoogleGroups = () => {
 }
 
 const getGoogleGroup = (identifier) => {
+    // TODO: handle case where a user does not have a watiam.
+    // This might happen if we get students from other universities (has happened before)
     return GoogleGroup.findOne({
         $or: [{ email: identifier }, { watiam: identifier }],
     })
 }
 
-const deleteUsers = async (currentEmails, newEmails) => {
+const deleteUnrecognizedUsers = async (currentEmails, newEmails) => {
     //delete documents that no longer exist in the incoming pairs
     const emailsToDelete = currentEmails.filter(
         (email) => !newEmails.includes(email)
@@ -58,7 +60,7 @@ const updateGoogleGroups = async (body) => {
     const currentEmails = currentGroups.map((group) => group.email)
     // new emails comes directly from our sheet, which is our source of truth
     const newEmails = newUserDetails.map((pair) => pair.email)
-    await deleteUsers(currentEmails, newEmails)
+    await deleteUnrecognizedUsers(currentEmails, newEmails)
     await upsertUsers(newUserDetails)
 }
 

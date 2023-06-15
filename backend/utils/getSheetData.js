@@ -1,6 +1,6 @@
 const Gsheet = require('google-spreadsheet')
 require('dotenv').config()
-const axios = require('axios')
+const { updateGoogleGroups } = require('../service/googlegroup.service')
 
 // Config variables
 const GOOGLE_SHEET_ID = process.env.GOOGLE_SHEET_ID
@@ -9,8 +9,8 @@ const SERVICE_ACCOUNT_EMAIL = process.env.SERVICE_ACCOUNT_EMAIL
 const SERVICE_ACCOUNT_PRIVATE_KEY = process.env.SERVICE_ACCOUNT_PRIVATE_KEY
 const doc = new Gsheet.GoogleSpreadsheet(GOOGLE_SHEET_ID)
 
-const EMAIL_HEADER_NAME = 'UW email*'
-const TITLE_HEADER_NAME = 'Title*'
+const SCHOOL_EMAIL_HEADER = 'Email'
+const TITLE_HEADER = 'Title'
 
 const readSpreadsheet = async () => {
     try {
@@ -25,8 +25,8 @@ const readSpreadsheet = async () => {
         const rows = await sheet.getRows()
 
         return rows.map((row) => ({
-            email: row[EMAIL_HEADER_NAME],
-            title: row[TITLE_HEADER_NAME],
+            email: row[SCHOOL_EMAIL_HEADER],
+            title: row[TITLE_HEADER],
         }))
     } catch (e) {
         console.error('Error: ', e)
@@ -34,13 +34,11 @@ const readSpreadsheet = async () => {
 }
 
 const updateGroup = async () => {
-    const pairs = await readSpreadsheet()
+    const userRows = await readSpreadsheet()
     try {
-        const cleanedPairs = pairs.filter((pair) => pair.title)
-        await axios.post(
-            `${process.env.REACT_APP_BACKEND_URL}/googlegroups/update`,
-            cleanedPairs
-        )
+        // only write if there was an associated title with the user. there should be one for everyone.
+        const cleanedUserRows = userRows.filter((pair) => pair.title)
+        await updateGoogleGroups(cleanedUserRows)
         console.log('Updated google groups')
     } catch (err) {
         console.error(err)

@@ -59,9 +59,10 @@ const updateFILinkPersonalPurchaseController = async (req, res) => {
 }
 
 const updateApprovalsPersonalPurchaseController = async (req, res) => {
-    const { ticket_data, approval_type, identifier } = req.body
+    const { ticket_data, approval_type, user_uid } = req.body
     const { isAdmin, isTeamCaptain, isDirector } = await getAuthRoles(
-        identifier
+        user_uid,
+        ticket_data?.reporter_id
     )
 
     const canUpdateApproval =

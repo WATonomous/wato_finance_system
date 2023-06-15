@@ -8,7 +8,6 @@ import {
 import React, { useContext, useEffect, useState, useCallback } from 'react'
 import { useOutlet } from 'react-router-dom'
 import app from '../firebase'
-import axios from 'axios'
 import { useToast } from '@chakra-ui/react'
 import {
     ADMIN_IDENTIFIERS,
@@ -75,7 +74,6 @@ export const AuthProvider = ({ children }) => {
             const searchWithEmail = whitelist.includes(userEmail)
             try {
                 const identifier = searchWithEmail ? userEmail : userWatiam
-                setCurrentIdentifier(identifier)
 
                 const retrievedGroup = await axiosPreset.get(
                     `${process.env.REACT_APP_BACKEND_URL}/googlegroups/${identifier}`

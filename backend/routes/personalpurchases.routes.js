@@ -1,53 +1,53 @@
 const router = require('express').Router()
 const PersonalPurchasesController = require('../controller/personalpurchases.controller')
 
-const { validateUser } = require('../auth/middleware')
+const { authenticateUser } = require('../auth/middleware')
 router
     .route('/')
     .get(
-        validateUser,
+        authenticateUser,
         PersonalPurchasesController.getAllPersonalPurchasesController
     )
 router
     .route('/')
     .post(
-        validateUser,
+        authenticateUser,
         PersonalPurchasesController.createPersonalPurchaseController
     )
 router
     .route('/:id')
     .get(
-        validateUser,
+        authenticateUser,
         PersonalPurchasesController.getPersonalPurchaseController
     )
 router
     .route('/:id')
     .patch(
-        validateUser,
+        authenticateUser,
         PersonalPurchasesController.updatePersonalPurchaseController
     )
 router
     .route('/:id/update_fi_link/:fi_link')
     .patch(
-        validateUser,
+        authenticateUser,
         PersonalPurchasesController.updateFILinkPersonalPurchaseController
     )
 router
     .route('/updateapprovals/:id')
     .patch(
-        validateUser,
+        authenticateUser,
         PersonalPurchasesController.updateApprovalsPersonalPurchaseController
     )
 router
     .route('/:id')
     .delete(
-        validateUser,
+        authenticateUser,
         PersonalPurchasesController.deletePersonalPurchaseController
     )
 router
     .route('/getsponsorshipfund/:id')
     .get(
-        validateUser,
+        authenticateUser,
         PersonalPurchasesController.getSponsorshipFundByPPRController
     )
 

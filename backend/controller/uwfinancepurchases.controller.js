@@ -64,7 +64,8 @@ const updateApprovalsUWFinancePurchaseController = async (req, res) => {
     const { ticket_data, approval_type, identifier } = req.body
 
     const { isAdmin, isTeamCaptain, isDirector } = await getAuthRoles(
-        identifier
+        identifier,
+        ticket_data?.reporter_id
     )
     const canUpdateApproval =
         (approval_type === APPROVAL_LEVELS.admin_approval && isAdmin) ||
