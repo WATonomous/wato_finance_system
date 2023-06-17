@@ -28,6 +28,11 @@ const createPersonalPurchaseController = (req, res) => {
 }
 
 const updatePersonalPurchaseController = (req, res) => {
+    if (req.body.fi_link) {
+        res.status(400).json('Error: fi_link in PPR cannot be patched')
+        return
+    }
+
     updatePersonalPurchase(req.params.id, req.body)
         .then((updatedPPR) => res.status(200).json(updatedPPR))
         .catch((err) => res.status(500).json('Error: ' + err))
