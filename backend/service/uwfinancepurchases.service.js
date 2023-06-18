@@ -72,10 +72,13 @@ const deleteUWFinancePurchase = async (id) => {
     return UPRtoDelete.remove()
 }
 
-const getSponsorshipFund = async (id) => {
+const getSponsorshipFundByUPR = async (id) => {
     const uwFinancePurchase = await UWFinancePurchase.findById(id)
     const fundingItem = await FundingItem.findById(uwFinancePurchase?.fi_link)
-    return getAnnotatedSponsorshipFundsByIdList([fundingItem?.sf_link])[0]
+    const sponsorshipFunds = await getAnnotatedSponsorshipFundsByIdList([
+        fundingItem?.sf_link,
+    ])
+    return sponsorshipFunds[0]
 }
 
 module.exports = {
@@ -85,5 +88,5 @@ module.exports = {
     updateUWFinancePurchase,
     updateApprovalsUWFinancePurchase,
     deleteUWFinancePurchase,
-    getSponsorshipFund,
+    getSponsorshipFundByUPR,
 }

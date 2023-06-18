@@ -7,7 +7,7 @@ const {
     updateUWFinancePurchase,
     updateApprovalsUWFinancePurchase,
     deleteUWFinancePurchase,
-    getSponsorshipFund,
+    getSponsorshipFundByUPR,
 } = require('../service/uwfinancepurchases.service')
 
 const getAllUWFinancePurchasesController = (_, res) => {
@@ -69,8 +69,8 @@ const deleteUWFinancePurchaseController = (req, res) => {
         .catch((err) => res.status(500).json('Error: ' + err))
 }
 
-const getSponsorshipFundController = (req, res) => {
-    getSponsorshipFund(req.params.id)
+const getSponsorshipFundByUPRController = (req, res) => {
+    getSponsorshipFundByUPR(req.params.id)
         .then((sponsorshipFund) => {
             res.status(200).json(sponsorshipFund)
         })
@@ -84,5 +84,5 @@ module.exports = {
     updateUWFinancePurchaseController,
     updateApprovalsUWFinancePurchaseController,
     deleteUWFinancePurchaseController,
-    getSponsorshipFundController,
+    getSponsorshipFundByUPRController,
 }

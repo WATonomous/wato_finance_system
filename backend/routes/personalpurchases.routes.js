@@ -23,6 +23,6 @@ router
     .delete(PersonalPurchasesController.deletePersonalPurchaseController)
 router
     .route('/getsponsorshipfund/:id')
-    .get(PersonalPurchasesController.getSponsorshipFundController)
+    .get(PersonalPurchasesController.getSponsorshipFundByPPRController)
 
 module.exports = router

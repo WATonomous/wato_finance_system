@@ -71,14 +71,13 @@ const deletePersonalPurchase = async (id) => {
     return PPRtoDelete.remove()
 }
 
-const getSponsorshipFund = async (id) => {
+const getSponsorshipFundByPPR = async (id) => {
     const personalPurchase = await PersonalPurchase.findById(id)
     const fundingItem = await FundingItem.findById(personalPurchase.fi_link)
-    getAnnotatedSponsorshipFundsByIdList([fundingItem?.sf_link]).then(
-        (sponsorshipFunds) => {
-            return sponsorshipFunds[0]
-        }
-    )
+    const sponsorshipFunds = await getAnnotatedSponsorshipFundsByIdList([
+        fundingItem?.sf_link,
+    ])
+    return sponsorshipFunds[0]
 }
 
 module.exports = {
@@ -88,5 +87,5 @@ module.exports = {
     updatePersonalPurchase,
     updateApprovalsPersonalPurchase,
     deletePersonalPurchase,
-    getSponsorshipFund,
+    getSponsorshipFundByPPR,
 }

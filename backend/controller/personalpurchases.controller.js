@@ -5,6 +5,7 @@ const {
     updatePersonalPurchase,
     updateApprovalsPersonalPurchase,
     deletePersonalPurchase,
+    getSponsorshipFundByPPR,
 } = require('../service/personalpurchases.service')
 const { APPROVAL_LEVELS } = require('../models/constants')
 const { getAuthRoles } = require('./getAuthRoles')
@@ -68,8 +69,8 @@ const deletePersonalPurchaseController = (req, res) => {
         .catch((err) => res.status(500).json('Error: ' + err))
 }
 
-const getSponsorshipFundController = async (req, res) => {
-    getSponsorshipFund(req.params.id)
+const getSponsorshipFundByPPRController = async (req, res) => {
+    getSponsorshipFundByPPR(req.params.id)
         .then((sponsorshipFund) => res.status(200).json(sponsorshipFund))
         .catch((err) => res.status(500).json('Error: ' + err))
 }
@@ -81,5 +82,5 @@ module.exports = {
     updatePersonalPurchaseController,
     updateApprovalsPersonalPurchaseController,
     deletePersonalPurchaseController,
-    getSponsorshipFundController,
+    getSponsorshipFundByPPRController,
 }
