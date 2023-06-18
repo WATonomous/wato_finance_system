@@ -8,8 +8,9 @@ const getAllFundingItems = () => {
     return getAnnotatedFundingItemsByIdList()
 }
 
-const getFundingItem = (id) => {
-    return getAnnotatedFundingItemsByIdList([id])[0]
+const getFundingItem = async (id) => {
+    const FI = await getAnnotatedFundingItemsByIdList([id])
+    return FI[0]
 }
 
 const createFundingItem = async (body) => {

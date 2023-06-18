@@ -17,8 +17,8 @@ const getAllSponsorshipFundsController = (_, res) => {
 
 const getSponsorshipFundController = (req, res) => {
     getSponsorshipFund(req.params.id)
-        .then((sponsorshipFunds) => {
-            res.status(200).json(sponsorshipFunds[0])
+        .then((sponsorshipFund) => {
+            res.status(200).json(sponsorshipFund)
         })
         .catch((err) => res.status(500).json('Error: ' + err))
 }

@@ -9,8 +9,9 @@ const getAllUWFinancePurchases = () => {
     return getAnnotatedUWFinancePurchasesByIdList()
 }
 
-const getUWFinancePurchase = (id) => {
-    return getAnnotatedUWFinancePurchasesByIdList([id])[0]
+const getUWFinancePurchase = async (id) => {
+    const UPR = await getAnnotatedUWFinancePurchasesByIdList([id])
+    return UPR[0]
 }
 
 const createNewUWFinancePurchase = async (body) => {

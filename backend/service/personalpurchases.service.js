@@ -9,8 +9,9 @@ const getAllPersonalPurchases = () => {
     return getAnnotatedPersonalPurchasesByIdList()
 }
 
-const getPersonalPurchase = (id) => {
-    return getAnnotatedPersonalPurchasesByIdList([id])
+const getPersonalPurchase = async (id) => {
+    const PPR = await getAnnotatedPersonalPurchasesByIdList([id])
+    return PPR[0]
 }
 
 const createPersonalPurchase = async (body) => {
