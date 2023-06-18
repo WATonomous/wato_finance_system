@@ -20,7 +20,6 @@ import TicketList from '../components/TicketList'
 import LoadingSpinner from '../components/LoadingSpinner'
 import { getStandardizedDate } from '../utils/utils'
 import { useAuth } from '../contexts/AuthContext'
-import app from '../firebase'
 import FIContentTable from '../components/TicketContent/FIContentTable'
 import TicketContentTableRow from '../components/TicketContent/TicketContentTableRow'
 import SFContentTable from '../components/TicketContent/SFContentTable'
@@ -59,7 +58,7 @@ const Dashboard = () => {
         onClose: onCloseUpdateTicket,
     } = useDisclosure()
 
-    const auth = useAuth(app)
+    const auth = useAuth()
     const [allUsers, setAllUsers] = useState({ users: [] })
     const [isCurrentTicketReporter, setIsCurrentTicketOwner] = useState(false)
     const setCurrentTree = useSetRecoilState(currentTreeState)

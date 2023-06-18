@@ -2,13 +2,12 @@ import { Checkbox, Table, Tbody, VStack } from '@chakra-ui/react'
 import React from 'react'
 import { getFormattedCurrency } from '../../utils/utils'
 import TicketContentTableRow from './TicketContentTableRow'
-import app from '../../firebase'
 import { useAuth } from '../../contexts/AuthContext'
 import { axiosPreset } from '../../axiosConfig'
 import { TICKET_ENDPOINTS, APPROVAL_LEVELS } from '../../constants'
 
 const PPRContentTable = ({ ticketData, partialUpdateAllTickets }) => {
-    const auth = useAuth(app)
+    const auth = useAuth()
 
     const handleUpdateApproval = (approval_level) => async () => {
         const newTicketData = {

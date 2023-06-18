@@ -1,28 +1,45 @@
 const router = require('express').Router()
 const PersonalPurchasesController = require('../controller/personalpurchases.controller')
 
+const { validateUser } = require('../auth/middleware')
 router
     .route('/')
-    .get(PersonalPurchasesController.getAllPersonalPurchasesController)
+    .get(
+        validateUser,
+        PersonalPurchasesController.getAllPersonalPurchasesController
+    )
 router
     .route('/')
-    .post(PersonalPurchasesController.createPersonalPurchaseController)
+    .post(
+        validateUser,
+        PersonalPurchasesController.createPersonalPurchaseController
+    )
 router
     .route('/:id')
-    .get(PersonalPurchasesController.getPersonalPurchaseController)
+    .get(
+        validateUser,
+        PersonalPurchasesController.getPersonalPurchaseController
+    )
 router
     .route('/:id')
-    .patch(PersonalPurchasesController.updatePersonalPurchaseController)
+    .patch(
+        validateUser,
+        PersonalPurchasesController.updatePersonalPurchaseController
+    )
 router
     .route('/updateapprovals/:id')
     .patch(
+        validateUser,
         PersonalPurchasesController.updateApprovalsPersonalPurchaseController
     )
 router
     .route('/:id')
-    .delete(PersonalPurchasesController.deletePersonalPurchaseController)
+    .delete(
+        validateUser,
+        PersonalPurchasesController.deletePersonalPurchaseController
+    )
 router
     .route('/getsponsorshipfund/:id')
-    .get(PersonalPurchasesController.getSponsorshipFundController)
+    .get(validateUser, PersonalPurchasesController.getSponsorshipFundController)
 
 module.exports = router

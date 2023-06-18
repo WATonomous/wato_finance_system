@@ -13,7 +13,6 @@ import {
 } from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
 import { useAuth } from '../contexts/AuthContext'
-import app from '../firebase'
 import { axiosPreset } from '../axiosConfig'
 import {
     FundingItemForm,
@@ -27,7 +26,7 @@ export function CreateTicketModal({ isOpen, onClose, getAllTickets }) {
     const [ticketType, setTicketType] = useState('')
     const { control, register, handleSubmit, reset } = useForm()
     const [isLoading, setIsLoading] = useState(false)
-    const auth = useAuth(app)
+    const auth = useAuth()
 
     const displayTicketType = () => {
         switch (ticketType) {
