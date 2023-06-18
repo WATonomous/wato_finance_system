@@ -14,6 +14,9 @@ router
     .route('/:id')
     .patch(PersonalPurchasesController.updatePersonalPurchaseController)
 router
+    .route('/updatefilink/:id')
+    .patch(PersonalPurchasesController.updateFILinkPersonalPurchaseController)
+router
     .route('/updateapprovals/:id')
     .patch(
         PersonalPurchasesController.updateApprovalsPersonalPurchaseController

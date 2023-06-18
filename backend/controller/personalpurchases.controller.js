@@ -3,12 +3,14 @@ const {
     getPersonalPurchase,
     createPersonalPurchase,
     updatePersonalPurchase,
+    updateFILinkPersonalPurchase,
     updateApprovalsPersonalPurchase,
     deletePersonalPurchase,
     getSponsorshipFundByPPR,
 } = require('../service/personalpurchases.service')
 const { APPROVAL_LEVELS } = require('../models/constants')
 const { getAuthRoles } = require('./getAuthRoles')
+const FundingItem = require('../models/fundingitem.model')
 
 const getAllPersonalPurchasesController = (_, res) => {
     getAllPersonalPurchases()
@@ -35,6 +37,25 @@ const updatePersonalPurchaseController = (req, res) => {
     }
 
     updatePersonalPurchase(req.params.id, req.body)
+        .then((updatedPPR) => res.status(200).json(updatedPPR))
+        .catch((err) => res.status(500).json('Error: ' + err))
+}
+
+const updateFILinkPersonalPurchaseController = async (req, res) => {
+    const { fi_link } = req.body
+    // TODO: add auth check (director+ and owner should be allowed)
+    if (!fi_link) {
+        res.status(400).json('Error: patch must include fi_link')
+        return
+    }
+
+    const newFI = await FundingItem.exists({ _id: fi_link })
+    if (!newFI) {
+        res.status(400).json('Error: FI with _id of fi_link does not exist')
+        return
+    }
+
+    updateFILinkPersonalPurchase(req.params.id, fi_link)
         .then((updatedPPR) => res.status(200).json(updatedPPR))
         .catch((err) => res.status(500).json('Error: ' + err))
 }
@@ -80,6 +101,7 @@ module.exports = {
     getPersonalPurchaseController,
     createPersonalPurchaseController,
     updatePersonalPurchaseController,
+    updateFILinkPersonalPurchaseController,
     updateApprovalsPersonalPurchaseController,
     deletePersonalPurchaseController,
     getSponsorshipFundByPPRController,

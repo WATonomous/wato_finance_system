@@ -34,6 +34,23 @@ const updateUWFinancePurchase = (id, body) => {
     })
 }
 
+const updateFILinkUWFinancePurchase = async (id, new_fi_link) => {
+    const { fi_link: old_fi_link } = await getUWFinancePurchase(id)
+    await FundingItem.findByIdAndUpdate(old_fi_link, {
+        $pull: { ppr_links: id },
+    })
+    await FundingItem.findByIdAndUpdate(new_fi_link, {
+        $push: { ppr_links: id },
+    })
+    return UWFinancePurchase.findByIdAndUpdate(
+        id,
+        { fi_link: new_fi_link },
+        {
+            new: true,
+        }
+    )
+}
+
 const updateApprovalsUWFinancePurchase = (id, ticket_data) => {
     const newUWFinancePurchase = UWFinancePurchase.findByIdAndUpdate(
         id,
@@ -86,6 +103,7 @@ module.exports = {
     getUWFinancePurchase,
     createNewUWFinancePurchase,
     updateUWFinancePurchase,
+    updateFILinkUWFinancePurchase,
     updateApprovalsUWFinancePurchase,
     deleteUWFinancePurchase,
     getSponsorshipFundByUPR,

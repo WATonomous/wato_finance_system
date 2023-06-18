@@ -5,10 +5,12 @@ const {
     getUWFinancePurchase,
     createNewUWFinancePurchase,
     updateUWFinancePurchase,
+    updateFILinkUWFinancePurchase,
     updateApprovalsUWFinancePurchase,
     deleteUWFinancePurchase,
     getSponsorshipFundByUPR,
 } = require('../service/uwfinancepurchases.service')
+const FundingItem = require('../models/fundingitem.model')
 
 const getAllUWFinancePurchasesController = (_, res) => {
     getAllUWFinancePurchases()
@@ -38,6 +40,25 @@ const updateUWFinancePurchaseController = (req, res) => {
 
     updateUWFinancePurchase(req.params.id, req.body)
         .then((updatedUPR) => res.status(200).json(updatedUPR))
+        .catch((err) => res.status(500).json('Error: ' + err))
+}
+
+const updateFILinkUWFinancePurchaseController = async (req, res) => {
+    const { fi_link } = req.body
+    // TODO: add auth check (director+ and owner should be allowed)
+    if (!fi_link) {
+        res.status(400).json('Error: patch must include fi_link')
+        return
+    }
+
+    const newFI = await FundingItem.exists({ _id: fi_link })
+    if (!newFI) {
+        res.status(400).json('Error: FI with _id of fi_link does not exist')
+        return
+    }
+
+    updateFILinkUWFinancePurchase(req.params.id, fi_link)
+        .then((updatedPPR) => res.status(200).json(updatedPPR))
         .catch((err) => res.status(500).json('Error: ' + err))
 }
 
@@ -82,6 +103,7 @@ module.exports = {
     getUWFinancePurchaseController,
     createNewUWFinancePurchaseController,
     updateUWFinancePurchaseController,
+    updateFILinkUWFinancePurchaseController,
     updateApprovalsUWFinancePurchaseController,
     deleteUWFinancePurchaseController,
     getSponsorshipFundByUPRController,

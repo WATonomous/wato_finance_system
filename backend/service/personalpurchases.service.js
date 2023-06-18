@@ -34,6 +34,23 @@ const updatePersonalPurchase = (id, body) => {
     })
 }
 
+const updateFILinkPersonalPurchase = async (id, new_fi_link) => {
+    const { fi_link: old_fi_link } = await getPersonalPurchase(id)
+    await FundingItem.findByIdAndUpdate(old_fi_link, {
+        $pull: { ppr_links: id },
+    })
+    await FundingItem.findByIdAndUpdate(new_fi_link, {
+        $push: { ppr_links: id },
+    })
+    return PersonalPurchase.findByIdAndUpdate(
+        id,
+        { fi_link: new_fi_link },
+        {
+            new: true,
+        }
+    )
+}
+
 const updateApprovalsPersonalPurchase = (id, ticket_data) => {
     const personalPurchase = PersonalPurchase.findByIdAndUpdate(
         id,
@@ -85,6 +102,7 @@ module.exports = {
     getPersonalPurchase,
     createPersonalPurchase,
     updatePersonalPurchase,
+    updateFILinkPersonalPurchase,
     updateApprovalsPersonalPurchase,
     deletePersonalPurchase,
     getSponsorshipFundByPPR,

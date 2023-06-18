@@ -14,6 +14,9 @@ router
     .route('/:id')
     .patch(UWFinancePurchasesController.updateUWFinancePurchaseController)
 router
+    .route('/updatefilink/:id')
+    .patch(UWFinancePurchasesController.updateFILinkUWFinancePurchaseController)
+router
     .route('/updateapprovals/:id')
     .patch(
         UWFinancePurchasesController.updateApprovalsUWFinancePurchaseController
