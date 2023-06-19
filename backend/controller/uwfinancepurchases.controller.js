@@ -58,7 +58,7 @@ const updateFILinkUWFinancePurchaseController = async (req, res) => {
     }
 
     updateFILinkUWFinancePurchase(req.params.id, fi_link)
-        .then((updatedPPR) => res.status(200).json(updatedPPR))
+        .then((updatedUPR) => res.status(200).json(updatedUPR))
         .catch((err) => res.status(500).json('Error: ' + err))
 }
 

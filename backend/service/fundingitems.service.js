@@ -34,6 +34,23 @@ const updateFundingItem = (id, body) => {
     })
 }
 
+const updateSFLinkFundingItem = async (id, new_sf_link) => {
+    const { sf_link: old_sf_link } = await getFundingItem(id)
+    await SponsorshipFund.findByIdAndUpdate(old_sf_link, {
+        $pull: { fi_links: id },
+    })
+    await SponsorshipFund.findByIdAndUpdate(new_sf_link, {
+        $push: { fi_links: id },
+    })
+    return FundingItem.findByIdAndUpdate(
+        id,
+        { sf_link: new_sf_link },
+        {
+            new: true,
+        }
+    )
+}
+
 const deleteFundingItem = async (id) => {
     return cascadeDeleteFundingItem(id)
 }
@@ -54,6 +71,7 @@ module.exports = {
     getFundingItem,
     createFundingItem,
     updateFundingItem,
+    updateSFLinkFundingItem,
     deleteFundingItem,
     cascadeDeleteFundingItem,
 }

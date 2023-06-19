@@ -1,8 +1,10 @@
+const SponsorshipFund = require('../models/sponsorshipfund.model')
 const {
     getAllFundingItems,
     getFundingItem,
     createFundingItem,
     updateFundingItem,
+    updateSFLinkFundingItem,
     deleteFundingItem,
 } = require('../service/fundingitems.service')
 
@@ -41,6 +43,25 @@ const updateFundingItemController = (req, res) => {
         .catch((err) => res.status(500).json('Error: ' + err))
 }
 
+const updateSFLinkFundingItemController = async (req, res) => {
+    const { sf_link } = req.body
+    // TODO: add auth check (director+ and owner should be allowed)
+    if (!sf_link) {
+        res.status(400).json('Error: patch must include sf_link')
+        return
+    }
+
+    const newSF = await SponsorshipFund.exists({ _id: sf_link })
+    if (!newSF) {
+        res.status(400).json('Error: SF with _id of sf_link does not exist')
+        return
+    }
+
+    updateSFLinkFundingItem(req.params.id, sf_link)
+        .then((updatedFI) => res.status(200).json(updatedFI))
+        .catch((err) => res.status(500).json('Error: ' + err))
+}
+
 const deleteFundingItemController = (req, res) => {
     deleteFundingItem(req.params.id)
         .then((deleted) => res.status(200).json(deleted))
@@ -52,5 +73,6 @@ module.exports = {
     getFundingItemController,
     createFundingItemController,
     updateFundingItemController,
+    updateSFLinkFundingItemController,
     deleteFundingItemController,
 }
