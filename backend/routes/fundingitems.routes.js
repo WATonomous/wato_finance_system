@@ -5,7 +5,9 @@ router.route('/').get(FundingItemsController.getAllFundingItemsController)
 router.route('/').post(FundingItemsController.createFundingItemController)
 router.route('/:id').get(FundingItemsController.getFundingItemController)
 router.route('/:id').patch(FundingItemsController.updateFundingItemController)
-router.route('/updatesflink/:id').patch(FundingItemsController.updateSFLinkFundingItemController)
+router
+    .route('/updatesflink/:id')
+    .patch(FundingItemsController.updateSFLinkFundingItemController)
 router.route('/:id').delete(FundingItemsController.deleteFundingItemController)
 
 module.exports = router
