@@ -34,7 +34,9 @@ const createNewUWFinancePurchaseController = (req, res) => {
 
 const updateUWFinancePurchaseController = (req, res) => {
     if (req.body.fi_link) {
-        res.status(400).json('Error: fi_link in UPR must be patched via /update_fi_link')
+        res.status(400).json(
+            'Error: fi_link in UPR must be patched via /update_fi_link'
+        )
         return
     }
 
