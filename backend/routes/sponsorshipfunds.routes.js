@@ -1,23 +1,36 @@
 const router = require('express').Router()
 const SponsorshipFundsController = require('../controller/sponsorshipfunds.controller')
 
+const { validateUser } = require('../auth/middleware')
 router
     .route('/')
-    .get(SponsorshipFundsController.getAllSponsorshipFundsController)
+    .get(
+        validateUser,
+        SponsorshipFundsController.getAllSponsorshipFundsController
+    )
 router
     .route('/')
-    .post(SponsorshipFundsController.createSponsorshipFundController)
+    .post(
+        validateUser,
+        SponsorshipFundsController.createSponsorshipFundController
+    )
 router
     .route('/:id')
-    .get(SponsorshipFundsController.getSponsorshipFundController)
+    .get(validateUser, SponsorshipFundsController.getSponsorshipFundController)
 router
     .route('/getallchildren/:id')
-    .get(SponsorshipFundsController.getAllChildrenController)
+    .get(validateUser, SponsorshipFundsController.getAllChildrenController)
 router
     .route('/:id')
-    .patch(SponsorshipFundsController.updateSponsorshipFundController)
+    .patch(
+        validateUser,
+        SponsorshipFundsController.updateSponsorshipFundController
+    )
 router
     .route('/:id')
-    .delete(SponsorshipFundsController.deleteSponsorshipFundController)
+    .delete(
+        validateUser,
+        SponsorshipFundsController.deleteSponsorshipFundController
+    )
 
 module.exports = router
