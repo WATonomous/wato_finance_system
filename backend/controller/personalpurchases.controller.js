@@ -32,7 +32,7 @@ const createPersonalPurchaseController = (req, res) => {
 
 const updatePersonalPurchaseController = (req, res) => {
     if (req.body.fi_link) {
-        res.status(400).json('Error: fi_link in PPR cannot be patched')
+        res.status(400).json('Error: fi_link in PPR must be patched via /update_fi_link')
         return
     }
 
@@ -42,12 +42,8 @@ const updatePersonalPurchaseController = (req, res) => {
 }
 
 const updateFILinkPersonalPurchaseController = async (req, res) => {
-    const { fi_link } = req.body
+    const { fi_link } = req.params
     // TODO: add auth check (director+ and owner should be allowed)
-    if (!fi_link) {
-        res.status(400).json('Error: patch must include fi_link')
-        return
-    }
 
     const newFI = await FundingItem.exists({ _id: fi_link })
     if (!newFI) {

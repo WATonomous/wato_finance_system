@@ -33,7 +33,7 @@ const createFundingItemController = (req, res) => {
 const updateFundingItemController = (req, res) => {
     if (req.body.sf_link || req.body.ppr_links || req.body.upr_links) {
         res.status(400).json(
-            'Error: sf_link, ppr_links, and upr_links in FI cannot be patched'
+            'Error: ppr_links and upr_links in FI cannot be patched. sf_link must be patched via /update_sf_link'
         )
         return
     }
@@ -44,12 +44,8 @@ const updateFundingItemController = (req, res) => {
 }
 
 const updateSFLinkFundingItemController = async (req, res) => {
-    const { sf_link } = req.body
+    const { sf_link } = req.params
     // TODO: add auth check (director+ and owner should be allowed)
-    if (!sf_link) {
-        res.status(400).json('Error: patch must include sf_link')
-        return
-    }
 
     const newSF = await SponsorshipFund.exists({ _id: sf_link })
     if (!newSF) {
