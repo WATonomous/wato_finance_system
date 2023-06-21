@@ -1,13 +1,8 @@
 const router = require('express').Router()
 const GoogleGroup = require('../controller/googlegroup.controller')
-const { validateUser } = require('../auth/middleware')
 
-router.route('/').get(validateUser, GoogleGroup.getAllGoogleGroupsController)
-router
-    .route('/:identifier')
-    .get(validateUser, GoogleGroup.getGoogleGroupController)
-router
-    .route('/update')
-    .post(validateUser, GoogleGroup.updateGoogleGroupsController)
+router.route('/').get(GoogleGroup.getAllGoogleGroupsController)
+router.route('/:identifier').get(GoogleGroup.getGoogleGroupController)
+router.route('/update').post(GoogleGroup.updateGoogleGroupsController)
 
 module.exports = router

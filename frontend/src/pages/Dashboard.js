@@ -76,7 +76,7 @@ const Dashboard = () => {
 
     const getAllTickets = useCallback(async () => {
         setIsLoading(true)
-        const data = await axios.all(
+        const data = await axiosPreset.all(
             Object.values(TICKET_ENDPOINTS).map((endpoint) =>
                 axiosPreset.get(endpoint)
             )
@@ -93,7 +93,7 @@ const Dashboard = () => {
 
     const getAllUsers = () => {
         const endpoint = `${process.env.REACT_APP_BACKEND_URL}/users/`
-        axios.get(endpoint).then((response) => {
+        axiosPreset.get(endpoint).then((response) => {
             setAllUsers({ users: response.data })
         })
     }
