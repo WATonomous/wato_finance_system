@@ -14,6 +14,9 @@ router
     .route('/:id')
     .patch(PersonalPurchasesController.updatePersonalPurchaseController)
 router
+    .route('/:id/update_fi_link/:fi_link')
+    .patch(PersonalPurchasesController.updateFILinkPersonalPurchaseController)
+router
     .route('/updateapprovals/:id')
     .patch(
         PersonalPurchasesController.updateApprovalsPersonalPurchaseController
@@ -23,6 +26,6 @@ router
     .delete(PersonalPurchasesController.deletePersonalPurchaseController)
 router
     .route('/getsponsorshipfund/:id')
-    .get(PersonalPurchasesController.getSponsorshipFundController)
+    .get(PersonalPurchasesController.getSponsorshipFundByPPRController)
 
 module.exports = router

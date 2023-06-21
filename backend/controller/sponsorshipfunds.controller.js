@@ -17,8 +17,8 @@ const getAllSponsorshipFundsController = (_, res) => {
 
 const getSponsorshipFundController = (req, res) => {
     getSponsorshipFund(req.params.id)
-        .then((sponsorshipFunds) => {
-            res.status(200).json(sponsorshipFunds[0])
+        .then((sponsorshipFund) => {
+            res.status(200).json(sponsorshipFund)
         })
         .catch((err) => res.status(500).json('Error: ' + err))
 }
@@ -39,6 +39,11 @@ const createSponsorshipFundController = (req, res) => {
 }
 
 const updateSponsorshipFundController = (req, res) => {
+    if (req.body.fi_links) {
+        res.status(400).json('Error: fi_links in SF cannot be patched')
+        return
+    }
+
     updateSponsorshipFund(req.params.id, req.body)
         .then((updatedSF) => res.status(200).json(updatedSF))
         .catch((err) => res.status(500).json('Error: ' + err))

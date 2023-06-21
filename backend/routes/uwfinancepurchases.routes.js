@@ -14,6 +14,9 @@ router
     .route('/:id')
     .patch(UWFinancePurchasesController.updateUWFinancePurchaseController)
 router
+    .route('/:id/update_fi_link/:fi_link')
+    .patch(UWFinancePurchasesController.updateFILinkUWFinancePurchaseController)
+router
     .route('/updateapprovals/:id')
     .patch(
         UWFinancePurchasesController.updateApprovalsUWFinancePurchaseController
@@ -23,6 +26,6 @@ router
     .delete(UWFinancePurchasesController.deleteUWFinancePurchaseController)
 router
     .route('/getsponsorshipfund/:id')
-    .get(UWFinancePurchasesController.getSponsorshipFundController)
+    .get(UWFinancePurchasesController.getSponsorshipFundByUPRController)
 
 module.exports = router

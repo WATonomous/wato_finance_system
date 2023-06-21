@@ -5,10 +5,12 @@ const {
     getUWFinancePurchase,
     createNewUWFinancePurchase,
     updateUWFinancePurchase,
+    updateFILinkUWFinancePurchase,
     updateApprovalsUWFinancePurchase,
     deleteUWFinancePurchase,
-    getSponsorshipFund,
+    getSponsorshipFundByUPR,
 } = require('../service/uwfinancepurchases.service')
+const FundingItem = require('../models/fundingitem.model')
 
 const getAllUWFinancePurchasesController = (_, res) => {
     getAllUWFinancePurchases()
@@ -31,7 +33,29 @@ const createNewUWFinancePurchaseController = (req, res) => {
 }
 
 const updateUWFinancePurchaseController = (req, res) => {
+    if (req.body.fi_link) {
+        res.status(400).json(
+            'Error: fi_link in UPR must be patched via /update_fi_link'
+        )
+        return
+    }
+
     updateUWFinancePurchase(req.params.id, req.body)
+        .then((updatedUPR) => res.status(200).json(updatedUPR))
+        .catch((err) => res.status(500).json('Error: ' + err))
+}
+
+const updateFILinkUWFinancePurchaseController = async (req, res) => {
+    const { fi_link } = req.params
+    // TODO: add auth check (director+ and owner should be allowed)
+
+    const newFI = await FundingItem.exists({ _id: fi_link })
+    if (!newFI) {
+        res.status(400).json('Error: FI with _id of fi_link does not exist')
+        return
+    }
+
+    updateFILinkUWFinancePurchase(req.params.id, fi_link)
         .then((updatedUPR) => res.status(200).json(updatedUPR))
         .catch((err) => res.status(500).json('Error: ' + err))
 }
@@ -64,8 +88,8 @@ const deleteUWFinancePurchaseController = (req, res) => {
         .catch((err) => res.status(500).json('Error: ' + err))
 }
 
-const getSponsorshipFundController = (req, res) => {
-    getSponsorshipFund(req.params.id)
+const getSponsorshipFundByUPRController = (req, res) => {
+    getSponsorshipFundByUPR(req.params.id)
         .then((sponsorshipFund) => {
             res.status(200).json(sponsorshipFund)
         })
@@ -77,7 +101,8 @@ module.exports = {
     getUWFinancePurchaseController,
     createNewUWFinancePurchaseController,
     updateUWFinancePurchaseController,
+    updateFILinkUWFinancePurchaseController,
     updateApprovalsUWFinancePurchaseController,
     deleteUWFinancePurchaseController,
-    getSponsorshipFundController,
+    getSponsorshipFundByUPRController,
 }
