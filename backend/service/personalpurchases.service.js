@@ -9,8 +9,9 @@ const getAllPersonalPurchases = () => {
     return getAnnotatedPersonalPurchasesByIdList()
 }
 
-const getPersonalPurchase = (id) => {
-    return getAnnotatedPersonalPurchasesByIdList([id])
+const getPersonalPurchase = async (id) => {
+    const PPR = await getAnnotatedPersonalPurchasesByIdList([id])
+    return PPR[0]
 }
 
 const createPersonalPurchase = async (body) => {
@@ -31,6 +32,23 @@ const updatePersonalPurchase = (id, body) => {
     return PersonalPurchase.findByIdAndUpdate(id, body, {
         new: true,
     })
+}
+
+const updateFILinkPersonalPurchase = async (id, new_fi_link) => {
+    const { fi_link: old_fi_link } = await getPersonalPurchase(id)
+    await FundingItem.findByIdAndUpdate(old_fi_link, {
+        $pull: { ppr_links: id },
+    })
+    await FundingItem.findByIdAndUpdate(new_fi_link, {
+        $push: { ppr_links: id },
+    })
+    return PersonalPurchase.findByIdAndUpdate(
+        id,
+        { fi_link: new_fi_link },
+        {
+            new: true,
+        }
+    )
 }
 
 const updateApprovalsPersonalPurchase = (id, ticket_data) => {
@@ -70,14 +88,13 @@ const deletePersonalPurchase = async (id) => {
     return PPRtoDelete.remove()
 }
 
-const getSponsorshipFund = async (id) => {
+const getSponsorshipFundByPPR = async (id) => {
     const personalPurchase = await PersonalPurchase.findById(id)
     const fundingItem = await FundingItem.findById(personalPurchase.fi_link)
-    getAnnotatedSponsorshipFundsByIdList([fundingItem?.sf_link]).then(
-        (sponsorshipFunds) => {
-            return sponsorshipFunds[0]
-        }
-    )
+    const sponsorshipFunds = await getAnnotatedSponsorshipFundsByIdList([
+        fundingItem?.sf_link,
+    ])
+    return sponsorshipFunds[0]
 }
 
 module.exports = {
@@ -85,7 +102,8 @@ module.exports = {
     getPersonalPurchase,
     createPersonalPurchase,
     updatePersonalPurchase,
+    updateFILinkPersonalPurchase,
     updateApprovalsPersonalPurchase,
     deletePersonalPurchase,
-    getSponsorshipFund,
+    getSponsorshipFundByPPR,
 }

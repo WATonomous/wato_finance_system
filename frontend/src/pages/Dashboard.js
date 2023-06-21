@@ -76,7 +76,7 @@ const Dashboard = () => {
 
     const getAllTickets = useCallback(async () => {
         setIsLoading(true)
-        const data = await axiosPreset.all(
+        const data = await axios.all(
             Object.values(TICKET_ENDPOINTS).map((endpoint) =>
                 axiosPreset.get(endpoint)
             )

@@ -27,6 +27,12 @@ router
         UWFinancePurchasesController.updateUWFinancePurchaseController
     )
 router
+    .route('/:id/update_fi_link/:fi_link')
+    .patch(
+        validateUser,
+        UWFinancePurchasesController.updateFILinkUWFinancePurchaseController
+    )
+router
     .route('/updateapprovals/:id')
     .patch(
         validateUser,
@@ -42,7 +48,7 @@ router
     .route('/getsponsorshipfund/:id')
     .get(
         validateUser,
-        UWFinancePurchasesController.getSponsorshipFundController
+        UWFinancePurchasesController.getSponsorshipFundByUPRController
     )
 
 module.exports = router

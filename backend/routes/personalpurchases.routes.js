@@ -27,6 +27,12 @@ router
         PersonalPurchasesController.updatePersonalPurchaseController
     )
 router
+    .route('/:id/update_fi_link/:fi_link')
+    .patch(
+        validateUser,
+        PersonalPurchasesController.updateFILinkPersonalPurchaseController
+    )
+router
     .route('/updateapprovals/:id')
     .patch(
         validateUser,
@@ -40,6 +46,9 @@ router
     )
 router
     .route('/getsponsorshipfund/:id')
-    .get(validateUser, PersonalPurchasesController.getSponsorshipFundController)
+    .get(
+        validateUser,
+        PersonalPurchasesController.getSponsorshipFundByPPRController
+    )
 
 module.exports = router

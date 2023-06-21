@@ -1,8 +1,10 @@
+const SponsorshipFund = require('../models/sponsorshipfund.model')
 const {
     getAllFundingItems,
     getFundingItem,
     createFundingItem,
     updateFundingItem,
+    updateSFLinkFundingItem,
     deleteFundingItem,
 } = require('../service/fundingitems.service')
 
@@ -29,7 +31,29 @@ const createFundingItemController = (req, res) => {
 }
 
 const updateFundingItemController = (req, res) => {
+    if (req.body.sf_link || req.body.ppr_links || req.body.upr_links) {
+        res.status(400).json(
+            'Error: ppr_links and upr_links in FI cannot be patched. sf_link must be patched via /update_sf_link'
+        )
+        return
+    }
+
     updateFundingItem(req.params.id, req.body)
+        .then((updatedFI) => res.status(200).json(updatedFI))
+        .catch((err) => res.status(500).json('Error: ' + err))
+}
+
+const updateSFLinkFundingItemController = async (req, res) => {
+    const { sf_link } = req.params
+    // TODO: add auth check (director+ and owner should be allowed)
+
+    const newSF = await SponsorshipFund.exists({ _id: sf_link })
+    if (!newSF) {
+        res.status(400).json('Error: SF with _id of sf_link does not exist')
+        return
+    }
+
+    updateSFLinkFundingItem(req.params.id, sf_link)
         .then((updatedFI) => res.status(200).json(updatedFI))
         .catch((err) => res.status(500).json('Error: ' + err))
 }
@@ -45,5 +69,6 @@ module.exports = {
     getFundingItemController,
     createFundingItemController,
     updateFundingItemController,
+    updateSFLinkFundingItemController,
     deleteFundingItemController,
 }

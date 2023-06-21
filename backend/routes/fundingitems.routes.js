@@ -15,6 +15,12 @@ router
     .route('/:id')
     .patch(validateUser, FundingItemsController.updateFundingItemController)
 router
+    .route('/:id/update_sf_link/:sf_link')
+    .patch(
+        validateUser,
+        FundingItemsController.updateSFLinkFundingItemController
+    )
+router
     .route('/:id')
     .delete(validateUser, FundingItemsController.deleteFundingItemController)
 

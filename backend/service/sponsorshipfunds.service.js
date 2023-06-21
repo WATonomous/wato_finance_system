@@ -11,8 +11,9 @@ const getAllSponsorshipFunds = () => {
     return getAnnotatedSponsorshipFundsByIdList()
 }
 
-const getSponsorshipFund = (id) => {
-    return getAnnotatedSponsorshipFundsByIdList([id])
+const getSponsorshipFund = async (id) => {
+    const SF = await getAnnotatedSponsorshipFundsByIdList([id])
+    return SF[0]
 }
 
 // this function reaches all the way down to the children
