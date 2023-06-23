@@ -10,6 +10,7 @@ import {
     Flex,
     Textarea,
 } from '@chakra-ui/react'
+import { Select as SearchableSelect } from 'chakra-react-select'
 import { Controller } from 'react-hook-form'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -135,7 +136,12 @@ export const SponsorshipFundForm = ({ register, control }) => {
     )
 }
 
-export const FundingItemForm = ({ register, showSFLink }) => {
+export const FundingItemForm = ({
+    register,
+    control,
+    sfOptions,
+    showSFLink,
+}) => {
     return (
         <>
             <FormControl isRequired>
@@ -160,23 +166,27 @@ export const FundingItemForm = ({ register, showSFLink }) => {
                         })}
                     />
                 </InputGroup>
-
                 {showSFLink && (
                     <>
                         <FormLabel mt="10px">Parent Sponsorship Fund</FormLabel>
-                        <InputGroup size="sm">
-                            <InputLeftElement
-                                justifyContent="right"
-                                children="SF-"
-                            />
-                            <Input
-                                h="1.95rem"
-                                id="sf_link"
-                                {...register('sf_link', {
-                                    required: 'This is required',
-                                })}
-                            />
-                        </InputGroup>
+                        <Controller
+                            control={control}
+                            name="sf_link"
+                            rules={{ required: "This is required" }}
+                            render={({
+                                field: { onChange, onBlur, value, name, ref },
+                            }) => (
+                                <SearchableSelect
+                                    name={name}
+                                    ref={ref}
+                                    onChange={onChange}
+                                    onBlur={onBlur}
+                                    value={value}
+                                    options={sfOptions}
+                                    placeholder=""
+                                />
+                            )}
+                        />
                     </>
                 )}
             </FormControl>
