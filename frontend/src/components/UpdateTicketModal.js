@@ -29,11 +29,15 @@ export function UpdateTicketModal({ isOpen, onClose, getAllTickets }) {
             ...currentTicket,
             claim_deadline: new Date(currentTicket.claim_deadline),
             fi_link: {
-                label: allTickets[TICKET_TYPES.FI].find(fi => fi._id === currentTicket.fi_link)?.codename,
+                label: allTickets[TICKET_TYPES.FI].find(
+                    (fi) => fi._id === currentTicket.fi_link
+                )?.codename,
                 value: currentTicket.fi_link,
             },
             sf_link: {
-                label: allTickets[TICKET_TYPES.SF].find(sf => sf._id === currentTicket.sf_link)?.codename,
+                label: allTickets[TICKET_TYPES.SF].find(
+                    (sf) => sf._id === currentTicket.sf_link
+                )?.codename,
                 value: currentTicket.sf_link,
             },
         },
