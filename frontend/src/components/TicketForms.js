@@ -168,11 +168,11 @@ export const FundingItemForm = ({
                 </InputGroup>
                 {showSFLink && (
                     <>
-                        <FormLabel mt="10px">Parent Sponsorship Fund</FormLabel>
+                        <FormLabel mt="10px">Sponsorship Fund Link</FormLabel>
                         <Controller
                             control={control}
                             name="sf_link"
-                            rules={{ required: "This is required" }}
+                            rules={{ required: 'This is required' }}
                             render={({
                                 field: { onChange, onBlur, value, name, ref },
                             }) => (
@@ -207,7 +207,12 @@ export const FundingItemForm = ({
     )
 }
 
-export const UWFinancePurchaseForm = ({ register, showFILink }) => {
+export const UWFinancePurchaseForm = ({
+    register,
+    control,
+    fiOptions,
+    showFILink,
+}) => {
     return (
         <>
             <FormControl isRequired>
@@ -236,20 +241,24 @@ export const UWFinancePurchaseForm = ({ register, showFILink }) => {
                 {showFILink && (
                     <>
                         <FormLabel mt="10px">Funding Item Link</FormLabel>
-                        <InputGroup size="sm">
-                            <InputLeftElement
-                                justifyContent="right"
-                                children="FI-"
-                            />
-                            <Input
-                                id="fi_link"
-                                h="1.95rem"
-                                {...register('fi_link', {
-                                    required: 'This is required',
-                                })}
-                                size="sm"
-                            />
-                        </InputGroup>
+                        <Controller
+                            control={control}
+                            name="fi_link"
+                            rules={{ required: 'This is required' }}
+                            render={({
+                                field: { onChange, onBlur, value, name, ref },
+                            }) => (
+                                <SearchableSelect
+                                    name={name}
+                                    ref={ref}
+                                    onChange={onChange}
+                                    onBlur={onBlur}
+                                    value={value}
+                                    options={fiOptions}
+                                    placeholder=""
+                                />
+                            )}
+                        />
                     </>
                 )}
 
@@ -299,7 +308,12 @@ export const UWFinancePurchaseForm = ({ register, showFILink }) => {
     )
 }
 
-export const PersonalPurchaseForm = ({ register, showFILink }) => {
+export const PersonalPurchaseForm = ({
+    register,
+    control,
+    fiOptions,
+    showFILink,
+}) => {
     return (
         <>
             <FormControl isRequired>
@@ -328,19 +342,24 @@ export const PersonalPurchaseForm = ({ register, showFILink }) => {
                 {showFILink && (
                     <>
                         <FormLabel mt="10px">Funding Item Link</FormLabel>
-                        <InputGroup size="sm">
-                            <InputLeftElement
-                                justifyContent="right"
-                                children="FI-"
-                            />
-                            <Input
-                                id="fi_link"
-                                h="1.95rem"
-                                {...register('fi_link', {
-                                    required: 'This is required',
-                                })}
-                            />
-                        </InputGroup>
+                        <Controller
+                            control={control}
+                            name="fi_link"
+                            rules={{ required: 'This is required' }}
+                            render={({
+                                field: { onChange, onBlur, value, name, ref },
+                            }) => (
+                                <SearchableSelect
+                                    name={name}
+                                    ref={ref}
+                                    onChange={onChange}
+                                    onBlur={onBlur}
+                                    value={value}
+                                    options={fiOptions}
+                                    placeholder=""
+                                />
+                            )}
+                        />
                     </>
                 )}
 
