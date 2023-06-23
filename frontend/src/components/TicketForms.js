@@ -136,12 +136,7 @@ export const SponsorshipFundForm = ({ register, control }) => {
     )
 }
 
-export const FundingItemForm = ({
-    register,
-    control,
-    sfOptions,
-    showSFLink,
-}) => {
+export const FundingItemForm = ({ register, control, sfOptions }) => {
     return (
         <>
             <FormControl isRequired>
@@ -166,29 +161,27 @@ export const FundingItemForm = ({
                         })}
                     />
                 </InputGroup>
-                {showSFLink && (
-                    <>
-                        <FormLabel mt="10px">Sponsorship Fund Link</FormLabel>
-                        <Controller
-                            control={control}
-                            name="sf_link"
-                            rules={{ required: 'This is required' }}
-                            render={({
-                                field: { onChange, onBlur, value, name, ref },
-                            }) => (
-                                <SearchableSelect
-                                    name={name}
-                                    ref={ref}
-                                    onChange={onChange}
-                                    onBlur={onBlur}
-                                    value={value}
-                                    options={sfOptions}
-                                    placeholder=""
-                                />
-                            )}
+
+                <FormLabel mt="10px">Sponsorship Fund Link</FormLabel>
+                <Controller
+                    control={control}
+                    name="sf_link"
+                    rules={{ required: 'This is required' }}
+                    render={({
+                        field: { onChange, onBlur, value, name, ref },
+                    }) => (
+                        <SearchableSelect
+                            size="sm"
+                            name={name}
+                            ref={ref}
+                            onChange={onChange}
+                            onBlur={onBlur}
+                            value={value}
+                            options={sfOptions}
+                            placeholder=""
                         />
-                    </>
-                )}
+                    )}
+                />
             </FormControl>
 
             <FormControl>
@@ -207,12 +200,7 @@ export const FundingItemForm = ({
     )
 }
 
-export const UWFinancePurchaseForm = ({
-    register,
-    control,
-    fiOptions,
-    showFILink,
-}) => {
+export const UWFinancePurchaseForm = ({ register, control, fiOptions }) => {
     return (
         <>
             <FormControl isRequired>
@@ -238,29 +226,26 @@ export const UWFinancePurchaseForm = ({
                     />
                 </InputGroup>
 
-                {showFILink && (
-                    <>
-                        <FormLabel mt="10px">Funding Item Link</FormLabel>
-                        <Controller
-                            control={control}
-                            name="fi_link"
-                            rules={{ required: 'This is required' }}
-                            render={({
-                                field: { onChange, onBlur, value, name, ref },
-                            }) => (
-                                <SearchableSelect
-                                    name={name}
-                                    ref={ref}
-                                    onChange={onChange}
-                                    onBlur={onBlur}
-                                    value={value}
-                                    options={fiOptions}
-                                    placeholder=""
-                                />
-                            )}
+                <FormLabel mt="10px">Funding Item Link</FormLabel>
+                <Controller
+                    control={control}
+                    name="fi_link"
+                    rules={{ required: 'This is required' }}
+                    render={({
+                        field: { onChange, onBlur, value, name, ref },
+                    }) => (
+                        <SearchableSelect
+                            size="sm"
+                            name={name}
+                            ref={ref}
+                            onChange={onChange}
+                            onBlur={onBlur}
+                            value={value}
+                            options={fiOptions}
+                            placeholder=""
                         />
-                    </>
-                )}
+                    )}
+                />
 
                 <FormLabel mt="10px">Purchase URL </FormLabel>
                 <Input
@@ -308,12 +293,7 @@ export const UWFinancePurchaseForm = ({
     )
 }
 
-export const PersonalPurchaseForm = ({
-    register,
-    control,
-    fiOptions,
-    showFILink,
-}) => {
+export const PersonalPurchaseForm = ({ register, control, fiOptions }) => {
     return (
         <>
             <FormControl isRequired>
@@ -339,29 +319,26 @@ export const PersonalPurchaseForm = ({
                     />
                 </InputGroup>
 
-                {showFILink && (
-                    <>
-                        <FormLabel mt="10px">Funding Item Link</FormLabel>
-                        <Controller
-                            control={control}
-                            name="fi_link"
-                            rules={{ required: 'This is required' }}
-                            render={({
-                                field: { onChange, onBlur, value, name, ref },
-                            }) => (
-                                <SearchableSelect
-                                    name={name}
-                                    ref={ref}
-                                    onChange={onChange}
-                                    onBlur={onBlur}
-                                    value={value}
-                                    options={fiOptions}
-                                    placeholder=""
-                                />
-                            )}
+                <FormLabel mt="10px">Funding Item Link</FormLabel>
+                <Controller
+                    control={control}
+                    name="fi_link"
+                    rules={{ required: 'This is required' }}
+                    render={({
+                        field: { onChange, onBlur, value, name, ref },
+                    }) => (
+                        <SearchableSelect
+                            size="sm"
+                            name={name}
+                            ref={ref}
+                            onChange={onChange}
+                            onBlur={onBlur}
+                            value={value}
+                            options={fiOptions}
+                            placeholder=""
                         />
-                    </>
-                )}
+                    )}
+                />
 
                 <FormLabel mt="10px">Purchase URL </FormLabel>
                 <Input
