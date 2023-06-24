@@ -31,6 +31,11 @@ const createPersonalPurchaseController = (req, res) => {
 }
 
 const updatePersonalPurchaseController = (req, res) => {
+    if (!req.isDirector && !req.isReporter) {
+        res.status(403).json('Error: Must be Director+ or reporter to update')
+        return
+    }
+
     if (req.body.fi_link) {
         res.status(400).json(
             'Error: fi_link in PPR must be patched via /update_fi_link'
@@ -44,8 +49,11 @@ const updatePersonalPurchaseController = (req, res) => {
 }
 
 const updateFILinkPersonalPurchaseController = async (req, res) => {
+    if (!req.isDirector && !req.isReporter) {
+        res.status(403).json('Error: Must be Director+ or reporter to update')
+        return
+    }
     const { fi_link } = req.params
-    // TODO: add auth check (director+ and owner should be allowed)
 
     const newFI = await FundingItem.exists({ _id: fi_link })
     if (!newFI) {
@@ -84,6 +92,10 @@ const updateApprovalsPersonalPurchaseController = async (req, res) => {
 }
 
 const deletePersonalPurchaseController = (req, res) => {
+    if (!req.isDirector && !req.isReporter) {
+        res.status(403).json('Error: Must be Director+ or reporter to delete')
+        return
+    }
     deletePersonalPurchase(req.params.id)
         .then((deleted) => res.status(200).json(deleted))
         .catch((err) => res.status(500).json('Error: ' + err))

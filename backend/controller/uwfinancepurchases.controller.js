@@ -33,6 +33,11 @@ const createNewUWFinancePurchaseController = (req, res) => {
 }
 
 const updateUWFinancePurchaseController = (req, res) => {
+    if (!req.isDirector && !req.isReporter) {
+        res.status(403).json('Error: Must be Director+ or reporter to update')
+        return
+    }
+
     if (req.body.fi_link) {
         res.status(400).json(
             'Error: fi_link in UPR must be patched via /update_fi_link'
@@ -46,8 +51,12 @@ const updateUWFinancePurchaseController = (req, res) => {
 }
 
 const updateFILinkUWFinancePurchaseController = async (req, res) => {
+    if (!req.isDirector && !req.isReporter) {
+        res.status(403).json('Error: Must be Director+ or reporter to update')
+        return
+    }
+
     const { fi_link } = req.params
-    // TODO: add auth check (director+ and owner should be allowed)
 
     const newFI = await FundingItem.exists({ _id: fi_link })
     if (!newFI) {
@@ -84,6 +93,10 @@ const updateApprovalsUWFinancePurchaseController = async (req, res) => {
 }
 
 const deleteUWFinancePurchaseController = (req, res) => {
+    if (!req.isDirector && !req.isReporter) {
+        res.status(403).json('Error: Must be Director+ or reporter to delete')
+        return
+    }
     deleteUWFinancePurchase(req.params.id)
         .then((deleted) => res.status(200).json(deleted))
         .catch((err) => res.status(500).json('Error: ' + err))

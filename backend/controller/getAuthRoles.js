@@ -27,8 +27,6 @@ const getAuthRoles = async (user_uid, email, reporter_id) => {
         isDirector =
             isTeamCaptain || DIRECTOR_TITLES.includes(currentGoogleGroup.title)
         isReporter = reporter_id === user_uid
-        console.log(reporter_id)
-        console.log(isAdmin, isTeamCaptain, isDirector, isReporter)
     }
 
     return {
