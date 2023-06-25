@@ -31,7 +31,7 @@ const createFundingItemController = (req, res) => {
 }
 
 const updateFundingItemController = (req, res) => {
-    if (!req.isDirector && !req.isReporter) {
+    if (!req.user.isDirector && !req.user.isReporter) {
         res.status(403).json('Error: Must be Director+ or reporter to update')
         return
     }
@@ -49,7 +49,7 @@ const updateFundingItemController = (req, res) => {
 }
 
 const updateSFLinkFundingItemController = async (req, res) => {
-    if (!req.isDirector && !req.isReporter) {
+    if (!req.user.isDirector && !req.user.isReporter) {
         res.status(403).json('Error: Must be Director+ or reporter to update')
         return
     }
@@ -68,7 +68,7 @@ const updateSFLinkFundingItemController = async (req, res) => {
 }
 
 const deleteFundingItemController = (req, res) => {
-    if (!req.isDirector && !req.isReporter) {
+    if (!req.user.isDirector && !req.user.isReporter) {
         res.status(403).json('Error: Must be Director+ or reporter to delete')
         return
     }

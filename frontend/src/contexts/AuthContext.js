@@ -27,7 +27,6 @@ const whitelist = ['test@test.com']
 export const AuthProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState()
     const [currentUserGroup, setCurrentUserGroup] = useState()
-    const [currentIdentifier, setCurrentIdentifier] = useState()
     const [isDirector, setIsDirector] = useState()
     const [isTeamCaptain, setIsTeamCaptain] = useState()
     const [isAdmin, setIsAdmin] = useState()
@@ -130,7 +129,6 @@ export const AuthProvider = ({ children }) => {
     const providerState = {
         currentUser,
         currentUserGroup,
-        currentIdentifier,
         isDirector,
         isTeamCaptain,
         isAdmin,

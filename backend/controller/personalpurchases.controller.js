@@ -9,7 +9,6 @@ const {
     getSponsorshipFundByPPR,
 } = require('../service/personalpurchases.service')
 const { APPROVAL_LEVELS } = require('../models/constants')
-const { getAuthRoles } = require('./getAuthRoles')
 const FundingItem = require('../models/fundingitem.model')
 
 const getAllPersonalPurchasesController = (_, res) => {
@@ -31,7 +30,7 @@ const createPersonalPurchaseController = (req, res) => {
 }
 
 const updatePersonalPurchaseController = (req, res) => {
-    if (!req.isDirector && !req.isReporter) {
+    if (!req.user.isDirector && !req.user.isReporter) {
         res.status(403).json('Error: Must be Director+ or reporter to update')
         return
     }
@@ -49,7 +48,7 @@ const updatePersonalPurchaseController = (req, res) => {
 }
 
 const updateFILinkPersonalPurchaseController = async (req, res) => {
-    if (!req.isDirector && !req.isReporter) {
+    if (!req.user.isDirector && !req.user.isReporter) {
         res.status(403).json('Error: Must be Director+ or reporter to update')
         return
     }
@@ -67,17 +66,14 @@ const updateFILinkPersonalPurchaseController = async (req, res) => {
 }
 
 const updateApprovalsPersonalPurchaseController = async (req, res) => {
-    const { ticket_data, approval_type, user_uid } = req.body
-    const { isAdmin, isTeamCaptain, isDirector } = await getAuthRoles(
-        user_uid,
-        ticket_data?.reporter_id
-    )
-
+    const { ticket_data, approval_type } = req.body
     const canUpdateApproval =
-        (approval_type === APPROVAL_LEVELS.admin_approval && isAdmin) ||
+        (approval_type === APPROVAL_LEVELS.admin_approval &&
+            req.user.isAdmin) ||
         (approval_type === APPROVAL_LEVELS.team_captain_approval &&
-            isTeamCaptain) ||
-        (approval_type === APPROVAL_LEVELS.director_approval && isDirector)
+            req.user.isTeamCaptain) ||
+        (approval_type === APPROVAL_LEVELS.director_approval &&
+            req.user.isDirector)
 
     if (!canUpdateApproval) {
         res.status(403).json('Error: Permission Denied')
@@ -92,7 +88,7 @@ const updateApprovalsPersonalPurchaseController = async (req, res) => {
 }
 
 const deletePersonalPurchaseController = (req, res) => {
-    if (!req.isDirector && !req.isReporter) {
+    if (!req.user.isDirector && !req.user.isReporter) {
         res.status(403).json('Error: Must be Director+ or reporter to delete')
         return
     }

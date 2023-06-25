@@ -39,7 +39,7 @@ const createSponsorshipFundController = (req, res) => {
 }
 
 const updateSponsorshipFundController = (req, res) => {
-    if (!req.isDirector && !req.isReporter) {
+    if (!req.user.isDirector && !req.user.isReporter) {
         res.status(403).json('Error: Must be Director+ or reporter to update')
         return
     }
@@ -55,7 +55,7 @@ const updateSponsorshipFundController = (req, res) => {
 }
 
 const deleteSponsorshipFundController = (req, res) => {
-    if (!req.isDirector && !req.isReporter) {
+    if (!req.user.isDirector && !req.user.isReporter) {
         res.status(403).json('Error: Must be Director+ or reporter to delete')
         return
     }

@@ -50,10 +50,10 @@ const authenticateUser = async (req, res, next) => {
                 decodedToken.email,
                 reporter_id
             )
-        req.isDirector = isDirector
-        req.isAdmin = isAdmin
-        req.isTeamCaptain = isTeamCaptain
-        req.isReporter = isReporter
+        req.user.isDirector = isDirector
+        req.user.isAdmin = isAdmin
+        req.user.isTeamCaptain = isTeamCaptain
+        req.user.isReporter = isReporter
         next()
     } catch (err) {
         res.status(401).json({ error: `Invalid user token: ${err}` })

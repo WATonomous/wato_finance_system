@@ -37,7 +37,7 @@ const updateGroup = async () => {
     const userRows = await readSpreadsheet()
     try {
         // only write if there was an associated title with the user. there should be one for everyone.
-        const cleanedUserRows = userRows.filter((pair) => pair.title)
+        const cleanedUserRows = userRows.filter((userRow) => userRow.title)
         await updateGoogleGroups(cleanedUserRows)
         console.log('Updated google groups')
     } catch (err) {
