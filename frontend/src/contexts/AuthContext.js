@@ -78,17 +78,16 @@ export const AuthProvider = ({ children }) => {
             )
             setCurrentUserGroup(retrievedGroup?.data?.title)
 
-            let _isAdmin, _isTeamCaptain, _isDirector
+            let _isAdmin,
+                _isTeamCaptain,
+                _isDirector = false
             if (process.env?.REACT_APP_AUTH_OVERRIDE) {
-                _isAdmin = process.env.REACT_APP_AUTH_OVERRIDE === 'ADMIN'
-
-                _isTeamCaptain =
-                    process.env.REACT_APP_AUTH_OVERRIDE === 'TEAM_CAPTAIN' ||
-                    _isAdmin
-
-                _isDirector =
-                    process.env.REACT_APP_AUTH_OVERRIDE === 'DIRECTOR' ||
-                    _isTeamCaptain
+                const authRoles =
+                    process.env?.REACT_APP_AUTH_OVERRIDE?.split(',')
+                console.log(authRoles)
+                _isAdmin = authRoles.includes('ADMIN')
+                _isTeamCaptain = authRoles.includes('TEAM_CAPTAIN') || isAdmin
+                _isDirector = authRoles.includes('DIRECTOR') || isTeamCaptain
             } else {
                 _isAdmin = ADMIN_IDENTIFIERS.includes(identifier)
 
@@ -100,6 +99,9 @@ export const AuthProvider = ({ children }) => {
                     _isTeamCaptain ||
                     DIRECTOR_TITLES.includes(retrievedGroup.data.title)
             }
+            console.log(_isAdmin)
+            console.log(_isDirector)
+            console.log(_isTeamCaptain)
             setIsAdmin(_isAdmin)
             setIsDirector(_isDirector)
             setIsTeamCaptain(_isTeamCaptain)

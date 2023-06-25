@@ -16,10 +16,11 @@ const getAuthRoles = async (user_uid, email, reporter_id) => {
     let isAdmin, isTeamCaptain, isDirector, isReporter
 
     if (process.env?.AUTH_OVERRIDE) {
-        isAdmin = process.env.AUTH_OVERRIDE === 'ADMIN'
-        isTeamCaptain = process.env.AUTH_OVERRIDE === 'TEAM_CAPTAIN' || isAdmin
-        isDirector = process.env.AUTH_OVERRIDE === 'DIRECTOR' || isTeamCaptain
-        isReporter = process.env.AUTH_OVERRIDE === 'REPORTER'
+        const authRoles = process.env?.AUTH_OVERRIDE?.split(',')
+        isAdmin = authRoles.includes('ADMIN')
+        isTeamCaptain = authRoles.includes('TEAM_CAPTAIN') || isAdmin
+        isDirector = authRoles.includes('DIRECTOR') || isTeamCaptain
+        isReporter = authRoles.includes('REPORTER')
     } else {
         isAdmin = ADMIN_IDENTIFIERS.includes(email)
         isTeamCaptain =
