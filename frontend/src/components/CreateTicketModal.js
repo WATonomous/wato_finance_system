@@ -21,14 +21,26 @@ import {
     UWFinancePurchaseForm,
 } from './TicketForms'
 import { TICKET_ENDPOINTS, TICKET_TYPES } from '../constants'
+import { useRecoilValue } from 'recoil'
+import { allTicketsState } from '../state/atoms'
 
 export function CreateTicketModal({ isOpen, onClose, getAllTickets }) {
+    const allTickets = useRecoilValue(allTicketsState)
     const [ticketType, setTicketType] = useState('')
     const { control, register, handleSubmit, reset } = useForm()
     const [isLoading, setIsLoading] = useState(false)
     const auth = useAuth()
 
     const displayTicketType = () => {
+        const sfOptions = allTickets[TICKET_TYPES.SF].map((ticket) => ({
+            label: ticket.codename,
+            value: ticket._id,
+        }))
+        const fiOptions = allTickets[TICKET_TYPES.FI].map((ticket) => ({
+            label: ticket.codename,
+            value: ticket._id,
+        }))
+
         switch (ticketType) {
             case TICKET_TYPES.SF:
                 return (
@@ -38,11 +50,32 @@ export function CreateTicketModal({ isOpen, onClose, getAllTickets }) {
                     />
                 )
             case TICKET_TYPES.FI:
-                return <FundingItemForm register={register} showSFLink />
+                return (
+                    <FundingItemForm
+                        register={register}
+                        control={control}
+                        sfOptions={sfOptions}
+                        showSFLink
+                    />
+                )
             case TICKET_TYPES.PPR:
-                return <PersonalPurchaseForm register={register} showFILink />
+                return (
+                    <PersonalPurchaseForm
+                        register={register}
+                        control={control}
+                        fiOptions={fiOptions}
+                        showFILink
+                    />
+                )
             case TICKET_TYPES.UPR:
-                return <UWFinancePurchaseForm register={register} showFILink />
+                return (
+                    <UWFinancePurchaseForm
+                        register={register}
+                        control={control}
+                        fiOptions={fiOptions}
+                        showFILink
+                    />
+                )
             default:
                 return null
         }
@@ -58,7 +91,10 @@ export function CreateTicketModal({ isOpen, onClose, getAllTickets }) {
                 ticketType === TICKET_TYPES.UPR ||
                 ticketType === TICKET_TYPES.PPR
             ) {
+                payload.fi_link = formValues.fi_link.value
                 payload.status = 'SEEKING_APPROVAL'
+            } else if (ticketType === TICKET_TYPES.FI) {
+                payload.sf_link = formValues.sf_link.value
             } else if (ticketType === TICKET_TYPES.SF) {
                 payload.status = 'ALLOCATED'
             }

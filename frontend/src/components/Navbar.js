@@ -53,9 +53,11 @@ const Navbar = ({ getAllTickets }) => {
                 WATonomous Finance System
             </Heading>
             <Spacer />
-            <Button onClick={onOpen} colorScheme="green" mr="20px">
-                Create New Ticket
-            </Button>
+            {currentUser && (
+                <Button onClick={onOpen} colorScheme="green" mr="20px">
+                    Create New Ticket
+                </Button>
+            )}
             <Button
                 onClick={currentUser ? handleLogout : handleLogin}
                 disabled={loading}
