@@ -106,16 +106,31 @@ export function UpdateTicketModal({ isOpen, onClose, getAllTickets }) {
                     Object.keys(formState.dirtyFields).includes(key)
                 )
                 .reduce((cur, key) => {
+                    if (key === 'fi_link' || key === 'sf_link') {
+                        return cur
+                    }
                     return Object.assign(cur, { [key]: formValues[key] })
                 }, {})
 
             if (
-                currentTicket.type === TICKET_TYPES.UPR ||
-                currentTicket.type === TICKET_TYPES.PPR
+                currentTicket.fi_link !== formValues.fi_link.value &&
+                (currentTicket.type === TICKET_TYPES.UPR ||
+                    currentTicket.type === TICKET_TYPES.PPR)
             ) {
-                payload.fi_link = formValues.fi_link.value
-            } else if (currentTicket.type === TICKET_TYPES.FI) {
-                payload.sf_link = formValues.sf_link.value
+                await axiosPreset.patch(
+                    `${TICKET_ENDPOINTS[currentTicket.type]}/${
+                        currentTicket._id
+                    }/update_fi_link/${formValues.fi_link.value}`
+                )
+            } else if (
+                currentTicket.sf_link !== formValues.sf_link.value &&
+                currentTicket.type === TICKET_TYPES.FI
+            ) {
+                await axiosPreset.patch(
+                    `${TICKET_ENDPOINTS[currentTicket.type]}/${
+                        currentTicket._id
+                    }/update_sf_link/${formValues.sf_link.value}`
+                )
             }
 
             await axiosPreset.patch(
