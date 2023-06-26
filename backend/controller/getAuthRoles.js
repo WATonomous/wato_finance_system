@@ -22,7 +22,7 @@ const getAuthRoles = async (user_uid, email, reporter_id) => {
         isDirector = authRoles.includes('DIRECTOR') || isTeamCaptain
         isReporter = authRoles.includes('REPORTER')
     } else {
-        isAdmin = ADMIN_IDENTIFIERS.includes(email)
+        isAdmin = ADMIN_IDENTIFIERS.includes(watiam)
         isTeamCaptain =
             isAdmin || TEAM_CAPTAIN_TITLES.includes(currentGoogleGroup.title)
         isDirector =

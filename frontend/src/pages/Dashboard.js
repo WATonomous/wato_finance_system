@@ -129,8 +129,10 @@ const Dashboard = () => {
         }
         setCurrentTicket(currentTicketData)
         setCurrentTree(buildTicketTree(currentTicketData, allTickets))
+        const reporterOverride = process.env?.REACT_APP_REPORTER_OVERRIDE
         setIsCurrentTicketReporter(
-            currentTicketData.reporter_id === auth.currentUser.uid
+            currentTicketData.reporter_id === auth.currentUser.uid ||
+                reporterOverride
         )
     }, [
         location.pathname,
