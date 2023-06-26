@@ -31,6 +31,11 @@ const createFundingItemController = (req, res) => {
 }
 
 const updateFundingItemController = (req, res) => {
+    if (!req.user.isDirector && !req.user.isReporter) {
+        res.status(403).json('Error: Must be Director+ or reporter to update')
+        return
+    }
+
     if (req.body.sf_link || req.body.ppr_links || req.body.upr_links) {
         res.status(400).json(
             'Error: ppr_links and upr_links in FI cannot be patched. sf_link must be patched via /update_sf_link'
@@ -44,8 +49,12 @@ const updateFundingItemController = (req, res) => {
 }
 
 const updateSFLinkFundingItemController = async (req, res) => {
+    if (!req.user.isDirector && !req.user.isReporter) {
+        res.status(403).json('Error: Must be Director+ or reporter to update')
+        return
+    }
+
     const { sf_link } = req.params
-    // TODO: add auth check (director+ and owner should be allowed)
 
     const newSF = await SponsorshipFund.exists({ _id: sf_link })
     if (!newSF) {
@@ -59,6 +68,11 @@ const updateSFLinkFundingItemController = async (req, res) => {
 }
 
 const deleteFundingItemController = (req, res) => {
+    if (!req.user.isDirector && !req.user.isReporter) {
+        res.status(403).json('Error: Must be Director+ or reporter to delete')
+        return
+    }
+
     deleteFundingItem(req.params.id)
         .then((deleted) => res.status(200).json(deleted))
         .catch((err) => res.status(500).json('Error: ' + err))

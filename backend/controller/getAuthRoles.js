@@ -5,28 +5,36 @@ const {
     DIRECTOR_TITLES,
 } = require('../models/constants')
 
-const getAuthRoles = async (identifier) => {
-    const currentGoogleGroup = await getGoogleGroup(identifier)
+const getWATIAMFromEmail = async (email) => {
+    return email.substring(0, email.indexOf('@'))
+}
 
-    let isAdmin, isTeamCaptain, isDirector
+const getAuthRoles = async (user_uid, email, reporter_id) => {
+    const watiam = await getWATIAMFromEmail(email)
+    const currentGoogleGroup = await getGoogleGroup(watiam)
+
+    let isAdmin, isTeamCaptain, isDirector, isReporter
 
     if (process.env?.AUTH_OVERRIDE) {
-        _isAdmin = process.env.AUTH_OVERRIDE === 'ADMIN'
-        _isTeamCaptain =
-            process.env.AUTH_OVERRIDE === 'TEAM_CAPTAIN' || _isAdmin
-        _isDirector = process.env.AUTH_OVERRIDE === 'DIRECTOR' || _isTeamCaptain
+        const authRoles = process.env?.AUTH_OVERRIDE?.split(',')
+        isAdmin = authRoles.includes('ADMIN')
+        isTeamCaptain = authRoles.includes('TEAM_CAPTAIN') || isAdmin
+        isDirector = authRoles.includes('DIRECTOR') || isTeamCaptain
+        isReporter = authRoles.includes('REPORTER')
     } else {
-        isAdmin = ADMIN_IDENTIFIERS.includes(identifier)
+        isAdmin = ADMIN_IDENTIFIERS.includes(watiam)
         isTeamCaptain =
             isAdmin || TEAM_CAPTAIN_TITLES.includes(currentGoogleGroup.title)
         isDirector =
             isTeamCaptain || DIRECTOR_TITLES.includes(currentGoogleGroup.title)
+        isReporter = reporter_id === user_uid
     }
 
     return {
         isAdmin,
         isTeamCaptain,
         isDirector,
+        isReporter,
     }
 }
 

@@ -25,9 +25,6 @@ const DeleteTicketAlertDialog = ({ isOpen, onClose, getAllTickets }) => {
     const cancelRef = React.useRef()
 
     const handleDeleteCurrentTicket = async () => {
-        // TODO: add backend call to delete ticket
-        // maybe implement soft-delete with mongoose plugin
-        // redirect to homepage after delete
         try {
             setIsDisabled(true)
             await axiosPreset.delete(

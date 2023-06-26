@@ -16,7 +16,6 @@ const UPRContentTable = ({ ticketData, partialUpdateAllTickets }) => {
         const payload = {
             ticket_data: newTicketData,
             approval_type: approval_level,
-            identifier: auth.currentIdentifier,
         }
         await axiosPreset.patch(
             `${TICKET_ENDPOINTS.UPR}/updateapprovals/${ticketData._id}`,

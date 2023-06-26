@@ -1,35 +1,38 @@
 const router = require('express').Router()
 const SponsorshipFundsController = require('../controller/sponsorshipfunds.controller')
 
-const { validateUser } = require('../auth/middleware')
+const { authenticateUser } = require('../auth/middleware')
 router
     .route('/')
     .get(
-        validateUser,
+        authenticateUser,
         SponsorshipFundsController.getAllSponsorshipFundsController
     )
 router
     .route('/')
     .post(
-        validateUser,
+        authenticateUser,
         SponsorshipFundsController.createSponsorshipFundController
     )
 router
     .route('/:id')
-    .get(validateUser, SponsorshipFundsController.getSponsorshipFundController)
+    .get(
+        authenticateUser,
+        SponsorshipFundsController.getSponsorshipFundController
+    )
 router
     .route('/getallchildren/:id')
-    .get(validateUser, SponsorshipFundsController.getAllChildrenController)
+    .get(authenticateUser, SponsorshipFundsController.getAllChildrenController)
 router
     .route('/:id')
     .patch(
-        validateUser,
+        authenticateUser,
         SponsorshipFundsController.updateSponsorshipFundController
     )
 router
     .route('/:id')
     .delete(
-        validateUser,
+        authenticateUser,
         SponsorshipFundsController.deleteSponsorshipFundController
     )
 

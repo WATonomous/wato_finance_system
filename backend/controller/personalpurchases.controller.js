@@ -9,7 +9,6 @@ const {
     getSponsorshipFundByPPR,
 } = require('../service/personalpurchases.service')
 const { APPROVAL_LEVELS } = require('../models/constants')
-const { getAuthRoles } = require('./getAuthRoles')
 const FundingItem = require('../models/fundingitem.model')
 
 const getAllPersonalPurchasesController = (_, res) => {
@@ -31,6 +30,11 @@ const createPersonalPurchaseController = (req, res) => {
 }
 
 const updatePersonalPurchaseController = (req, res) => {
+    if (!req.user.isDirector && !req.user.isReporter) {
+        res.status(403).json('Error: Must be Director+ or reporter to update')
+        return
+    }
+
     if (req.body.fi_link) {
         res.status(400).json(
             'Error: fi_link in PPR must be patched via /update_fi_link'
@@ -44,8 +48,11 @@ const updatePersonalPurchaseController = (req, res) => {
 }
 
 const updateFILinkPersonalPurchaseController = async (req, res) => {
+    if (!req.user.isDirector && !req.user.isReporter) {
+        res.status(403).json('Error: Must be Director+ or reporter to update')
+        return
+    }
     const { fi_link } = req.params
-    // TODO: add auth check (director+ and owner should be allowed)
 
     const newFI = await FundingItem.exists({ _id: fi_link })
     if (!newFI) {
@@ -59,16 +66,14 @@ const updateFILinkPersonalPurchaseController = async (req, res) => {
 }
 
 const updateApprovalsPersonalPurchaseController = async (req, res) => {
-    const { ticket_data, approval_type, identifier } = req.body
-    const { isAdmin, isTeamCaptain, isDirector } = await getAuthRoles(
-        identifier
-    )
-
+    const { ticket_data, approval_type } = req.body
     const canUpdateApproval =
-        (approval_type === APPROVAL_LEVELS.admin_approval && isAdmin) ||
+        (approval_type === APPROVAL_LEVELS.admin_approval &&
+            req.user.isAdmin) ||
         (approval_type === APPROVAL_LEVELS.team_captain_approval &&
-            isTeamCaptain) ||
-        (approval_type === APPROVAL_LEVELS.director_approval && isDirector)
+            req.user.isTeamCaptain) ||
+        (approval_type === APPROVAL_LEVELS.director_approval &&
+            req.user.isDirector)
 
     if (!canUpdateApproval) {
         res.status(403).json('Error: Permission Denied')
@@ -83,6 +88,10 @@ const updateApprovalsPersonalPurchaseController = async (req, res) => {
 }
 
 const deletePersonalPurchaseController = (req, res) => {
+    if (!req.user.isDirector && !req.user.isReporter) {
+        res.status(403).json('Error: Must be Director+ or reporter to delete')
+        return
+    }
     deletePersonalPurchase(req.params.id)
         .then((deleted) => res.status(200).json(deleted))
         .catch((err) => res.status(500).json('Error: ' + err))

@@ -39,7 +39,14 @@ const APPROVAL_LEVELS = Object.freeze({
     admin_approval: 'admin_approval',
 })
 
-const ADMIN_IDENTIFIERS = ['drayside@uwaterloo.ca', 'v2zheng', 'jw4he']
+const TICKET_ENDPOINTS = Object.freeze({
+    SF: '/sponsorshipfunds',
+    FI: '/fundingitems',
+    PPR: '/personalpurchases',
+    UPR: '/uwfinancepurchases',
+})
+
+const ADMIN_IDENTIFIERS = ['drayside', 'v2zheng', 'jw4he']
 const TEAM_CAPTAIN_TITLES = ['Team Captain']
 const DIRECTOR_TITLES = ['Director']
 
@@ -50,6 +57,7 @@ module.exports = {
     PPR_STATUS_FUNDING_SPENT,
     UPR_STATUS,
     UPR_STATUS_FUNDING_SPENT,
+    TICKET_ENDPOINTS,
     APPROVAL_LEVELS,
     ADMIN_IDENTIFIERS,
     TEAM_CAPTAIN_TITLES,

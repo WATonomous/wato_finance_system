@@ -1,5 +1,4 @@
 const { APPROVAL_LEVELS } = require('../models/constants')
-const { getAuthRoles } = require('./getAuthRoles')
 const {
     getAllUWFinancePurchases,
     getUWFinancePurchase,
@@ -33,6 +32,11 @@ const createNewUWFinancePurchaseController = (req, res) => {
 }
 
 const updateUWFinancePurchaseController = (req, res) => {
+    if (!req.user.isDirector && !req.user.isReporter) {
+        res.status(403).json('Error: Must be Director+ or reporter to update')
+        return
+    }
+
     if (req.body.fi_link) {
         res.status(400).json(
             'Error: fi_link in UPR must be patched via /update_fi_link'
@@ -46,8 +50,12 @@ const updateUWFinancePurchaseController = (req, res) => {
 }
 
 const updateFILinkUWFinancePurchaseController = async (req, res) => {
+    if (!req.user.isDirector && !req.user.isReporter) {
+        res.status(403).json('Error: Must be Director+ or reporter to update')
+        return
+    }
+
     const { fi_link } = req.params
-    // TODO: add auth check (director+ and owner should be allowed)
 
     const newFI = await FundingItem.exists({ _id: fi_link })
     if (!newFI) {
@@ -61,16 +69,15 @@ const updateFILinkUWFinancePurchaseController = async (req, res) => {
 }
 
 const updateApprovalsUWFinancePurchaseController = async (req, res) => {
-    const { ticket_data, approval_type, identifier } = req.body
+    const { ticket_data, approval_type } = req.body
 
-    const { isAdmin, isTeamCaptain, isDirector } = await getAuthRoles(
-        identifier
-    )
     const canUpdateApproval =
-        (approval_type === APPROVAL_LEVELS.admin_approval && isAdmin) ||
+        (approval_type === APPROVAL_LEVELS.admin_approval &&
+            req.user.isAdmin) ||
         (approval_type === APPROVAL_LEVELS.team_captain_approval &&
-            isTeamCaptain) ||
-        (approval_type === APPROVAL_LEVELS.director_approval && isDirector)
+            req.user.isTeamCaptain) ||
+        (approval_type === APPROVAL_LEVELS.director_approval &&
+            req.user.isDirector)
 
     if (canUpdateApproval) {
         return updateApprovalsUWFinancePurchase(req.params.id, ticket_data)
@@ -83,6 +90,10 @@ const updateApprovalsUWFinancePurchaseController = async (req, res) => {
 }
 
 const deleteUWFinancePurchaseController = (req, res) => {
+    if (!req.user.isDirector && !req.user.isReporter) {
+        res.status(403).json('Error: Must be Director+ or reporter to delete')
+        return
+    }
     deleteUWFinancePurchase(req.params.id)
         .then((deleted) => res.status(200).json(deleted))
         .catch((err) => res.status(500).json('Error: ' + err))

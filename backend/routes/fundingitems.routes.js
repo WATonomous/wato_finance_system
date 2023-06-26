@@ -1,27 +1,30 @@
 const router = require('express').Router()
 const FundingItemsController = require('../controller/fundingitems.controller')
-const { validateUser } = require('../auth/middleware')
+const { authenticateUser } = require('../auth/middleware')
 
 router
     .route('/')
-    .get(validateUser, FundingItemsController.getAllFundingItemsController)
+    .get(authenticateUser, FundingItemsController.getAllFundingItemsController)
 router
     .route('/')
-    .post(validateUser, FundingItemsController.createFundingItemController)
+    .post(authenticateUser, FundingItemsController.createFundingItemController)
 router
     .route('/:id')
-    .get(validateUser, FundingItemsController.getFundingItemController)
+    .get(authenticateUser, FundingItemsController.getFundingItemController)
 router
     .route('/:id')
-    .patch(validateUser, FundingItemsController.updateFundingItemController)
+    .patch(authenticateUser, FundingItemsController.updateFundingItemController)
 router
     .route('/:id/update_sf_link/:sf_link')
     .patch(
-        validateUser,
+        authenticateUser,
         FundingItemsController.updateSFLinkFundingItemController
     )
 router
     .route('/:id')
-    .delete(validateUser, FundingItemsController.deleteFundingItemController)
+    .delete(
+        authenticateUser,
+        FundingItemsController.deleteFundingItemController
+    )
 
 module.exports = router

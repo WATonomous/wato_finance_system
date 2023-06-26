@@ -8,7 +8,6 @@ import {
 import React, { useContext, useEffect, useState, useCallback } from 'react'
 import { useOutlet } from 'react-router-dom'
 import app from '../firebase'
-import axios from 'axios'
 import { useToast } from '@chakra-ui/react'
 import {
     ADMIN_IDENTIFIERS,
@@ -28,7 +27,6 @@ const whitelist = ['test@test.com']
 export const AuthProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState()
     const [currentUserGroup, setCurrentUserGroup] = useState()
-    const [currentIdentifier, setCurrentIdentifier] = useState()
     const [isDirector, setIsDirector] = useState()
     const [isTeamCaptain, setIsTeamCaptain] = useState()
     const [isAdmin, setIsAdmin] = useState()
@@ -73,43 +71,33 @@ export const AuthProvider = ({ children }) => {
             const userEmail = user.email
             const userWatiam = userEmail.substring(0, userEmail.indexOf('@'))
             const searchWithEmail = whitelist.includes(userEmail)
-            try {
-                const identifier = searchWithEmail ? userEmail : userWatiam
-                setCurrentIdentifier(identifier)
+            const identifier = searchWithEmail ? userEmail : userWatiam
 
-                const retrievedGroup = await axiosPreset.get(
-                    `${process.env.REACT_APP_BACKEND_URL}/googlegroups/${identifier}`
-                )
-                setCurrentUserGroup(retrievedGroup.data.title)
+            const retrievedGroup = await axiosPreset.get(
+                `${process.env.REACT_APP_BACKEND_URL}/googlegroups/${identifier}`
+            )
+            setCurrentUserGroup(retrievedGroup?.data?.title)
 
-                let _isAdmin, _isTeamCaptain, _isDirector
-                if (process.env?.REACT_APP_AUTH_OVERRIDE) {
-                    _isAdmin = process.env.REACT_APP_AUTH_OVERRIDE === 'ADMIN'
+            let _isAdmin, _isTeamCaptain, _isDirector
+            if (process.env?.REACT_APP_AUTH_OVERRIDE) {
+                const authRole = process.env?.REACT_APP_AUTH_OVERRIDE
+                _isAdmin = authRole === 'ADMIN'
+                _isTeamCaptain = authRole === 'TEAM_CAPTAIN' || _isAdmin
+                _isDirector = authRole === 'DIRECTOR' || _isTeamCaptain
+            } else {
+                _isAdmin = ADMIN_IDENTIFIERS.includes(identifier)
 
-                    _isTeamCaptain =
-                        process.env.REACT_APP_AUTH_OVERRIDE ===
-                            'TEAM_CAPTAIN' || _isAdmin
+                _isTeamCaptain =
+                    _isAdmin ||
+                    TEAM_CAPTAIN_TITLES.includes(retrievedGroup.data.title)
 
-                    _isDirector =
-                        process.env.REACT_APP_AUTH_OVERRIDE === 'DIRECTOR' ||
-                        _isTeamCaptain
-                } else {
-                    _isAdmin = ADMIN_IDENTIFIERS.includes(identifier)
-
-                    _isTeamCaptain =
-                        _isAdmin ||
-                        TEAM_CAPTAIN_TITLES.includes(retrievedGroup.data.title)
-
-                    _isDirector =
-                        _isTeamCaptain ||
-                        DIRECTOR_TITLES.includes(retrievedGroup.data.title)
-                }
-                setIsAdmin(_isAdmin)
-                setIsDirector(_isDirector)
-                setIsTeamCaptain(_isTeamCaptain)
-            } catch (err) {
-                console.log('Error: ' + err)
+                _isDirector =
+                    _isTeamCaptain ||
+                    DIRECTOR_TITLES.includes(retrievedGroup.data.title)
             }
+            setIsAdmin(_isAdmin)
+            setIsDirector(_isDirector)
+            setIsTeamCaptain(_isTeamCaptain)
         }
     }
 
@@ -136,7 +124,6 @@ export const AuthProvider = ({ children }) => {
     const providerState = {
         currentUser,
         currentUserGroup,
-        currentIdentifier,
         isDirector,
         isTeamCaptain,
         isAdmin,

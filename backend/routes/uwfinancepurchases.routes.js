@@ -1,53 +1,53 @@
 const router = require('express').Router()
 const UWFinancePurchasesController = require('../controller/uwfinancepurchases.controller')
-const { validateUser } = require('../auth/middleware')
+const { authenticateUser } = require('../auth/middleware')
 
 router
     .route('/')
     .get(
-        validateUser,
+        authenticateUser,
         UWFinancePurchasesController.getAllUWFinancePurchasesController
     )
 router
     .route('/')
     .post(
-        validateUser,
+        authenticateUser,
         UWFinancePurchasesController.createNewUWFinancePurchaseController
     )
 router
     .route('/:id')
     .get(
-        validateUser,
+        authenticateUser,
         UWFinancePurchasesController.getUWFinancePurchaseController
     )
 router
     .route('/:id')
     .patch(
-        validateUser,
+        authenticateUser,
         UWFinancePurchasesController.updateUWFinancePurchaseController
     )
 router
     .route('/:id/update_fi_link/:fi_link')
     .patch(
-        validateUser,
+        authenticateUser,
         UWFinancePurchasesController.updateFILinkUWFinancePurchaseController
     )
 router
     .route('/updateapprovals/:id')
     .patch(
-        validateUser,
+        authenticateUser,
         UWFinancePurchasesController.updateApprovalsUWFinancePurchaseController
     )
 router
     .route('/:id')
     .delete(
-        validateUser,
+        authenticateUser,
         UWFinancePurchasesController.deleteUWFinancePurchaseController
     )
 router
     .route('/getsponsorshipfund/:id')
     .get(
-        validateUser,
+        authenticateUser,
         UWFinancePurchasesController.getSponsorshipFundByUPRController
     )
 

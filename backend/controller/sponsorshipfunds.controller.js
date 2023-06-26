@@ -39,6 +39,11 @@ const createSponsorshipFundController = (req, res) => {
 }
 
 const updateSponsorshipFundController = (req, res) => {
+    if (!req.user.isDirector && !req.user.isReporter) {
+        res.status(403).json('Error: Must be Director+ or reporter to update')
+        return
+    }
+
     if (req.body.fi_links) {
         res.status(400).json('Error: fi_links in SF cannot be patched')
         return
@@ -50,6 +55,11 @@ const updateSponsorshipFundController = (req, res) => {
 }
 
 const deleteSponsorshipFundController = (req, res) => {
+    if (!req.user.isDirector && !req.user.isReporter) {
+        res.status(403).json('Error: Must be Director+ or reporter to delete')
+        return
+    }
+
     deleteSponsorshipFund(req.params.id)
         .then((deleted) => res.status(200).json(deleted))
         .catch((err) => res.status(500).json('Error: ' + err))

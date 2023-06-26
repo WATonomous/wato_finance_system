@@ -4,6 +4,11 @@ const getAllUsers = () => {
     return authAdmin.listUsers()
 }
 
+const getUserByUID = (uid) => {
+    return authAdmin.getUser(uid)
+}
+
 module.exports = {
     getAllUsers,
+    getUserByUID,
 }
