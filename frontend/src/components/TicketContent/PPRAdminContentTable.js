@@ -3,7 +3,7 @@ import React from 'react'
 import { useRecoilState } from 'recoil'
 import { currentTicketState } from '../../state/atoms'
 
-const UPRAdminContentTable = () => {
+const PPRAdminContentTable = () => {
     const [ticketData, setTicketData] = useRecoilState(currentTicketState)
     return (
         <VStack
@@ -32,4 +32,4 @@ const UPRAdminContentTable = () => {
     )
 }
 
-export default UPRAdminContentTable
+export default PPRAdminContentTable
