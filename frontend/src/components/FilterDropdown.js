@@ -16,7 +16,7 @@ const FilterDropdown = ({ filter, setFilter }) => {
     const [searchParams, setSearchParams] = useSearchParams()
 
     return (
-        <Box w="100%" p="16px" borderRight="1px solid #dedede">
+        <Box w="100%" p="16px 16px 0">
             <Menu closeOnSelect={false}>
                 <MenuButton
                     as={Button}
