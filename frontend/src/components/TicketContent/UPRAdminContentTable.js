@@ -6,19 +6,19 @@ import { currentTicketState } from '../../state/atoms'
 import { axiosPreset } from '../../axiosConfig'
 import { TICKET_ENDPOINTS } from '../../constants'
 
-const UPRAdminContentTable = () => {
-    const [ticketData, setTicketData] = useRecoilState(currentTicketState)
+const UPRAdminContentTable = ({ partialUpdateAllTickets }) => {
+    const [currentTicket, setCurrentTicket] = useRecoilState(currentTicketState)
     const [changed, setChanged] = React.useState(false)
     const changeReqNumber = (e) => {
-        setTicketData({
-            ...ticketData,
+        setCurrentTicket({
+            ...currentTicket,
             requisition_number: e.target.value,
         })
         setChanged(true)
     }
     const changePoNumber = (e) => {
-        setTicketData({
-            ...ticketData,
+        setCurrentTicket({
+            ...currentTicket,
             po_number: e.target.value,
         })
         setChanged(true)
@@ -26,13 +26,14 @@ const UPRAdminContentTable = () => {
 
     const saveFields = async () => {
         const payload = {
-            requisition_number: ticketData.requisition_number,
-            po_number: ticketData.po_number,
+            requisition_number: currentTicket.requisition_number,
+            po_number: currentTicket.po_number,
         }
         await axiosPreset.patch(
-            `${TICKET_ENDPOINTS.UPR}/${ticketData._id}`,
+            `${TICKET_ENDPOINTS.UPR}/${currentTicket._id}`,
             payload
         )
+        partialUpdateAllTickets(currentTicket.type, currentTicket._id, payload)
         setChanged(false)
     }
 
@@ -48,12 +49,12 @@ const UPRAdminContentTable = () => {
                 <Tbody>
                     <TicketContentTableRow
                         heading={'Purchase Order Number'}
-                        value={ticketData?.po_number}
+                        value={currentTicket?.po_number}
                         onChange={changePoNumber}
                     />
                     <TicketContentTableRow
                         heading={'Requisition Number'}
-                        value={ticketData?.requisition_number}
+                        value={currentTicket?.requisition_number}
                         onChange={changeReqNumber}
                     />
                 </Tbody>
@@ -65,8 +66,8 @@ const UPRAdminContentTable = () => {
                     size="sm"
                     mr="20px"
                     disabled={
-                        ticketData?.po_number?.length +
-                            ticketData?.requisition_number?.length ===
+                        currentTicket?.po_number?.length +
+                            currentTicket?.requisition_number?.length ===
                         0
                     }
                 >

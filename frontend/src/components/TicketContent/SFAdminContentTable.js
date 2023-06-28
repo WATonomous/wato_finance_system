@@ -1,10 +1,10 @@
-import { Button, Center, Heading, Table, Tbody, VStack } from '@chakra-ui/react'
+import { Button, Center, Heading, VStack } from '@chakra-ui/react'
 import React from 'react'
-import { useRecoilState } from 'recoil'
+import { useRecoilValue } from 'recoil'
 import { currentTicketState } from '../../state/atoms'
 
 const UPRAdminContentTable = () => {
-    const [ticketData, setTicketData] = useRecoilState(currentTicketState)
+    const currentTicket = useRecoilValue(currentTicketState)
     return (
         <VStack
             border="1px solid black"
@@ -19,8 +19,8 @@ const UPRAdminContentTable = () => {
                         colorScheme="blue"
                         size="sm"
                         disabled={
-                            ticketData?.po_number?.length +
-                                ticketData?.requisition_number?.length ===
+                            currentTicket?.po_number?.length +
+                                currentTicket?.requisition_number?.length ===
                             0
                         }
                     >
