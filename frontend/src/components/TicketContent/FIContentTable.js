@@ -2,9 +2,11 @@ import { Table, Tbody, VStack } from '@chakra-ui/react'
 import React from 'react'
 import { getFormattedCurrency } from '../../utils/utils'
 import TicketContentTableRow from './TicketContentTableRow'
+import { useRecoilValue } from 'recoil'
+import { currentTicketState } from '../../state/atoms'
 
-const FIContentTable = (props) => {
-    const { ticketData } = props
+const FIContentTable = () => {
+    const currentTicket = useRecoilValue(currentTicketState)
     return (
         <VStack>
             <Table>
@@ -12,16 +14,18 @@ const FIContentTable = (props) => {
                     <TicketContentTableRow
                         heading={'Funding Allocation'}
                         value={getFormattedCurrency(
-                            ticketData.funding_allocation
+                            currentTicket.funding_allocation
                         )}
                     />
                     <TicketContentTableRow
                         heading={'Funding Spent'}
-                        value={getFormattedCurrency(ticketData.funding_spent)}
+                        value={getFormattedCurrency(
+                            currentTicket.funding_spent
+                        )}
                     />
                     <TicketContentTableRow
                         heading={'Purchase Justification'}
-                        value={ticketData.purchase_justification}
+                        value={currentTicket.purchase_justification}
                     />
                 </Tbody>
             </Table>

@@ -145,21 +145,19 @@ const Dashboard = () => {
     ])
 
     const getCurrentTicketContentTable = () => {
-        const ticketData = currentTicket
-
         switch (currentTicket.type) {
             case TICKET_TYPES.SF:
                 return (
                     <>
                         {auth.isAdmin && <SFAdminContentTable />}
-                        <SFContentTable ticketData={ticketData} />
+                        <SFContentTable />
                     </>
                 )
             case TICKET_TYPES.FI:
                 return (
                     <>
                         {auth.isAdmin && <FIAdminContentTable />}
-                        <FIContentTable ticketData={ticketData} />
+                        <FIContentTable />
                     </>
                 )
 
@@ -168,7 +166,6 @@ const Dashboard = () => {
                     <>
                         {auth.isAdmin && <PPRAdminContentTable />}
                         <PPRContentTable
-                            ticketData={ticketData}
                             partialUpdateAllTickets={partialUpdateAllTickets}
                         />
                     </>
@@ -176,9 +173,14 @@ const Dashboard = () => {
             case TICKET_TYPES.UPR:
                 return (
                     <>
-                        {auth.isAdmin && <UPRAdminContentTable />}
+                        {auth.isAdmin && (
+                            <UPRAdminContentTable
+                                partialUpdateAllTickets={
+                                    partialUpdateAllTickets
+                                }
+                            />
+                        )}
                         <UPRContentTable
-                            ticketData={ticketData}
                             partialUpdateAllTickets={partialUpdateAllTickets}
                         />
                     </>
@@ -196,7 +198,6 @@ const Dashboard = () => {
                 </Center>
             )
         }
-        const ticketData = currentTicket
         if (isLoading) {
             return (
                 <Center w="100%">
@@ -258,23 +259,23 @@ const Dashboard = () => {
                         <Table>
                             <Tbody>
                                 <ReporterInfoTip
-                                    ticketData={ticketData}
                                     heading={'Reporter Id'}
                                     reporter={allUsers.users.find(
                                         (user) =>
-                                            user.uid === ticketData.reporter_id
+                                            user.uid ===
+                                            currentTicket.reporter_id
                                     )}
                                 />
                                 <TicketContentTableRow
                                     heading={'Created at'}
                                     value={getStandardizedDate(
-                                        ticketData.createdAt
+                                        currentTicket.createdAt
                                     )}
                                 />
                                 <TicketContentTableRow
                                     heading={'Updated at'}
                                     value={getStandardizedDate(
-                                        ticketData.updatedAt
+                                        currentTicket.updatedAt
                                     )}
                                 />
                             </Tbody>

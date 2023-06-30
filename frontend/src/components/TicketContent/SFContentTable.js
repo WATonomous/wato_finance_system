@@ -2,9 +2,11 @@ import { Table, Tbody, VStack } from '@chakra-ui/react'
 import React from 'react'
 import { getFormattedCurrency, getStandardizedDate } from '../../utils/utils'
 import TicketContentTableRow from './TicketContentTableRow'
+import { useRecoilValue } from 'recoil'
+import { currentTicketState } from '../../state/atoms'
 
-const SFContentTable = (props) => {
-    const { ticketData } = props
+const SFContentTable = () => {
+    const currentTicket = useRecoilValue(currentTicketState)
 
     return (
         <VStack>
@@ -12,33 +14,37 @@ const SFContentTable = (props) => {
                 <Tbody>
                     <TicketContentTableRow
                         heading={'Status'}
-                        value={ticketData.status}
+                        value={currentTicket.status}
                     />
                     <TicketContentTableRow
                         heading={'Funding Allocation'}
                         value={getFormattedCurrency(
-                            ticketData.funding_allocation
+                            currentTicket.funding_allocation
                         )}
                     />
                     <TicketContentTableRow
                         heading={'Funding Spent'}
-                        value={getFormattedCurrency(ticketData.funding_spent)}
+                        value={getFormattedCurrency(
+                            currentTicket.funding_spent
+                        )}
                     />
                     <TicketContentTableRow
                         heading={'Proposal Id'}
-                        value={ticketData.proposal_id}
+                        value={currentTicket.proposal_id}
                     />
                     <TicketContentTableRow
                         heading={'Proposal URL'}
-                        value={ticketData.proposal_url}
+                        value={currentTicket.proposal_url}
                     />
                     <TicketContentTableRow
                         heading={'Presentation URL'}
-                        value={ticketData.presentation_url}
+                        value={currentTicket.presentation_url}
                     />
                     <TicketContentTableRow
                         heading={'Claim Deadline'}
-                        value={getStandardizedDate(ticketData.claim_deadline)}
+                        value={getStandardizedDate(
+                            currentTicket.claim_deadline
+                        )}
                     />
                 </Tbody>
             </Table>
