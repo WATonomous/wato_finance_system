@@ -47,6 +47,7 @@ const Navbar = ({ getAllTickets }) => {
         >
             <Heading
                 lineHeight="48px"
+                fontSize={{ base: 'lg', md: '2xl', lg: '3xl' }}
                 onClick={() => navigate('/')}
                 cursor="pointer"
             >

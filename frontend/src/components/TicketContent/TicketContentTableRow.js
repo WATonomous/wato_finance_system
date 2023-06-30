@@ -5,7 +5,6 @@ const TicketContentTableRow = ({ heading, value, onChange }) => {
     return (
         <Tr borderTopWidth="2px" borderBottomWidth="2px">
             <Th
-                w="185px"
                 fontSize={{ base: 'xs', md: 'sm' }}
                 p={{
                     base: '4px 4px',
