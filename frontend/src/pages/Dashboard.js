@@ -36,8 +36,8 @@ import {
     currentTicketState,
     currentTreeState,
 } from '../state/atoms'
-import { UpdateTicketModal } from '../components/UpdateTicketModal'
-
+import UpdateTicketModal from '../components/UpdateTicketModal'
+import UploadFileModal from '../components/UploadFileModal'
 import UPRAdminContentTable from '../components/TicketContent/UPRAdminContentTable'
 import SFAdminContentTable from '../components/TicketContent/SFAdminContentTable'
 import PPRAdminContentTable from '../components/TicketContent/PPRAdminContentTable'
@@ -56,6 +56,12 @@ const Dashboard = () => {
         isOpen: isUpdateTicketOpen,
         onOpen: onOpenUpdateTicket,
         onClose: onCloseUpdateTicket,
+    } = useDisclosure()
+
+    const {
+        isOpen: isUploadModalOpen,
+        onOpen: onOpenUploadModal,
+        onClose: onCloseUploadModal,
     } = useDisclosure()
 
     const auth = useAuth()
@@ -229,6 +235,13 @@ const Dashboard = () => {
                             <Flex flexDir="row" mb="12px" gap="16px">
                                 <Button
                                     size="sm"
+                                    colorScheme="gray"
+                                    onClick={onOpenUploadModal}
+                                >
+                                    <Text>Upload Files</Text>
+                                </Button>
+                                <Button
+                                    size="sm"
                                     colorScheme="cyan"
                                     onClick={onOpenUpdateTicket}
                                 >
@@ -293,6 +306,14 @@ const Dashboard = () => {
                 <TicketList isLoading={isLoading} />
                 {getMainContent()}
             </Flex>
+            {isUploadModalOpen && (
+                <UploadFileModal
+                    isOpen={isUploadModalOpen}
+                    onClose={onCloseUploadModal}
+                    endpointToSave={TICKET_ENDPOINTS.UPR}
+                />
+            )}
+
             {isDeleteTicketOpen && (
                 <DeleteTicketAlertDialog
                     isOpen={isDeleteTicketOpen}

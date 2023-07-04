@@ -21,7 +21,7 @@ import { TICKET_ENDPOINTS, TICKET_TYPES } from '../constants'
 import { useRecoilValue } from 'recoil'
 import { currentTicketState, allTicketsState } from '../state/atoms'
 
-export function UpdateTicketModal({ isOpen, onClose, getAllTickets }) {
+const UpdateTicketModal = ({ isOpen, onClose, getAllTickets }) => {
     const currentTicket = useRecoilValue(currentTicketState)
     const allTickets = useRecoilValue(allTicketsState)
     const { control, register, handleSubmit, formState } = useForm({
@@ -176,3 +176,5 @@ export function UpdateTicketModal({ isOpen, onClose, getAllTickets }) {
         </Modal>
     )
 }
+
+export default UpdateTicketModal
