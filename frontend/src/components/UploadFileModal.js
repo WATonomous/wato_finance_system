@@ -16,26 +16,52 @@ import {
     Text,
     UnorderedList,
 } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
+import { useRecoilValue } from 'recoil'
 
 import { FileUploader } from 'react-drag-drop-files'
 import { axiosPreset } from '../axiosConfig'
 import LoadingSpinner from './LoadingSpinner'
+import { currentTicketState } from '../state/atoms'
 
 const fileTypes = ['PNG', 'JPG', 'PDF']
 const UploadFileModal = ({ isOpen, onClose, endpointToSave }) => {
+    const ticket = useRecoilValue(currentTicketState)
     const [filesToUpload, setFilesToUpload] = useState([])
+    const originalFiles = useRef([])
     const [loading, isLoading] = useState(true)
     const [uploadedFiles, setUploadedFiles] = useState([])
+
+    useEffect(() => {
+        axiosPreset
+            .get(`/files/getallbyreference/${ticket._id}`)
+            .then((res) => {
+                setUploadedFiles(res.data)
+                originalFiles.current = res.data
+            })
+            .catch((err) => console.log(err))
+            .finally(isLoading)
+    }, [ticket._id])
 
     const onFileAttach = (attachedFile) => {
         setFilesToUpload([...filesToUpload, attachedFile])
         console.log(attachedFile)
     }
-    const submitFiles = () => {
-        // call an api endpoint which is given via props
-        // pass the files to the api endpoint
-        axiosPreset.post(endpointToSave, filesToUpload)
+
+    const submitFiles = async () => {
+        const allFiles = [...filesToUpload, ...uploadedFiles]
+        // perform a diff here. call a delete for all files that are not in allFiles
+        const filesToDelete = originalFiles.current.filter(
+            (file) => !allFiles.includes(file)
+        )
+        const deleteFilesResponse = axiosPreset.delete('/files/bulk', {
+            ids: filesToDelete.map((file) => file._id),
+        })
+        const createFilesResponse = axiosPreset.post('/files/bulk', {
+            files: filesToUpload,
+            referenceItem: ticket._id,
+        })
+        await Promise.all([deleteFilesResponse, createFilesResponse])
         onClose()
     }
     const removeFile = (fileToRemoveName) => {
@@ -43,7 +69,12 @@ const UploadFileModal = ({ isOpen, onClose, endpointToSave }) => {
             filesToUpload.filter((file) => file !== fileToRemoveName)
         )
     }
-    if (loading) {
+    const removeUploadedFile = (fileToRemoveName) => {
+        setUploadedFiles(
+            uploadedFiles.filter((file) => file !== fileToRemoveName)
+        )
+    }
+    if (loading && isOpen) {
         return <LoadingSpinner />
     }
     return (
@@ -95,7 +126,9 @@ const UploadFileModal = ({ isOpen, onClose, endpointToSave }) => {
                         {filesToUpload.map((file) => (
                             <ListItem display="flex" alignItems="center">
                                 {file.name}{' '}
-                                <CloseButton onClick={() => removeFile(file)} />
+                                <CloseButton
+                                    onClick={() => removeUploadedFile(file)}
+                                />
                             </ListItem>
                         ))}
                     </UnorderedList>
