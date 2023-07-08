@@ -54,15 +54,36 @@ const UploadFileModal = ({ isOpen, onClose, endpointToSave }) => {
         const filesToDelete = originalFiles.current.filter(
             (file) => !allFiles.includes(file)
         )
-        const deleteFilesResponse = axiosPreset.delete('/files/bulk', {
-            ids: filesToDelete.map((file) => file._id),
-        })
-        const createFilesResponse = axiosPreset.post('/files/bulk', {
-            files: filesToUpload,
-            referenceItem: ticket._id,
-        })
-        await Promise.all([deleteFilesResponse, createFilesResponse])
-        onClose()
+        let deleteFilesResponse = null
+        let createFilesResponse = null
+        try {
+            if (filesToDelete.length > 0) {
+                deleteFilesResponse = axiosPreset.delete('/files/bulk', {
+                    ids: filesToDelete.map((file) => file._id),
+                })
+            }
+            if (filesToUpload.length > 0) {
+                console.log(filesToUpload)
+                const formData = new FormData()
+                filesToUpload.forEach((file) => {
+                    formData.append('files', file)
+                })
+                createFilesResponse = axiosPreset.post(
+                    `/files/bulk/${ticket._id}`,
+                    formData,
+                    {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
+                    }
+                )
+            }
+            await Promise.all([deleteFilesResponse, createFilesResponse])
+        } catch (e) {
+            console.log(e)
+        } finally {
+            // onClose()
+        }
     }
     const removeFile = (fileToRemoveName) => {
         setFilesToUpload(
@@ -105,7 +126,11 @@ const UploadFileModal = ({ isOpen, onClose, endpointToSave }) => {
                     </Box>
                     <UnorderedList ml="0">
                         {filesToUpload.map((file) => (
-                            <ListItem display="flex" alignItems="center">
+                            <ListItem
+                                display="flex"
+                                alignItems="center"
+                                key={file.name}
+                            >
                                 {file.name}{' '}
                                 <CloseButton onClick={() => removeFile(file)} />
                             </ListItem>
@@ -123,8 +148,12 @@ const UploadFileModal = ({ isOpen, onClose, endpointToSave }) => {
                         </AbsoluteCenter>
                     </Box>
                     <UnorderedList ml="0">
-                        {filesToUpload.map((file) => (
-                            <ListItem display="flex" alignItems="center">
+                        {uploadedFiles.map((file) => (
+                            <ListItem
+                                display="flex"
+                                alignItems="center"
+                                key={file.name}
+                            >
                                 {file.name}{' '}
                                 <CloseButton
                                     onClick={() => removeUploadedFile(file)}
@@ -142,7 +171,7 @@ const UploadFileModal = ({ isOpen, onClose, endpointToSave }) => {
                         colorScheme="blue"
                         onClick={submitFiles}
                     >
-                        Update Ticket
+                        Save Changes
                     </Button>
                 </ModalFooter>
             </ModalContent>

@@ -9,4 +9,16 @@ router.get(
     FilesController.getAllFilesByReferenceController
 )
 router.post('/', authenticateUser, FilesController.createFileController)
+router.post(
+    '/bulk:reference',
+    authenticateUser,
+    FilesController.bulkCreateFileController
+)
+router.delete(
+    '/bulk',
+    authenticateUser,
+    FilesController.bulkDeleteFileController
+)
 router.delete('/:id', authenticateUser, FilesController.deleteFileController)
+
+module.exports = router

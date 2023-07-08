@@ -30,6 +30,7 @@ const personalPurchaseRouter = require('./routes/personalpurchases.routes')
 const UWFinancePurchaseRouter = require('./routes/uwfinancepurchases.routes')
 const usersRouter = require('./routes/users.routes')
 const groupRouter = require('./routes/googlegroup.routes')
+const filesRouter = require('./routes/files.routes')
 
 app.use(express.json())
 app.use('/fundingitems', fundingItemsRouter)
@@ -38,6 +39,7 @@ app.use('/sponsorshipfunds', sponsorshipFundsRouter)
 app.use('/uwfinancepurchases', UWFinancePurchaseRouter)
 app.use('/users', usersRouter)
 app.use('/googlegroups', groupRouter)
+app.use('/files', filesRouter)
 
 app.listen(port, async () => {
     console.log(`Server is running on port: ${port}`)
