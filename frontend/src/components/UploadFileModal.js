@@ -45,7 +45,6 @@ const UploadFileModal = ({ isOpen, onClose, endpointToSave }) => {
 
     const onFileAttach = (attachedFile) => {
         setFilesToUpload([...filesToUpload, attachedFile])
-        console.log(attachedFile)
     }
 
     const submitFiles = async () => {
@@ -63,7 +62,6 @@ const UploadFileModal = ({ isOpen, onClose, endpointToSave }) => {
                 })
             }
             if (filesToUpload.length > 0) {
-                console.log(filesToUpload)
                 const formData = new FormData()
                 filesToUpload.forEach((file) => {
                     formData.append('files', file)

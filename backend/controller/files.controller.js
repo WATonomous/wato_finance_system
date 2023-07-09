@@ -33,13 +33,9 @@ const deleteFileController = (req, res) => {
         .then((deletedFile) => res.status(200).json(deletedFile))
         .catch((err) => res.status(500).json('Error: ' + err))
 }
-const upload = multer({ dest: 'uploads/' })
 
 const bulkCreateFileController = (req, res) => {
-    console.log('hello here')
-    console.log(req.body)
-    console.log(req.params.reference)
-    bulkCreateFiles(req.body.files, req.body.referenceItem)
+    bulkCreateFiles(req.files, req.params.reference)
         .then((newFiles) => res.status(200).json(newFiles))
         .catch((err) => res.status(500).json('Error: ' + err))
 }

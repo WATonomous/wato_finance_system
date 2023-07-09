@@ -8,6 +8,7 @@ const FileSchema = new Schema(
         referenceItem: { type: Number, index: true },
         filename: { type: String, required: true },
         data: { type: Buffer, required: true },
+        mimetype: { type: String, required: true },
         isPoDocument: { type: Boolean, default: false },
     },
     {

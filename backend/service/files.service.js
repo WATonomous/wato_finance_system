@@ -5,37 +5,25 @@ const getFile = async (id) => {
 }
 
 const getAllFilesByReference = async (reference) => {
-    try {
-        const test = await File.find({ referenceItem: reference })
-
-        console.log(test)
-    } catch (e) {
-        console.log(e)
-    }
     return File.find({ referenceItem: reference })
 }
 
-const createFile = (file, referenceItem) => {
-    console.log('file is ')
-    console.log(file)
+const createFile = (file, referenceItem, isPoDocument) => {
     const newFile = new File({
         referenceItem: referenceItem,
-        filename: file.filename,
-        data: new Buffer.from(file, 'base64'),
-        isPoDocument: body?.isPoDocument || false,
+        filename: file.originalname,
+        mimetype: file.mimetype,
+        data: file.buffer,
+        isPoDocument: isPoDocument,
     })
-    let blah = null
-    try {
-        const blah = newFile.save()
-        console.log(blah)
-    } catch (e) {
-        console.log(e)
-    }
-    return blah
+    return newFile.save()
 }
 
 const bulkCreateFiles = (files, referenceItem) => {
-    const promises = files.map((file) => createFile(file, referenceItem))
+    const promises = files.map((file) =>
+        // TODO: support isPoDocument
+        createFile(file, referenceItem, false)
+    )
     return Promise.all(promises)
 }
 
