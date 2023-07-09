@@ -25,12 +25,13 @@ import LoadingSpinner from './LoadingSpinner'
 import { currentTicketState } from '../state/atoms'
 
 const fileTypes = ['PNG', 'JPG', 'PDF']
-const UploadFileModal = ({ isOpen, onClose, endpointToSave }) => {
+const UploadFileModal = ({ isOpen, onClose }) => {
     const ticket = useRecoilValue(currentTicketState)
     const [filesToUpload, setFilesToUpload] = useState([])
     const originalFiles = useRef([])
     const [loading, isLoading] = useState(true)
     const [uploadedFiles, setUploadedFiles] = useState([])
+    const [filesToDelete, setFilesToDelete] = useState([])
 
     useEffect(() => {
         axiosPreset
@@ -48,11 +49,6 @@ const UploadFileModal = ({ isOpen, onClose, endpointToSave }) => {
     }
 
     const submitFiles = async () => {
-        const allFiles = [...filesToUpload, ...uploadedFiles]
-        // perform a diff here. call a delete for all files that are not in allFiles
-        const filesToDelete = originalFiles.current.filter(
-            (file) => !allFiles.includes(file)
-        )
         let deleteFilesResponse = null
         let createFilesResponse = null
         try {
@@ -89,6 +85,7 @@ const UploadFileModal = ({ isOpen, onClose, endpointToSave }) => {
         )
     }
     const removeUploadedFile = (fileToRemoveName) => {
+        setFilesToDelete([...filesToDelete, fileToRemoveName])
         setUploadedFiles(
             uploadedFiles.filter((file) => file !== fileToRemoveName)
         )

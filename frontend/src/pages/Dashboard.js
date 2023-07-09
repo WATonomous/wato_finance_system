@@ -310,7 +310,6 @@ const Dashboard = () => {
                 <UploadFileModal
                     isOpen={isUploadModalOpen}
                     onClose={onCloseUploadModal}
-                    endpointToSave={TICKET_ENDPOINTS.UPR}
                 />
             )}
 
