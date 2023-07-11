@@ -4,6 +4,7 @@ const {
     createFile,
     bulkCreateFiles,
     deleteFile,
+    bulkDeleteFiles,
 } = require('../service/files.service')
 
 const getFileController = (req, res) => {
@@ -41,10 +42,8 @@ const bulkCreateFileController = (req, res) => {
 }
 
 const bulkDeleteFileController = (req, res) => {
-    const { ids } = req.body
-    const promises = ids.map((id) => deleteFile(id))
-    Promise.all(promises)
-        .then((deletedFiles) => res.status(200).json(deletedFiles))
+    bulkDeleteFiles(req.body.ids)
+        .then((newFiles) => res.status(200).json(newFiles))
         .catch((err) => res.status(500).json('Error: ' + err))
 }
 

@@ -31,10 +31,16 @@ const deleteFile = (id) => {
     return File.findByIdAndDelete(id)
 }
 
+const bulkDeleteFiles = (ids) => {
+    const promises = ids.map((id) => deleteFile(id))
+    return Promise.all(promises)
+}
+
 module.exports = {
     getFile,
     getAllFilesByReference,
     createFile,
     bulkCreateFiles,
     deleteFile,
+    bulkDeleteFiles,
 }

@@ -22,11 +22,11 @@ router.post(
     upload.array('files'),
     FilesController.bulkCreateFileController
 )
+router.delete('/:id', authenticateUser, FilesController.deleteFileController)
 router.delete(
     '/bulk',
     authenticateUser,
     FilesController.bulkDeleteFileController
 )
-router.delete('/:id', authenticateUser, FilesController.deleteFileController)
 
 module.exports = router
