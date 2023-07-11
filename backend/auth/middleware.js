@@ -19,7 +19,7 @@ const authenticateUser = async (req, res, next) => {
         req.user = decodedToken
         // look for the id path variable
         // if it exists, check if the user is the reporter
-        // if it doesn't exist, check if the user is an admin
+        // otherwise, just assume false (the endpoint will not check for reporter)
         let reporter_id = null
         const itemId = req.params?.id
         if (itemId) {
