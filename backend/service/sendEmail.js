@@ -29,7 +29,9 @@ const sendEmail = async (emailDetail) => {
                     },
                     To: emailDetail.To,
                     Subject: emailDetail.Subject,
-                    HTMLPart: emailDetail.HTMLPart + getTicketLinkHTML(emailDetail.ticketPath),
+                    HTMLPart:
+                        emailDetail.HTMLPart +
+                        getTicketLinkHTML(emailDetail.ticketPath),
                 },
             ],
         })

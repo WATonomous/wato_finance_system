@@ -13,8 +13,6 @@ const getReporterHTMLByUID = async (reporter_id) => {
     return `${userRecord.displayName} \<${userRecord.email}\>`
 }
 
-
-
 module.exports = {
     getAllUsers,
     getUserByUID,
