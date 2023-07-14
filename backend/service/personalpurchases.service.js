@@ -4,6 +4,9 @@ const {
     getAnnotatedPersonalPurchasesByIdList,
     getAnnotatedSponsorshipFundsByIdList,
 } = require('./annotatedGetters')
+const { sendEmail } = require('./sendEmail')
+const { pprCreatedToApprovers } = require('../emails/emails')
+const { getReporterHTMLByUID } = require('./users.service')
 
 const getAllPersonalPurchases = () => {
     return getAnnotatedPersonalPurchasesByIdList()
@@ -15,17 +18,16 @@ const getPersonalPurchase = async (id) => {
 }
 
 const createPersonalPurchase = async (body) => {
-    const newPersonalPurchase = new PersonalPurchase(body)
-    const newPPR = await newPersonalPurchase.save()
-    return FundingItem.findByIdAndUpdate(
-        newPPR.fi_link,
-        {
-            $push: { ppr_links: newPPR._id },
-        },
-        {
-            new: true,
-        }
-    )
+    let newPPR = new PersonalPurchase(body)
+    newPPR = await newPPR.save()
+    newPPR = await getPersonalPurchase(newPPR._id)
+    await FundingItem.findByIdAndUpdate(newPPR.fi_link, {
+        $push: { ppr_links: newPPR._id },
+    })
+    const reporterHTML = await getReporterHTMLByUID(newPPR.reporter_id)
+
+    sendEmail(pprCreatedToApprovers({ ...newPPR, reporterHTML }))
+    return newPPR
 }
 
 const updatePersonalPurchase = (id, body) => {

@@ -39,6 +39,15 @@ const APPROVAL_LEVELS = Object.freeze({
     admin_approval: 'admin_approval',
 })
 
+const EMAIL_RECIPIENTS = Object.freeze({
+    admin: 'admin',
+    coordinator: 'coordinator',
+    director: 'director',
+    faculty_advisor: 'faculty_advisor',
+    finance: 'finance',
+    team_captain: 'team_captain',
+})
+
 const TICKET_ENDPOINTS = Object.freeze({
     SF: '/sponsorshipfunds',
     FI: '/fundingitems',
@@ -59,6 +68,7 @@ module.exports = {
     UPR_STATUS_FUNDING_SPENT,
     TICKET_ENDPOINTS,
     APPROVAL_LEVELS,
+    EMAIL_RECIPIENTS,
     ADMIN_IDENTIFIERS,
     TEAM_CAPTAIN_TITLES,
     DIRECTOR_TITLES,

@@ -1,3 +1,5 @@
+const { EMAIL_RECIPIENTS } = require('../models/constants')
+
 const DivisionEmails = {
     software: 'software-leads@watonomous.ca',
     mechanical: 'mechanical-leads@watonomous.ca',
@@ -5,63 +7,46 @@ const DivisionEmails = {
     electrical: 'electrical-leads@watonomous.ca',
 }
 
-const ExpiringFundingReminder = (issueDetails) => {
-    const { toUrl, summary, funding_allocation, funding_allocation_spent } =
-        issueDetails
+const currencyFormatter = new Intl.NumberFormat('en-CA', {
+    style: 'currency',
+    currency: 'CAD',
+})
 
-    let htmlComponent = `
+const getEmailToSection = (emailToList) => {
+    const emailTo = []
+
+    if (emailToList.includes(EMAIL_RECIPIENTS.admin)) {
+        emailTo.push('jw4he@watonomous.ca')
+    } else if (emailToList.includes(EMAIL_RECIPIENTS.faculty_advisor)) {
+        emailTo.push('drayside@uwaterloo.ca')
+    }
+
+    return emailTo.map((Email) => ({
+        Email,
+    }))
+}
+
+const pprCreatedToApprovers = (ticketData) => {
+    const Subject = `[Seeking Approval: Personal Purchase Request] ${ticketData.codename}`
+    const HTMLPart = `
         <div>
-            <a href=${toUrl}>${summary}</a> is expiring this term! Don't forget to
-            make any last minute purchases! This award has a total Funding
-            Allocation of ${funding_allocation} and ${funding_allocation_spent}{' '}
-            has been spent so far.
+            A new Personal Purchase Request needs your approval! <br />
+            <br />
+            Ticket Code: ${ticketData.code} <br />
+            Ticket Name: ${ticketData.name} <br />
+            Cost: CAD ${currencyFormatter.format(ticketData.cost)} <br />
+            Reporter: ${ticketData.reporterHTML} <br />
+            Purchase URL: ${ticketData.purchase_url} <br />
+            Purchase Justification: ${ticketData.purchase_justification} <br />
+            Status: ${ticketData.status} <br />
         </div>
     `
 
     return {
-        toName: 'financegroup@watonomous.ca',
-        subject: `${summary} is expiring`,
-        htmlPart: htmlComponent,
-    }
-}
-const PurchaseRequestCreated = (purchaseRequestDetails) => {
-    const { issue, reporter, Division, purchase_link, purchase_justification } =
-        purchaseRequestDetails
-
-    let htmlComponent = `
-        <div>
-            A new Purchase Request needs your approval!
-            <br />
-            <br />
-            Item: ${issue.summary} <br />
-            Creator: ${reporter.displayName} <br />
-            Division: ${Division.value} {Division.child.value} <br />
-            Purchase Link: ${purchase_link} <br />
-            Cost: ${issue.cost_in_cad} <br />
-            CAD Funded by: ${issue.issuelinks.inwardIssue.parent.summary} <br />
-            Purchase Justification: ${purchase_justification} <br />
-            <br />
-            You can approve this PR and see more details
-            <a href=${issue.toUrl}>here</a>. If necessary, you can invalidate the
-            PR
-            <a
-                href={
-                    'https://finance.watonomous.ca/invalidate.php?issue=' +
-                    ${issue.key}
-                }
-            >
-                here
-            </a>
-            .
-        </div>
-        `
-
-    return {
-        toName: `team-captain@watonomous.ca, financegroup@watonomous.ca, drayside@uwaterloo.ca, ${
-            DivisionEmails[Division.value]
-        }`,
-        subject: `WATonomous - New Purchase Request Seeking Approval: ${issue.summary}`,
-        htmlPart: htmlComponent,
+        Subject,
+        HTMLPart,
+        To: getEmailToSection([EMAIL_RECIPIENTS.admin]),
+        ticketPath: ticketData.path,
     }
 }
 const PurchaseRequestInvalidated = (purchaseRequestDetails) => {
@@ -385,8 +370,7 @@ const PaidPersonalPurchaseReimbursementClaimInstructions = (
 }
 
 module.exports = {
-    ExpiringFundingReminder,
-    PurchaseRequestCreated,
+    pprCreatedToApprovers,
     PurchaseRequestInvalidated,
     PersonalPurchaseApproved,
     UWFinancePurchaseApproved,
