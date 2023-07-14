@@ -16,6 +16,7 @@ const getEmailToSection = (emailToList) => {
     const emailTo = []
 
     if (emailToList.includes(EMAIL_RECIPIENTS.admin)) {
+        // TODO: use ADMIN_IDENTIFIERS (rename to ADMIN_EMAILS) after migrating to new onboarding data
         emailTo.push('jw4he@watonomous.ca')
     } else if (emailToList.includes(EMAIL_RECIPIENTS.faculty_advisor)) {
         emailTo.push('drayside@uwaterloo.ca')

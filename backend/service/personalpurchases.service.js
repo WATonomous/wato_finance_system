@@ -18,16 +18,16 @@ const getPersonalPurchase = async (id) => {
 }
 
 const createPersonalPurchase = async (body) => {
-    let newPPR = new PersonalPurchase(body)
-    newPPR = await newPPR.save()
-    newPPR = await getPersonalPurchase(newPPR._id)
-    await FundingItem.findByIdAndUpdate(newPPR.fi_link, {
-        $push: { ppr_links: newPPR._id },
+    const newPPR = new PersonalPurchase(body)
+    const savedPPR = await newPPR.save()
+    const annotatedPPR = await getPersonalPurchase(savedPPR._id)
+    await FundingItem.findByIdAndUpdate(annotatedPPR.fi_link, {
+        $push: { ppr_links: annotatedPPR._id },
     })
-    const reporterHTML = await getReporterHTMLByUID(newPPR.reporter_id)
+    const reporterHTML = await getReporterHTMLByUID(annotatedPPR.reporter_id)
 
-    sendEmail(pprCreatedToApprovers({ ...newPPR, reporterHTML }))
-    return newPPR
+    sendEmail(pprCreatedToApprovers({ ...annotatedPPR, reporterHTML }))
+    return annotatedPPR
 }
 
 const updatePersonalPurchase = (id, body) => {

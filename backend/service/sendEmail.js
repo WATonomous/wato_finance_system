@@ -11,9 +11,9 @@ const getTicketLinkHTML = (ticketPath) => {
             <br />
             View the ticket here: 
             <a
-                href=${process.env.REACT_APP_FRONTEND_URL}${ticketPath}
+                href=${process.env.CLIENT_URL}${ticketPath}
             >
-                ${process.env.REACT_APP_FRONTEND_URL}${ticketPath}
+                ${process.env.CLIENT_URL}${ticketPath}
             </a>
         </div>
     `
