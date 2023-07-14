@@ -15,17 +15,13 @@ const getUWFinancePurchase = async (id) => {
 }
 
 const createNewUWFinancePurchase = async (body) => {
-    const newUWFinancePurchase = new UWFinancePurchase(body)
-    const newUPR = await newUWFinancePurchase.save()
-    return FundingItem.findByIdAndUpdate(
-        newUPR.fi_link,
-        {
-            $push: { upr_links: newUPR._id },
-        },
-        {
-            new: true,
-        }
-    )
+    const newUPR = new UWFinancePurchase(body)
+    const savedUPR = await newUPR.save()
+    const annotatedUPR = await getUWFinancePurchase(savedUPR._id)
+    await FundingItem.findByIdAndUpdate(annotatedUPR.fi_link, {
+        $push: { upr_links: annotatedUPR._id },
+    })
+    return annotatedUPR
 }
 
 const updateUWFinancePurchase = (id, body) => {

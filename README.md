@@ -23,6 +23,7 @@ ATLAS_URI=<YOUR_MONGO_ATLAS_URI_HERE>
 MAILJET_API_KEY=<YOUR_MAILJET_API_KEY>
 MAILJET_SECRET_KEY=<YOUR_MAILJET_SECRET_KEY>
 FINANCE_EMAIL=<EMAIL_WHERE_YOU_WANT_TO_SEND_FROM>
+CLIENT_URL=http://localhost:3000
 ```
 
 In order to run the cron that updates the db from the WATO members spreadsheet, please contact Victor or Anson for the following variables you will add in your `.env`
