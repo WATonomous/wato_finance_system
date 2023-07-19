@@ -35,6 +35,14 @@ SERVICE_ACCOUNT_EMAIL=<DISCORD_AUTOMATION_SERVICE_ACCOUNT>
 SERVICE_ACCOUNT_PRIVATE_KEY=<DISCORD_AUTOMATION_SERVICE_ACCOUNT_PRIVATE_KEY>
 ```
 
+In order to upload attachments, AWS credentials are needed. To access a role that is already set up with policies on WATonomous' AWS account, please contact Victor.
+
+```
+AWS_SECRET_ACCESS_KEY=<YOUR_SECRET_ACCESS_KEY>
+AWS_ACCESS_KEY_ID=<YOUR_ACCESS_KEY>
+AWS_FINANCE_BUCKET_NAME=<S3_BUCKET_NAME>
+```
+
 To start the server, run
 
 ```

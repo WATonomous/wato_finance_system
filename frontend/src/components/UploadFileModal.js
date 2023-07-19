@@ -41,7 +41,7 @@ const UploadFileModal = ({ isOpen, onClose }) => {
                 originalFiles.current = res.data
             })
             .catch((err) => console.log(err))
-            .finally(isLoading)
+            .finally(isLoading(false))
     }, [ticket._id])
 
     const onFileAttach = (attachedFile) => {
@@ -49,13 +49,17 @@ const UploadFileModal = ({ isOpen, onClose }) => {
     }
 
     const submitFiles = async () => {
-        let deleteFilesResponse = null
+        let deleteFilesResponses = null
         let createFilesResponse = null
         try {
             if (filesToDelete.length > 0) {
-                deleteFilesResponse = axiosPreset.delete('/files/bulk', {
-                    ids: filesToDelete.map((file) => file._id),
-                })
+                deleteFilesResponses = await Promise.all(
+                    filesToDelete.map((file) => {
+                        return axiosPreset.delete(
+                            `/files/${ticket.code}/${file.filename}`
+                        )
+                    })
+                )
             }
             if (filesToUpload.length > 0) {
                 const formData = new FormData()
@@ -63,7 +67,7 @@ const UploadFileModal = ({ isOpen, onClose }) => {
                     formData.append('files', file)
                 })
                 createFilesResponse = axiosPreset.post(
-                    `/files/bulk/${ticket._id}`,
+                    `/files/bulk/${ticket.code}`,
                     formData,
                     {
                         headers: {
@@ -72,11 +76,11 @@ const UploadFileModal = ({ isOpen, onClose }) => {
                     }
                 )
             }
-            await Promise.all([deleteFilesResponse, createFilesResponse])
+            await Promise.all([deleteFilesResponses, createFilesResponse])
         } catch (e) {
             console.log(e)
         } finally {
-            // onClose()
+            onClose()
         }
     }
     const removeFile = (fileToRemoveName) => {
@@ -147,9 +151,9 @@ const UploadFileModal = ({ isOpen, onClose }) => {
                             <ListItem
                                 display="flex"
                                 alignItems="center"
-                                key={file.name}
+                                key={file.filename}
                             >
-                                {file.name}{' '}
+                                {file.filename}{' '}
                                 <CloseButton
                                     onClick={() => removeUploadedFile(file)}
                                 />
@@ -162,7 +166,10 @@ const UploadFileModal = ({ isOpen, onClose }) => {
                         Close
                     </Button>
                     <Button
-                        isDisabled={filesToUpload.length === 0}
+                        isDisabled={
+                            filesToUpload.length === 0 &&
+                            filesToDelete.length === 0
+                        }
                         colorScheme="blue"
                         onClick={submitFiles}
                     >
