@@ -1,10 +1,8 @@
 const {
     getFile,
     getAllFilesByReference,
-    createFile,
     bulkCreateFiles,
     deleteFile,
-    bulkDeleteFiles,
 } = require('../service/files.service')
 
 const getFileController = (req, res) => {
@@ -15,34 +13,24 @@ const getFileController = (req, res) => {
         .catch((err) => res.status(500).json('Error: ' + err))
 }
 
+const deleteFileController = (req, res) => {
+    deleteFile(req.params.reference_code, req.params.filename)
+        .then((file) => {
+            res.status(200).json(file)
+        })
+        .catch((err) => res.status(500).json('Error: ' + err))
+}
+
 const getAllFilesByReferenceController = (req, res) => {
-    getAllFilesByReference(req.params.reference)
+    getAllFilesByReference(req.params.reference_code)
         .then((files) => {
             res.status(200).json(files)
         })
         .catch((err) => res.status(500).json('Error: ' + err))
 }
 
-const createFileController = (req, res) => {
-    createFile(req.body.file, req.body.reference)
-        .then((newFile) => res.status(200).json(newFile))
-        .catch((err) => res.status(500).json('Error: ' + err))
-}
-
-const deleteFileController = (req, res) => {
-    deleteFile(req.params.id)
-        .then((deletedFile) => res.status(200).json(deletedFile))
-        .catch((err) => res.status(500).json('Error: ' + err))
-}
-
 const bulkCreateFileController = (req, res) => {
-    bulkCreateFiles(req.files, req.params.reference)
-        .then((newFiles) => res.status(200).json(newFiles))
-        .catch((err) => res.status(500).json('Error: ' + err))
-}
-
-const bulkDeleteFileController = (req, res) => {
-    bulkDeleteFiles(req.body.ids)
+    bulkCreateFiles(req.files, req.params.reference_code)
         .then((newFiles) => res.status(200).json(newFiles))
         .catch((err) => res.status(500).json('Error: ' + err))
 }
@@ -50,8 +38,6 @@ const bulkDeleteFileController = (req, res) => {
 module.exports = {
     getFileController,
     getAllFilesByReferenceController,
-    createFileController,
-    deleteFileController,
     bulkCreateFileController,
-    bulkDeleteFileController,
+    deleteFileController,
 }

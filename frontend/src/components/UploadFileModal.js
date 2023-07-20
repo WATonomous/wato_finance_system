@@ -4,8 +4,6 @@ import {
     Button,
     CloseButton,
     Divider,
-    Heading,
-    ListIcon,
     ListItem,
     Modal,
     ModalBody,
@@ -13,10 +11,9 @@ import {
     ModalFooter,
     ModalHeader,
     ModalOverlay,
-    Text,
     UnorderedList,
 } from '@chakra-ui/react'
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useRecoilValue } from 'recoil'
 
 import { FileUploader } from 'react-drag-drop-files'
@@ -28,34 +25,36 @@ const fileTypes = ['PNG', 'JPG', 'PDF']
 const UploadFileModal = ({ isOpen, onClose }) => {
     const ticket = useRecoilValue(currentTicketState)
     const [filesToUpload, setFilesToUpload] = useState([])
-    const originalFiles = useRef([])
-    const [loading, isLoading] = useState(true)
+    const [loading, setLoading] = useState(true)
     const [uploadedFiles, setUploadedFiles] = useState([])
     const [filesToDelete, setFilesToDelete] = useState([])
 
     useEffect(() => {
         axiosPreset
-            .get(`/files/getallbyreference/${ticket._id}`)
+            .get(`/files/getallbyreference/${ticket.code}`)
             .then((res) => {
                 setUploadedFiles(res.data)
-                originalFiles.current = res.data
             })
             .catch((err) => console.log(err))
-            .finally(isLoading)
-    }, [ticket._id])
+            .finally(setLoading(false))
+    }, [ticket.code])
 
     const onFileAttach = (attachedFile) => {
         setFilesToUpload([...filesToUpload, attachedFile])
     }
 
     const submitFiles = async () => {
-        let deleteFilesResponse = null
+        let deleteFilesResponses = null
         let createFilesResponse = null
         try {
             if (filesToDelete.length > 0) {
-                deleteFilesResponse = axiosPreset.delete('/files/bulk', {
-                    ids: filesToDelete.map((file) => file._id),
-                })
+                deleteFilesResponses = await Promise.all(
+                    filesToDelete.map((file) => {
+                        return axiosPreset.delete(
+                            `/files/${ticket.code}/${file.name}`
+                        )
+                    })
+                )
             }
             if (filesToUpload.length > 0) {
                 const formData = new FormData()
@@ -63,7 +62,7 @@ const UploadFileModal = ({ isOpen, onClose }) => {
                     formData.append('files', file)
                 })
                 createFilesResponse = axiosPreset.post(
-                    `/files/bulk/${ticket._id}`,
+                    `/files/bulk/${ticket.code}`,
                     formData,
                     {
                         headers: {
@@ -72,11 +71,11 @@ const UploadFileModal = ({ isOpen, onClose }) => {
                     }
                 )
             }
-            await Promise.all([deleteFilesResponse, createFilesResponse])
+            await Promise.all([deleteFilesResponses, createFilesResponse])
         } catch (e) {
             console.log(e)
         } finally {
-            // onClose()
+            onClose()
         }
     }
     const removeFile = (fileToRemoveName) => {
@@ -162,7 +161,10 @@ const UploadFileModal = ({ isOpen, onClose }) => {
                         Close
                     </Button>
                     <Button
-                        isDisabled={filesToUpload.length === 0}
+                        isDisabled={
+                            filesToUpload.length === 0 &&
+                            filesToDelete.length === 0
+                        }
                         colorScheme="blue"
                         onClick={submitFiles}
                     >
