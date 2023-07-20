@@ -6,16 +6,16 @@ const getFile = async (id) => {
 }
 
 const getAllFilesByReference = async (reference) => {
-    return File.find({ referenceItem: reference })
+    return File.find({ reference_code: reference })
 }
 
 const createFile = async (file, referenceCode, isSupportingDocument) => {
     const newFile = new File({
-        referenceCode: referenceCode,
-        filename: file.originalname,
+        reference_code: referenceCode,
+        name: file.originalname,
         location: file.location,
         mimetype: file.mimetype,
-        isSupportingDocument: isSupportingDocument,
+        is_supporting_document: isSupportingDocument,
     })
     return newFile.save()
 }
@@ -36,8 +36,8 @@ const deleteFile = async (referenceCode, fileName) => {
         getS3FileKey(referenceCode, fileName)
     )
     return File.findOneAndDelete({
-        referenceCode: referenceCode,
-        filename: fileName,
+        reference_code: referenceCode,
+        name: fileName,
     })
 }
 

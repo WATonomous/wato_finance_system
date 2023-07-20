@@ -26,11 +26,6 @@ const upload = multer({
     }),
 })
 
-router.delete(
-    '/:reference_code/:filename',
-    authenticateUser,
-    FilesController.deleteFileController
-)
 router.get('/:id', authenticateUser, FilesController.getFileController)
 router.get(
     '/getallbyreference/:reference_code',
@@ -42,6 +37,11 @@ router.post(
     authenticateUser,
     upload.array('files'),
     FilesController.bulkCreateFileController
+)
+router.delete(
+    '/:reference_code/:filename',
+    authenticateUser,
+    FilesController.deleteFileController
 )
 
 module.exports = router

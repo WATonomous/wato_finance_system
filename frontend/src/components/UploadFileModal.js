@@ -4,8 +4,6 @@ import {
     Button,
     CloseButton,
     Divider,
-    Heading,
-    ListIcon,
     ListItem,
     Modal,
     ModalBody,
@@ -13,10 +11,9 @@ import {
     ModalFooter,
     ModalHeader,
     ModalOverlay,
-    Text,
     UnorderedList,
 } from '@chakra-ui/react'
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useRecoilValue } from 'recoil'
 
 import { FileUploader } from 'react-drag-drop-files'
@@ -28,21 +25,19 @@ const fileTypes = ['PNG', 'JPG', 'PDF']
 const UploadFileModal = ({ isOpen, onClose }) => {
     const ticket = useRecoilValue(currentTicketState)
     const [filesToUpload, setFilesToUpload] = useState([])
-    const originalFiles = useRef([])
-    const [loading, isLoading] = useState(true)
+    const [loading, setLoading] = useState(true)
     const [uploadedFiles, setUploadedFiles] = useState([])
     const [filesToDelete, setFilesToDelete] = useState([])
 
     useEffect(() => {
         axiosPreset
-            .get(`/files/getallbyreference/${ticket._id}`)
+            .get(`/files/getallbyreference/${ticket.code}`)
             .then((res) => {
                 setUploadedFiles(res.data)
-                originalFiles.current = res.data
             })
             .catch((err) => console.log(err))
-            .finally(isLoading(false))
-    }, [ticket._id])
+            .finally(setLoading(false))
+    }, [ticket.code])
 
     const onFileAttach = (attachedFile) => {
         setFilesToUpload([...filesToUpload, attachedFile])
@@ -56,7 +51,7 @@ const UploadFileModal = ({ isOpen, onClose }) => {
                 deleteFilesResponses = await Promise.all(
                     filesToDelete.map((file) => {
                         return axiosPreset.delete(
-                            `/files/${ticket.code}/${file.filename}`
+                            `/files/${ticket.code}/${file.name}`
                         )
                     })
                 )
@@ -151,9 +146,9 @@ const UploadFileModal = ({ isOpen, onClose }) => {
                             <ListItem
                                 display="flex"
                                 alignItems="center"
-                                key={file.filename}
+                                key={file.name}
                             >
-                                {file.filename}{' '}
+                                {file.name}{' '}
                                 <CloseButton
                                     onClick={() => removeUploadedFile(file)}
                                 />
