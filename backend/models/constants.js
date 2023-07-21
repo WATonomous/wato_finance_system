@@ -45,6 +45,7 @@ const EMAIL_RECIPIENTS = Object.freeze({
     director: 'director',
     faculty_advisor: 'faculty_advisor',
     finance: 'finance',
+    reporter: 'reporter',
     team_captain: 'team_captain',
 })
 

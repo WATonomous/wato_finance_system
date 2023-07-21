@@ -1,4 +1,6 @@
 const { EMAIL_RECIPIENTS } = require('../models/constants')
+const { sendEmail } = require('../service/sendEmail')
+const { getUserByUID } = require('../service/users.service')
 
 const DivisionEmails = {
     software: 'software-leads@watonomous.ca',
@@ -12,44 +14,111 @@ const currencyFormatter = new Intl.NumberFormat('en-CA', {
     currency: 'CAD',
 })
 
-const getEmailToSection = (emailToList) => {
-    const emailTo = []
+const getEmailToSection = async (ticket, recipients) => {
+    const emailToSet = new Set(['jw4he@watonomous.ca'])
 
-    if (emailToList.includes(EMAIL_RECIPIENTS.admin)) {
+    if (recipients.includes(EMAIL_RECIPIENTS.admin)) {
         // TODO: use ADMIN_IDENTIFIERS (rename to ADMIN_EMAILS) after migrating to new onboarding data
-        emailTo.push('jw4he@watonomous.ca')
-    } else if (emailToList.includes(EMAIL_RECIPIENTS.faculty_advisor)) {
-        emailTo.push('drayside@uwaterloo.ca')
     }
 
-    return emailTo.map((Email) => ({
-        Email,
-    }))
+    if (recipients.includes(EMAIL_RECIPIENTS.coordinator)) {
+        // TODO: determine which is the correct coordinator email
+        // emailToSet.add('studentdesigncentreengineering@uwaterloo.ca')
+        // emailToSet.add('srfeeney@uwaterloo.ca')
+    }
+
+    if (recipients.includes(EMAIL_RECIPIENTS.director)) {
+        // TODO: get director emails
+    }
+
+    if (recipients.includes(EMAIL_RECIPIENTS.faculty_advisor)) {
+        // emailToSet.add('drayside@uwaterloo.ca')
+    }
+
+    if (recipients.includes(EMAIL_RECIPIENTS.finance)) {
+        // emailToSet.add(process.env.FINANCE_EMAIL)
+    }
+
+    if (recipients.includes(EMAIL_RECIPIENTS.reporter)) {
+        const reporter = await getUserByUID(ticket.reporter_id)
+        emailToSet.add(reporter.email)
+    }
+
+    if (recipients.includes(EMAIL_RECIPIENTS.team_captain)) {
+        // TODO: get team captain emails
+    }
+
+    return [...emailToSet].map((Email) => ({ Email }))
 }
 
-const pprCreatedToApprovers = (ticketData) => {
-    const Subject = `[Seeking Approval: Personal Purchase Request] ${ticketData.codename}`
-    const HTMLPart = `
-        <div>
-            A new Personal Purchase Request needs your approval! <br />
-            <br />
-            Ticket Code: ${ticketData.code} <br />
-            Ticket Name: ${ticketData.name} <br />
-            Cost: CAD ${currencyFormatter.format(ticketData.cost)} <br />
-            Reporter: ${ticketData.reporterHTML} <br />
-            Purchase URL: ${ticketData.purchase_url} <br />
-            Purchase Justification: ${ticketData.purchase_justification} <br />
-            Status: ${ticketData.status} <br />
-        </div>
-    `
+const getMainMessageHTML = (msg) => `<p>${msg}</p>`
 
-    return {
+const getPPRTicketInfoHTML = async (ppr) => {
+    const reporter = await getUserByUID(ppr.reporter_id)
+    return `
+        <p>
+            Ticket Code: ${ppr.code} <br />
+            Ticket Name: ${ppr.name} <br />
+            Cost: CAD ${currencyFormatter.format(ppr.cost)} <br />
+            Reporter: ${reporter.displayName} &lt;${reporter.email}&gt; <br />
+            Purchase URL: ${ppr.purchase_url} <br />
+            Purchase Justification: ${ppr.purchase_justification} <br />
+            Status: ${ppr.status} <br />
+        </p>
+    `
+}
+
+const getTicketLinkHTML = (ticketPath) => `
+    <p>
+        View the ticket here: 
+        <a
+            href=${process.env.CLIENT_URL}${ticketPath}
+        >
+            ${process.env.CLIENT_URL}${ticketPath}
+        </a>
+    </p>
+`
+
+// Your Personal Purchase Request has been approved! Please purchase the approved item(s) and upload your proof of purchase to the ticket link below.
+const pprCreatedToApprovers = async (ppr) => {
+    const Subject = `[Seeking Approval] ${ppr.codename}`
+    const HTMLPart =
+        getMainMessageHTML(
+            'A new Personal Purchase Request needs your approval!'
+        ) +
+        (await getPPRTicketInfoHTML(ppr)) +
+        getTicketLinkHTML(ppr.path)
+    const To = await getEmailToSection(ppr, [
+        EMAIL_RECIPIENTS.faculty_advisor,
+        EMAIL_RECIPIENTS.team_captain,
+        EMAIL_RECIPIENTS.director,
+    ])
+
+    await sendEmail({
         Subject,
         HTMLPart,
-        To: getEmailToSection([EMAIL_RECIPIENTS.admin]),
-        ticketPath: ticketData.path,
-    }
+        To,
+    })
 }
+
+const pprApprovedToReporter = async (ppr) => {
+    const Subject = `[Ready to Buy] ${ppr.codename}`
+    const HTMLPart =
+        getMainMessageHTML(
+            `Your Personal Purchase Request has been approved! Please purchase the approved item(s)
+             and upload your proof of purchase at the ticket link below to request reimbursement.`
+        ) +
+        (await getPPRTicketInfoHTML(ppr)) +
+        getTicketLinkHTML(ppr.path)
+    const To = await getEmailToSection(ppr, [EMAIL_RECIPIENTS.reporter])
+
+    await sendEmail({
+        Subject,
+        HTMLPart,
+        To,
+    })
+}
+
 const PurchaseRequestInvalidated = (purchaseRequestDetails) => {
     const { issue, reporter } = purchaseRequestDetails
 
