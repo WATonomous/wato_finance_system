@@ -34,6 +34,7 @@ const UploadFileModal = ({ isOpen, onClose }) => {
             .get(`/files/getallbyreference/${ticket.code}`)
             .then((res) => {
                 setUploadedFiles(res.data)
+                console.log(res.data)
             })
             .catch((err) => console.log(err))
             .finally(setLoading(false))

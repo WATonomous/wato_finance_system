@@ -1,12 +1,29 @@
 const File = require('../models/file.model')
-const { getS3FileKey, deleteS3File } = require('../aws/s3')
+const {
+    getS3FileKey,
+    deleteS3File,
+    generatePresignedUrl,
+} = require('../aws/s3')
 
 const getFile = async (id) => {
     return File.findById(id)
 }
 
 const getAllFilesByReference = async (reference) => {
-    return File.find({ reference_code: reference })
+    const files = await File.find({ reference_code: reference })
+    return Promise.all(
+        files.map(async (file) => {
+            // generate a presigned url for each file
+            const presignedUrl = await generatePresignedUrl(
+                process.env.AWS_FINANCE_BUCKET_NAME,
+                getS3FileKey(file.reference_code, file.name)
+            )
+            return {
+                ...file,
+                link: presignedUrl,
+            }
+        })
+    )
 }
 
 const createFile = async (file, referenceCode, isSupportingDocument) => {
