@@ -60,10 +60,11 @@ const getPPRTicketInfoHTML = async (ppr) => {
             Ticket Code: ${ppr.code} <br />
             Ticket Name: ${ppr.name} <br />
             Cost: CAD ${currencyFormatter.format(ppr.cost)} <br />
-            Reporter: ${reporter.displayName} &lt;${reporter.email}&gt; <br />
             Purchase URL: ${ppr.purchase_url} <br />
             Purchase Justification: ${ppr.purchase_justification} <br />
             Status: ${ppr.status} <br />
+            Reporter: ${reporter.displayName} &lt;${reporter.email}&gt; <br />
+            Created: ${new Date(ppr.createdAt).toDateString()}
         </p>
     `
 }
