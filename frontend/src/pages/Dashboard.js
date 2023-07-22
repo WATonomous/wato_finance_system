@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import {
     Box,
@@ -13,8 +13,6 @@ import {
     useDisclosure,
 } from '@chakra-ui/react'
 import TreeView from '../components/TreeView'
-import axios from 'axios'
-
 import Navbar from '../components/Navbar'
 import TicketList from '../components/TicketList'
 import LoadingSpinner from '../components/LoadingSpinner'
@@ -26,7 +24,7 @@ import SFContentTable from '../components/TicketContent/SFContentTable'
 import PPRContentTable from '../components/TicketContent/PPRContentTable'
 import UPRContentTable from '../components/TicketContent/UPRContentTable'
 import ReporterInfoTip from '../components/ReporterInfoTip'
-import { TICKET_ENDPOINTS, TICKET_TYPES } from '../constants'
+import { TICKET_TYPES } from '../constants'
 import buildTicketTree from '../utils/buildTicketTree'
 import DeleteTicketAlertDialog from '../components/DeleteTicketAlertDialog'
 import { axiosPreset } from '../axiosConfig'
