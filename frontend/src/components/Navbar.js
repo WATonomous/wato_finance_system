@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button, Flex, Heading, Spacer, useDisclosure } from '@chakra-ui/react'
 import { useAuth } from '../contexts/AuthContext'
 import { CreateTicketModal } from './CreateTicketModal'
-const Navbar = ({ getAllTickets }) => {
+const Navbar = () => {
     const navigate = useNavigate()
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
@@ -69,7 +69,6 @@ const Navbar = ({ getAllTickets }) => {
                 <CreateTicketModal
                     isOpen={isOpen}
                     onClose={onClose}
-                    getAllTickets={getAllTickets}
                 />
             )}
         </Flex>

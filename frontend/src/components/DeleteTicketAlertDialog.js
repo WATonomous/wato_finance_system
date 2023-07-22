@@ -14,13 +14,15 @@ import React, { useState } from 'react'
 import { TICKET_ENDPOINTS, TICKET_TYPES } from '../constants'
 import { useNavigate } from 'react-router-dom'
 import { axiosPreset } from '../axiosConfig'
-import { useRecoilValue } from 'recoil'
-import { currentTicketState, currentTreeState } from '../state/atoms'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { allTicketsState, currentTicketState, currentTreeState } from '../state/atoms'
+import getAllTickets from '../utils/getAllTickets'
 
-const DeleteTicketAlertDialog = ({ isOpen, onClose, getAllTickets }) => {
+const DeleteTicketAlertDialog = ({ isOpen, onClose }) => {
     const navigate = useNavigate()
     const currentTicket = useRecoilValue(currentTicketState)
     const currentTree = useRecoilValue(currentTreeState)
+    const setAllTickets = useSetRecoilState(allTicketsState)
     const [isDisabled, setIsDisabled] = useState(false)
     const cancelRef = React.useRef()
 
@@ -30,7 +32,7 @@ const DeleteTicketAlertDialog = ({ isOpen, onClose, getAllTickets }) => {
             await axiosPreset.delete(
                 `${TICKET_ENDPOINTS[currentTicket.type]}/${currentTicket._id}`
             )
-            await getAllTickets()
+            await getAllTickets(setAllTickets)
             navigate('/')
             onClose()
         } catch (err) {

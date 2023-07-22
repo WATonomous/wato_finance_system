@@ -18,12 +18,13 @@ import {
     UWFinancePurchaseForm,
 } from './TicketForms'
 import { TICKET_ENDPOINTS, TICKET_TYPES } from '../constants'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import { currentTicketState, allTicketsState } from '../state/atoms'
+import getAllTickets from '../utils/getAllTickets'
 
-const UpdateTicketModal = ({ isOpen, onClose, getAllTickets }) => {
+const UpdateTicketModal = ({ isOpen, onClose }) => {
     const currentTicket = useRecoilValue(currentTicketState)
-    const allTickets = useRecoilValue(allTicketsState)
+    const [allTickets, setAllTickets] = useRecoilState(allTicketsState)
     const { control, register, handleSubmit, formState } = useForm({
         defaultValues: {
             ...currentTicket,
@@ -137,7 +138,7 @@ const UpdateTicketModal = ({ isOpen, onClose, getAllTickets }) => {
                 `${TICKET_ENDPOINTS[currentTicket.type]}/${currentTicket._id}`,
                 payload
             )
-            await getAllTickets()
+            await getAllTickets(setAllTickets)
             onClose()
         } catch (err) {
             console.log(err)

@@ -1,14 +1,16 @@
 import { Button, Center, Heading, Table, Tbody, VStack } from '@chakra-ui/react'
 import React from 'react'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useSetRecoilState } from 'recoil'
 import TicketContentTableRow from './TicketContentTableRow'
-import { currentTicketState } from '../../state/atoms'
+import { allTicketsState, currentTicketState } from '../../state/atoms'
 import { axiosPreset } from '../../axiosConfig'
 import { TICKET_ENDPOINTS } from '../../constants'
+import getAllTickets from '../../utils/getAllTickets'
 
-const UPRAdminContentTable = ({ partialUpdateAllTickets }) => {
+const UPRAdminContentTable = () => {
     const [currentTicket, setCurrentTicket] = useRecoilState(currentTicketState)
     const [changed, setChanged] = React.useState(false)
+    const setAllTickets = useSetRecoilState(allTicketsState)
     const changeReqNumber = (e) => {
         setCurrentTicket({
             ...currentTicket,
@@ -33,7 +35,7 @@ const UPRAdminContentTable = ({ partialUpdateAllTickets }) => {
             `${TICKET_ENDPOINTS.UPR}/${currentTicket._id}`,
             payload
         )
-        partialUpdateAllTickets(currentTicket.type, currentTicket._id, payload)
+        await getAllTickets(setAllTickets)
         setChanged(false)
     }
 

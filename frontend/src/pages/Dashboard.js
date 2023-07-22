@@ -42,6 +42,7 @@ import UPRAdminContentTable from '../components/TicketContent/UPRAdminContentTab
 import SFAdminContentTable from '../components/TicketContent/SFAdminContentTable'
 import PPRAdminContentTable from '../components/TicketContent/PPRAdminContentTable'
 import FIAdminContentTable from '../components/TicketContent/FIAdminContentTable'
+import getAllTickets from '../utils/getAllTickets'
 const Dashboard = () => {
     const navigate = useNavigate()
     const location = useLocation()
@@ -72,43 +73,21 @@ const Dashboard = () => {
     const [currentTicket, setCurrentTicket] = useRecoilState(currentTicketState)
     const [allTickets, setAllTickets] = useRecoilState(allTicketsState)
 
-    const partialUpdateAllTickets = (ticketType, ticketId, newData) => {
-        const newTickets = allTickets[ticketType].slice()
-        const localIndex = newTickets
-            .map((ticket) => ticket._id)
-            .indexOf(ticketId)
-        newTickets[localIndex] = { ...newTickets[localIndex], ...newData }
-        setAllTickets({ ...allTickets, [ticketType]: newTickets })
-    }
-
-    const getAllTickets = useCallback(async () => {
-        setIsLoading(true)
-        const data = await axios.all(
-            Object.values(TICKET_ENDPOINTS).map((endpoint) =>
-                axiosPreset.get(endpoint)
-            )
-        )
-        const allTickets = data.reduce((acc, response, index) => {
-            return {
-                ...acc,
-                [Object.keys(TICKET_ENDPOINTS)[index]]: response.data,
-            }
-        }, {})
-        setAllTickets(allTickets)
-        setIsLoading(false)
-    }, [setAllTickets])
-
-    const getAllUsers = () => {
-        const endpoint = `${process.env.REACT_APP_BACKEND_URL}/users/`
-        axiosPreset.get(endpoint).then((response) => {
-            setAllUsers({ users: response.data })
-        })
-    }
-
     useEffect(() => {
-        getAllTickets()
-        getAllUsers()
-    }, [getAllTickets])
+        const fetchData = async () => {
+            try {
+                setIsLoading(true)
+                await getAllTickets(setAllTickets)
+                const res = await axiosPreset.get('/users')
+                setAllUsers({ users: res.data })
+            } catch (err) {
+                console.log(err)
+            } finally {
+                setIsLoading(false)
+            }
+        }
+        fetchData()
+    }, [setAllTickets])
 
     useEffect(() => {
         if (location.pathname === '/') return
@@ -171,24 +150,14 @@ const Dashboard = () => {
                 return (
                     <>
                         {auth.isAdmin && <PPRAdminContentTable />}
-                        <PPRContentTable
-                            partialUpdateAllTickets={partialUpdateAllTickets}
-                        />
+                        <PPRContentTable />
                     </>
                 )
             case TICKET_TYPES.UPR:
                 return (
                     <>
-                        {auth.isAdmin && (
-                            <UPRAdminContentTable
-                                partialUpdateAllTickets={
-                                    partialUpdateAllTickets
-                                }
-                            />
-                        )}
-                        <UPRContentTable
-                            partialUpdateAllTickets={partialUpdateAllTickets}
-                        />
+                        {auth.isAdmin && <UPRAdminContentTable />}
+                        <UPRContentTable />
                     </>
                 )
             default:
@@ -301,7 +270,7 @@ const Dashboard = () => {
 
     return (
         <VStack spacing="0">
-            <Navbar getAllTickets={getAllTickets} />
+            <Navbar />
             <Flex pos="absolute" top="80px" w="100%">
                 <TicketList isLoading={isLoading} />
                 {getMainContent()}
@@ -317,14 +286,12 @@ const Dashboard = () => {
                 <DeleteTicketAlertDialog
                     isOpen={isDeleteTicketOpen}
                     onClose={onCloseDeleteTicket}
-                    getAllTickets={getAllTickets}
                 />
             )}
             {isUpdateTicketOpen && (
                 <UpdateTicketModal
                     isOpen={isUpdateTicketOpen}
                     onClose={onCloseUpdateTicket}
-                    getAllTickets={getAllTickets}
                 />
             )}
         </VStack>
