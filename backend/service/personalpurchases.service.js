@@ -4,7 +4,10 @@ const {
     getAnnotatedPersonalPurchasesByIdList,
     getAnnotatedSponsorshipFundsByIdList,
 } = require('./annotatedGetters')
-const { sendEmailPPRCreatedToApprovers, sendEmailPPRApprovedToReporter } = require('../emails/emails')
+const {
+    sendEmailPPRCreatedToApprovers,
+    sendEmailPPRApprovedToReporter,
+} = require('../emails/emails')
 
 const getAllPersonalPurchases = () => {
     return getAnnotatedPersonalPurchasesByIdList()
