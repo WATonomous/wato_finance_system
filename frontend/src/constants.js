@@ -23,3 +23,5 @@ export const TEAM_CAPTAIN_TITLES = ['Team Captain']
 export const DIRECTOR_TITLES = ['Director']
 
 export const ENDOWMENT_FUNDS = ['MEF', 'WEEF', 'EngSoc', 'Dean of Eng']
+
+export const SEEKING_APPROVAL_STATUS = 'SEEKING_APPROVAL'

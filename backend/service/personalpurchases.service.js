@@ -75,7 +75,6 @@ const updateApprovalsPersonalPurchase = async (id, new_approval_levels) => {
         return newPersonalPurchase
     }
 
-    // TODO: Transition status to 'SENT_TO_COORDINATOR' and auto send email
     return PersonalPurchase.findByIdAndUpdate(id, new_approval_levels, {
         new: true,
     })
