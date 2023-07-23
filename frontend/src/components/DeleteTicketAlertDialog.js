@@ -15,7 +15,11 @@ import { TICKET_ENDPOINTS, TICKET_TYPES } from '../constants'
 import { useNavigate } from 'react-router-dom'
 import { axiosPreset } from '../axiosConfig'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { allTicketsState, currentTicketState, currentTreeState } from '../state/atoms'
+import {
+    allTicketsState,
+    currentTicketState,
+    currentTreeState,
+} from '../state/atoms'
 import getAllTickets from '../utils/getAllTickets'
 
 const DeleteTicketAlertDialog = ({ isOpen, onClose }) => {

@@ -65,12 +65,7 @@ const Navbar = () => {
             >
                 {error ? error : currentUser ? 'Log Out' : 'Log In'}
             </Button>
-            {isOpen && (
-                <CreateTicketModal
-                    isOpen={isOpen}
-                    onClose={onClose}
-                />
-            )}
+            {isOpen && <CreateTicketModal isOpen={isOpen} onClose={onClose} />}
         </Flex>
     )
 }
