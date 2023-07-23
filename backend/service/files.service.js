@@ -19,7 +19,7 @@ const getAllFilesByReference = async (reference) => {
                 getS3FileKey(file.reference_code, file.name)
             )
             return {
-                ...file,
+                ...file.toObject(),
                 link: presignedUrl,
             }
         })

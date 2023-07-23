@@ -13,7 +13,7 @@ import {
     ModalOverlay,
     UnorderedList,
 } from '@chakra-ui/react'
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useRecoilValue } from 'recoil'
 
 import { FileUploader } from 'react-drag-drop-files'
@@ -22,23 +22,11 @@ import LoadingSpinner from './LoadingSpinner'
 import { currentTicketState } from '../state/atoms'
 
 const fileTypes = ['PNG', 'JPG', 'PDF']
-const UploadFileModal = ({ isOpen, onClose }) => {
+const UploadFileModal = ({ isOpen, onClose, startingUploadedFiles }) => {
     const ticket = useRecoilValue(currentTicketState)
     const [filesToUpload, setFilesToUpload] = useState([])
-    const [loading, setLoading] = useState(true)
-    const [uploadedFiles, setUploadedFiles] = useState([])
+    const [uploadedFiles, setUploadedFiles] = useState(startingUploadedFiles)
     const [filesToDelete, setFilesToDelete] = useState([])
-
-    useEffect(() => {
-        axiosPreset
-            .get(`/files/getallbyreference/${ticket.code}`)
-            .then((res) => {
-                setUploadedFiles(res.data)
-                console.log(res.data)
-            })
-            .catch((err) => console.log(err))
-            .finally(setLoading(false))
-    }, [ticket.code])
 
     const onFileAttach = (attachedFile) => {
         setFilesToUpload([...filesToUpload, attachedFile])
@@ -90,7 +78,7 @@ const UploadFileModal = ({ isOpen, onClose }) => {
             uploadedFiles.filter((file) => file !== fileToRemoveName)
         )
     }
-    if (loading && isOpen) {
+    if (isOpen) {
         return <LoadingSpinner />
     }
     return (

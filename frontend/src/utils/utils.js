@@ -5,11 +5,16 @@ export const getStandardizedDate = (dateStr) => {
     return date.format('YYYY-MM-DD')
 }
 
-const currencyFormatter = new Intl.NumberFormat('en-CA', {
-    style: 'currency',
-    currency: 'CAD',
-})
-
 export const getFormattedCurrency = (currencyStr) => {
+    const currencyFormatter = new Intl.NumberFormat('en-CA', {
+        style: 'currency',
+        currency: 'CAD',
+    })
     return `CAD ${currencyFormatter.format(currencyStr)}`
+}
+
+export const mimeTypeToExtension = {
+    'image/jpeg': 'jpg',
+    'image/png': 'png',
+    'application/pdf': 'pdf',
 }

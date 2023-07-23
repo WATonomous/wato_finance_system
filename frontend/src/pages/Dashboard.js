@@ -11,12 +11,14 @@ import {
     Button,
     Text,
     useDisclosure,
+    Spinner,
 } from '@chakra-ui/react'
 import TreeView from '../components/TreeView'
 import Navbar from '../components/Navbar'
+import FileViewer from 'react-file-viewer'
 import TicketList from '../components/TicketList'
 import LoadingSpinner from '../components/LoadingSpinner'
-import { getStandardizedDate } from '../utils/utils'
+import { getStandardizedDate, mimeTypeToExtension } from '../utils/utils'
 import { useAuth } from '../contexts/AuthContext'
 import FIContentTable from '../components/TicketContent/FIContentTable'
 import TicketContentTableRow from '../components/TicketContent/TicketContentTableRow'
@@ -70,6 +72,7 @@ const Dashboard = () => {
     const setCurrentTree = useSetRecoilState(currentTreeState)
     const [currentTicket, setCurrentTicket] = useRecoilState(currentTicketState)
     const [allTickets, setAllTickets] = useRecoilState(allTicketsState)
+    const [uploadedFiles, setUploadedFiles] = useState([])
 
     useEffect(() => {
         const fetchData = async () => {
@@ -86,6 +89,16 @@ const Dashboard = () => {
         }
         fetchData()
     }, [setAllTickets])
+
+    useEffect(() => {
+        axiosPreset
+            .get(`/files/getallbyreference/${currentTicket.code}`)
+            .then((res) => {
+                setUploadedFiles(res.data)
+                console.log(res.data)
+            })
+            .catch((err) => console.log(err))
+    }, [currentTicket.code])
 
     useEffect(() => {
         if (location.pathname === '/') return
@@ -261,6 +274,28 @@ const Dashboard = () => {
                             </Tbody>
                         </Table>
                     </Box>
+                    <Box w="100%" mt="12px">
+                        <Heading mb="8px" fontSize="2xl">
+                            Attachments
+                        </Heading>
+                        <Box>
+                            {uploadedFiles?.map((file) => {
+                                console.log('mimetype')
+                                console.log(file.mimetype)
+                                const fileType =
+                                    mimeTypeToExtension[file.mimetype]
+                                console.log(fileType)
+                                return (
+                                    <FileViewer
+                                        fileType={fileType}
+                                        filePath={file.link}
+                                        errorComponent={<Spinner />}
+                                        onError={(e) => console.log(e)}
+                                    />
+                                )
+                            })}
+                        </Box>
+                    </Box>
                 </VStack>
             </Flex>
         )
@@ -277,6 +312,7 @@ const Dashboard = () => {
                 <UploadFileModal
                     isOpen={isUploadModalOpen}
                     onClose={onCloseUploadModal}
+                    startingUploadedFiles={uploadedFiles}
                 />
             )}
 
