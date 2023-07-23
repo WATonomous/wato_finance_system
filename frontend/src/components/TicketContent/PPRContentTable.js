@@ -14,13 +14,19 @@ const PPRContentTable = () => {
     const currentTicket = useRecoilValue(currentTicketState)
     const setAllTickets = useSetRecoilState(allTicketsState)
 
-    const handleUpdateApproval = (approval_level) => async () => {
-        const newTicketData = {
-            [approval_level]: !currentTicket[approval_level],
-        }
+    const handleUpdateApproval = (currentApprovalType) => async () => {
+        const newApprovalLevels = {}
+
+        Object.values(APPROVAL_LEVELS).forEach((approval_level) => {
+            newApprovalLevels[approval_level] =
+                approval_level === currentApprovalType
+                    ? !currentTicket[approval_level]
+                    : currentTicket[approval_level]
+        })
+
         const payload = {
-            ticket_data: newTicketData,
-            approval_type: approval_level,
+            new_approval_levels: newApprovalLevels,
+            approval_type: currentApprovalType,
         }
         await axiosPreset.patch(
             `${TICKET_ENDPOINTS.PPR}/updateapprovals/${currentTicket._id}`,

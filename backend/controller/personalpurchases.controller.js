@@ -66,7 +66,7 @@ const updateFILinkPersonalPurchaseController = async (req, res) => {
 }
 
 const updateApprovalsPersonalPurchaseController = async (req, res) => {
-    const { ticket_data, approval_type } = req.body
+    const { new_approval_levels, approval_type } = req.body
     const canUpdateApproval =
         (approval_type === APPROVAL_LEVELS.admin_approval &&
             req.user.isAdmin) ||
@@ -80,7 +80,7 @@ const updateApprovalsPersonalPurchaseController = async (req, res) => {
         return
     }
 
-    updateApprovalsPersonalPurchase(req.params.id, ticket_data)
+    updateApprovalsPersonalPurchase(req.params.id, new_approval_levels)
         .then((personalpurchase) => {
             res.status(200).json(personalpurchase)
         })

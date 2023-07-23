@@ -4,7 +4,7 @@ const {
     getAnnotatedPersonalPurchasesByIdList,
     getAnnotatedSponsorshipFundsByIdList,
 } = require('./annotatedGetters')
-const { pprCreatedToApprovers } = require('../emails/emails')
+const { sendEmailPPRCreatedToApprovers, sendEmailPPRApprovedToReporter } = require('../emails/emails')
 
 const getAllPersonalPurchases = () => {
     return getAnnotatedPersonalPurchasesByIdList()
@@ -23,7 +23,7 @@ const createPersonalPurchase = async (body) => {
         $push: { ppr_links: annotatedPPR._id },
     })
 
-    await pprCreatedToApprovers(annotatedPPR)
+    await sendEmailPPRCreatedToApprovers(annotatedPPR)
     return annotatedPPR
 }
 
@@ -50,33 +50,32 @@ const updateFILinkPersonalPurchase = async (id, new_fi_link) => {
     )
 }
 
-const updateApprovalsPersonalPurchase = async (id, ticket_data) => {
-    const newPersonalPurchase = await PersonalPurchase.findByIdAndUpdate(
-        id,
-        ticket_data,
-        {
-            new: true,
-        }
-    )
+const updateApprovalsPersonalPurchase = async (id, new_approval_levels) => {
     const completedApprovals =
-        newPersonalPurchase.team_captain_approval &&
-        newPersonalPurchase.admin_approval &&
-        newPersonalPurchase.director_approval
+        new_approval_levels.team_captain_approval &&
+        new_approval_levels.admin_approval &&
+        new_approval_levels.director_approval
 
     if (completedApprovals) {
-        return PersonalPurchase.findByIdAndUpdate(
+        const newPersonalPurchase = await PersonalPurchase.findByIdAndUpdate(
             id,
             {
+                ...new_approval_levels,
                 status: 'READY_TO_BUY',
             },
             {
                 new: true,
             }
         )
+        const annotatedPPR = await getPersonalPurchase(id)
+        await sendEmailPPRApprovedToReporter(annotatedPPR)
+        return newPersonalPurchase
     }
 
     // TODO: Transition status to 'SENT_TO_COORDINATOR' and auto send email
-    return newPersonalPurchase
+    return PersonalPurchase.findByIdAndUpdate(id, new_approval_levels, {
+        new: true,
+    })
 }
 
 const deletePersonalPurchase = async (id) => {
