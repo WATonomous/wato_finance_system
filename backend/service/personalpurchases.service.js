@@ -51,7 +51,7 @@ const updateFILinkPersonalPurchase = async (id, new_fi_link) => {
 }
 
 const updateApprovalsPersonalPurchase = async (id, ticket_data) => {
-    const personalPurchase = await PersonalPurchase.findByIdAndUpdate(
+    const newPersonalPurchase = await PersonalPurchase.findByIdAndUpdate(
         id,
         ticket_data,
         {
@@ -59,12 +59,12 @@ const updateApprovalsPersonalPurchase = async (id, ticket_data) => {
         }
     )
     const completedApprovals =
-        personalPurchase.team_captain_approval &&
-        personalPurchase.admin_approval &&
-        personalPurchase.director_approval
+        newPersonalPurchase.team_captain_approval &&
+        newPersonalPurchase.admin_approval &&
+        newPersonalPurchase.director_approval
 
     if (completedApprovals) {
-        return personalPurchase.findByIdAndUpdate(
+        return PersonalPurchase.findByIdAndUpdate(
             id,
             {
                 status: 'READY_TO_BUY',
@@ -76,7 +76,7 @@ const updateApprovalsPersonalPurchase = async (id, ticket_data) => {
     }
 
     // TODO: Transition status to 'SENT_TO_COORDINATOR' and auto send email
-    return personalPurchase
+    return newPersonalPurchase
 }
 
 const deletePersonalPurchase = async (id) => {

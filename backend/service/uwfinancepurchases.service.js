@@ -47,8 +47,8 @@ const updateFILinkUWFinancePurchase = async (id, new_fi_link) => {
     )
 }
 
-const updateApprovalsUWFinancePurchase = (id, ticket_data) => {
-    const newUWFinancePurchase = UWFinancePurchase.findByIdAndUpdate(
+const updateApprovalsUWFinancePurchase = async (id, ticket_data) => {
+    const newUWFinancePurchase = await UWFinancePurchase.findByIdAndUpdate(
         id,
         ticket_data,
         {
@@ -64,7 +64,7 @@ const updateApprovalsUWFinancePurchase = (id, ticket_data) => {
         return UWFinancePurchase.findByIdAndUpdate(
             id,
             {
-                status: 'READY_TO_BUY',
+                status: 'SENT_TO_COORDINATOR',
             },
             {
                 new: true,
