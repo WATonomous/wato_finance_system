@@ -5,30 +5,34 @@ import TicketContentTableRow from './TicketContentTableRow'
 import { useAuth } from '../../contexts/AuthContext'
 import { axiosPreset } from '../../axiosConfig'
 import { TICKET_ENDPOINTS, APPROVAL_LEVELS } from '../../constants'
-import { useRecoilValue } from 'recoil'
-import { currentTicketState } from '../../state/atoms'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { allTicketsState, currentTicketState } from '../../state/atoms'
+import getAllTickets from '../../utils/getAllTickets'
 
-const PPRContentTable = ({ partialUpdateAllTickets }) => {
+const PPRContentTable = () => {
     const auth = useAuth()
     const currentTicket = useRecoilValue(currentTicketState)
+    const setAllTickets = useSetRecoilState(allTicketsState)
 
-    const handleUpdateApproval = (approval_level) => async () => {
-        const newTicketData = {
-            [approval_level]: !currentTicket[approval_level],
-        }
+    const handleUpdateApproval = (currentApprovalType) => async () => {
+        const newApprovalLevels = {}
+
+        Object.values(APPROVAL_LEVELS).forEach((approval_level) => {
+            newApprovalLevels[approval_level] =
+                approval_level === currentApprovalType
+                    ? !currentTicket[approval_level]
+                    : currentTicket[approval_level]
+        })
+
         const payload = {
-            ticket_data: newTicketData,
-            approval_type: approval_level,
+            new_approval_levels: newApprovalLevels,
+            approval_type: currentApprovalType,
         }
         await axiosPreset.patch(
             `${TICKET_ENDPOINTS.PPR}/updateapprovals/${currentTicket._id}`,
             payload
         )
-        partialUpdateAllTickets(
-            currentTicket.type,
-            currentTicket._id,
-            newTicketData
-        )
+        await getAllTickets(setAllTickets)
     }
 
     return (

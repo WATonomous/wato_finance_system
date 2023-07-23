@@ -21,11 +21,12 @@ import {
     UWFinancePurchaseForm,
 } from './TicketForms'
 import { TICKET_ENDPOINTS, TICKET_TYPES } from '../constants'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState } from 'recoil'
 import { allTicketsState } from '../state/atoms'
+import getAllTickets from '../utils/getAllTickets'
 
-export function CreateTicketModal({ isOpen, onClose, getAllTickets }) {
-    const allTickets = useRecoilValue(allTicketsState)
+export function CreateTicketModal({ isOpen, onClose }) {
+    const [allTickets, setAllTickets] = useRecoilState(allTicketsState)
     const [ticketType, setTicketType] = useState('')
     const { control, register, handleSubmit, reset } = useForm()
     const [isLoading, setIsLoading] = useState(false)
@@ -99,7 +100,7 @@ export function CreateTicketModal({ isOpen, onClose, getAllTickets }) {
                 payload.status = 'ALLOCATED'
             }
             await axiosPreset.post(TICKET_ENDPOINTS[ticketType], payload)
-            await getAllTickets()
+            await getAllTickets(setAllTickets)
             onClose()
         } catch (err) {
             console.log(err)

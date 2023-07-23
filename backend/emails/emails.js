@@ -81,7 +81,7 @@ const getTicketLinkHTML = (ticketPath) => `
 `
 
 // Your Personal Purchase Request has been approved! Please purchase the approved item(s) and upload your proof of purchase to the ticket link below.
-const pprCreatedToApprovers = async (ppr) => {
+const sendEmailPPRCreatedToApprovers = async (ppr) => {
     const Subject = `[Seeking Approval] ${ppr.codename}`
     const HTMLPart =
         getMainMessageHTML(
@@ -102,12 +102,12 @@ const pprCreatedToApprovers = async (ppr) => {
     })
 }
 
-const pprApprovedToReporter = async (ppr) => {
+const sendEmailPPRApprovedToReporter = async (ppr) => {
     const Subject = `[Ready to Buy] ${ppr.codename}`
     const HTMLPart =
         getMainMessageHTML(
-            `Your Personal Purchase Request has been approved! Please purchase the approved item(s)
-             and upload your proof of purchase at the ticket link below to request reimbursement.`
+            `Your Personal Purchase Request has been approved! Please purchase the approved item(s).<br>
+            Upload your proof of purchase at the ticket link below to request reimbursement.`
         ) +
         (await getPPRTicketInfoHTML(ppr)) +
         getTicketLinkHTML(ppr.path)
@@ -441,7 +441,8 @@ const PaidPersonalPurchaseReimbursementClaimInstructions = (
 }
 
 module.exports = {
-    pprCreatedToApprovers,
+    sendEmailPPRCreatedToApprovers,
+    sendEmailPPRApprovedToReporter,
     PurchaseRequestInvalidated,
     PersonalPurchaseApproved,
     UWFinancePurchaseApproved,
