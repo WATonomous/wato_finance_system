@@ -14,13 +14,6 @@ const { Hash } = require('@aws-sdk/hash-node')
 const s3Client = new S3Client({
     region: 'us-east-2',
 })
-const presigner = new S3RequestPresigner({
-    sha256: Hash.bind(null, 'sha256'),
-    credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    },
-})
 
 // for now, store files in memory as we are only handling small files
 const getS3FileKey = (referenceCode, filename) => {
@@ -36,15 +29,11 @@ const deleteS3File = (bucket, key) => {
 }
 
 const generatePresignedUrl = async (bucket, key) => {
-    console.log(bucket)
-    console.log(key)
     const command = new GetObjectCommand({
         Bucket: bucket,
         Key: key,
     })
-    const url = await getSignedUrl(s3Client, command, { expiresIn: 3600 })
-    return url
-    // return formatUrl(await presigner.presign(new HttpRequest(url)))
+    return getSignedUrl(s3Client, command, { expiresIn: 60 * 60 })
 }
 
 module.exports = {

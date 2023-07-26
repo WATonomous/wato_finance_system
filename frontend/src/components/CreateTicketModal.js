@@ -23,7 +23,7 @@ import {
 import { TICKET_ENDPOINTS, TICKET_TYPES } from '../constants'
 import { useRecoilState } from 'recoil'
 import { allTicketsState } from '../state/atoms'
-import getAllTickets from '../utils/getAllTickets'
+import getAllTickets from '../utils/globalSetters'
 
 export function CreateTicketModal({ isOpen, onClose }) {
     const [allTickets, setAllTickets] = useRecoilState(allTicketsState)

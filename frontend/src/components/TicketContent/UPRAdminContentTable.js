@@ -5,7 +5,7 @@ import TicketContentTableRow from './TicketContentTableRow'
 import { allTicketsState, currentTicketState } from '../../state/atoms'
 import { axiosPreset } from '../../axiosConfig'
 import { TICKET_ENDPOINTS } from '../../constants'
-import getAllTickets from '../../utils/getAllTickets'
+import getAllTickets from '../../utils/globalSetters'
 
 const UPRAdminContentTable = () => {
     const [currentTicket, setCurrentTicket] = useRecoilState(currentTicketState)

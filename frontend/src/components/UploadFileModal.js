@@ -14,7 +14,7 @@ import {
     UnorderedList,
 } from '@chakra-ui/react'
 import React, { useState } from 'react'
-import { useRecoilValue } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 
 import { FileUploader } from 'react-drag-drop-files'
 import { axiosPreset } from '../axiosConfig'
@@ -26,6 +26,7 @@ const UploadFileModal = ({ isOpen, onClose, startingUploadedFiles }) => {
     const ticket = useRecoilValue(currentTicketState)
     const [filesToUpload, setFilesToUpload] = useState([])
     const [uploadedFiles, setUploadedFiles] = useState(startingUploadedFiles)
+    const setCurrentFiles = useSetRecoilState(currentTicketState)
     const [filesToDelete, setFilesToDelete] = useState([])
 
     const onFileAttach = (attachedFile) => {
@@ -78,7 +79,7 @@ const UploadFileModal = ({ isOpen, onClose, startingUploadedFiles }) => {
             uploadedFiles.filter((file) => file !== fileToRemoveName)
         )
     }
-    if (isOpen) {
+    if (!isOpen) {
         return <LoadingSpinner />
     }
     return (

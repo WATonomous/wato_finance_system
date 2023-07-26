@@ -11,14 +11,13 @@ import {
     Button,
     Text,
     useDisclosure,
-    Spinner,
+    Grid,
 } from '@chakra-ui/react'
 import TreeView from '../components/TreeView'
 import Navbar from '../components/Navbar'
-import FileViewer from 'react-file-viewer'
 import TicketList from '../components/TicketList'
 import LoadingSpinner from '../components/LoadingSpinner'
-import { getStandardizedDate, mimeTypeToExtension } from '../utils/utils'
+import { getStandardizedDate } from '../utils/utils'
 import { useAuth } from '../contexts/AuthContext'
 import FIContentTable from '../components/TicketContent/FIContentTable'
 import TicketContentTableRow from '../components/TicketContent/TicketContentTableRow'
@@ -33,6 +32,7 @@ import { axiosPreset } from '../axiosConfig'
 import { useRecoilState, useSetRecoilState } from 'recoil'
 import {
     allTicketsState,
+    currentFiles,
     currentTicketState,
     currentTreeState,
 } from '../state/atoms'
@@ -42,7 +42,8 @@ import UPRAdminContentTable from '../components/TicketContent/UPRAdminContentTab
 import SFAdminContentTable from '../components/TicketContent/SFAdminContentTable'
 import PPRAdminContentTable from '../components/TicketContent/PPRAdminContentTable'
 import FIAdminContentTable from '../components/TicketContent/FIAdminContentTable'
-import getAllTickets from '../utils/getAllTickets'
+import getAllTickets, { getAllFilesByCode } from '../utils/globalSetters'
+import ImageViewer from '../components/ImageViewer'
 const Dashboard = () => {
     const navigate = useNavigate()
     const location = useLocation()
@@ -72,7 +73,7 @@ const Dashboard = () => {
     const setCurrentTree = useSetRecoilState(currentTreeState)
     const [currentTicket, setCurrentTicket] = useRecoilState(currentTicketState)
     const [allTickets, setAllTickets] = useRecoilState(allTicketsState)
-    const [uploadedFiles, setUploadedFiles] = useState([])
+    const [uploadedFiles, setUploadedFiles] = useRecoilState(currentFiles)
 
     useEffect(() => {
         const fetchData = async () => {
@@ -91,14 +92,8 @@ const Dashboard = () => {
     }, [setAllTickets])
 
     useEffect(() => {
-        axiosPreset
-            .get(`/files/getallbyreference/${currentTicket.code}`)
-            .then((res) => {
-                setUploadedFiles(res.data)
-                console.log(res.data)
-            })
-            .catch((err) => console.log(err))
-    }, [currentTicket.code])
+        getAllFilesByCode(setUploadedFiles, currentTicket.code)
+    }, [currentTicket.code, setUploadedFiles])
 
     useEffect(() => {
         if (location.pathname === '/') return
@@ -278,23 +273,11 @@ const Dashboard = () => {
                         <Heading mb="8px" fontSize="2xl">
                             Attachments
                         </Heading>
-                        <Box>
+                        <Grid gap="5px">
                             {uploadedFiles?.map((file) => {
-                                console.log('mimetype')
-                                console.log(file.mimetype)
-                                const fileType =
-                                    mimeTypeToExtension[file.mimetype]
-                                console.log(fileType)
-                                return (
-                                    <FileViewer
-                                        fileType={fileType}
-                                        filePath={file.link}
-                                        errorComponent={<Spinner />}
-                                        onError={(e) => console.log(e)}
-                                    />
-                                )
+                                return <ImageViewer file={file} />
                             })}
-                        </Box>
+                        </Grid>
                     </Box>
                 </VStack>
             </Flex>
