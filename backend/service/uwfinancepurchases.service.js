@@ -4,6 +4,10 @@ const {
     getAnnotatedSponsorshipFundsByIdList,
     getAnnotatedUWFinancePurchasesByIdList,
 } = require('./annotatedGetters')
+const {
+    sendEmailUPRCreatedToApprovers,
+    sendEmailUPRApprovedToCoordinator,
+} = require('../emails/emails')
 
 const getAllUWFinancePurchases = () => {
     return getAnnotatedUWFinancePurchasesByIdList()
@@ -21,6 +25,8 @@ const createNewUWFinancePurchase = async (body) => {
     await FundingItem.findByIdAndUpdate(annotatedUPR.fi_link, {
         $push: { upr_links: annotatedUPR._id },
     })
+
+    await sendEmailUPRCreatedToApprovers(annotatedUPR)
     return annotatedUPR
 }
 
@@ -47,34 +53,31 @@ const updateFILinkUWFinancePurchase = async (id, new_fi_link) => {
     )
 }
 
-const updateApprovalsUWFinancePurchase = async (id, ticket_data) => {
-    const newUWFinancePurchase = await UWFinancePurchase.findByIdAndUpdate(
-        id,
-        ticket_data,
-        {
-            new: true,
-        }
-    )
+const updateApprovalsUWFinancePurchase = async (id, new_approval_levels) => {
     const completedApprovals =
-        newUWFinancePurchase.team_captain_approval &&
-        newUWFinancePurchase.admin_approval &&
-        newUWFinancePurchase.director_approval
+        new_approval_levels.team_captain_approval &&
+        new_approval_levels.admin_approval &&
+        new_approval_levels.director_approval
 
     if (completedApprovals) {
-        return UWFinancePurchase.findByIdAndUpdate(
+        const newUWFinancePurchase = await UWFinancePurchase.findByIdAndUpdate(
             id,
             {
+                ...new_approval_levels,
                 status: 'SENT_TO_COORDINATOR',
             },
             {
                 new: true,
             }
         )
+        const annotatedUPR = await getUWFinancePurchase(id)
+        await sendEmailUPRApprovedToCoordinator(annotatedUPR)
+        return newUWFinancePurchase
     }
 
-    // TODO: If this is the last approval, transition status to 'SENT_TO_COORDINATOR' and auto send email
-
-    return newUWFinancePurchase
+    return UWFinancePurchase.findByIdAndUpdate(id, new_approval_levels, {
+        new: true,
+    })
 }
 
 const deleteUWFinancePurchase = async (id) => {

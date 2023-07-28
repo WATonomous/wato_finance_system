@@ -69,8 +69,7 @@ const updateFILinkUWFinancePurchaseController = async (req, res) => {
 }
 
 const updateApprovalsUWFinancePurchaseController = async (req, res) => {
-    const { ticket_data, approval_type } = req.body
-
+    const { new_approval_levels, approval_type } = req.body
     const canUpdateApproval =
         (approval_type === APPROVAL_LEVELS.admin_approval &&
             req.user.isAdmin) ||
@@ -79,14 +78,16 @@ const updateApprovalsUWFinancePurchaseController = async (req, res) => {
         (approval_type === APPROVAL_LEVELS.director_approval &&
             req.user.isDirector)
 
-    if (canUpdateApproval) {
-        return updateApprovalsUWFinancePurchase(req.params.id, ticket_data)
-            .then((uwFinancePurchase) => {
-                res.status(200).json(uwFinancePurchase)
-            })
-            .catch((err) => res.status(500).json('Error: ' + err))
+    if (!canUpdateApproval) {
+        res.status(403).json('Error: Permission Denied')
+        return
     }
-    res.status(403).json('Error: Permission Denied')
+
+    updateApprovalsUWFinancePurchase(req.params.id, new_approval_levels)
+        .then((uwFinancePurchase) => {
+            res.status(200).json(uwFinancePurchase)
+        })
+        .catch((err) => res.status(500).json('Error: ' + err))
 }
 
 const deleteUWFinancePurchaseController = (req, res) => {

@@ -14,7 +14,7 @@ const currencyFormatter = new Intl.NumberFormat('en-CA', {
     currency: 'CAD',
 })
 
-const getEmailToSection = async (ticket, recipients) => {
+const getEmailToSection = async (reporter_id, recipients) => {
     const emailToSet = new Set(['jw4he@watonomous.ca'])
 
     if (recipients.includes(EMAIL_RECIPIENTS.admin)) {
@@ -40,7 +40,7 @@ const getEmailToSection = async (ticket, recipients) => {
     }
 
     if (recipients.includes(EMAIL_RECIPIENTS.reporter)) {
-        const reporter = await getUserByUID(ticket.reporter_id)
+        const reporter = await getUserByUID(reporter_id)
         emailToSet.add(reporter.email)
     }
 
@@ -69,6 +69,23 @@ const getPPRTicketInfoHTML = async (ppr) => {
     `
 }
 
+const getUPRTicketInfoHTML = async (upr) => {
+    const reporter = await getUserByUID(upr.reporter_id)
+    return `
+        <p>
+            Ticket Code: ${upr.code} <br />
+            Ticket Name: ${upr.name} <br />
+            Cost: CAD ${currencyFormatter.format(upr.cost)} <br />
+            Purchase URL: ${upr.purchase_url} <br />
+            Purchase Instructions: ${upr.purchase_instructions} <br />
+            Purchase Justification: ${upr.purchase_justification} <br />
+            Status: ${upr.status} <br />
+            Reporter: ${reporter.displayName} &lt;${reporter.email}&gt; <br />
+            Created: ${new Date(upr.createdAt).toDateString()}
+        </p>
+    `
+}
+
 const getTicketLinkHTML = (ticketPath) => `
     <p>
         View the ticket here: 
@@ -80,7 +97,6 @@ const getTicketLinkHTML = (ticketPath) => `
     </p>
 `
 
-// Your Personal Purchase Request has been approved! Please purchase the approved item(s) and upload your proof of purchase to the ticket link below.
 const sendEmailPPRCreatedToApprovers = async (ppr) => {
     const Subject = `[Seeking Approval] ${ppr.codename}`
     const HTMLPart =
@@ -89,7 +105,28 @@ const sendEmailPPRCreatedToApprovers = async (ppr) => {
         ) +
         (await getPPRTicketInfoHTML(ppr)) +
         getTicketLinkHTML(ppr.path)
-    const To = await getEmailToSection(ppr, [
+    const To = await getEmailToSection(ppr.reporter_id, [
+        EMAIL_RECIPIENTS.faculty_advisor,
+        EMAIL_RECIPIENTS.team_captain,
+        EMAIL_RECIPIENTS.director,
+    ])
+
+    await sendEmail({
+        Subject,
+        HTMLPart,
+        To,
+    })
+}
+
+const sendEmailUPRCreatedToApprovers = async (upr) => {
+    const Subject = `[Seeking Approval] ${upr.codename}`
+    const HTMLPart =
+        getMainMessageHTML(
+            'A new UW Finance Purchase Request needs your approval!'
+        ) +
+        (await getUPRTicketInfoHTML(upr)) +
+        getTicketLinkHTML(upr.path)
+    const To = await getEmailToSection(upr.reporter_id, [
         EMAIL_RECIPIENTS.faculty_advisor,
         EMAIL_RECIPIENTS.team_captain,
         EMAIL_RECIPIENTS.director,
@@ -111,7 +148,29 @@ const sendEmailPPRApprovedToReporter = async (ppr) => {
         ) +
         (await getPPRTicketInfoHTML(ppr)) +
         getTicketLinkHTML(ppr.path)
-    const To = await getEmailToSection(ppr, [EMAIL_RECIPIENTS.reporter])
+    const To = await getEmailToSection(ppr.reporter_id, [
+        EMAIL_RECIPIENTS.reporter,
+    ])
+
+    await sendEmail({
+        Subject,
+        HTMLPart,
+        To,
+    })
+}
+
+const sendEmailUPRApprovedToCoordinator = async (upr) => {
+    const Subject = `[Ready to Buy] ${upr.codename}`
+    const HTMLPart =
+        getMainMessageHTML(
+            `A new UW Finance Purchase Request has been approved! Please purchase the approved item(s).<br>
+            After purchase, update the purchase order number and requisition number at the ticket link below.`
+        ) +
+        (await getUPRTicketInfoHTML(upr)) +
+        getTicketLinkHTML(upr.path)
+    const To = await getEmailToSection(upr.reporter_id, [
+        EMAIL_RECIPIENTS.coordinator,
+    ])
 
     await sendEmail({
         Subject,
@@ -442,7 +501,9 @@ const PaidPersonalPurchaseReimbursementClaimInstructions = (
 
 module.exports = {
     sendEmailPPRCreatedToApprovers,
+    sendEmailUPRCreatedToApprovers,
     sendEmailPPRApprovedToReporter,
+    sendEmailUPRApprovedToCoordinator,
     PurchaseRequestInvalidated,
     PersonalPurchaseApproved,
     UWFinancePurchaseApproved,

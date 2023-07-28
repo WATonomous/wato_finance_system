@@ -4,7 +4,11 @@ import { getFormattedCurrency } from '../../utils/utils'
 import TicketContentTableRow from './TicketContentTableRow'
 import { useAuth } from '../../contexts/AuthContext'
 import { axiosPreset } from '../../axiosConfig'
-import { TICKET_ENDPOINTS, APPROVAL_LEVELS } from '../../constants'
+import {
+    TICKET_ENDPOINTS,
+    APPROVAL_LEVELS,
+    SEEKING_APPROVAL_STATUS,
+} from '../../constants'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { allTicketsState, currentTicketState } from '../../state/atoms'
 import getAllTickets from '../../utils/getAllTickets'
@@ -14,13 +18,19 @@ const UPRContentTable = () => {
     const currentTicket = useRecoilValue(currentTicketState)
     const setAllTickets = useSetRecoilState(allTicketsState)
 
-    const handleUpdateApproval = (approval_level) => async () => {
-        const newTicketData = {
-            [approval_level]: !currentTicket[approval_level],
-        }
+    const handleUpdateApproval = (currentApprovalType) => async () => {
+        const newApprovalLevels = {}
+
+        Object.values(APPROVAL_LEVELS).forEach((approval_level) => {
+            newApprovalLevels[approval_level] =
+                approval_level === currentApprovalType
+                    ? !currentTicket[approval_level]
+                    : currentTicket[approval_level]
+        })
+
         const payload = {
-            ticket_data: newTicketData,
-            approval_type: approval_level,
+            new_approval_levels: newApprovalLevels,
+            approval_type: currentApprovalType,
         }
         await axiosPreset.patch(
             `${TICKET_ENDPOINTS.UPR}/updateapprovals/${currentTicket._id}`,
@@ -73,7 +83,11 @@ const UPRContentTable = () => {
                         heading={'Director Approval'}
                         value={
                             <Checkbox
-                                disabled={!auth.isDirector}
+                                disabled={
+                                    !auth.isDirector ||
+                                    currentTicket.status !==
+                                        SEEKING_APPROVAL_STATUS
+                                }
                                 onChange={handleUpdateApproval(
                                     APPROVAL_LEVELS.director_approval
                                 )}
@@ -85,7 +99,11 @@ const UPRContentTable = () => {
                         heading={'Team Captain Approval'}
                         value={
                             <Checkbox
-                                disabled={!auth.isTeamCaptain}
+                                disabled={
+                                    !auth.isTeamCaptain ||
+                                    currentTicket.status !==
+                                        SEEKING_APPROVAL_STATUS
+                                }
                                 onChange={handleUpdateApproval(
                                     APPROVAL_LEVELS.team_captain_approval
                                 )}
@@ -97,7 +115,11 @@ const UPRContentTable = () => {
                         heading={'Faculty Advisor Approval'}
                         value={
                             <Checkbox
-                                disabled={!auth.isAdmin}
+                                disabled={
+                                    !auth.isAdmin ||
+                                    currentTicket.status !==
+                                        SEEKING_APPROVAL_STATUS
+                                }
                                 onChange={handleUpdateApproval(
                                     APPROVAL_LEVELS.admin_approval
                                 )}

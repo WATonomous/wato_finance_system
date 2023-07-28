@@ -4,7 +4,11 @@ import { getFormattedCurrency } from '../../utils/utils'
 import TicketContentTableRow from './TicketContentTableRow'
 import { useAuth } from '../../contexts/AuthContext'
 import { axiosPreset } from '../../axiosConfig'
-import { TICKET_ENDPOINTS, APPROVAL_LEVELS } from '../../constants'
+import {
+    TICKET_ENDPOINTS,
+    APPROVAL_LEVELS,
+    SEEKING_APPROVAL_STATUS,
+} from '../../constants'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { allTicketsState, currentTicketState } from '../../state/atoms'
 import getAllTickets from '../../utils/getAllTickets'
@@ -71,7 +75,11 @@ const PPRContentTable = () => {
                         heading={'Director Approval'}
                         value={
                             <Checkbox
-                                disabled={!auth.isDirector}
+                                disabled={
+                                    !auth.isDirector ||
+                                    currentTicket.status !==
+                                        SEEKING_APPROVAL_STATUS
+                                }
                                 onChange={handleUpdateApproval(
                                     APPROVAL_LEVELS.director_approval
                                 )}
@@ -83,7 +91,11 @@ const PPRContentTable = () => {
                         heading={'Team Captain Approval'}
                         value={
                             <Checkbox
-                                disabled={!auth.isTeamCaptain}
+                                disabled={
+                                    !auth.isTeamCaptain ||
+                                    currentTicket.status !==
+                                        SEEKING_APPROVAL_STATUS
+                                }
                                 onChange={handleUpdateApproval(
                                     APPROVAL_LEVELS.team_captain_approval
                                 )}
@@ -95,7 +107,11 @@ const PPRContentTable = () => {
                         heading={'Faculty Advisor Approval'}
                         value={
                             <Checkbox
-                                disabled={!auth.isAdmin}
+                                disabled={
+                                    !auth.isAdmin ||
+                                    currentTicket.status !==
+                                        SEEKING_APPROVAL_STATUS
+                                }
                                 onChange={handleUpdateApproval(
                                     APPROVAL_LEVELS.admin_approval
                                 )}
