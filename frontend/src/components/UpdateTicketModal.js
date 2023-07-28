@@ -20,7 +20,7 @@ import {
 import { TICKET_ENDPOINTS, TICKET_TYPES } from '../constants'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { currentTicketState, allTicketsState } from '../state/atoms'
-import getAllTickets from '../utils/globalSetters'
+import { getAllTickets } from '../utils/globalSetters'
 
 const UpdateTicketModal = ({ isOpen, onClose }) => {
     const currentTicket = useRecoilValue(currentTicketState)

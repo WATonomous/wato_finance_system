@@ -12,9 +12,3 @@ export const getFormattedCurrency = (currencyStr) => {
     })
     return `CAD ${currencyFormatter.format(currencyStr)}`
 }
-
-const mimeTypeToExtension = {
-    'image/jpeg': 'jpg',
-    'image/png': 'png',
-    'application/pdf': 'pdf',
-}

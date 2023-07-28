@@ -16,13 +16,3 @@ export const getAllTickets = async (setAllTickets) => {
         }, {})
     )
 }
-
-export const getAllFilesByCode = async (setAllFiles, code) => {
-    axiosPreset
-        .get(`/files/getallbyreference/${code}`)
-        .then((res) => {
-            setAllFiles(res.data)
-            console.log(res.data)
-        })
-        .catch((err) => console.log(err))
-}

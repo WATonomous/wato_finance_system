@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import {
     Box,
@@ -42,8 +42,8 @@ import UPRAdminContentTable from '../components/TicketContent/UPRAdminContentTab
 import SFAdminContentTable from '../components/TicketContent/SFAdminContentTable'
 import PPRAdminContentTable from '../components/TicketContent/PPRAdminContentTable'
 import FIAdminContentTable from '../components/TicketContent/FIAdminContentTable'
-import getAllTickets, { getAllFilesByCode } from '../utils/globalSetters'
-import ImageViewer from '../components/ImageViewer'
+import { getAllTickets } from '../utils/globalSetters'
+import FileViewer from '../components/FileViewer'
 const Dashboard = () => {
     const navigate = useNavigate()
     const location = useLocation()
@@ -91,8 +91,16 @@ const Dashboard = () => {
         fetchData()
     }, [setAllTickets])
 
-    useEffect(() => {
-        getAllFilesByCode(setUploadedFiles, currentTicket.code)
+    const getUploadedFiles = useCallback(async () => {
+        if (!currentTicket?.code) {
+            return
+        }
+        await axiosPreset
+            .get(`/files/getallbyreference/${currentTicket.code}`)
+            .then((res) => {
+                setUploadedFiles(res.data)
+            })
+            .catch((err) => console.log(err))
     }, [currentTicket.code, setUploadedFiles])
 
     useEffect(() => {
@@ -125,6 +133,7 @@ const Dashboard = () => {
             currentTicketData.reporter_id === auth.currentUser.uid ||
                 reporterOverride
         )
+        getUploadedFiles()
     }, [
         location.pathname,
         allTickets,
@@ -133,6 +142,8 @@ const Dashboard = () => {
         setCurrentTicket,
         setCurrentTree,
         auth.currentUser.uid,
+        currentTicket.code,
+        getUploadedFiles,
     ])
 
     const getCurrentTicketContentTable = () => {
@@ -275,7 +286,7 @@ const Dashboard = () => {
                         </Heading>
                         <Grid gap="5px">
                             {uploadedFiles?.map((file) => {
-                                return <ImageViewer file={file} />
+                                return <FileViewer file={file} />
                             })}
                         </Grid>
                     </Box>
@@ -296,6 +307,7 @@ const Dashboard = () => {
                     isOpen={isUploadModalOpen}
                     onClose={onCloseUploadModal}
                     startingUploadedFiles={uploadedFiles}
+                    refetchFiles={getUploadedFiles}
                 />
             )}
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import usePreserveParamsNavigate from '../hooks/usePreserveParamsNavigate'
+import { usePreserveParamsNavigate } from '../hooks/hooks'
 import {
     Card,
     CardBody,

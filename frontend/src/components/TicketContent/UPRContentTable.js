@@ -7,7 +7,7 @@ import { axiosPreset } from '../../axiosConfig'
 import { TICKET_ENDPOINTS, APPROVAL_LEVELS } from '../../constants'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { allTicketsState, currentTicketState } from '../../state/atoms'
-import getAllTickets from '../../utils/globalSetters'
+import { getAllTickets } from '../../utils/globalSetters'
 
 const UPRContentTable = () => {
     const auth = useAuth()
