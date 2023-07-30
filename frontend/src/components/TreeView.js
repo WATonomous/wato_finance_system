@@ -1,6 +1,6 @@
 import React from 'react'
 import { Text, Box, Stack } from '@chakra-ui/react'
-import usePreserveParamsNavigate from '../hooks/usePreserveParamsNavigate'
+import { usePreserveParamsNavigate } from '../hooks/hooks'
 import { useRecoilValue } from 'recoil'
 import { currentTicketState, currentTreeState } from '../state/atoms'
 

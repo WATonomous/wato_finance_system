@@ -20,7 +20,7 @@ import {
     currentTicketState,
     currentTreeState,
 } from '../state/atoms'
-import getAllTickets from '../utils/getAllTickets'
+import { getAllTickets } from '../utils/globalSetters'
 
 const DeleteTicketAlertDialog = ({ isOpen, onClose }) => {
     const navigate = useNavigate()

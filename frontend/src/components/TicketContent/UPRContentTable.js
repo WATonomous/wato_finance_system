@@ -11,7 +11,7 @@ import {
 } from '../../constants'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { allTicketsState, currentTicketState } from '../../state/atoms'
-import getAllTickets from '../../utils/getAllTickets'
+import { getAllTickets } from '../../utils/globalSetters'
 
 const UPRContentTable = () => {
     const auth = useAuth()

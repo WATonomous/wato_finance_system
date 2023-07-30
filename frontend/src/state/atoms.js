@@ -26,4 +26,9 @@ const currentTicketState = atom({
     },
 })
 
-export { allTicketsState, currentTreeState, currentTicketState }
+const currentFiles = atom({
+    key: 'currentFiles',
+    default: [],
+})
+
+export { allTicketsState, currentTreeState, currentTicketState, currentFiles }

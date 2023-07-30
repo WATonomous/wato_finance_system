@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import {
     Box,
@@ -11,6 +11,7 @@ import {
     Button,
     Text,
     useDisclosure,
+    Grid,
 } from '@chakra-ui/react'
 import TreeView from '../components/TreeView'
 import Navbar from '../components/Navbar'
@@ -31,6 +32,7 @@ import { axiosPreset } from '../axiosConfig'
 import { useRecoilState, useSetRecoilState } from 'recoil'
 import {
     allTicketsState,
+    currentFiles,
     currentTicketState,
     currentTreeState,
 } from '../state/atoms'
@@ -40,7 +42,8 @@ import UPRAdminContentTable from '../components/TicketContent/UPRAdminContentTab
 import SFAdminContentTable from '../components/TicketContent/SFAdminContentTable'
 import PPRAdminContentTable from '../components/TicketContent/PPRAdminContentTable'
 import FIAdminContentTable from '../components/TicketContent/FIAdminContentTable'
-import getAllTickets from '../utils/getAllTickets'
+import { getAllTickets } from '../utils/globalSetters'
+import FileViewer from '../components/FileViewer'
 const Dashboard = () => {
     const navigate = useNavigate()
     const location = useLocation()
@@ -70,6 +73,7 @@ const Dashboard = () => {
     const setCurrentTree = useSetRecoilState(currentTreeState)
     const [currentTicket, setCurrentTicket] = useRecoilState(currentTicketState)
     const [allTickets, setAllTickets] = useRecoilState(allTicketsState)
+    const [uploadedFiles, setUploadedFiles] = useRecoilState(currentFiles)
 
     useEffect(() => {
         const fetchData = async () => {
@@ -86,6 +90,18 @@ const Dashboard = () => {
         }
         fetchData()
     }, [setAllTickets])
+
+    const getUploadedFiles = useCallback(async () => {
+        if (!currentTicket?.code) {
+            return
+        }
+        await axiosPreset
+            .get(`/files/getallbyreference/${currentTicket.code}`)
+            .then((res) => {
+                setUploadedFiles(res.data)
+            })
+            .catch((err) => console.log(err))
+    }, [currentTicket.code, setUploadedFiles])
 
     useEffect(() => {
         if (location.pathname === '/') return
@@ -117,6 +133,7 @@ const Dashboard = () => {
             currentTicketData.reporter_id === auth.currentUser.uid ||
                 reporterOverride
         )
+        getUploadedFiles()
     }, [
         location.pathname,
         allTickets,
@@ -125,6 +142,7 @@ const Dashboard = () => {
         setCurrentTicket,
         setCurrentTree,
         auth.currentUser.uid,
+        getUploadedFiles,
     ])
 
     const getCurrentTicketContentTable = () => {
@@ -261,6 +279,16 @@ const Dashboard = () => {
                             </Tbody>
                         </Table>
                     </Box>
+                    <Box w="100%" mt="12px">
+                        <Heading mb="8px" fontSize="2xl">
+                            Attachments
+                        </Heading>
+                        <Grid gap="5px">
+                            {uploadedFiles?.map((file) => {
+                                return <FileViewer file={file} />
+                            })}
+                        </Grid>
+                    </Box>
                 </VStack>
             </Flex>
         )
@@ -277,6 +305,8 @@ const Dashboard = () => {
                 <UploadFileModal
                     isOpen={isUploadModalOpen}
                     onClose={onCloseUploadModal}
+                    startingUploadedFiles={uploadedFiles}
+                    refetchFiles={getUploadedFiles}
                 />
             )}
 
