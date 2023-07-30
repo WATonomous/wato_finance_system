@@ -142,7 +142,6 @@ const Dashboard = () => {
         setCurrentTicket,
         setCurrentTree,
         auth.currentUser.uid,
-        currentTicket.code,
         getUploadedFiles,
     ])
 
