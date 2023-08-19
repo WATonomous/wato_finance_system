@@ -27,6 +27,7 @@ const UploadFileModal = ({
     onClose,
     startingUploadedFiles,
     refetchFiles,
+    isSupportingDocument,
 }) => {
     const ticket = useRecoilValue(currentTicketState)
     const [filesToUpload, setFilesToUpload] = useState([])
@@ -56,7 +57,7 @@ const UploadFileModal = ({
                     formData.append('files', file)
                 })
                 createFilesResponse = axiosPreset.post(
-                    `/files/bulk/${ticket.code}`,
+                    `/files/bulk/${ticket.code}?isSupportingDocument=${isSupportingDocument}`,
                     formData,
                     {
                         headers: {
@@ -96,7 +97,11 @@ const UploadFileModal = ({
         >
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>Upload Document</ModalHeader>
+                <ModalHeader>
+                    {isSupportingDocument
+                        ? 'Upload Supporting Documents'
+                        : 'Upload Files'}
+                </ModalHeader>
                 <ModalBody>
                     <FileUploader
                         handleChange={onFileAttach}

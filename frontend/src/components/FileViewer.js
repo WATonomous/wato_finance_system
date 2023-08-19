@@ -70,7 +70,16 @@ const FileViewer = ({ file }) => {
     const { isOpen, onOpen, onClose } = useDisclosure()
     return (
         <Box>
-            <Button onClick={onOpen}>{file.name}</Button>
+            <Button
+                onClick={onOpen}
+                wordBreak="break-all"
+                whiteSpace="normal"
+                textAlign="left"
+                height="fit-content"
+                py="4px"
+            >
+                {file.name}
+            </Button>
             <FilePopUpModal isOpen={isOpen} onClose={onClose} file={file} />
         </Box>
     )
