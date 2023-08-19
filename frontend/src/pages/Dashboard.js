@@ -303,7 +303,7 @@ const Dashboard = () => {
                             </Tbody>
                         </Table>
                     </Box>
-                    {supportingDocuments && (
+                    {supportingDocuments.length > 0 && (
                         <Box w="100%" mt="12px">
                             <Heading mb="8px" fontSize="2xl">
                                 Supporting Documents
@@ -315,7 +315,7 @@ const Dashboard = () => {
                             </Grid>
                         </Box>
                     )}
-                    {attachments && (
+                    {attachments.length > 0 && (
                         <Box w="100%" mt="12px">
                             <Heading mb="8px" fontSize="2xl">
                                 Uploaded Files
