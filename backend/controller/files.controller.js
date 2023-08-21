@@ -30,7 +30,11 @@ const getAllFilesByReferenceController = (req, res) => {
 }
 
 const bulkCreateFileController = (req, res) => {
-    bulkCreateFiles(req.files, req.params.reference_code, req.query.isSupportingDocument)
+    bulkCreateFiles(
+        req.files,
+        req.params.reference_code,
+        req.query.isSupportingDocument
+    )
         .then((newFiles) => res.status(200).json(newFiles))
         .catch((err) => res.status(500).json('Error: ' + err))
 }
