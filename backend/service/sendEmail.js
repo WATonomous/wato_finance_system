@@ -21,7 +21,7 @@ const sendEmail = async ({ To, Subject, HTMLPart }) => {
         })
         console.log('sendEmail success!')
     } catch (err) {
-        console.log(`Uh oh! bad sendEmail: ${err}`)
+        console.log(`sendEmail failed: ${err}`)
     }
 }
 

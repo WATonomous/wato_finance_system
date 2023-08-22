@@ -7,6 +7,8 @@ const {
 const {
     sendEmailUPRCreatedToApprovers,
     sendEmailUPRApprovedToCoordinator,
+    sendEmailUPRPurchasedToCoordinator,
+    sendEmailUPRPurchasedToReporter,
 } = require('../emails/emails')
 
 const getAllUWFinancePurchases = () => {
@@ -30,10 +32,28 @@ const createNewUWFinancePurchase = async (body) => {
     return annotatedUPR
 }
 
-const updateUWFinancePurchase = (id, body) => {
-    return UWFinancePurchase.findByIdAndUpdate(id, body, {
-        new: true,
-    })
+const updateUWFinancePurchase = async (id, body) => {
+    const existingPurchaseTicket = await getUWFinancePurchase(id)
+    // SENT_TO_COORDINATOR -> ORDERED
+    const newPurchaseTicket = await UWFinancePurchase.findByIdAndUpdate(
+        id,
+        body,
+        {
+            new: true,
+        }
+    )
+    if (
+        existingPurchaseTicket.status === 'SENT_TO_COORDINATOR' &&
+        body.status === 'ORDERED'
+    ) {
+        const annotatedUPR = await getUWFinancePurchase(id)
+        const emails = [
+            sendEmailUPRPurchasedToCoordinator(annotatedUPR),
+            sendEmailUPRPurchasedToReporter(annotatedUPR),
+        ]
+        await Promise.all(emails)
+    }
+    return newPurchaseTicket
 }
 
 const updateFILinkUWFinancePurchase = async (id, new_fi_link) => {

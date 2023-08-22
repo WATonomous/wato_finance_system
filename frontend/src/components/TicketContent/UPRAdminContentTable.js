@@ -39,6 +39,20 @@ const UPRAdminContentTable = () => {
         setChanged(false)
     }
 
+    const transitionToPurchased = async () => {
+        const payload = {
+            status: 'ORDERED',
+            po_number: currentTicket.po_number,
+            requisition_number: currentTicket.requisition_number,
+        }
+        await axiosPreset.patch(
+            `${TICKET_ENDPOINTS.UPR}/${currentTicket._id}`,
+            payload
+        )
+        await getAllTickets(setAllTickets)
+        setChanged(false)
+    }
+
     return (
         <VStack
             border="1px solid black"
@@ -63,27 +77,29 @@ const UPRAdminContentTable = () => {
             </Table>
 
             <Center pb="7px">
-                <Button
-                    colorScheme="blue"
-                    size="sm"
-                    mr="20px"
-                    disabled={
-                        currentTicket?.po_number?.length +
-                            currentTicket?.requisition_number?.length ===
-                        0
-                    }
-                >
-                    Transition Status
-                </Button>
-
-                <Button
-                    colorScheme="green"
-                    size="sm"
-                    disabled={!changed}
-                    onClick={saveFields}
-                >
-                    Save Fields
-                </Button>
+                {currentTicket.status === 'SENT_TO_COORDINATOR' ? (
+                    <Button
+                        colorScheme="blue"
+                        size="sm"
+                        mr="20px"
+                        onClick={transitionToPurchased}
+                        disabled={
+                            !currentTicket?.po_number ||
+                            !currentTicket?.requisition_number
+                        }
+                    >
+                        Transition To Purchased
+                    </Button>
+                ) : (
+                    <Button
+                        colorScheme="green"
+                        size="sm"
+                        onClick={saveFields}
+                        disabled={!changed}
+                    >
+                        Save Fields
+                    </Button>
+                )}
             </Center>
         </VStack>
     )
