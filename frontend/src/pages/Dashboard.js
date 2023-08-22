@@ -66,6 +66,12 @@ const Dashboard = () => {
         onClose: onCloseUploadModal,
     } = useDisclosure()
 
+    const {
+        isOpen: isSupportingDocumentsModalOpen,
+        onOpen: onOpenSupportingDocumentsModal,
+        onClose: onCloseSupportingDocumentsModal,
+    } = useDisclosure()
+
     const auth = useAuth()
     const [allUsers, setAllUsers] = useState({ users: [] })
     const [isCurrentTicketReporter, setIsCurrentTicketReporter] =
@@ -74,6 +80,12 @@ const Dashboard = () => {
     const [currentTicket, setCurrentTicket] = useRecoilState(currentTicketState)
     const [allTickets, setAllTickets] = useRecoilState(allTicketsState)
     const [uploadedFiles, setUploadedFiles] = useRecoilState(currentFiles)
+    const attachments = uploadedFiles?.filter(
+        (file) => !file.is_supporting_document
+    )
+    const supportingDocuments = uploadedFiles?.filter(
+        (file) => file.is_supporting_document
+    )
 
     useEffect(() => {
         const fetchData = async () => {
@@ -217,14 +229,12 @@ const Dashboard = () => {
                     {/* Do not display update/delete button for WATO Cash */}
                     {currentTicket.sf_link !== -1 &&
                         (isCurrentTicketReporter || auth.isDirector) && (
-                            <Flex flexDir="row" mb="12px" gap="16px">
-                                <Button
-                                    size="sm"
-                                    colorScheme="gray"
-                                    onClick={onOpenUploadModal}
-                                >
-                                    <Text>Upload Files</Text>
-                                </Button>
+                            <Flex
+                                flexDir="row"
+                                mb="12px"
+                                gap="16px"
+                                flexWrap="wrap"
+                            >
                                 <Button
                                     size="sm"
                                     colorScheme="cyan"
@@ -238,6 +248,20 @@ const Dashboard = () => {
                                     onClick={onOpenDeleteTicket}
                                 >
                                     <Text>Delete</Text>
+                                </Button>
+                                <Button
+                                    size="sm"
+                                    colorScheme="gray"
+                                    onClick={onOpenUploadModal}
+                                >
+                                    <Text>Upload Files</Text>
+                                </Button>
+                                <Button
+                                    size="sm"
+                                    colorScheme="blackAlpha"
+                                    onClick={onOpenSupportingDocumentsModal}
+                                >
+                                    <Text>Upload Supporting Documents</Text>
                                 </Button>
                             </Flex>
                         )}
@@ -279,16 +303,30 @@ const Dashboard = () => {
                             </Tbody>
                         </Table>
                     </Box>
-                    <Box w="100%" mt="12px">
-                        <Heading mb="8px" fontSize="2xl">
-                            Attachments
-                        </Heading>
-                        <Grid gap="5px">
-                            {uploadedFiles?.map((file) => {
-                                return <FileViewer file={file} />
-                            })}
-                        </Grid>
-                    </Box>
+                    {supportingDocuments.length > 0 && (
+                        <Box w="100%" mt="12px">
+                            <Heading mb="8px" fontSize="2xl">
+                                Supporting Documents
+                            </Heading>
+                            <Grid gap="5px">
+                                {supportingDocuments?.map((file) => {
+                                    return <FileViewer file={file} />
+                                })}
+                            </Grid>
+                        </Box>
+                    )}
+                    {attachments.length > 0 && (
+                        <Box w="100%" mt="12px">
+                            <Heading mb="8px" fontSize="2xl">
+                                Uploaded Files
+                            </Heading>
+                            <Grid gap="5px">
+                                {attachments?.map((file) => {
+                                    return <FileViewer file={file} />
+                                })}
+                            </Grid>
+                        </Box>
+                    )}
                 </VStack>
             </Flex>
         )
@@ -305,8 +343,22 @@ const Dashboard = () => {
                 <UploadFileModal
                     isOpen={isUploadModalOpen}
                     onClose={onCloseUploadModal}
-                    startingUploadedFiles={uploadedFiles}
+                    startingUploadedFiles={uploadedFiles?.filter(
+                        (file) => !file.is_supporting_document
+                    )}
                     refetchFiles={getUploadedFiles}
+                    isSupportingDocument={false}
+                />
+            )}
+            {isSupportingDocumentsModalOpen && (
+                <UploadFileModal
+                    isOpen={isSupportingDocumentsModalOpen}
+                    onClose={onCloseSupportingDocumentsModal}
+                    startingUploadedFiles={uploadedFiles?.filter(
+                        (file) => file.is_supporting_document
+                    )}
+                    refetchFiles={getUploadedFiles}
+                    isSupportingDocument={true}
                 />
             )}
 

@@ -37,10 +37,9 @@ const createFile = async (file, referenceCode, isSupportingDocument) => {
     return newFile.save()
 }
 
-const bulkCreateFiles = (files, referenceCode) => {
+const bulkCreateFiles = (files, referenceCode, isSupportingDocument) => {
     const promises = files.map((file) =>
-        // TODO: support isPoDocument
-        createFile(file, referenceCode, false)
+        createFile(file, referenceCode, isSupportingDocument)
     )
     return Promise.all(promises)
 }
