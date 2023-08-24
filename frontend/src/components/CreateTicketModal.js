@@ -24,12 +24,14 @@ import { TICKET_ENDPOINTS, TICKET_TYPES } from '../constants'
 import { useRecoilState } from 'recoil'
 import { allTicketsState } from '../state/atoms'
 import { getAllTickets } from '../utils/globalSetters'
+import { usePreserveParamsNavigate } from '../hooks/hooks'
 
 export function CreateTicketModal({ isOpen, onClose }) {
     const [allTickets, setAllTickets] = useRecoilState(allTicketsState)
     const [ticketType, setTicketType] = useState('')
     const { control, register, handleSubmit, reset } = useForm()
     const [isLoading, setIsLoading] = useState(false)
+    const preserveParamsNavigate = usePreserveParamsNavigate()
     const auth = useAuth()
 
     const displayTicketType = () => {
@@ -99,9 +101,13 @@ export function CreateTicketModal({ isOpen, onClose }) {
             } else if (ticketType === TICKET_TYPES.SF) {
                 payload.status = 'ALLOCATED'
             }
-            await axiosPreset.post(TICKET_ENDPOINTS[ticketType], payload)
+            const createdTicket = await axiosPreset.post(
+                TICKET_ENDPOINTS[ticketType],
+                payload
+            )
             await getAllTickets(setAllTickets)
             onClose()
+            preserveParamsNavigate(`/${ticketType}/${createdTicket.data._id}`)
         } catch (err) {
             console.log(err)
         } finally {
