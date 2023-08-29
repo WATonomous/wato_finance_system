@@ -1,5 +1,5 @@
 import { Checkbox, Table, Tbody, VStack } from '@chakra-ui/react'
-import React from 'react'
+import React, { useState } from 'react'
 import { getFormattedCurrency } from '../../utils/utils'
 import TicketContentTableRow from './TicketContentTableRow'
 import { useAuth } from '../../contexts/AuthContext'
@@ -17,6 +17,7 @@ const UPRContentTable = () => {
     const auth = useAuth()
     const currentTicket = useRecoilValue(currentTicketState)
     const setAllTickets = useSetRecoilState(allTicketsState)
+    const [loading, setLoading] = useState(false)
 
     const handleUpdateApproval = (currentApprovalType) => async () => {
         const newApprovalLevels = {}
@@ -32,11 +33,18 @@ const UPRContentTable = () => {
             new_approval_levels: newApprovalLevels,
             approval_type: currentApprovalType,
         }
-        await axiosPreset.patch(
-            `${TICKET_ENDPOINTS.UPR}/updateapprovals/${currentTicket._id}`,
-            payload
-        )
-        await getAllTickets(setAllTickets)
+        try {
+            setLoading(true)
+            await axiosPreset.patch(
+                `${TICKET_ENDPOINTS.UPR}/updateapprovals/${currentTicket._id}`,
+                payload
+            )
+            await getAllTickets(setAllTickets)
+        } catch (err) {
+            console.log(err)
+        } finally {
+            setLoading(false)
+        }
     }
 
     return (
@@ -86,7 +94,8 @@ const UPRContentTable = () => {
                                 disabled={
                                     !auth.isDirector ||
                                     currentTicket.status !==
-                                        SEEKING_APPROVAL_STATUS
+                                        SEEKING_APPROVAL_STATUS ||
+                                    loading
                                 }
                                 onChange={handleUpdateApproval(
                                     APPROVAL_LEVELS.director_approval
@@ -102,7 +111,8 @@ const UPRContentTable = () => {
                                 disabled={
                                     !auth.isTeamCaptain ||
                                     currentTicket.status !==
-                                        SEEKING_APPROVAL_STATUS
+                                        SEEKING_APPROVAL_STATUS ||
+                                    loading
                                 }
                                 onChange={handleUpdateApproval(
                                     APPROVAL_LEVELS.team_captain_approval
@@ -118,7 +128,8 @@ const UPRContentTable = () => {
                                 disabled={
                                     !auth.isAdmin ||
                                     currentTicket.status !==
-                                        SEEKING_APPROVAL_STATUS
+                                        SEEKING_APPROVAL_STATUS ||
+                                    loading
                                 }
                                 onChange={handleUpdateApproval(
                                     APPROVAL_LEVELS.admin_approval
