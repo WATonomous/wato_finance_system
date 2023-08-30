@@ -44,6 +44,8 @@ import PPRAdminContentTable from '../components/TicketContent/PPRAdminContentTab
 import FIAdminContentTable from '../components/TicketContent/FIAdminContentTable'
 import { getAllTickets } from '../utils/globalSetters'
 import FileViewer from '../components/FileViewer'
+import PPRReporterTable from '../components/TicketContent/PPRReporterTable'
+
 const Dashboard = () => {
     const navigate = useNavigate()
     const location = useLocation()
@@ -102,6 +104,10 @@ const Dashboard = () => {
         }
         fetchData()
     }, [setAllTickets])
+
+    const isReporter = () => {
+        return auth.currentUser.uid === currentTicket.reporter_id
+    }
 
     const getUploadedFiles = useCallback(async () => {
         if (!currentTicket?.code) {
@@ -178,6 +184,13 @@ const Dashboard = () => {
                 return (
                     <>
                         {auth.isAdmin && <PPRAdminContentTable />}
+                        {isReporter() &&
+                            currentTicket.status === 'READY_TO_BUY' && (
+                                <PPRReporterTable
+                                    supportingDocuments={supportingDocuments}
+                                    currentTicket={currentTicket}
+                                />
+                            )}
                         <PPRContentTable />
                     </>
                 )

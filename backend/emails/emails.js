@@ -217,6 +217,25 @@ const sendEmailUPRApprovedToCoordinator = async (upr) => {
     })
 }
 
+const sendEmailPPRPurchasedAndReceiptsSubmittedToCoordinator = async (ppr) => {
+    const Subject = `[Purchased And Receipts Submitted] ${ppr.codename}`
+    const HTMLPart =
+        getMainMessageHTML(
+            `Item ${ppr.codename} has been purchased and receipts have been submitted! Please review the expense claim form and reimburse the reporter out of WATonomous' cash account.`
+        ) +
+        (await getUPRTicketInfoHTML(ppr)) +
+        getTicketLinkHTML(ppr.path)
+    const To = await getEmailToSection(ppr.reporter_id, [
+        EMAIL_RECIPIENTS.finance,
+        EMAIL_RECIPIENTS.coordinator,
+    ])
+    await sendEmail({
+        Subject,
+        HTMLPart,
+        To,
+    })
+}
+
 const PurchaseRequestInvalidated = (purchaseRequestDetails) => {
     const { issue, reporter } = purchaseRequestDetails
 
@@ -544,6 +563,7 @@ module.exports = {
     sendEmailUPRPurchasedToCoordinator,
     sendEmailPPRApprovedToReporter,
     sendEmailPPRCreatedToApprovers,
+    sendEmailPPRPurchasedAndReceiptsSubmittedToCoordinator,
     PurchaseRequestInvalidated,
     PersonalPurchaseApproved,
     UWFinancePurchaseApproved,
