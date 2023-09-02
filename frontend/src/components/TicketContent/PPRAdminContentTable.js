@@ -1,10 +1,51 @@
 import { Button, Center, Heading, VStack } from '@chakra-ui/react'
 import React from 'react'
-import { useRecoilValue } from 'recoil'
-import { currentTicketState } from '../../state/atoms'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { allTicketsState, currentTicketState } from '../../state/atoms'
+import { axiosPreset } from '../../axiosConfig'
+import { TICKET_ENDPOINTS } from '../../constants'
+import { getAllTickets } from '../../utils/globalSetters'
 
 const PPRAdminContentTable = () => {
     const currentTicket = useRecoilValue(currentTicketState)
+    const setAllTickets = useSetRecoilState(allTicketsState)
+    const handleUpdateStatus = async (nextStatus) => {
+        const payload = {
+            status: nextStatus,
+        }
+        await axiosPreset.patch(
+            `${TICKET_ENDPOINTS.PPR}/${currentTicket._id}`,
+            payload
+        )
+        await getAllTickets(setAllTickets)
+    }
+    const getTransitionBody = () => {
+        switch (currentTicket.status) {
+            case 'PURCHASED_AND_RECEIPTS_SUBMITTED':
+                return getPurchasedAndReceiptsSubmittedBody()
+            default:
+                return (
+                    <>
+                        <h1>No Current Actions Available</h1>
+                    </>
+                )
+        }
+    }
+    const getPurchasedAndReceiptsSubmittedBody = () => {
+        return (
+            <Center pb="7px">
+                <Button
+                    colorScheme="blue"
+                    size="sm"
+                    onClick={() =>
+                        handleUpdateStatus('REPORTER_REIMBURSE_CONFIRMATION')
+                    }
+                >
+                    Confirm Reporter Reimbursed
+                </Button>
+            </Center>
+        )
+    }
     return (
         <VStack
             border="1px solid black"
@@ -13,21 +54,7 @@ const PPRAdminContentTable = () => {
             mb="30px"
         >
             <Heading size="md">Admin View</Heading>
-            {
-                <Center pb="7px">
-                    <Button
-                        colorScheme="blue"
-                        size="sm"
-                        disabled={
-                            currentTicket?.po_number?.length +
-                                currentTicket?.requisition_number?.length ===
-                            0
-                        }
-                    >
-                        Transition Status
-                    </Button>
-                </Center>
-            }
+            <Center pb="7px">{getTransitionBody()}</Center>
         </VStack>
     )
 }
