@@ -184,13 +184,12 @@ const Dashboard = () => {
                 return (
                     <>
                         {auth.isAdmin && <PPRAdminContentTable />}
-                        {isReporter() &&
-                            currentTicket.status === 'READY_TO_BUY' && (
-                                <PPRReporterTable
-                                    supportingDocuments={supportingDocuments}
-                                    currentTicket={currentTicket}
-                                />
-                            )}
+                        {isReporter() && (
+                            <PPRReporterTable
+                                supportingDocuments={supportingDocuments}
+                                currentTicket={currentTicket}
+                            />
+                        )}
                         <PPRContentTable />
                     </>
                 )

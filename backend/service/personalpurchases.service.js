@@ -8,6 +8,7 @@ const {
     sendEmailPPRCreatedToApprovers,
     sendEmailPPRApprovedToReporter,
     sendEmailPPRPurchasedAndReceiptsSubmittedToCoordinator,
+    sendEmailPPRReimbursedToReporter,
 } = require('../emails/emails')
 
 const getAllPersonalPurchases = () => {
@@ -36,9 +37,11 @@ const updatePersonalPurchase = async (id, body) => {
     const newPurchaseTicket = PersonalPurchase.findByIdAndUpdate(id, body, {
         new: true,
     })
+    const annotatedPPR = await getPersonalPurchase(id)
     if (body?.status === 'PURCHASED_AND_RECEIPTS_SUBMITTED') {
-        const annotatedPPR = await getPersonalPurchase(id)
         sendEmailPPRPurchasedAndReceiptsSubmittedToCoordinator(annotatedPPR)
+    } else if (body?.status === 'REPORTER_REIMBURSE_CONFIRMATION') {
+        sendEmailPPRReimbursedToReporter(annotatedPPR)
     }
     return newPurchaseTicket
 }

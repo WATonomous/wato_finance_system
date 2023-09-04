@@ -223,7 +223,26 @@ const sendEmailPPRPurchasedAndReceiptsSubmittedToCoordinator = async (ppr) => {
         getMainMessageHTML(
             `Item ${ppr.codename} has been purchased and receipts have been submitted! Please review the expense claim form and reimburse the reporter out of WATonomous' cash account.`
         ) +
-        (await getUPRTicketInfoHTML(ppr)) +
+        (await getPPRTicketInfoHTML(ppr)) +
+        getTicketLinkHTML(ppr.path)
+    const To = await getEmailToSection(ppr.reporter_id, [
+        EMAIL_RECIPIENTS.finance,
+        EMAIL_RECIPIENTS.coordinator,
+    ])
+    await sendEmail({
+        Subject,
+        HTMLPart,
+        To,
+    })
+}
+
+const sendEmailPPRReimbursedToReporter = async (ppr) => {
+    const Subject = `[Reimbursed] ${ppr.codename}`
+    const HTMLPart =
+        getMainMessageHTML(
+            `Your Personal Purchase Request has been reimbursed! Please visit the ticket link below to confirm your reimbursement has been received.`
+        ) +
+        (await getPPRTicketInfoHTML(ppr)) +
         getTicketLinkHTML(ppr.path)
     const To = await getEmailToSection(ppr.reporter_id, [
         EMAIL_RECIPIENTS.finance,
@@ -564,6 +583,7 @@ module.exports = {
     sendEmailPPRApprovedToReporter,
     sendEmailPPRCreatedToApprovers,
     sendEmailPPRPurchasedAndReceiptsSubmittedToCoordinator,
+    sendEmailPPRReimbursedToReporter,
     PurchaseRequestInvalidated,
     PersonalPurchaseApproved,
     UWFinancePurchaseApproved,
