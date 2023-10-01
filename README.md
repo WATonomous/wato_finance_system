@@ -13,6 +13,7 @@ npm install
 create a `.env` file in the "backend" folder
 
 **Create an account here to use mongo: https://cloud.mongodb.com/**
+test
 
 **Create an account here to use the email api: https://www.mailjet.com/**
 
