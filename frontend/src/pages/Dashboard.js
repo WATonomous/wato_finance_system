@@ -36,6 +36,7 @@ import {
     currentTicketState,
     currentTreeState,
 } from '../state/atoms'
+import CommentSection from '../components/CommentSection'
 import UpdateTicketModal from '../components/UpdateTicketModal'
 import UploadFileModal from '../components/UploadFileModal'
 import UPRAdminContentTable from '../components/TicketContent/UPRAdminContentTable'
@@ -170,6 +171,7 @@ const Dashboard = () => {
                     <>
                         {auth.isAdmin && <SFAdminContentTable />}
                         <SFContentTable />
+                        <CommentSection />
                     </>
                 )
             case TICKET_TYPES.FI:
@@ -177,6 +179,7 @@ const Dashboard = () => {
                     <>
                         {auth.isAdmin && <FIAdminContentTable />}
                         <FIContentTable />
+                        <CommentSection />
                     </>
                 )
 
@@ -191,6 +194,7 @@ const Dashboard = () => {
                             />
                         )}
                         <PPRContentTable />
+                        <CommentSection />
                     </>
                 )
             case TICKET_TYPES.UPR:
@@ -198,6 +202,7 @@ const Dashboard = () => {
                     <>
                         {auth.isAdmin && <UPRAdminContentTable />}
                         <UPRContentTable />
+                        <CommentSection />
                     </>
                 )
             default:
