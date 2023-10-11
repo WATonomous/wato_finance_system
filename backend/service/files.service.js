@@ -4,12 +4,14 @@ const {
     deleteS3File,
     generatePresignedUrl,
 } = require('../aws/s3')
+const { getAllChildren } = require('./sponsorshipfunds.service')
 
 const getFile = async (id) => {
     return File.findById(id)
 }
 
 const getAllFilesByReference = async (reference) => {
+    console.log(reference)
     const files = await File.find({ reference_code: reference })
     return Promise.all(
         files.map(async (file) => {
@@ -24,6 +26,28 @@ const getAllFilesByReference = async (reference) => {
             }
         })
     )
+}
+
+// extract the child pprs and uprs from the sf
+const flattenFundingItems = (children) => {
+    // console.log(children)
+    return children.fundingItems
+        .map((child) => {
+            return [child.personalPurchases, child.uwFinancePurchases]
+        })
+        .flat(2)
+}
+const getAllFilesBySF = async (sfCode) => {
+    const children = await getAllChildren(sfCode)
+    const items = flattenFundingItems(children)
+    const attachmentsByKey = {}
+    await Promise.all(
+        items.map(async (item) => {
+            const attachments = await getAllFilesByReference(item.code)
+            attachmentsByKey[item.code] = attachments
+        })
+    )
+    return attachmentsByKey
 }
 
 const createFile = async (file, referenceCode, isSupportingDocument) => {
@@ -60,6 +84,7 @@ const deleteFile = async (referenceCode, fileName) => {
 module.exports = {
     getFile,
     getAllFilesByReference,
+    getAllFilesBySF,
     createFile,
     bulkCreateFiles,
     deleteFile,

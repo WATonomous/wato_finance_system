@@ -1,27 +1,16 @@
 // modified version of https://github.com/ianstormtaylor/slate/blob/main/site/examples/richtext.tsx
 import React, { useCallback, useMemo } from 'react'
 import isHotkey from 'is-hotkey'
-import { Editable, withReact, useSlate, Slate } from 'slate-react'
-import {
-    Editor,
-    Transforms,
-    createEditor,
-    Element as SlateElement,
-} from 'slate'
+import { Editable, withReact, Slate } from 'slate-react'
+import { createEditor } from 'slate'
 import { withHistory } from 'slate-history'
 
 import {
     BlockButton,
-    Button,
     Element,
-    Icon,
     Leaf,
     MarkButton,
-    TEXT_ALIGN_TYPES,
     Toolbar,
-    isBlockActive,
-    isMarkActive,
-    toggleBlock,
     toggleMark,
 } from './SlateComponents'
 import { Box, Heading } from '@chakra-ui/react'

@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import {
     Box,
     Heading,
-    Center,
     Th,
     Tr,
     Td,
@@ -12,12 +11,35 @@ import {
     Tbody,
     Button,
     Stack,
+    Center,
 } from '@chakra-ui/react'
 import { getStandardizedDate } from '../utils/utils'
-import { useParams } from 'react-router-dom'
+import { axiosPreset } from '../axiosConfig'
+import { useLocation, useParams } from 'react-router-dom'
 import LoadingSpinner from '../components/LoadingSpinner'
+import { useRecoilState } from 'recoil'
+import { currentTicketState } from '../state/atoms'
+import FileViewer from '../components/FileViewer'
 
 const FundingItemView = ({ fundingItem }) => {
+    const [uploadedFiles, setUploadedFiles] = useState([])
+    const [currentTicket, setCurrentTicket] = useRecoilState(currentTicketState)
+    const getUploadedFiles = useCallback(async () => {
+        console.log('hhhh')
+        console.log(currentTicket)
+        console.log(currentTicket?.code)
+        await axiosPreset
+            .get(`/files/getallbysf/${currentTicket._id}`)
+            .then((res) => {
+                console.log('hello')
+                console.log(res.data)
+                setUploadedFiles(res.data)
+            })
+            .catch((err) => console.log(err))
+    }, [currentTicket, setUploadedFiles])
+    useEffect(() => {
+        getUploadedFiles()
+    }, [getUploadedFiles])
     return (
         <Box
             padding="15px"
@@ -43,6 +65,7 @@ const FundingItemView = ({ fundingItem }) => {
                                 <Th isNumeric>Item Spend</Th>
                                 <Th>Requisition Number</Th>
                                 <Th>Purchase Order Number</Th>
+                                <Th>Attachments</Th>
                                 <Th>Action</Th>
                             </Tr>
                         </Thead>
@@ -54,6 +77,15 @@ const FundingItemView = ({ fundingItem }) => {
                                         <Td isNumeric>{pp.cost}</Td>
                                         <Td>{pp.requisition_number}</Td>
                                         <Td>{pp.po_number}</Td>
+                                        <Td>
+                                            {uploadedFiles?.map((file) => {
+                                                console.log('hello')
+                                                console.log(file)
+                                                return (
+                                                    <FileViewer file={file} />
+                                                )
+                                            })}
+                                        </Td>
                                         <Td>
                                             <Button>Test</Button>
                                         </Td>
@@ -74,6 +106,7 @@ const FundingItemView = ({ fundingItem }) => {
                                 <Th isNumeric>Item Spend</Th>
                                 <Th>Requisition Number</Th>
                                 <Th>Purchase Order Number</Th>
+                                <Th>Attachments</Th>
                                 <Th>Action</Th>
                             </Tr>
                         </Thead>
@@ -85,6 +118,15 @@ const FundingItemView = ({ fundingItem }) => {
                                         <Td isNumeric>{uwfp.cost}</Td>
                                         <Td>{uwfp.requisition_number}</Td>
                                         <Td>{uwfp.po_number}</Td>
+                                        <Td>
+                                            {uploadedFiles?.map((file) => {
+                                                console.log('hello')
+                                                console.log(file)
+                                                return (
+                                                    <FileViewer file={file} />
+                                                )
+                                            })}
+                                        </Td>
                                         <Td>
                                             <Button>Test</Button>
                                         </Td>
@@ -100,18 +142,25 @@ const FundingItemView = ({ fundingItem }) => {
 }
 
 const ClaimSummary = () => {
-    const { id } = useParams()
+    const location = useLocation()
+    const splitPath = location.pathname.split('/')
+    console.log(splitPath)
+    const id = splitPath[splitPath.length - 1]
     const [claimData, setClaimData] = useState()
     useEffect(() => {
         const fetchClaimData = async () => {
-            const res = await fetch(
+            const children = axiosPreset.get(
                 `${process.env.REACT_APP_BACKEND_URL}/sponsorshipfunds/getallchildren/${id}`
             )
-            const data = await res.json()
-            setClaimData(data)
+            const files = axiosPreset.get(
+                `${process.env.REACT_APP_BACKEND_URL}/files/getallbysf/${id}`
+            )
+            await Promise.all([children, files])
+            setClaimData(children.data)
         }
         fetchClaimData()
-    }, [id])
+    }, [])
+    console.log(claimData)
 
     if (!claimData)
         return (

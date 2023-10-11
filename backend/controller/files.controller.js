@@ -1,6 +1,7 @@
 const {
     getFile,
     getAllFilesByReference,
+    getAllFilesBySF,
     bulkCreateFiles,
     deleteFile,
 } = require('../service/files.service')
@@ -29,6 +30,15 @@ const getAllFilesByReferenceController = (req, res) => {
         .catch((err) => res.status(500).json('Error: ' + err))
 }
 
+const getAllFilesBySFController = (req, res) => {
+    console.log(req.params)
+    getAllFilesBySF(Number(req.params.sf_code))
+        .then((files) => {
+            res.status(200).json(files)
+        })
+        .catch((err) => res.status(500).json('Error: ' + err))
+}
+
 const bulkCreateFileController = (req, res) => {
     bulkCreateFiles(
         req.files,
@@ -42,6 +52,7 @@ const bulkCreateFileController = (req, res) => {
 module.exports = {
     getFileController,
     getAllFilesByReferenceController,
+    getAllFilesBySFController,
     bulkCreateFileController,
     deleteFileController,
 }

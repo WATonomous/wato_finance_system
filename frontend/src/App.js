@@ -27,7 +27,7 @@ const router = createBrowserRouter(
             <Route element={<LoggedInRedirect />}>
                 <Route path="/login" element={<Login />} />
             </Route>
-            <Route element={<PublicRoute />}>
+            <Route element={<PrivateRoute />}>
                 <Route path="/claim/:id" element={<ClaimSummary />} />
             </Route>
             <Route element={<PrivateRoute />}>
