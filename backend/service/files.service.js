@@ -11,7 +11,6 @@ const getFile = async (id) => {
 }
 
 const getAllFilesByReference = async (reference) => {
-    console.log(reference)
     const files = await File.find({ reference_code: reference })
     return Promise.all(
         files.map(async (file) => {
@@ -28,23 +27,30 @@ const getAllFilesByReference = async (reference) => {
     )
 }
 
-// extract the child pprs and uprs from the sf
-const flattenFundingItems = (children) => {
-    // console.log(children)
-    return children.fundingItems
-        .map((child) => {
-            return [child.personalPurchases, child.uwFinancePurchases]
-        })
-        .flat(2)
+// returns list of ticket codes from output of getAllChildren
+const extractAllTicketCodes = (sf) => {
+    const output = [sf.code]
+    for (const fi of sf.fundingItems) {
+        output.push(fi.code)
+        for (const ppr of fi.personalPurchases) {
+            output.push(ppr.code)
+        }
+        for (const upr of fi.uwFinancePurchases) {
+            output.push(upr.code)
+        }
+    }
+    return output
 }
-const getAllFilesBySF = async (sfCode) => {
-    const children = await getAllChildren(sfCode)
-    const items = flattenFundingItems(children)
+
+// returns map of ticket code to each ticket's list of files for all tickets associated with sf_id
+const getAllFilesBySF = async (sf_id) => {
+    const sf = await getAllChildren(sf_id)
+    const ticketCodes = extractAllTicketCodes(sf)
     const attachmentsByKey = {}
     await Promise.all(
-        items.map(async (item) => {
-            const attachments = await getAllFilesByReference(item.code)
-            attachmentsByKey[item.code] = attachments
+        ticketCodes.map(async (code) => {
+            const attachments = await getAllFilesByReference(code)
+            attachmentsByKey[code] = attachments
         })
     )
     return attachmentsByKey

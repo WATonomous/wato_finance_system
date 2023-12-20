@@ -30,9 +30,8 @@ const getAllFilesByReferenceController = (req, res) => {
         .catch((err) => res.status(500).json('Error: ' + err))
 }
 
-const getAllFilesBySFController = (req, res) => {
-    console.log(req.params)
-    getAllFilesBySF(Number(req.params.sf_code))
+const getAllFilesBySFId = (req, res) => {
+    getAllFilesBySF(Number(req.params.sf_id))
         .then((files) => {
             res.status(200).json(files)
         })
@@ -52,7 +51,7 @@ const bulkCreateFileController = (req, res) => {
 module.exports = {
     getFileController,
     getAllFilesByReferenceController,
-    getAllFilesBySFController,
+    getAllFilesBySFId,
     bulkCreateFileController,
     deleteFileController,
 }
