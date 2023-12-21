@@ -9,10 +9,7 @@ import {
 import { ChakraProvider } from '@chakra-ui/react'
 
 import { AuthLayout } from './contexts/AuthContext'
-import {
-    PrivateRoute,
-    LoggedInRedirect,
-} from './contexts/CustomRoutes'
+import { PrivateRoute, LoggedInRedirect } from './contexts/CustomRoutes'
 import { RecoilRoot } from 'recoil'
 
 import Login from './pages/Login'
