@@ -6,7 +6,7 @@ import {
     signOut,
 } from 'firebase/auth'
 import React, { useContext, useEffect, useState, useCallback } from 'react'
-import { useOutlet } from 'react-router-dom'
+import { useOutlet, useLocation } from 'react-router-dom'
 import app from '../firebase'
 import { useToast } from '@chakra-ui/react'
 import {
@@ -33,6 +33,8 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true)
     const auth = getAuth(app)
     const provider = new GoogleAuthProvider()
+    const location = useLocation()
+    const prevLocation = location.state ? location.state['from'] : "/"
     provider.setCustomParameters({ prompt: 'select_account' })
     const toast = useToast()
 
@@ -129,6 +131,7 @@ export const AuthProvider = ({ children }) => {
         isAdmin,
         login,
         logout,
+        prevLocation,
     }
 
     return (

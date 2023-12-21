@@ -1,12 +1,14 @@
 import React from 'react'
-import { Navigate, Outlet } from 'react-router-dom'
+import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import { useAuth } from './AuthContext'
 
 export const PrivateRoute = () => {
     const { currentUser } = useAuth()
 
+    const location = useLocation()
+
     if (typeof currentUser === 'undefined') return <h1>Loading.....</h1>
-    if (!currentUser) return <Navigate replace to="/login" />
+    if (!currentUser) return <Navigate replace to="/login" state = {{from: location.pathname != "/login" ? location.pathname : "/"}}/>
     return <Outlet />
 }
 
@@ -15,7 +17,8 @@ export const PublicRoute = () => {
 }
 
 export const LoggedInRedirect = () => {
-    const { currentUser } = useAuth()
-    if (currentUser) return <Navigate replace to="/" />
+    const { currentUser, prevLocation } = useAuth()
+
+    if (currentUser) return <Navigate replace to={prevLocation} />
     return <Outlet />
 }

@@ -14,7 +14,7 @@ const Navbar = () => {
         setLoading(true)
         try {
             await login()
-            navigate('/')
+            //nagivate("/") //LoggedInRedirect already does this
         } catch (err) {
             setError('Failed to log in')
             console.log(err)
