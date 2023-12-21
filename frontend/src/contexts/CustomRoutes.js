@@ -8,7 +8,17 @@ export const PrivateRoute = () => {
     const location = useLocation()
 
     if (typeof currentUser === 'undefined') return <h1>Loading.....</h1>
-    if (!currentUser) return <Navigate replace to="/login" state = {{from: location.pathname != "/login" ? location.pathname : "/"}}/>
+    if (!currentUser)
+        return (
+            <Navigate
+                replace
+                to="/login"
+                state={{
+                    from:
+                        location.pathname != '/login' ? location.pathname : '/',
+                }}
+            />
+        )
     return <Outlet />
 }
 
@@ -21,7 +31,7 @@ export const LoggedInRedirect = () => {
 
     const location = useLocation()
 
-    const prevLocation = location.state ? location.state['from'] : "/"
+    const prevLocation = location.state ? location.state['from'] : '/'
 
     if (currentUser) return <Navigate replace to={prevLocation} />
     return <Outlet />
