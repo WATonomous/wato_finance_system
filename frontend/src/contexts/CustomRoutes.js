@@ -17,7 +17,11 @@ export const PublicRoute = () => {
 }
 
 export const LoggedInRedirect = () => {
-    const { currentUser, prevLocation } = useAuth()
+    const { currentUser } = useAuth()
+
+    const location = useLocation()
+
+    const prevLocation = location.state ? location.state['from'] : "/"
 
     if (currentUser) return <Navigate replace to={prevLocation} />
     return <Outlet />
