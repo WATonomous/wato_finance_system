@@ -50,6 +50,26 @@ const UPRAdminContentTable = () => {
             payload
         )
         await getAllTickets(setAllTickets)
+        setCurrentTicket({
+            ...currentTicket,
+            status: 'ORDERED',
+        })
+        setChanged(false)
+    }
+
+    const transitionToPickedUp = async () => {
+        const payload = {
+            status: 'PICKED_UP',
+        }
+        await axiosPreset.patch(
+            `${TICKET_ENDPOINTS.UPR}/${currentTicket._id}`,
+            payload
+        )
+        await getAllTickets(setAllTickets)
+        setCurrentTicket({
+            ...currentTicket,
+            status: 'PICKED_UP',
+        })
         setChanged(false)
     }
 
@@ -77,7 +97,7 @@ const UPRAdminContentTable = () => {
             </Table>
 
             <Center pb="7px">
-                {currentTicket.status === 'SENT_TO_COORDINATOR' ? (
+                {currentTicket.status === 'SENT_TO_COORDINATOR' && (
                     <Button
                         colorScheme="blue"
                         size="sm"
@@ -90,16 +110,25 @@ const UPRAdminContentTable = () => {
                     >
                         Transition To Purchased
                     </Button>
-                ) : (
+                )}
+                {currentTicket.status === 'ORDERED' && (
                     <Button
-                        colorScheme="green"
+                        colorScheme="blue"
                         size="sm"
-                        onClick={saveFields}
-                        disabled={!changed}
+                        mr="20px"
+                        onClick={transitionToPickedUp}
                     >
-                        Save Fields
+                        Transition To Picked Up
                     </Button>
                 )}
+                <Button
+                    colorScheme="green"
+                    size="sm"
+                    onClick={saveFields}
+                    disabled={!changed}
+                >
+                    Save Fields
+                </Button>
             </Center>
         </VStack>
     )
