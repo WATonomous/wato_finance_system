@@ -1,15 +1,12 @@
-import { Button, Center, Heading, Link, VStack } from '@chakra-ui/react'
+import { Button, Center, Heading, VStack, Link } from '@chakra-ui/react'
 import React from 'react'
 import { useRecoilValue } from 'recoil'
 import { currentTicketState } from '../../state/atoms'
-import { usePreserveParamsNavigate } from '../../hooks/hooks'
-import { useNavigate } from 'react-router-dom'
+import { useGetPreserveParamsHref } from '../../hooks/hooks'
 
-const UPRAdminContentTable = () => {
+const SFAdminContentTable = () => {
     const currentTicket = useRecoilValue(currentTicketState)
-    const navigate = useNavigate()
-    const preserveParamsNavigate = usePreserveParamsNavigate()
-    console.log(currentTicket)
+    const getPreserveParamsHref = useGetPreserveParamsHref()
     return (
         <VStack
             border="1px solid black"
@@ -31,17 +28,20 @@ const UPRAdminContentTable = () => {
                     >
                         Transition Status
                     </Button>
-                    <Button
-                        colorScheme="green"
-                        size="sm"
-                        onClick={() => navigate(`/claim/${currentTicket._id}`)}
+                    {/* can remove getPreserveParamsHref if it does not make sense to preserve params */}
+                    <Link
+                        href={getPreserveParamsHref(
+                            `/claim/${currentTicket._id}`
+                        )}
                     >
-                        View Claim Page
-                    </Button>
+                        <Button colorScheme="green" size="sm">
+                            View Claim Page
+                        </Button>
+                    </Link>
                 </Center>
             }
         </VStack>
     )
 }
 
-export default UPRAdminContentTable
+export default SFAdminContentTable

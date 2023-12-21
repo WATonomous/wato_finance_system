@@ -9,3 +9,13 @@ export const usePreserveParamsNavigate = () => {
         navigate(`${path}?${oldSearchParams.toString()}`)
     }
 }
+
+export const useGetPreserveParamsHref = () => {
+    const [searchParams] = useSearchParams()
+    const oldSearchParams = new URLSearchParams(searchParams)
+    const newSearchParams =
+        oldSearchParams.toString().trim() === ''
+            ? ''
+            : `?${oldSearchParams.toString()}`
+    return (path) => `${path}${newSearchParams}`
+}

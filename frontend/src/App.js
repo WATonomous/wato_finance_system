@@ -12,13 +12,11 @@ import { AuthLayout } from './contexts/AuthContext'
 import {
     PrivateRoute,
     LoggedInRedirect,
-    PublicRoute,
 } from './contexts/CustomRoutes'
 import { RecoilRoot } from 'recoil'
 
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
-import ClaimSummary from './pages/ClaimSummary'
 import NotFound from './pages/NotFound'
 
 const router = createBrowserRouter(
@@ -28,14 +26,12 @@ const router = createBrowserRouter(
                 <Route path="/login" element={<Login />} />
             </Route>
             <Route element={<PrivateRoute />}>
-                <Route path="/claim/:id" element={<ClaimSummary />} />
-            </Route>
-            <Route element={<PrivateRoute />}>
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/SF/:id" element={<Dashboard />} />
                 <Route path="/FI/:id" element={<Dashboard />} />
                 <Route path="/PPR/:id" element={<Dashboard />} />
                 <Route path="/UPR/:id" element={<Dashboard />} />
+                <Route path="/claim/:id" element={<Dashboard />} />
             </Route>
             <Route path="/notfound" element={<NotFound />} />
             <Route path="*" element={<Navigate replace to="/notfound" />} />

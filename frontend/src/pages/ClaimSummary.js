@@ -1,7 +1,11 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React from 'react'
 import {
     Box,
+    Card,
+    CardBody,
+    Flex,
     Heading,
+    StackDivider,
     Th,
     Tr,
     Td,
@@ -9,180 +13,210 @@ import {
     Table,
     Thead,
     Tbody,
-    Button,
     Stack,
     Center,
 } from '@chakra-ui/react'
 import { getStandardizedDate } from '../utils/utils'
-import { axiosPreset } from '../axiosConfig'
-import { useLocation, useParams } from 'react-router-dom'
 import LoadingSpinner from '../components/LoadingSpinner'
-import { useRecoilState } from 'recoil'
-import { currentTicketState } from '../state/atoms'
-import FileViewer from '../components/FileViewer'
+import TreeViewWithLinks from '../components/TreeViewWithLinks'
+import { getFormattedCurrency } from '../utils/utils'
 
 const FundingItemView = ({ fundingItem }) => {
-    const [uploadedFiles, setUploadedFiles] = useState([])
-    const [currentTicket, setCurrentTicket] = useRecoilState(currentTicketState)
-    const getUploadedFiles = useCallback(async () => {
-        console.log('hhhh')
-        console.log(currentTicket)
-        console.log(currentTicket?.code)
-        await axiosPreset
-            .get(`/files/getallbysf/${currentTicket._id}`)
-            .then((res) => {
-                console.log('hello')
-                console.log(res.data)
-                setUploadedFiles(res.data)
-            })
-            .catch((err) => console.log(err))
-    }, [currentTicket, setUploadedFiles])
-    useEffect(() => {
-        getUploadedFiles()
-    }, [getUploadedFiles])
     return (
-        <Box
-            padding="15px"
-            marginTop="2vw"
-            border="1px"
-            borderRadius="4%"
-            borderColor="black"
-        >
-            <Heading size="md">{fundingItem.name}</Heading>
-            <Heading size="md">
-                {`Allocation: ${fundingItem.funding_allocation}`}
-            </Heading>
-            <Heading size="md">
-                {`Amount Reimbursed: ${fundingItem.amount_reimbursed}`}
-            </Heading>
-            <Stack>
-                <Heading size="sm">Personal Purchases</Heading>
-                <TableContainer>
-                    <Table size="lg">
-                        <Thead>
-                            <Tr>
-                                <Th>Item Name</Th>
-                                <Th isNumeric>Item Spend</Th>
-                                <Th>Requisition Number</Th>
-                                <Th>Purchase Order Number</Th>
-                                <Th>Attachments</Th>
-                                <Th>Action</Th>
-                            </Tr>
-                        </Thead>
-                        <Tbody>
-                            {fundingItem.personalPurchases.map((pp) => {
-                                return (
-                                    <Tr key={pp._id}>
-                                        <Td>{pp.name}</Td>
-                                        <Td isNumeric>{pp.cost}</Td>
-                                        <Td>{pp.requisition_number}</Td>
-                                        <Td>{pp.po_number}</Td>
-                                        <Td>
-                                            {uploadedFiles?.map((file) => {
-                                                console.log('hello')
-                                                console.log(file)
+        <Card maxW="100%">
+            <CardBody>
+                <Stack divider={<StackDivider />} spacing="4">
+                    <Stack>
+                        <Heading size="md" mb="12px">
+                            {fundingItem.codename}
+                        </Heading>
+                        <Heading size="sm">
+                            {`Funding Allocation: ${getFormattedCurrency(
+                                fundingItem.funding_allocation
+                            )}`}
+                        </Heading>
+                        <Heading size="sm">
+                            {`Funding Spent: ${getFormattedCurrency(
+                                fundingItem.funding_spent
+                            )}`}
+                        </Heading>
+                    </Stack>
+                    {fundingItem.personalPurchases.length > 0 && (
+                        <Stack>
+                            <Heading size="sm">Personal Purchases</Heading>
+                            <TableContainer>
+                                <Table
+                                    size="md"
+                                    __css={{ tableLayout: 'fixed' }}
+                                >
+                                    <Thead>
+                                        <Tr>
+                                            <Th>Item Name</Th>
+                                            <Th isNumeric>Cost</Th>
+                                            <Th>Status</Th>
+                                        </Tr>
+                                    </Thead>
+                                    <Tbody>
+                                        {fundingItem.personalPurchases.map(
+                                            (ppr) => {
                                                 return (
-                                                    <FileViewer file={file} />
+                                                    <Tr key={ppr._id}>
+                                                        <Td fontSize="sm">
+                                                            {ppr.codename}
+                                                        </Td>
+                                                        <Td
+                                                            fontSize="sm"
+                                                            isNumeric
+                                                        >
+                                                            {getFormattedCurrency(
+                                                                ppr.cost
+                                                            )}
+                                                        </Td>
+                                                        <Td fontSize="sm">
+                                                            {ppr.status}
+                                                        </Td>
+                                                    </Tr>
                                                 )
-                                            })}
-                                        </Td>
-                                        <Td>
-                                            <Button>Test</Button>
-                                        </Td>
-                                    </Tr>
-                                )
-                            })}
-                        </Tbody>
-                    </Table>
-                </TableContainer>
-            </Stack>
-            <Stack>
-                <Heading size="sm">UW Finance Purchases</Heading>
-                <TableContainer>
-                    <Table size="lg">
-                        <Thead>
-                            <Tr>
-                                <Th>Item Name</Th>
-                                <Th isNumeric>Item Spend</Th>
-                                <Th>Requisition Number</Th>
-                                <Th>Purchase Order Number</Th>
-                                <Th>Attachments</Th>
-                                <Th>Action</Th>
-                            </Tr>
-                        </Thead>
-                        <Tbody>
-                            {fundingItem.uwFinancePurchases.map((uwfp) => {
-                                return (
-                                    <Tr key={uwfp._id}>
-                                        <Td>{uwfp.name}</Td>
-                                        <Td isNumeric>{uwfp.cost}</Td>
-                                        <Td>{uwfp.requisition_number}</Td>
-                                        <Td>{uwfp.po_number}</Td>
-                                        <Td>
-                                            {uploadedFiles?.map((file) => {
-                                                console.log('hello')
-                                                console.log(file)
+                                            }
+                                        )}
+                                    </Tbody>
+                                </Table>
+                            </TableContainer>
+                        </Stack>
+                    )}
+                    {fundingItem.uwFinancePurchases.length > 0 && (
+                        <Stack>
+                            <Heading size="sm">UW Finance Purchases</Heading>
+                            <TableContainer>
+                                <Table
+                                    size="md"
+                                    __css={{ tableLayout: 'fixed' }}
+                                >
+                                    <Thead>
+                                        <Tr>
+                                            <Th>Item Name</Th>
+                                            <Th isNumeric>Cost</Th>
+                                            <Th>Status</Th>
+                                            <Th>Req #</Th>
+                                            <Th>PO #</Th>
+                                        </Tr>
+                                    </Thead>
+                                    <Tbody>
+                                        {fundingItem.uwFinancePurchases.map(
+                                            (upr) => {
                                                 return (
-                                                    <FileViewer file={file} />
+                                                    <Tr key={upr._id}>
+                                                        <Td fontSize="sm">
+                                                            {upr.codename}
+                                                        </Td>
+                                                        <Td
+                                                            fontSize="sm"
+                                                            isNumeric
+                                                        >
+                                                            {getFormattedCurrency(
+                                                                upr.cost
+                                                            )}
+                                                        </Td>
+                                                        <Td fontSize="sm">
+                                                            {upr.status}
+                                                        </Td>
+                                                        <Td fontSize="sm">
+                                                            {
+                                                                upr.requisition_number
+                                                            }
+                                                        </Td>
+                                                        <Td fontSize="sm">
+                                                            {upr.po_number}
+                                                        </Td>
+                                                    </Tr>
                                                 )
-                                            })}
-                                        </Td>
-                                        <Td>
-                                            <Button>Test</Button>
-                                        </Td>
-                                    </Tr>
-                                )
-                            })}
-                        </Tbody>
-                    </Table>
-                </TableContainer>
-            </Stack>
-        </Box>
+                                            }
+                                        )}
+                                    </Tbody>
+                                </Table>
+                            </TableContainer>
+                        </Stack>
+                    )}
+                </Stack>
+            </CardBody>
+        </Card>
     )
 }
 
-const ClaimSummary = () => {
-    const location = useLocation()
-    const splitPath = location.pathname.split('/')
-    console.log(splitPath)
-    const id = splitPath[splitPath.length - 1]
-    const [claimData, setClaimData] = useState()
-    useEffect(() => {
-        const fetchClaimData = async () => {
-            const children = axiosPreset.get(
-                `${process.env.REACT_APP_BACKEND_URL}/sponsorshipfunds/getallchildren/${id}`
-            )
-            const files = axiosPreset.get(
-                `${process.env.REACT_APP_BACKEND_URL}/files/getallbysf/${id}`
-            )
-            await Promise.all([children, files])
-            setClaimData(children.data)
-        }
-        fetchClaimData()
-    }, [])
-    console.log(claimData)
+const ClaimSummary = ({ claimData }) => {
+    const claimSummaryInfoHeight = 24 + 6 * (24 + 8) + 43.2 + 24 + 2
+    const claimSummaryInfoHeightText = `${claimSummaryInfoHeight}px`
+    const ticketTreeHeightText = `calc(100vh - ${
+        claimSummaryInfoHeight + 80
+    }px)`
 
-    if (!claimData)
+    if (Object.keys(claimData).length === 0)
         return (
-            <Box h="100vh">
+            <Box h="100vh" w="100%">
                 <LoadingSpinner />
             </Box>
         )
 
     return (
-        <Box>
-            <Heading>Claim Summary</Heading>
-            <Heading size="md">{`Sponsorship Fund ID: ${id}`}</Heading>
-            <Heading size="md">{`Name: ${claimData.name}`}</Heading>
-            <Heading size="md">
-                {`Deadline: ${getStandardizedDate(claimData.claim_deadline)}`}
-            </Heading>
-            <Center flexDir="column" marginTop="5vw">
-                {claimData.fundingItems.map((fi) => {
-                    return <FundingItemView fundingItem={fi} key={fi._id} />
-                })}
-            </Center>
-        </Box>
+        <>
+            <Flex
+                flexDir="column"
+                minW="350px"
+                h="calc(100vh - 80px)"
+                borderRight="2px solid #dedede"
+            >
+                <Flex
+                    flexDir="column"
+                    minH={claimSummaryInfoHeightText}
+                    p="24px"
+                    gap="8px"
+                    borderBottom="2px solid #dedede"
+                >
+                    <Heading>Claim Summary</Heading>
+                    <Heading size="md">{claimData.codename}</Heading>
+                    <Heading size="md">
+                        {`Proposal ID: ${claimData.proposal_id}`}
+                    </Heading>
+                    <Heading size="md">
+                        {`Deadline: ${getStandardizedDate(
+                            claimData.claim_deadline
+                        )}`}
+                    </Heading>
+                    <Heading size="md">{`Status: ${claimData.status}`}</Heading>
+                    <Heading size="md">
+                        {`Funding Allocation: ${getFormattedCurrency(
+                            claimData.funding_allocation
+                        )}`}
+                    </Heading>
+                    <Heading size="md">
+                        {`Funding Spent: ${getFormattedCurrency(
+                            claimData.funding_spent
+                        )}`}
+                    </Heading>
+                </Flex>
+                <Flex
+                    w="100%"
+                    h={ticketTreeHeightText}
+                    overflowY="auto"
+                    p="24px"
+                >
+                    <TreeViewWithLinks />
+                </Flex>
+            </Flex>
+            <Flex
+                flexDir="column"
+                w="100%"
+                h="calc(100vh - 80px)"
+                p="24px"
+                overflowY="auto"
+            >
+                <Center flexDir="column" h="max-content" gap="24px">
+                    {claimData.fundingItems.map((fi) => {
+                        return <FundingItemView fundingItem={fi} key={fi._id} />
+                    })}
+                </Center>
+            </Flex>
+        </>
     )
 }
 

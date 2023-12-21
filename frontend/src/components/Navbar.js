@@ -1,6 +1,13 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Button, Flex, Heading, Spacer, useDisclosure } from '@chakra-ui/react'
+import {
+    Button,
+    Flex,
+    Heading,
+    Spacer,
+    useDisclosure,
+    Link,
+} from '@chakra-ui/react'
 import { useAuth } from '../contexts/AuthContext'
 import { CreateTicketModal } from './CreateTicketModal'
 const Navbar = () => {
@@ -45,14 +52,14 @@ const Navbar = () => {
             w="100%"
             h="80px"
         >
-            <Heading
-                lineHeight="48px"
-                fontSize={{ base: 'lg', md: '2xl', lg: '3xl' }}
-                onClick={() => navigate('/')}
-                cursor="pointer"
-            >
-                WATonomous Finance System
-            </Heading>
+            <Link href="/">
+                <Heading
+                    lineHeight="48px"
+                    fontSize={{ base: 'lg', md: '2xl', lg: '3xl' }}
+                >
+                    WATonomous Finance System
+                </Heading>
+            </Link>
             <Spacer />
             {currentUser && (
                 <Button onClick={onOpen} colorScheme="green" mr="20px">
