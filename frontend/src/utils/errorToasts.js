@@ -10,6 +10,7 @@ export const createErrorMessage = (err) => {
 
     //custom error messages made in frontend
     if (err.customMsg) {
+        res.title = err.customTitle
         res.description = err.customMsg
         return res
     }
@@ -37,7 +38,7 @@ export const createErrorMessage = (err) => {
     //MongoDB errors
     if (error.status === 500) {
         res.title = 'Internal Error!'
-        res.description = 'Failed to create ticket, please try again'
+        res.description = 'Failed to finish task, please try again'
         return res
     }
 
