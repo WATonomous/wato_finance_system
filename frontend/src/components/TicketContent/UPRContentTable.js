@@ -66,6 +66,7 @@ const UPRContentTable = () => {
                     <TicketContentTableRow
                         heading={'Purchase URL'}
                         value={currentTicket.purchase_url}
+                        type="URL"
                     />
                     <TicketContentTableRow
                         heading={'Purchase Instructions'}

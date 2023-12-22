@@ -17,10 +17,11 @@ import { useSearchParams } from 'react-router-dom'
 import { TICKET_TYPES } from '../constants'
 import LoadingSpinner from './LoadingSpinner'
 import { useRecoilValue } from 'recoil'
-import { allTicketsState } from '../state/atoms'
+import { allTicketsState, currentTicketState } from '../state/atoms'
 
 const TicketList = ({ isLoading }) => {
     const allTickets = useRecoilValue(allTicketsState)
+    const currentTicket = useRecoilValue(currentTicketState)
     const preserveParamsNavigate = usePreserveParamsNavigate()
     const [searchParams] = useSearchParams()
     const tickettypes = searchParams.get('tickettypes')
@@ -97,6 +98,11 @@ const TicketList = ({ isLoading }) => {
                     {filteredTickets.map((ticket) => {
                         return (
                             <Card
+                                _hover={{
+                                    bg: 'blue.500',
+                                    color: 'white',
+                                    cursor: 'pointer',
+                                }}
                                 key={ticket.code}
                                 w="100%"
                                 borderTop="1px solid #dedede"
@@ -107,6 +113,10 @@ const TicketList = ({ isLoading }) => {
                                     preserveParamsNavigate(ticket.path)
                                 }
                                 cursor="pointer"
+                                bg={ticket == currentTicket ? 'blue.600' : ''}
+                                color={
+                                    ticket == currentTicket ? 'white' : 'black'
+                                }
                             >
                                 <CardBody p="8px 16px">
                                     <Text>{ticket.code}</Text>

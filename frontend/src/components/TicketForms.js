@@ -91,6 +91,7 @@ export const SponsorshipFundForm = ({ register, control }) => {
                         id="funding_allocation"
                         h="1.95rem"
                         pl="24px"
+                        type="number"
                         {...register('funding_allocation', {
                             required: 'This is required',
                         })}
@@ -156,6 +157,7 @@ export const FundingItemForm = ({ register, control, sfOptions }) => {
                         id="funding_allocation"
                         h="1.95rem"
                         pl="24px"
+                        type="number"
                         {...register('funding_allocation', {
                             required: 'This is required',
                         })}
@@ -220,6 +222,7 @@ export const UWFinancePurchaseForm = ({ register, control, fiOptions }) => {
                         id="cost"
                         h="1.95rem"
                         pl="24px"
+                        type="number"
                         {...register('cost', {
                             required: 'This is required',
                         })}
@@ -313,6 +316,7 @@ export const PersonalPurchaseForm = ({ register, control, fiOptions }) => {
                         id="cost"
                         h="1.95rem"
                         pl="24px"
+                        type="number"
                         {...register('cost', {
                             required: 'This is required',
                         })}

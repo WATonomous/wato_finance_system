@@ -10,6 +10,7 @@ import {
     Button,
     Select,
     FormLabel,
+    useToast,
 } from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
 import { useAuth } from '../contexts/AuthContext'
@@ -25,6 +26,7 @@ import { useRecoilState } from 'recoil'
 import { allTicketsState } from '../state/atoms'
 import { getAllTickets } from '../utils/globalSetters'
 import { usePreserveParamsNavigate } from '../hooks/hooks'
+import { createErrorMessage } from '../utils/errorToasts'
 
 export function CreateTicketModal({ isOpen, onClose }) {
     const [allTickets, setAllTickets] = useRecoilState(allTicketsState)
@@ -33,6 +35,7 @@ export function CreateTicketModal({ isOpen, onClose }) {
     const [isLoading, setIsLoading] = useState(false)
     const preserveParamsNavigate = usePreserveParamsNavigate()
     const auth = useAuth()
+    const toast = useToast()
 
     const displayTicketType = () => {
         const sfOptions = allTickets[TICKET_TYPES.SF].map((ticket) => ({
@@ -90,6 +93,12 @@ export function CreateTicketModal({ isOpen, onClose }) {
                 ...formValues,
                 reporter_id: auth.currentUser.uid,
             }
+            if (ticketType.length === 0) {
+                const error = new Error('')
+                error.customTitle = 'Action Needed!'
+                error.customMsg = 'Please select a ticket type'
+                throw error
+            }
             if (
                 ticketType === TICKET_TYPES.UPR ||
                 ticketType === TICKET_TYPES.PPR
@@ -109,7 +118,7 @@ export function CreateTicketModal({ isOpen, onClose }) {
             onClose()
             preserveParamsNavigate(`/${ticketType}/${createdTicket.data._id}`)
         } catch (err) {
-            console.log(err)
+            toast(createErrorMessage(err))
         } finally {
             setIsLoading(false)
         }
