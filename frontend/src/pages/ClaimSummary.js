@@ -144,7 +144,8 @@ const FundingItemView = ({ fundingItem }) => {
 }
 
 const ClaimSummary = ({ claimData }) => {
-    const claimSummaryInfoHeight = 24 + 6 * (24 + 8) + 43.2 + 24 + 2
+    // 24px top padding + 43.2 for main heading + 6 * (24px subheading + 8px gap) + 24px bottom padding + 2px bottom border
+    const claimSummaryInfoHeight = 285.2
     const claimSummaryInfoHeightText = `${claimSummaryInfoHeight}px`
     const ticketTreeHeightText = `calc(100vh - ${
         claimSummaryInfoHeight + 80
