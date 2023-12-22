@@ -175,7 +175,7 @@ const Dashboard = () => {
     ])
 
     useEffect(() => {
-        pageRef.current.scrollTop = 0
+        pageRef?.current?.scrollTop = 0
     }, [location])
 
     const getCurrentTicketContentTable = () => {
