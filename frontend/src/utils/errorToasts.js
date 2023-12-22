@@ -5,7 +5,7 @@ export const createErrorMessage = (err) => {
         duration: 6000,
         status: 'error',
         isClosable: true,
-        position: 'top-left',
+        position: 'bottom-right',
     }
 
     //custom error messages made in frontend
