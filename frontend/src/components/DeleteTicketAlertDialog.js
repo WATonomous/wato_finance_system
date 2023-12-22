@@ -9,6 +9,7 @@ import {
     Button,
     Flex,
     Text,
+    useToast,
 } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { TICKET_ENDPOINTS, TICKET_TYPES } from '../constants'
@@ -21,6 +22,7 @@ import {
     currentTreeState,
 } from '../state/atoms'
 import { getAllTickets } from '../utils/globalSetters'
+import { createErrorMessage } from '../utils/errorToasts'
 
 const DeleteTicketAlertDialog = ({ isOpen, onClose }) => {
     const navigate = useNavigate()
@@ -29,6 +31,7 @@ const DeleteTicketAlertDialog = ({ isOpen, onClose }) => {
     const setAllTickets = useSetRecoilState(allTicketsState)
     const [isDisabled, setIsDisabled] = useState(false)
     const cancelRef = React.useRef()
+    const toast = useToast()
 
     const handleDeleteCurrentTicket = async () => {
         try {
@@ -40,7 +43,7 @@ const DeleteTicketAlertDialog = ({ isOpen, onClose }) => {
             navigate('/')
             onClose()
         } catch (err) {
-            console.log(err)
+            toast(createErrorMessage(err))
         } finally {
             setIsDisabled(false)
         }
