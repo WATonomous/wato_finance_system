@@ -10,7 +10,7 @@ const TreeViewWithLinks = () => {
     const getPreserveParamsHref = useGetPreserveParamsHref()
 
     const sortTickets = (ticketList) => {
-        return [...ticketList].sort((a, b) => (a._id > b._id ? 1 : -1))
+        return ticketList.toSorted((a, b) => a._id - b._id)
     }
 
     const getFundingItemTree = (fi) => (
