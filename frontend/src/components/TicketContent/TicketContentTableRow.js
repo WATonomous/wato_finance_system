@@ -2,7 +2,6 @@ import React from 'react'
 import { Input, Td, Th, Tr, Link } from '@chakra-ui/react'
 
 const TicketContentTableRow = ({ heading, value, onChange, type }) => {
-    console.log(type)
     return (
         <Tr borderTopWidth="2px" borderBottomWidth="2px">
             <Th
@@ -23,7 +22,15 @@ const TicketContentTableRow = ({ heading, value, onChange, type }) => {
                     lg: '12px 24px',
                 }}
             >
-                {onChange ? <Input onChange={onChange} value={value} /> : (type == "URL"? <Link color="blue.500" href={value} isExternal>{value}</Link> : value)}
+                {onChange ? (
+                    <Input onChange={onChange} value={value} />
+                ) : type == 'URL' ? (
+                    <Link color="blue.500" href={value} isExternal>
+                        {value}
+                    </Link>
+                ) : (
+                    value
+                )}
             </Td>
         </Tr>
     )

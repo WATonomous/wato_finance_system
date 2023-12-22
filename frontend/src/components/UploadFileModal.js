@@ -12,6 +12,7 @@ import {
     ModalHeader,
     ModalOverlay,
     UnorderedList,
+    useToast,
 } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { useRecoilValue } from 'recoil'
@@ -20,6 +21,7 @@ import { FileUploader } from 'react-drag-drop-files'
 import { axiosPreset } from '../axiosConfig'
 import LoadingSpinner from './LoadingSpinner'
 import { currentTicketState } from '../state/atoms'
+import { createErrorMessage } from '../utils/errorToasts'
 
 const fileTypes = ['PNG', 'JPG', 'PDF']
 const UploadFileModal = ({
@@ -33,6 +35,7 @@ const UploadFileModal = ({
     const [filesToUpload, setFilesToUpload] = useState([])
     const [uploadedFiles, setUploadedFiles] = useState(startingUploadedFiles)
     const [filesToDelete, setFilesToDelete] = useState([])
+    const toast = useToast()
 
     const onFileAttach = (attachedFile) => {
         setFilesToUpload([...filesToUpload, attachedFile])
@@ -68,8 +71,8 @@ const UploadFileModal = ({
             }
             await Promise.all([deleteFilesResponses, createFilesResponse])
             await refetchFiles()
-        } catch (e) {
-            console.log(e)
+        } catch (err) {
+            toast(createErrorMessage(err))
         } finally {
             onClose()
         }

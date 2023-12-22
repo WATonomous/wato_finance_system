@@ -1,9 +1,9 @@
 export const createErrorMessage = (err) => {
     const res = {
         title: '',
-        description: "",
+        description: '',
         duration: 6000,
-        status: "error",
+        status: 'error',
         isClosable: true,
         position: 'top-left',
     }
@@ -15,40 +15,35 @@ export const createErrorMessage = (err) => {
     }
 
     const error = err.response ? err.response : err
-    const data = error.data? error.data : error
-    console.log(error.status)
+    const data = error.data ? error.data : error
 
     //MongoDB validation errors (wrong type of/missing input)
-    if (data.includes("ValidationError")) {
-        res.title = "Invalid Form!"
-        res.description = "Please make sure all inputs are valid"
+    if (typeof data === 'string' && data.includes('ValidationError')) {
+        res.title = 'Invalid Form!'
+        res.description = 'Please make sure all inputs are valid'
         return res
     }
 
     //Permission errors
-    if (error.status === 403)
-    {
-        const words = data.split(" ")
+    if (error.status === 403) {
+        const words = data.split(' ')
         words.shift()
-        const message = words.join(" ")
-        res.title = "Permission Error!"
+        const message = words.join(' ')
+        res.title = 'Permission Error!'
         res.description = message
         return res
     }
 
     //MongoDB errors
-    if (error.status === 500)
-    {
-        res.title = "Internal Error!"
-        res.description = "Failed to create ticket, please try again"
+    if (error.status === 500) {
+        res.title = 'Internal Error!'
+        res.description = 'Failed to create ticket, please try again'
         return res
     }
 
-    //possible status: 500, 403, 401
     //rest of errors
-    res.title = "Error!"
-    res.description = data
+    res.title = 'Error!'
+    res.description = typeof data === 'string' ? data : 'Please try again'
 
     return res
 }
-

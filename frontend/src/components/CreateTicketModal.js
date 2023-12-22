@@ -94,8 +94,8 @@ export function CreateTicketModal({ isOpen, onClose }) {
                 reporter_id: auth.currentUser.uid,
             }
             if (ticketType.length === 0) {
-                const error = new Error("Error!")
-                error.customMsg = "Please select a ticket type"
+                const error = new Error('Error!')
+                error.customMsg = 'Please select a ticket type'
                 throw error
             }
             if (
