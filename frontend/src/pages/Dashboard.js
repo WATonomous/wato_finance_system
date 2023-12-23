@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState, useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import {
     Box,
@@ -12,6 +12,7 @@ import {
     Text,
     useDisclosure,
     Grid,
+    useToast,
 } from '@chakra-ui/react'
 import TreeView from '../components/TreeView'
 import Navbar from '../components/Navbar'
@@ -47,6 +48,7 @@ import { getAllTickets } from '../utils/globalSetters'
 import FileViewer from '../components/FileViewer'
 import PPRReporterTable from '../components/TicketContent/PPRReporterTable'
 import ClaimSummary from './ClaimSummary'
+import { createErrorMessage } from '../utils/errorToasts'
 
 const Dashboard = () => {
     const navigate = useNavigate()
@@ -91,6 +93,8 @@ const Dashboard = () => {
     const supportingDocuments = uploadedFiles?.filter(
         (file) => file.is_supporting_document
     )
+    const toast = useToast()
+    const pageRef = useRef()
 
     useEffect(() => {
         const fetchData = async () => {
@@ -100,7 +104,9 @@ const Dashboard = () => {
                 const res = await axiosPreset.get('/users')
                 setAllUsers({ users: res.data })
             } catch (err) {
-                console.log(err)
+                err.customTitle = 'Error Fetching Data!'
+                err.customMsg = 'Please refresh and try again'
+                toast(createErrorMessage(err))
             } finally {
                 setIsLoading(false)
             }
@@ -121,7 +127,11 @@ const Dashboard = () => {
             .then((res) => {
                 setUploadedFiles(res.data)
             })
-            .catch((err) => console.log(err))
+            .catch((err) => {
+                err.customTitle = 'Failed to fetch files'
+                err.customMsg = 'Please try again'
+                toast(createErrorMessage(err))
+            })
     }, [currentTicket.code, setUploadedFiles])
 
     useEffect(() => {
@@ -174,6 +184,10 @@ const Dashboard = () => {
         displayClaimSummary,
     ])
 
+    useEffect(() => {
+        pageRef.current.scrollTop = 0
+    }, [location.pathname])
+
     const getCurrentTicketContentTable = () => {
         switch (currentTicket.type) {
             case TICKET_TYPES.SF:
@@ -223,14 +237,14 @@ const Dashboard = () => {
     const getMainContent = () => {
         if (location.pathname === '/') {
             return (
-                <Center w="100%">
+                <Center w="100%" ref={pageRef}>
                     <Heading fontSize="2xl">Choose a ticket to view</Heading>
                 </Center>
             )
         }
         if (isLoading) {
             return (
-                <Center w="100%">
+                <Center w="100%" ref={pageRef}>
                     <LoadingSpinner />
                 </Center>
             )
@@ -238,6 +252,7 @@ const Dashboard = () => {
 
         return (
             <Flex
+                ref={pageRef}
                 w="100%"
                 h="calc(100vh - 80px)"
                 overflowY="auto"

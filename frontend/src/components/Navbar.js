@@ -21,7 +21,6 @@ const Navbar = () => {
         setLoading(true)
         try {
             await login()
-            navigate('/')
         } catch (err) {
             setError('Failed to log in')
             console.log(err)

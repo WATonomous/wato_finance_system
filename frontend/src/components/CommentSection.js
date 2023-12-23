@@ -57,7 +57,7 @@ const CommentSection = () => {
                     renderLeaf={renderLeaf}
                     placeholder="Enter some rich text…"
                     spellCheck
-                    autoFocus
+                    autoFocus={false}
                     onKeyDown={(event) => {
                         for (const hotkey in HOTKEYS) {
                             if (isHotkey(hotkey, event)) {

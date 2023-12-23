@@ -8,6 +8,7 @@ import {
     ModalBody,
     ModalCloseButton,
     Button,
+    useToast,
 } from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
 import { axiosPreset } from '../axiosConfig'
@@ -21,6 +22,7 @@ import { TICKET_ENDPOINTS, TICKET_TYPES } from '../constants'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { currentTicketState, allTicketsState } from '../state/atoms'
 import { getAllTickets } from '../utils/globalSetters'
+import { createErrorMessage } from '../utils/errorToasts'
 
 const UpdateTicketModal = ({ isOpen, onClose }) => {
     const currentTicket = useRecoilValue(currentTicketState)
@@ -45,6 +47,7 @@ const UpdateTicketModal = ({ isOpen, onClose }) => {
     })
     const [isLoading, setIsLoading] = useState(false)
     const [isDisabled, setIsDisabled] = useState(false)
+    const toast = useToast()
 
     useEffect(() => {
         setIsDisabled(!formState.isDirty)
@@ -141,7 +144,7 @@ const UpdateTicketModal = ({ isOpen, onClose }) => {
             await getAllTickets(setAllTickets)
             onClose()
         } catch (err) {
-            console.log(err)
+            toast(createErrorMessage(err))
         } finally {
             setIsLoading(false)
         }

@@ -34,10 +34,12 @@ const SFContentTable = () => {
                     <TicketContentTableRow
                         heading={'Proposal URL'}
                         value={currentTicket.proposal_url}
+                        type="URL"
                     />
                     <TicketContentTableRow
                         heading={'Presentation URL'}
                         value={currentTicket.presentation_url}
+                        type="URL"
                     />
                     <TicketContentTableRow
                         heading={'Claim Deadline'}
