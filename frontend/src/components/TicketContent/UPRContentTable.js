@@ -12,10 +12,13 @@ import {
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { allTicketsState, currentTicketState } from '../../state/atoms'
 import { getAllTickets } from '../../utils/globalSetters'
+import { useGetCurrentTicket } from '../../hooks/hooks'
 
 const UPRContentTable = () => {
     const auth = useAuth()
     const currentTicket = useRecoilValue(currentTicketState)
+    // const currentTicket = useGetCurrentTicket()
+    console.log(currentTicket)
     const setAllTickets = useSetRecoilState(allTicketsState)
     const [loading, setLoading] = useState(false)
 

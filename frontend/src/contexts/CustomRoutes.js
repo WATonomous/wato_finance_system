@@ -15,7 +15,9 @@ export const PrivateRoute = () => {
                 to="/login"
                 state={{
                     from:
-                        location.pathname != '/login' ? location.pathname : '/',
+                        location.pathname !== '/login'
+                            ? location.pathname
+                            : '/',
                 }}
             />
         )

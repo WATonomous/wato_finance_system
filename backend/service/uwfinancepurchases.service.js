@@ -42,6 +42,7 @@ const updateUWFinancePurchase = async (id, body) => {
             new: true,
         }
     )
+    console.log(newPurchaseTicket)
     if (
         existingPurchaseTicket.status === 'SENT_TO_COORDINATOR' &&
         body.status === 'ORDERED'
@@ -53,6 +54,7 @@ const updateUWFinancePurchase = async (id, body) => {
         ]
         await Promise.all(emails)
     }
+    console.log('test')
     return newPurchaseTicket
 }
 
@@ -80,6 +82,7 @@ const updateApprovalsUWFinancePurchase = async (id, new_approval_levels) => {
         new_approval_levels.director_approval
 
     if (completedApprovals) {
+        console.log('hello')
         const newUWFinancePurchase = await UWFinancePurchase.findByIdAndUpdate(
             id,
             {
@@ -90,8 +93,11 @@ const updateApprovalsUWFinancePurchase = async (id, new_approval_levels) => {
                 new: true,
             }
         )
+        console.log(newUWFinancePurchase)
         const annotatedUPR = await getUWFinancePurchase(id)
+        console.log(annotatedUPR)
         await sendEmailUPRApprovedToCoordinator(annotatedUPR)
+        console.log('test')
         return newUWFinancePurchase
     }
 

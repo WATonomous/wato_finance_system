@@ -113,9 +113,9 @@ const TicketList = ({ isLoading }) => {
                                     preserveParamsNavigate(ticket.path)
                                 }
                                 cursor="pointer"
-                                bg={ticket == currentTicket ? 'blue.600' : ''}
+                                bg={ticket === currentTicket ? 'blue.600' : ''}
                                 color={
-                                    ticket == currentTicket ? 'white' : 'black'
+                                    ticket === currentTicket ? 'white' : 'black'
                                 }
                             >
                                 <CardBody p="8px 16px">

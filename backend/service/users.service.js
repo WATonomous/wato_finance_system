@@ -5,6 +5,8 @@ const getAllUsers = () => {
 }
 
 const getUserByUID = (uid) => {
+    console.log(uid)
+    console.log(getAllUsers)
     return authAdmin.getUser(uid)
 }
 

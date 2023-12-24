@@ -85,9 +85,14 @@ const updateApprovalsUWFinancePurchaseController = async (req, res) => {
 
     updateApprovalsUWFinancePurchase(req.params.id, new_approval_levels)
         .then((uwFinancePurchase) => {
+            console.log('hello we are here')
             res.status(200).json(uwFinancePurchase)
         })
-        .catch((err) => res.status(500).json('Error: ' + err))
+        .catch((err) => {
+            console.log(err)
+            res.status(500).json('Error: ' + err)
+        })
+    console.log('made it')
 }
 
 const deleteUWFinancePurchaseController = (req, res) => {
