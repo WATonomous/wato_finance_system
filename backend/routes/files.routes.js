@@ -32,6 +32,11 @@ router.get(
     authenticateUser,
     FilesController.getAllFilesByReferenceController
 )
+router.get(
+    '/getallbysf/:sf_id',
+    authenticateUser,
+    FilesController.getAllFilesBySFId
+)
 router.post(
     '/bulk/:reference_code',
     authenticateUser,

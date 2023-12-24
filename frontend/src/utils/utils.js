@@ -10,5 +10,5 @@ export const getFormattedCurrency = (currencyStr) => {
         style: 'currency',
         currency: 'CAD',
     })
-    return `CAD ${currencyFormatter.format(currencyStr)}`
+    return currencyFormatter.format(currencyStr)
 }

@@ -30,7 +30,7 @@ import { TICKET_TYPES } from '../constants'
 import buildTicketTree from '../utils/buildTicketTree'
 import DeleteTicketAlertDialog from '../components/DeleteTicketAlertDialog'
 import { axiosPreset } from '../axiosConfig'
-import { useRecoilState, useSetRecoilState } from 'recoil'
+import { useRecoilState } from 'recoil'
 import {
     allTicketsState,
     currentFiles,
@@ -47,6 +47,7 @@ import FIAdminContentTable from '../components/TicketContent/FIAdminContentTable
 import { getAllTickets } from '../utils/globalSetters'
 import FileViewer from '../components/FileViewer'
 import PPRReporterTable from '../components/TicketContent/PPRReporterTable'
+import ClaimSummary from './ClaimSummary'
 import { createErrorMessage } from '../utils/errorToasts'
 
 const Dashboard = () => {
@@ -78,10 +79,11 @@ const Dashboard = () => {
     } = useDisclosure()
 
     const auth = useAuth()
+    const [displayClaimSummary, setDisplayClaimSummary] = useState(false)
     const [allUsers, setAllUsers] = useState({ users: [] })
     const [isCurrentTicketReporter, setIsCurrentTicketReporter] =
         useState(false)
-    const setCurrentTree = useSetRecoilState(currentTreeState)
+    const [currentTree, setCurrentTree] = useRecoilState(currentTreeState)
     const [currentTicket, setCurrentTicket] = useRecoilState(currentTicketState)
     const [allTickets, setAllTickets] = useRecoilState(allTicketsState)
     const [uploadedFiles, setUploadedFiles] = useRecoilState(currentFiles)
@@ -135,16 +137,23 @@ const Dashboard = () => {
     useEffect(() => {
         if (location.pathname === '/') return
         const splitPath = location.pathname.split('/')
+        let currentTicketType = splitPath[1]
+        const currentTicketId = parseInt(splitPath[2])
+        if (currentTicketType === 'claim') {
+            setDisplayClaimSummary(true)
+            currentTicketType = TICKET_TYPES.SF
+        } else {
+            setDisplayClaimSummary(false)
+        }
+
         if (
             splitPath.length !== 3 ||
-            !Object.values(TICKET_TYPES).includes(splitPath[1])
+            !Object.values(TICKET_TYPES).includes(currentTicketType)
         ) {
             navigate('/notfound')
             return
         }
 
-        const currentTicketType = splitPath[1]
-        const currentTicketId = parseInt(splitPath[2])
         const currentTicketData = allTickets[
             TICKET_TYPES[currentTicketType]
         ].find((ticket) => ticket._id === currentTicketId)
@@ -172,6 +181,7 @@ const Dashboard = () => {
         setCurrentTree,
         auth.currentUser.uid,
         getUploadedFiles,
+        displayClaimSummary,
     ])
 
     useEffect(() => {
@@ -368,8 +378,14 @@ const Dashboard = () => {
         <VStack spacing="0">
             <Navbar />
             <Flex pos="absolute" top="80px" w="100%">
-                <TicketList isLoading={isLoading} />
-                {getMainContent()}
+                {displayClaimSummary ? (
+                    <ClaimSummary claimData={currentTree} />
+                ) : (
+                    <>
+                        <TicketList isLoading={isLoading} />
+                        {getMainContent()}
+                    </>
+                )}
             </Flex>
             {isUploadModalOpen && (
                 <UploadFileModal
@@ -393,7 +409,6 @@ const Dashboard = () => {
                     isSupportingDocument={true}
                 />
             )}
-
             {isDeleteTicketOpen && (
                 <DeleteTicketAlertDialog
                     isOpen={isDeleteTicketOpen}

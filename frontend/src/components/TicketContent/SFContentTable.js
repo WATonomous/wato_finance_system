@@ -7,7 +7,6 @@ import { currentTicketState } from '../../state/atoms'
 
 const SFContentTable = () => {
     const currentTicket = useRecoilValue(currentTicketState)
-
     return (
         <VStack>
             <Table>
