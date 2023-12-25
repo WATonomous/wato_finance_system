@@ -16,19 +16,9 @@ const currentTreeState = atom({
     default: {},
 })
 
-const currentTicketState = atom({
-    key: 'currentTicket',
-    default: {
-        type: '',
-        id: 0,
-        code: '',
-        codename: '',
-    },
-})
-
 const currentFiles = atom({
     key: 'currentFiles',
     default: [],
 })
 
-export { allTicketsState, currentTreeState, currentTicketState, currentFiles }
+export { allTicketsState, currentTreeState, currentFiles }

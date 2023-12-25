@@ -1,35 +1,32 @@
 import { Button, Center, Heading, Table, Tbody, VStack } from '@chakra-ui/react'
-import React from 'react'
-import { useRecoilState, useSetRecoilState } from 'recoil'
+import React, { useState } from 'react'
+import { useSetRecoilState } from 'recoil'
 import TicketContentTableRow from './TicketContentTableRow'
-import { allTicketsState, currentTicketState } from '../../state/atoms'
+import { allTicketsState } from '../../state/atoms'
 import { axiosPreset } from '../../axiosConfig'
 import { TICKET_ENDPOINTS } from '../../constants'
 import { getAllTickets } from '../../utils/globalSetters'
+import { useGetCurrentTicket } from '../../hooks/hooks'
 
 const UPRAdminContentTable = () => {
-    const [currentTicket, setCurrentTicket] = useRecoilState(currentTicketState)
+    const currentTicket = useGetCurrentTicket()
+    const [reqNum, setReqNum] = useState(currentTicket.requisition_number)
+    const [poNum, setPoNum] = useState(currentTicket.po_number)
     const [changed, setChanged] = React.useState(false)
     const setAllTickets = useSetRecoilState(allTicketsState)
     const changeReqNumber = (e) => {
-        setCurrentTicket({
-            ...currentTicket,
-            requisition_number: e.target.value,
-        })
+        setReqNum(e.target.value)
         setChanged(true)
     }
     const changePoNumber = (e) => {
-        setCurrentTicket({
-            ...currentTicket,
-            po_number: e.target.value,
-        })
+        setPoNum(e.target.value)
         setChanged(true)
     }
 
     const saveFields = async () => {
         const payload = {
-            requisition_number: currentTicket.requisition_number,
-            po_number: currentTicket.po_number,
+            requisition_number: reqNum,
+            po_number: poNum,
         }
         await axiosPreset.patch(
             `${TICKET_ENDPOINTS.UPR}/${currentTicket._id}`,
@@ -42,18 +39,14 @@ const UPRAdminContentTable = () => {
     const transitionToPurchased = async () => {
         const payload = {
             status: 'ORDERED',
-            po_number: currentTicket.po_number,
-            requisition_number: currentTicket.requisition_number,
+            po_number: poNum,
+            requisition_number: reqNum,
         }
         await axiosPreset.patch(
             `${TICKET_ENDPOINTS.UPR}/${currentTicket._id}`,
             payload
         )
         await getAllTickets(setAllTickets)
-        setCurrentTicket({
-            ...currentTicket,
-            status: 'ORDERED',
-        })
         setChanged(false)
     }
 
@@ -66,10 +59,6 @@ const UPRAdminContentTable = () => {
             payload
         )
         await getAllTickets(setAllTickets)
-        setCurrentTicket({
-            ...currentTicket,
-            status: 'PICKED_UP',
-        })
         setChanged(false)
     }
 
@@ -85,12 +74,12 @@ const UPRAdminContentTable = () => {
                 <Tbody>
                     <TicketContentTableRow
                         heading={'Purchase Order Number'}
-                        value={currentTicket?.po_number}
+                        value={poNum}
                         onChange={changePoNumber}
                     />
                     <TicketContentTableRow
                         heading={'Requisition Number'}
-                        value={currentTicket?.requisition_number}
+                        value={reqNum}
                         onChange={changeReqNumber}
                     />
                 </Tbody>
@@ -103,10 +92,7 @@ const UPRAdminContentTable = () => {
                         size="sm"
                         mr="20px"
                         onClick={transitionToPurchased}
-                        disabled={
-                            !currentTicket?.po_number ||
-                            !currentTicket?.requisition_number
-                        }
+                        disabled={!poNum || !reqNum}
                     >
                         Transition To Purchased
                     </Button>

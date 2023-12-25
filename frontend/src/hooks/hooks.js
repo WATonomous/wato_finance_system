@@ -29,6 +29,7 @@ export const useGetCurrentTicket = () => {
     const allTickets = useRecoilValue(allTicketsState)
     const getCurrentTicket = useCallback(() => {
         const splitPath = location.pathname.split('/')
+        if (splitPath.length !== 3) return null
         const ticketType = splitPath[1]
         const ticketId = parseInt(splitPath[2])
         const currentTicketData = allTickets[TICKET_TYPES[ticketType]].find(

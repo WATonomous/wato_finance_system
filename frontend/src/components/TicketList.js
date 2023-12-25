@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { usePreserveParamsNavigate } from '../hooks/hooks'
+import { useGetCurrentTicket, usePreserveParamsNavigate } from '../hooks/hooks'
 import {
     Card,
     CardBody,
@@ -17,11 +17,11 @@ import { useSearchParams } from 'react-router-dom'
 import { TICKET_TYPES } from '../constants'
 import LoadingSpinner from './LoadingSpinner'
 import { useRecoilValue } from 'recoil'
-import { allTicketsState, currentTicketState } from '../state/atoms'
+import { allTicketsState } from '../state/atoms'
 
 const TicketList = ({ isLoading }) => {
     const allTickets = useRecoilValue(allTicketsState)
-    const currentTicket = useRecoilValue(currentTicketState)
+    const currentTicket = useGetCurrentTicket()
     const preserveParamsNavigate = usePreserveParamsNavigate()
     const [searchParams] = useSearchParams()
     const tickettypes = searchParams.get('tickettypes')

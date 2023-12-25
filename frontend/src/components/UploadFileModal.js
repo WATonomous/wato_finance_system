@@ -15,13 +15,12 @@ import {
     useToast,
 } from '@chakra-ui/react'
 import React, { useState } from 'react'
-import { useRecoilValue } from 'recoil'
 
 import { FileUploader } from 'react-drag-drop-files'
 import { axiosPreset } from '../axiosConfig'
 import LoadingSpinner from './LoadingSpinner'
-import { currentTicketState } from '../state/atoms'
 import { createErrorMessage } from '../utils/errorToasts'
+import { useGetCurrentTicket } from '../hooks/hooks'
 
 const fileTypes = ['PNG', 'JPG', 'PDF']
 const UploadFileModal = ({
@@ -31,7 +30,7 @@ const UploadFileModal = ({
     refetchFiles,
     isSupportingDocument,
 }) => {
-    const ticket = useRecoilValue(currentTicketState)
+    const ticket = useGetCurrentTicket()
     const [filesToUpload, setFilesToUpload] = useState([])
     const [uploadedFiles, setUploadedFiles] = useState(startingUploadedFiles)
     const [filesToDelete, setFilesToDelete] = useState([])

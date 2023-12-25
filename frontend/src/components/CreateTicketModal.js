@@ -116,6 +116,7 @@ export function CreateTicketModal({ isOpen, onClose }) {
             )
             await getAllTickets(setAllTickets)
             onClose()
+            console.log(createdTicket.data)
             preserveParamsNavigate(`/${ticketType}/${createdTicket.data._id}`)
         } catch (err) {
             toast(createErrorMessage(err))

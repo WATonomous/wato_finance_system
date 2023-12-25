@@ -1,11 +1,11 @@
 import React from 'react'
 import { Text, Box, Stack } from '@chakra-ui/react'
-import { usePreserveParamsNavigate } from '../hooks/hooks'
+import { useGetCurrentTicket, usePreserveParamsNavigate } from '../hooks/hooks'
 import { useRecoilValue } from 'recoil'
-import { currentTicketState, currentTreeState } from '../state/atoms'
+import { currentTreeState } from '../state/atoms'
 
 const TreeView = () => {
-    const currentTicket = useRecoilValue(currentTicketState)
+    const currentTicket = useGetCurrentTicket()
     const currentTree = useRecoilValue(currentTreeState)
     const preserveParamsNavigate = usePreserveParamsNavigate()
 

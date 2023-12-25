@@ -16,17 +16,14 @@ import { TICKET_ENDPOINTS, TICKET_TYPES } from '../constants'
 import { useNavigate } from 'react-router-dom'
 import { axiosPreset } from '../axiosConfig'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
-import {
-    allTicketsState,
-    currentTicketState,
-    currentTreeState,
-} from '../state/atoms'
+import { allTicketsState, currentTreeState } from '../state/atoms'
 import { getAllTickets } from '../utils/globalSetters'
 import { createErrorMessage } from '../utils/errorToasts'
+import { useGetCurrentTicket } from '../hooks/hooks'
 
 const DeleteTicketAlertDialog = ({ isOpen, onClose }) => {
     const navigate = useNavigate()
-    const currentTicket = useRecoilValue(currentTicketState)
+    const currentTicket = useGetCurrentTicket()
     const currentTree = useRecoilValue(currentTreeState)
     const setAllTickets = useSetRecoilState(allTicketsState)
     const [isDisabled, setIsDisabled] = useState(false)
