@@ -17,7 +17,6 @@ import { useGetCurrentTicket } from '../../hooks/hooks'
 const UPRContentTable = () => {
     const auth = useAuth()
     const currentTicket = useGetCurrentTicket()
-    console.log(currentTicket)
     const setAllTickets = useSetRecoilState(allTicketsState)
     const [loading, setLoading] = useState(false)
 

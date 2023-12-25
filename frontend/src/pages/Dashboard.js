@@ -75,7 +75,7 @@ const Dashboard = () => {
     } = useDisclosure()
 
     const auth = useAuth()
-    const [displayClaimSummary, setDisplayClaimSummary] = useState(false)
+    const [displayClaimSummary, _] = useState(false)
     const [allUsers, setAllUsers] = useState({ users: [] })
     const [isCurrentTicketReporter, setIsCurrentTicketReporter] =
         useState(false)
@@ -242,7 +242,7 @@ const Dashboard = () => {
                         {currentTicket?.codename}
                     </Heading>
                     {/* Do not display update/delete button for WATO Cash */}
-                    {currentTicket.sf_link !== -1 &&
+                    {currentTicket?.sf_link !== -1 &&
                         (isCurrentTicketReporter || auth.isDirector) && (
                             <Flex
                                 flexDir="row"
