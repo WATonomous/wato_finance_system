@@ -75,7 +75,7 @@ const Dashboard = () => {
     } = useDisclosure()
 
     const auth = useAuth()
-    const [displayClaimSummary, _] = useState(false)
+    const [displayClaimSummary, setDisplayClaimSummary] = useState(false)
     const [allUsers, setAllUsers] = useState({ users: [] })
     const [isCurrentTicketReporter, setIsCurrentTicketReporter] =
         useState(false)
@@ -135,10 +135,20 @@ const Dashboard = () => {
 
         if (!currentTicket) {
             if (!isLoading) {
+                console.log('NAVIGATING')
+                console.log(currentTicket)
                 navigate('/notfound')
             }
             return
         }
+        const splitPath = location.pathname.split('/')
+        const isClaimPage = splitPath[1] === 'claim'
+        if (isClaimPage) {
+            setDisplayClaimSummary(true)
+        } else {
+            setDisplayClaimSummary(false)
+        }
+
         setCurrentTree(buildTicketTree(currentTicket, allTickets))
         const reporterOverride = process.env?.REACT_APP_REPORTER_OVERRIDE
         setIsCurrentTicketReporter(
@@ -216,7 +226,7 @@ const Dashboard = () => {
                 </Center>
             )
         }
-        if (isLoading) {
+        if (isLoading || !currentTicket) {
             return (
                 <Center w="100%" ref={pageRef}>
                     <LoadingSpinner />
@@ -242,7 +252,7 @@ const Dashboard = () => {
                         {currentTicket?.codename}
                     </Heading>
                     {/* Do not display update/delete button for WATO Cash */}
-                    {currentTicket?.sf_link !== -1 &&
+                    {currentTicket.sf_link !== -1 &&
                         (isCurrentTicketReporter || auth.isDirector) && (
                             <Flex
                                 flexDir="row"
