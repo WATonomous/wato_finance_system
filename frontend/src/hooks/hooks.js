@@ -29,7 +29,7 @@ export const useGetCurrentTicket = () => {
     const allTickets = useRecoilValue(allTicketsState)
     const getCurrentTicket = useCallback(() => {
         const splitPath = location.pathname.split('/')
-        if (splitPath.length !== 3) return null
+        if (splitPath.length !== 3) return {}
         let ticketType = splitPath[1]
         const ticketId = parseInt(splitPath[2])
         if (ticketType === 'claim') {
@@ -38,26 +38,10 @@ export const useGetCurrentTicket = () => {
         // in case of claim view for instance
         // return {} in case that allTickets is empty, means its still loading
         if (Object.keys(allTickets).length === 0) return {}
-        console.log('hit here I guess')
-        console.log(allTickets)
         const currentTicketData = allTickets[TICKET_TYPES[ticketType]].find(
             (ticket) => ticket._id === ticketId
         )
         // if not found, will return null
-        console.log('current ticket data below')
-        console.log(currentTicketData)
-        if (!currentTicketData) {
-            console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
-            console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
-            console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
-            console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
-            console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
-            console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
-            console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
-            console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
-            console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
-        }
-        console.log('^ current ticket data')
         return currentTicketData
     }, [allTickets, location.pathname])
     const [ticket, setTicket] = useState(getCurrentTicket())

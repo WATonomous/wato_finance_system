@@ -135,8 +135,6 @@ const Dashboard = () => {
 
         if (!currentTicket) {
             if (!isLoading) {
-                console.log('NAVIGATING')
-                console.log(currentTicket)
                 navigate('/notfound')
             }
             return

@@ -1,5 +1,4 @@
 import { atom } from 'recoil'
-import { TICKET_TYPES } from '../constants'
 
 const allTicketsState = atom({
     key: 'allTickets',
