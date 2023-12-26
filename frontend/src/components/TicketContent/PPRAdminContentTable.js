@@ -1,13 +1,14 @@
 import { Button, Center, Heading, VStack } from '@chakra-ui/react'
 import React from 'react'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { allTicketsState, currentTicketState } from '../../state/atoms'
+import { useSetRecoilState } from 'recoil'
+import { allTicketsState } from '../../state/atoms'
 import { axiosPreset } from '../../axiosConfig'
 import { TICKET_ENDPOINTS } from '../../constants'
 import { getAllTickets } from '../../utils/globalSetters'
+import { useGetCurrentTicket } from '../../hooks/hooks'
 
 const PPRAdminContentTable = () => {
-    const currentTicket = useRecoilValue(currentTicketState)
+    const currentTicket = useGetCurrentTicket()
     const setAllTickets = useSetRecoilState(allTicketsState)
     const handleUpdateStatus = async (nextStatus) => {
         const payload = {

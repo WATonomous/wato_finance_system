@@ -17,7 +17,7 @@ const createFundingItem = async (body) => {
     const newFundingItem = new FundingItem(body)
     const newFI = await newFundingItem.save()
     // update the parent SF to store link to child FI
-    return SponsorshipFund.findByIdAndUpdate(
+    await SponsorshipFund.findByIdAndUpdate(
         newFI.sf_link,
         {
             $push: { fi_links: newFI._id },
@@ -26,6 +26,7 @@ const createFundingItem = async (body) => {
             new: true,
         }
     )
+    return newFI
 }
 
 const updateFundingItem = (id, body) => {

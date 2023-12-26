@@ -1,12 +1,11 @@
 import { Button, Center, Heading, VStack, Link } from '@chakra-ui/react'
 import React from 'react'
-import { useRecoilValue } from 'recoil'
-import { currentTicketState } from '../../state/atoms'
 import { useGetPreserveParamsHref } from '../../hooks/hooks'
+import { useGetCurrentTicket } from '../../hooks/hooks'
 
 const SFAdminContentTable = () => {
-    const currentTicket = useRecoilValue(currentTicketState)
     const getPreserveParamsHref = useGetPreserveParamsHref()
+    const currentTicket = useGetCurrentTicket()
     return (
         <VStack
             border="1px solid black"

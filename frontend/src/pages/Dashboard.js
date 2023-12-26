@@ -31,12 +31,7 @@ import buildTicketTree from '../utils/buildTicketTree'
 import DeleteTicketAlertDialog from '../components/DeleteTicketAlertDialog'
 import { axiosPreset } from '../axiosConfig'
 import { useRecoilState } from 'recoil'
-import {
-    allTicketsState,
-    currentFiles,
-    currentTicketState,
-    currentTreeState,
-} from '../state/atoms'
+import { allTicketsState, currentFiles, currentTreeState } from '../state/atoms'
 import CommentSection from '../components/CommentSection'
 import UpdateTicketModal from '../components/UpdateTicketModal'
 import UploadFileModal from '../components/UploadFileModal'
@@ -49,6 +44,7 @@ import FileViewer from '../components/FileViewer'
 import PPRReporterTable from '../components/TicketContent/PPRReporterTable'
 import ClaimSummary from './ClaimSummary'
 import { createErrorMessage } from '../utils/errorToasts'
+import { useGetCurrentTicket } from '../hooks/hooks'
 
 const Dashboard = () => {
     const navigate = useNavigate()
@@ -84,7 +80,7 @@ const Dashboard = () => {
     const [isCurrentTicketReporter, setIsCurrentTicketReporter] =
         useState(false)
     const [currentTree, setCurrentTree] = useRecoilState(currentTreeState)
-    const [currentTicket, setCurrentTicket] = useRecoilState(currentTicketState)
+    const currentTicket = useGetCurrentTicket()
     const [allTickets, setAllTickets] = useRecoilState(allTicketsState)
     const [uploadedFiles, setUploadedFiles] = useRecoilState(currentFiles)
     const attachments = uploadedFiles?.filter(
@@ -112,7 +108,7 @@ const Dashboard = () => {
             }
         }
         fetchData()
-    }, [setAllTickets])
+    }, [setAllTickets, toast])
 
     const isReporter = () => {
         return auth.currentUser.uid === currentTicket.reporter_id
@@ -132,43 +128,29 @@ const Dashboard = () => {
                 err.customMsg = 'Please try again'
                 toast(createErrorMessage(err))
             })
-    }, [currentTicket.code, setUploadedFiles])
+    }, [currentTicket?.code, setUploadedFiles, toast])
 
     useEffect(() => {
         if (location.pathname === '/') return
-        const splitPath = location.pathname.split('/')
-        let currentTicketType = splitPath[1]
-        const currentTicketId = parseInt(splitPath[2])
-        if (currentTicketType === 'claim') {
-            setDisplayClaimSummary(true)
-            currentTicketType = TICKET_TYPES.SF
-        } else {
-            setDisplayClaimSummary(false)
-        }
 
-        if (
-            splitPath.length !== 3 ||
-            !Object.values(TICKET_TYPES).includes(currentTicketType)
-        ) {
-            navigate('/notfound')
-            return
-        }
-
-        const currentTicketData = allTickets[
-            TICKET_TYPES[currentTicketType]
-        ].find((ticket) => ticket._id === currentTicketId)
-
-        if (!currentTicketData) {
+        if (!currentTicket) {
             if (!isLoading) {
                 navigate('/notfound')
             }
             return
         }
-        setCurrentTicket(currentTicketData)
-        setCurrentTree(buildTicketTree(currentTicketData, allTickets))
+        const splitPath = location.pathname.split('/')
+        const isClaimPage = splitPath[1] === 'claim'
+        if (isClaimPage) {
+            setDisplayClaimSummary(true)
+        } else {
+            setDisplayClaimSummary(false)
+        }
+
+        setCurrentTree(buildTicketTree(currentTicket, allTickets))
         const reporterOverride = process.env?.REACT_APP_REPORTER_OVERRIDE
         setIsCurrentTicketReporter(
-            currentTicketData.reporter_id === auth.currentUser.uid ||
+            currentTicket.reporter_id === auth.currentUser.uid ||
                 reporterOverride
         )
         getUploadedFiles()
@@ -177,7 +159,7 @@ const Dashboard = () => {
         allTickets,
         isLoading,
         navigate,
-        setCurrentTicket,
+        currentTicket,
         setCurrentTree,
         auth.currentUser.uid,
         getUploadedFiles,
@@ -242,7 +224,7 @@ const Dashboard = () => {
                 </Center>
             )
         }
-        if (isLoading) {
+        if (isLoading || !currentTicket) {
             return (
                 <Center w="100%" ref={pageRef}>
                     <LoadingSpinner />
@@ -256,7 +238,6 @@ const Dashboard = () => {
                 w="100%"
                 h="calc(100vh - 80px)"
                 overflowY="auto"
-                // zIndex="tooltip"
             >
                 <Flex
                     flexDir="column"
@@ -266,7 +247,7 @@ const Dashboard = () => {
                     p="16px 24px"
                 >
                     <Heading mb="16px" fontSize="3xl">
-                        {currentTicket.codename}
+                        {currentTicket?.codename}
                     </Heading>
                     {/* Do not display update/delete button for WATO Cash */}
                     {currentTicket.sf_link !== -1 &&

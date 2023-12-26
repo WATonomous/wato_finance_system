@@ -2,7 +2,11 @@ import { TICKET_TYPES } from '../constants'
 
 const buildTicketTree = (currentTicket, allTickets) => {
     const { SF, FI, PPR, UPR } = allTickets
-    if (!currentTicket || allTickets[currentTicket.type].length === 0) return {}
+    if (
+        Object.keys(currentTicket).length === 0 ||
+        allTickets[currentTicket.type].length === 0
+    )
+        return {}
 
     let sf_id = currentTicket._id
     if (currentTicket.type === TICKET_TYPES.FI) {

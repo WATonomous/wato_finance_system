@@ -9,13 +9,14 @@ import {
     APPROVAL_LEVELS,
     SEEKING_APPROVAL_STATUS,
 } from '../../constants'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { allTicketsState, currentTicketState } from '../../state/atoms'
+import { useSetRecoilState } from 'recoil'
+import { allTicketsState } from '../../state/atoms'
 import { getAllTickets } from '../../utils/globalSetters'
+import { useGetCurrentTicket } from '../../hooks/hooks'
 
 const UPRContentTable = () => {
     const auth = useAuth()
-    const currentTicket = useRecoilValue(currentTicketState)
+    const currentTicket = useGetCurrentTicket()
     const setAllTickets = useSetRecoilState(allTicketsState)
     const [loading, setLoading] = useState(false)
 
