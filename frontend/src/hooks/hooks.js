@@ -30,7 +30,7 @@ export const useGetCurrentTicket = () => {
     const getCurrentTicket = useCallback(() => {
         const splitPath = location.pathname.split('/')
         if (splitPath.length !== 3) return {}
-        let ticketType = splitPath[1]
+        let ticketType = splitPath[1].toUpperCase()
         const ticketId = parseInt(splitPath[2])
         if (ticketType === 'claim') {
             ticketType = TICKET_TYPES.SF
