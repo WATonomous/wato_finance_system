@@ -22,14 +22,48 @@ const PPRAdminContentTable = () => {
     }
     const getTransitionBody = () => {
         switch (currentTicket.status) {
-            case 'PURCHASED_AND_RECEIPTS_SUBMITTED':
-                return getPurchasedAndReceiptsSubmittedBody()
-            default:
+            case 'SEEKING_APPROVAL':
                 return (
                     <>
                         <h1>No Current Actions Available</h1>
+                        <h2>Will automatically transition to READY_TO_BUY</h2>
+                        <h2>
+                            Condition: All three approvals below must be checked
+                        </h2>
                     </>
                 )
+            case 'READY_TO_BUY':
+                return (
+                    <>
+                        <h1>No Current Actions Available</h1>
+                        <h2>
+                            Will automatically transition to
+                            PURCHASED_AND_RECEIPTS_SUBMITTED
+                        </h2>
+                        <h2>
+                            Condition: Reporter uploads supporting documents and
+                            manually transitions status
+                        </h2>
+                    </>
+                )
+            case 'PURCHASED_AND_RECEIPTS_SUBMITTED':
+                return getPurchasedAndReceiptsSubmittedBody()
+            case 'REPORTER_PAID':
+                return (
+                    <>
+                        <h1>No Current Actions Available</h1>
+                        <h2>
+                            Will automatically transition to
+                            REPORTER_REIMBURSE_CONFIRMED
+                        </h2>
+                        <h2>
+                            Condition: Reporter confirms they have been
+                            reimbursed and manually transitions status
+                        </h2>
+                    </>
+                )
+            default:
+                return <h1>No Current Actions Available</h1>
         }
     }
     const getPurchasedAndReceiptsSubmittedBody = () => {
@@ -38,9 +72,7 @@ const PPRAdminContentTable = () => {
                 <Button
                     colorScheme="blue"
                     size="sm"
-                    onClick={() =>
-                        handleUpdateStatus('REPORTER_REIMBURSE_CONFIRMATION')
-                    }
+                    onClick={() => handleUpdateStatus('REPORTER_PAID')}
                 >
                     Confirm Reporter Reimbursed
                 </Button>
@@ -55,7 +87,9 @@ const PPRAdminContentTable = () => {
             mb="30px"
         >
             <Heading size="md">Admin View</Heading>
-            <Center pb="7px">{getTransitionBody()}</Center>
+            <Center pb="7px" flexDir="column" textAlign="center" gap="8px">
+                {getTransitionBody()}
+            </Center>
         </VStack>
     )
 }
