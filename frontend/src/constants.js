@@ -18,7 +18,7 @@ export const APPROVAL_LEVELS = Object.freeze({
     admin_approval: 'admin_approval',
 })
 
-export const ADMIN_IDENTIFIERS = ['drayside', 'v2zheng', 'jw4he']
+export const ADMIN_IDENTIFIERS = ['drayside', 'v2zheng', 'jw4he', 'william.li']
 export const TEAM_CAPTAIN_TITLES = ['Team Captain']
 export const DIRECTOR_TITLES = ['Director']
 
