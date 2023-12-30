@@ -39,7 +39,9 @@ const updatePersonalPurchase = async (id, body) => {
     })
     const annotatedPPR = await getPersonalPurchase(id)
     if (body?.status === 'PURCHASED_AND_RECEIPTS_SUBMITTED') {
-        await sendEmailPPRPurchasedAndReceiptsSubmittedToCoordinator(annotatedPPR)
+        await sendEmailPPRPurchasedAndReceiptsSubmittedToCoordinator(
+            annotatedPPR
+        )
     } else if (body?.status === 'REPORTER_PAID') {
         await sendEmailPPRReimbursedToReporter(annotatedPPR)
     }
