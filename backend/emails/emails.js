@@ -15,7 +15,7 @@ const currencyFormatter = new Intl.NumberFormat('en-CA', {
 })
 
 const getEmailToSection = async (reporter_id, recipients) => {
-    const emailToSet = new Set(['jw4he@watonomous.ca', 'v2zheng@watonomous.ca'])
+    const emailToSet = new Set(['william.li@watonomous.ca'])
 
     if (recipients.includes(EMAIL_RECIPIENTS.admin)) {
         // TODO: use ADMIN_IDENTIFIERS (rename to ADMIN_EMAILS) after migrating to new onboarding data
@@ -82,6 +82,24 @@ const getUPRTicketInfoHTML = async (upr) => {
             Status: ${upr.status} <br />
             Reporter: ${reporter.displayName} &lt;${reporter.email}&gt; <br />
             Created: ${new Date(upr.createdAt).toDateString()}
+        </p>
+    `
+}
+
+const getSFTicketInfoHTML = async (sf) => {
+    const reporter = await getUserByUID(sf.reporter_id)
+    return `
+        <p>
+            Ticket Code: ${sf.code} <br />
+            Sponsorship Fund: ${sf.name} <br />
+            Allocated Funding: ${sf.funding_allocation} <br/ >
+            Funding Spent: ${sf.funding_spent} <br />
+            ${sf.proposal_url? `Proposal URL: ${sf.proposal_url} <br />` : ``}
+            ${sf.presentation_url? `Presentation URL: ${sf.presentation_url} <br />` : ``}
+            Status: ${sf.status} <br />
+            Reporter: ${reporter.displayName} &lt;${reporter.email}&gt; <br />
+            Created: ${new Date(sf.createdAt).toDateString()} <br />
+            Claim Deadline: ${new Date(sf.claim_deadline).toDateString()} <br />
         </p>
     `
 }
@@ -247,6 +265,50 @@ const sendEmailPPRReimbursedToReporter = async (ppr) => {
     const To = await getEmailToSection(ppr.reporter_id, [
         EMAIL_RECIPIENTS.finance,
         EMAIL_RECIPIENTS.coordinator,
+    ])
+    await sendEmail({
+        Subject,
+        HTMLPart,
+        To,
+    })
+}
+
+const sendEmailSFReimbursementRequestToCoordinator = async (sf) => {
+    const Subject = `[Action Needed] Submit Reimbursement Request ${sf.codename}`
+    const HTMLPart = getMainMessageHTML(`Claim has been submitted for ${sf.codename}! Please review it and submit a reimbursement request. Visit the ticket link below to confirm you have submitted the reimbursement request.`)
+    + (await getSFTicketInfoHTML(sf)) + getTicketLinkHTML(sf.path)
+    const To = await getEmailToSection(sf.reporter_id, [
+        EMAIL_RECIPIENTS.coordinator,
+    ])
+    await sendEmail({
+        Subject,
+        HTMLPart,
+        To,
+    })
+}
+
+const sendEmailSFConfirmReimbursementSubmitToCoordinator = async (sf) => {
+    const Subject = `[Action Needed] Confirm Reimbursement Received ${sf.codename}`
+    const HTMLPart = getMainMessageHTML(`Please visit the ticket link below to confirm you have received the reimbursement for ${sf.codename}.`)
+    + (await getSFTicketInfoHTML(sf)) + getTicketLinkHTML(sf.path)
+    const To = await getEmailToSection(sf.reporter_id, [
+        EMAIL_RECIPIENTS.coordinator,
+    ])
+    await sendEmail({
+        Subject,
+        HTMLPart,
+        To,
+    })
+}
+
+const sendEmailSFReimbursementReceivedToTeam = async (sf) => {
+    const Subject = `[Reimbursed] ${sf.codename}`
+    const HTMLPart = getMainMessageHTML(`${sf.codename} has been reimbursed.`)
+    + (await getSFTicketInfoHTML(sf)) + getTicketLinkHTML(sf.path)
+    const To = await getEmailToSection(sf.reporter_id, [
+        EMAIL_RECIPIENTS.finance,
+        EMAIL_RECIPIENTS.coordinator,
+        EMAIL_RECIPIENTS.team_captain,
     ])
     await sendEmail({
         Subject,
@@ -584,6 +646,9 @@ module.exports = {
     sendEmailPPRCreatedToApprovers,
     sendEmailPPRPurchasedAndReceiptsSubmittedToCoordinator,
     sendEmailPPRReimbursedToReporter,
+    sendEmailSFReimbursementRequestToCoordinator,
+    sendEmailSFConfirmReimbursementSubmitToCoordinator,
+    sendEmailSFReimbursementReceivedToTeam,
     PurchaseRequestInvalidated,
     PersonalPurchaseApproved,
     UWFinancePurchaseApproved,
