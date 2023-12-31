@@ -32,7 +32,7 @@ export const useGetCurrentTicket = () => {
         if (splitPath.length !== 3) return {}
         let ticketType = splitPath[1].toUpperCase()
         const ticketId = parseInt(splitPath[2])
-        if (ticketType === 'claim') {
+        if (ticketType === 'CLAIM') {
             ticketType = TICKET_TYPES.SF
         }
         // in case of claim view for instance
