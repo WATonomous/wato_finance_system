@@ -6,7 +6,11 @@ const {
     getAnnotatedUWFinancePurchasesByIdList,
     getAnnotatedSponsorshipFundsByIdList,
 } = require('./annotatedGetters')
-const { sendEmailSFReimbursementRequestToCoordinator, sendEmailSFConfirmReimbursementSubmitToCoordinator, sendEmailSFReimbursementReceivedToTeam } = require('../emails/emails')
+const {
+    sendEmailSFReimbursementRequestToCoordinator,
+    sendEmailSFConfirmReimbursementSubmitToCoordinator,
+    sendEmailSFReimbursementReceivedToTeam,
+} = require('../emails/emails')
 
 const getAllSponsorshipFunds = () => {
     return getAnnotatedSponsorshipFundsByIdList()
@@ -51,22 +55,28 @@ const createSponsorshipFund = (body) => {
 }
 
 const updateSponsorshipFund = async (id, body) => {
-    const newSponsorshipFund = await SponsorshipFund.findByIdAndUpdate(id, body, {
-        new: true,
-    })
+    const newSponsorshipFund = await SponsorshipFund.findByIdAndUpdate(
+        id,
+        body,
+        {
+            new: true,
+        }
+    )
 
     const annotatedSponsorshipFund = await getSponsorshipFund(id)
     const status = annotatedSponsorshipFund.status
 
-    if (status === "CLAIM_SUBMITTED") {
+    if (status === 'CLAIM_SUBMITTED') {
         sendEmailSFReimbursementRequestToCoordinator(annotatedSponsorshipFund)
     }
-    
-    if (status === "SUBMITTED_TO_SF") {
-        sendEmailSFConfirmReimbursementSubmitToCoordinator(annotatedSponsorshipFund)
+
+    if (status === 'SUBMITTED_TO_SF') {
+        sendEmailSFConfirmReimbursementSubmitToCoordinator(
+            annotatedSponsorshipFund
+        )
     }
 
-    if (status === "REIMBURSED") {
+    if (status === 'REIMBURSED') {
         sendEmailSFReimbursementReceivedToTeam(annotatedSponsorshipFund)
     }
 
