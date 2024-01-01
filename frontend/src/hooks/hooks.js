@@ -38,9 +38,9 @@ export const useGetCurrentTicket = () => {
         // in case of claim view for instance
         // return {} in case that allTickets is empty, means its still loading
         if (Object.keys(allTickets).length === 0) return {}
-        const currentTicketData = allTickets[TICKET_TYPES[ticketType.toUpperCase()]].find(
-            (ticket) => ticket._id === ticketId
-        )
+        const currentTicketData = allTickets[
+            TICKET_TYPES[ticketType.toUpperCase()]
+        ].find((ticket) => ticket._id === ticketId)
         // if not found, will return null
         return currentTicketData
     }, [allTickets, location.pathname])
