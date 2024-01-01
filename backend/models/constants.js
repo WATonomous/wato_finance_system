@@ -46,7 +46,7 @@ const TICKET_ENDPOINTS = Object.freeze({
     UPR: '/uwfinancepurchases',
 })
 
-const ADMIN_IDENTIFIERS = ['drayside', 'v2zheng', 'jw4he']
+const ADMIN_IDENTIFIERS = ['drayside', 'v2zheng', 'jw4he', 'william.li']
 const TEAM_CAPTAIN_TITLES = ['Team Captain']
 const DIRECTOR_TITLES = ['Director']
 
