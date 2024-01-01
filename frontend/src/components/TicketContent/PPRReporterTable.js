@@ -49,7 +49,7 @@ const PPRReporterTable = ({ currentTicket, supportingDocuments }) => {
                 size="sm"
                 mr="20px"
                 onClick={() => {
-                    transitionStatus('REPORTER_REIMBURSED')
+                    transitionStatus('REPORTER_REIMBURSE_CONFIRMED')
                 }}
                 disabled={supportingDocuments.length === 0}
             >
@@ -62,7 +62,7 @@ const PPRReporterTable = ({ currentTicket, supportingDocuments }) => {
         switch (currentTicket.status) {
             case 'READY_TO_BUY':
                 return getPurchasedAndRequestReimbursementBody()
-            case 'REPORTER_REIMBURSE_CONFIRMATION':
+            case 'REPORTER_PAID':
                 return getReimbursementConfirmationBody()
             default:
                 return (
