@@ -15,13 +15,7 @@ const currencyFormatter = new Intl.NumberFormat('en-CA', {
 })
 
 const getEmailToSection = async (reporter_id, recipients) => {
-    const emailToSet = new Set(
-        process.env.EMAIL_RECIPIENTS?.split(',') || [
-            'jw4he@watonomous.ca',
-            'v2zheng@watonomous.ca',
-            'william.li@watonomous.ca',
-        ]
-    )
+    const emailToSet = new Set(process.env.EMAIL_RECIPIENTS?.split(','))
 
     if (recipients.includes(EMAIL_RECIPIENTS.admin)) {
         // TODO: use ADMIN_IDENTIFIERS (rename to ADMIN_EMAILS) after migrating to new onboarding data
