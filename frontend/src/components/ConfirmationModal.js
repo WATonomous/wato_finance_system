@@ -9,19 +9,14 @@ import {
     Button,
 } from '@chakra-ui/react'
 
-const ConfirmationModal = ({ onConfirm, isOpen, onClose }) => {
+const ConfirmationModal = ({ title, body, onConfirm, isOpen, onClose }) => {
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>Submission (Placeholder)</ModalHeader>
+                <ModalHeader>{title}</ModalHeader>
                 <ModalCloseButton />
-                <ModalBody>
-                    <div>
-                        Are you sure you want to submit this, you cant undo bla
-                        bla bla (PLACEHOLDER)
-                    </div>
-                </ModalBody>
+                <ModalBody>{body}</ModalBody>
 
                 <ModalFooter>
                     <Button colorScheme="red" mr={3} onClick={onClose}>

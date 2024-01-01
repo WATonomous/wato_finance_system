@@ -6,7 +6,7 @@ import {
     Link,
     useDisclosure,
 } from '@chakra-ui/react'
-import React from 'react'
+import React, { useState } from 'react'
 import { useGetPreserveParamsHref } from '../../hooks/hooks'
 import { useGetCurrentTicket } from '../../hooks/hooks'
 import { TICKET_ENDPOINTS } from '../../constants'
@@ -25,35 +25,45 @@ const SFAdminContentTable = () => {
         onOpen: onOpenConfirmation,
         onClose: onCloseConfirmation,
     } = useDisclosure()
+    const [confirmationModalTitleText, setConfirmationModalTitleText] =
+        useState('')
+    const [confirmationModalBodyText, setConfirmationModalBodyText] =
+        useState('')
+    const transitionStatusButtonText = {
+        ALLOCATED: 'Submit Claim',
+        CLAIM_SUBMITTED: 'Confirm Reimbursement Request Submitted',
+        SUBMITTED_TO_SF: 'Confirm SF Reimbursed',
+    }
 
-    const transitionStatusText = (status) => {
-        if (status === 'ALLOCATED') {
-            return 'Submit Claim'
+    const handleOpenConfirmation = () => {
+        setConfirmationModalTitleText(
+            transitionStatusButtonText[currentTicket.status]
+        )
+        if (currentTicket.status === 'ALLOCATED') {
+            setConfirmationModalBodyText(
+                `Are you sure you want to submit this claim? This will send an email to the Finance Coordinator and prompt them to submit a reimbursement request for ${currentTicket.codename}`
+            )
         }
-        if (status === 'CLAIM_SUBMITTED') {
-            return 'Confirm Reimbursement Submission'
+        if (currentTicket.status === 'CLAIM_SUBMITTED') {
+            setConfirmationModalBodyText(
+                `Please confirm that you have submitted a reimbursement request for ${currentTicket.codename}.`
+            )
         }
-        if (status === 'SUBMITTED_TO_SF') {
-            return 'Confirm Reimbursement'
+        if (currentTicket.status === 'SUBMITTED_TO_SF') {
+            setConfirmationModalBodyText(
+                `Please confirm that the sponsorship fund for ${currentTicket.codename} has successfully reimbursed WATonomous.`
+            )
         }
-        if (status === 'REIMBURSED') {
-            return 'Reimbursement Confirmed'
-        }
+        onOpenConfirmation()
     }
-    const nextStatus = (status) => {
-        if (status === 'ALLOCATED') {
-            return 'CLAIM_SUBMITTED'
+    const handleUpdateStatus = async () => {
+        const nextStatus = {
+            ALLOCATED: 'CLAIM_SUBMITTED',
+            CLAIM_SUBMITTED: 'SUBMITTED_TO_SF',
+            SUBMITTED_TO_SF: 'REIMBURSED',
         }
-        if (status === 'CLAIM_SUBMITTED') {
-            return 'SUBMITTED_TO_SF'
-        }
-        if (status === 'SUBMITTED_TO_SF') {
-            return 'REIMBURSED'
-        }
-    }
-    const handleUpdateStatus = async (nextStatus) => {
         const payload = {
-            status: nextStatus,
+            status: nextStatus[currentTicket.status],
         }
         await axiosPreset.patch(
             `${TICKET_ENDPOINTS.SF}/${currentTicket._id}`,
@@ -73,30 +83,20 @@ const SFAdminContentTable = () => {
                 <Center pb="7px" gap="10px">
                     {isConfirmationOpen && (
                         <ConfirmationModal
+                            title={confirmationModalTitleText}
+                            body={confirmationModalBodyText}
                             onClose={onCloseConfirmation}
                             isOpen={isConfirmationOpen}
-                            onConfirm={() =>
-                                handleUpdateStatus(
-                                    nextStatus(currentTicket.status)
-                                )
-                            }
+                            onConfirm={handleUpdateStatus}
                         />
                     )}
                     {currentTicket.status !== 'REIMBURSED' && (
                         <Button
                             colorScheme="blue"
                             size="sm"
-                            disabled={
-                                currentTicket?.po_number?.length +
-                                    currentTicket?.requisition_number
-                                        ?.length ===
-                                0
-                            }
-                            onClick={() => {
-                                onOpenConfirmation()
-                            }}
+                            onClick={handleOpenConfirmation}
                         >
-                            {transitionStatusText(currentTicket.status)}
+                            {transitionStatusButtonText[currentTicket.status]}
                         </Button>
                     )}
                     {/* can remove getPreserveParamsHref if it does not make sense to preserve params */}
