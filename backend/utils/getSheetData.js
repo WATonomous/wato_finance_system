@@ -1,14 +1,21 @@
-const fs = require('fs/promises')
+const fs = require('fs')
 const yaml = require('js-yaml')
 require('dotenv').config()
 
 const { updateGoogleGroups } = require('../service/googlegroup.service')
 
 const readUserGroups = async () => {
-    const yamlFiles = await fs.readdir('./data')
+    // check if ./data exists
+    if (!fs.existsSync('./data')) {
+        console.log('No user role data to be found.')
+        return []
+    }
+    const yamlFiles = await fs.promises.readdir('./data')
     const userGroups = []
     const promises = yamlFiles.map(async (yamlFile) => {
-        const doc = yaml.load(await fs.readFile(`./data/${yamlFile}`, 'utf8'))
+        const doc = yaml.load(
+            await fs.promises.readFile(`./data/${yamlFile}`, 'utf8')
+        )
         if (doc?.finance_system?.enabled) {
             userGroups.push(doc.finance_system)
         }
