@@ -1,44 +1,26 @@
-const Gsheet = require('google-spreadsheet')
+const fs = require('fs/promises')
+const yaml = require('js-yaml')
 require('dotenv').config()
+
 const { updateGoogleGroups } = require('../service/googlegroup.service')
 
-// Config variables
-const GOOGLE_SHEET_ID = process.env.GOOGLE_SHEET_ID
-const SHEET_TAB_ID = process.env.SHEET_TAB_ID
-const SERVICE_ACCOUNT_EMAIL = process.env.SERVICE_ACCOUNT_EMAIL
-const SERVICE_ACCOUNT_PRIVATE_KEY = process.env.SERVICE_ACCOUNT_PRIVATE_KEY
-const doc = new Gsheet.GoogleSpreadsheet(GOOGLE_SHEET_ID)
-
-const SCHOOL_EMAIL_HEADER = 'Email'
-const TITLE_HEADER = 'Title'
-
-const readSpreadsheet = async () => {
-    try {
-        await doc.useServiceAccountAuth({
-            client_email: SERVICE_ACCOUNT_EMAIL,
-            private_key: SERVICE_ACCOUNT_PRIVATE_KEY,
-        })
-        // loads document properties and worksheets
-        await doc.loadInfo()
-
-        const sheet = doc.sheetsById[SHEET_TAB_ID]
-        const rows = await sheet.getRows()
-
-        return rows.map((row) => ({
-            email: row[SCHOOL_EMAIL_HEADER],
-            title: row[TITLE_HEADER],
-        }))
-    } catch (e) {
-        console.error('Error: ', e)
-    }
+const readUserGroups = async () => {
+    const yamlFiles = await fs.readdir('./data')
+    const userGroups = []
+    const promises = yamlFiles.map(async (yamlFile) => {
+        const doc = yaml.load(await fs.readFile(`./data/${yamlFile}`, 'utf8'))
+        if (doc?.finance_system?.enabled) {
+            userGroups.push(doc.finance_system)
+        }
+    })
+    await Promise.all(promises)
+    return userGroups
 }
 
 const updateGroup = async () => {
-    const userRows = await readSpreadsheet()
+    const users = await readUserGroups()
     try {
-        // only write if there was an associated title with the user. there should be one for everyone.
-        const cleanedUserRows = userRows.filter((userRow) => userRow.title)
-        await updateGoogleGroups(cleanedUserRows)
+        await updateGoogleGroups(users)
         console.log('Updated google groups')
     } catch (err) {
         console.error(err)

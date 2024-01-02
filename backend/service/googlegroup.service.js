@@ -33,7 +33,7 @@ const upsertUsers = async (newUsers) => {
                 update: {
                     $set: {
                         watiam: user.watiam,
-                        title: user.title,
+                        title: user.membership,
                     },
                 },
                 upsert: true,
@@ -56,7 +56,7 @@ const updateGoogleGroups = async (body) => {
     })
 
     const currentGroups = await getAllGoogleGroups()
-    // currentEmails comes from our database, which needs to be synced from our sheet
+    // currentEmails comes from our mongo database, which needs to be synced with the users directory in infra-config
     const currentEmails = currentGroups.map((group) => group.email)
     // new emails comes directly from our sheet, which is our source of truth
     const newEmails = newUserDetails.map((userDetail) => userDetail.email)
