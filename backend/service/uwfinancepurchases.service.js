@@ -34,8 +34,6 @@ const createNewUWFinancePurchase = async (body) => {
 }
 
 const updateUWFinancePurchase = async (id, body) => {
-    const existingPurchaseTicket = await getUWFinancePurchase(id)
-    // SENT_TO_COORDINATOR -> ORDERED
     const newPurchaseTicket = await UWFinancePurchase.findByIdAndUpdate(
         id,
         body,
@@ -43,10 +41,8 @@ const updateUWFinancePurchase = async (id, body) => {
             new: true,
         }
     )
-    if (
-        existingPurchaseTicket.status === 'SENT_TO_COORDINATOR' &&
-        body.status === 'ORDERED'
-    ) {
+    // SENT_TO_COORDINATOR -> ORDERED
+    if (body.status === 'ORDERED') {
         const annotatedUPR = await getUWFinancePurchase(id)
         const emails = [
             sendEmailUPRPurchasedToCoordinator(annotatedUPR),
@@ -54,10 +50,8 @@ const updateUWFinancePurchase = async (id, body) => {
         ]
         await Promise.all(emails)
     }
-    if (
-        existingPurchaseTicket.status === 'ORDERED' &&
-        body.status === 'READY_FOR_PICKUP'
-    ) {
+    // ORDERED -> READY_FOR_PICKUP
+    if (body.status === 'READY_FOR_PICKUP') {
         const annotatedUPR = await getUWFinancePurchase(id)
         await sendEmailUPRReadyForPickupToCoordinator(annotatedUPR)
     }

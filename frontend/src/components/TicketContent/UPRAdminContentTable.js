@@ -26,16 +26,8 @@ const UPRAdminContentTable = () => {
     }
 
     useEffect(() => {
-        if (!currentTicket.requisition_number) {
-            setReqNum('')
-        } else {
-            setReqNum(currentTicket.requisition_number)
-        }
-        if (!currentTicket.po_number) {
-            setPoNum('')
-        } else {
-            setPoNum(currentTicket.po_number)
-        }
+        setReqNum(currentTicket.requisition_number ?? '')
+        setPoNum(currentTicket.po_number ?? '')
     }, [
         location.pathname,
         currentTicket.requisition_number,

@@ -67,17 +67,19 @@ const updateSponsorshipFund = async (id, body) => {
     const status = annotatedSponsorshipFund.status
 
     if (status === 'CLAIM_SUBMITTED') {
-        sendEmailSFReimbursementRequestToCoordinator(annotatedSponsorshipFund)
+        await sendEmailSFReimbursementRequestToCoordinator(
+            annotatedSponsorshipFund
+        )
     }
 
     if (status === 'SUBMITTED_TO_SF') {
-        sendEmailSFConfirmReimbursementSubmitToCoordinator(
+        await sendEmailSFConfirmReimbursementSubmitToCoordinator(
             annotatedSponsorshipFund
         )
     }
 
     if (status === 'REIMBURSED') {
-        sendEmailSFReimbursementReceivedToTeam(annotatedSponsorshipFund)
+        await sendEmailSFReimbursementReceivedToTeam(annotatedSponsorshipFund)
     }
 
     return newSponsorshipFund
