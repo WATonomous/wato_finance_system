@@ -1,5 +1,6 @@
 import { Button, Center, Heading, Table, Tbody, VStack } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { useSetRecoilState } from 'recoil'
 import TicketContentTableRow from './TicketContentTableRow'
 import { allTicketsState } from '../../state/atoms'
@@ -9,6 +10,7 @@ import { getAllTickets } from '../../utils/globalSetters'
 import { useGetCurrentTicket } from '../../hooks/hooks'
 
 const UPRAdminContentTable = () => {
+    const location = useLocation()
     const currentTicket = useGetCurrentTicket()
     const [reqNum, setReqNum] = useState(currentTicket.requisition_number)
     const [poNum, setPoNum] = useState(currentTicket.po_number)
@@ -22,6 +24,15 @@ const UPRAdminContentTable = () => {
         setPoNum(e.target.value)
         setChanged(true)
     }
+
+    useEffect(() => {
+        setReqNum(currentTicket.requisition_number ?? '')
+        setPoNum(currentTicket.po_number ?? '')
+    }, [
+        location.pathname,
+        currentTicket.requisition_number,
+        currentTicket.po_number,
+    ])
 
     const saveFields = async () => {
         const payload = {
@@ -41,6 +52,18 @@ const UPRAdminContentTable = () => {
             status: 'ORDERED',
             po_number: poNum,
             requisition_number: reqNum,
+        }
+        await axiosPreset.patch(
+            `${TICKET_ENDPOINTS.UPR}/${currentTicket._id}`,
+            payload
+        )
+        await getAllTickets(setAllTickets)
+        setChanged(false)
+    }
+
+    const transitionToReadyForPickup = async () => {
+        const payload = {
+            status: 'READY_FOR_PICKUP',
         }
         await axiosPreset.patch(
             `${TICKET_ENDPOINTS.UPR}/${currentTicket._id}`,
@@ -98,6 +121,16 @@ const UPRAdminContentTable = () => {
                     </Button>
                 )}
                 {currentTicket.status === 'ORDERED' && (
+                    <Button
+                        colorScheme="blue"
+                        size="sm"
+                        mr="20px"
+                        onClick={transitionToReadyForPickup}
+                    >
+                        Transition To Ready for Pickup
+                    </Button>
+                )}
+                {currentTicket.status === 'READY_FOR_PICKUP' && (
                     <Button
                         colorScheme="blue"
                         size="sm"

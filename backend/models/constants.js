@@ -20,10 +20,10 @@ const UPR_STATUS = [
     'SEEKING_APPROVAL',
     'SENT_TO_COORDINATOR',
     'ORDERED',
+    'READY_FOR_PICKUP',
     'PICKED_UP',
 ]
-
-const UPR_STATUS_FUNDING_SPENT = ['ORDERED', 'PICKED_UP']
+const UPR_STATUS_FUNDING_SPENT = ['ORDERED', 'READY_FOR_PICKUP', 'PICKED_UP']
 
 const APPROVAL_LEVELS = Object.freeze({
     director_approval: 'director_approval',

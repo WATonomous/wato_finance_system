@@ -30,7 +30,7 @@ export const useGetCurrentTicket = () => {
     const getCurrentTicket = useCallback(() => {
         const splitPath = location.pathname.split('/')
         if (splitPath.length !== 3) return {}
-        let ticketType = splitPath[1].toUpperCase()
+        let ticketType = splitPath[1]
         const ticketId = parseInt(splitPath[2])
         if (ticketType === 'claim') {
             ticketType = TICKET_TYPES.SF
@@ -38,9 +38,9 @@ export const useGetCurrentTicket = () => {
         // in case of claim view for instance
         // return {} in case that allTickets is empty, means its still loading
         if (Object.keys(allTickets).length === 0) return {}
-        const currentTicketData = allTickets[TICKET_TYPES[ticketType]].find(
-            (ticket) => ticket._id === ticketId
-        )
+        const currentTicketData = allTickets[
+            TICKET_TYPES[ticketType.toUpperCase()]
+        ].find((ticket) => ticket._id === ticketId)
         // if not found, will return null
         return currentTicketData
     }, [allTickets, location.pathname])

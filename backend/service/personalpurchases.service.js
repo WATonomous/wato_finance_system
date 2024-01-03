@@ -33,15 +33,17 @@ const createPersonalPurchase = async (body) => {
 }
 
 const updatePersonalPurchase = async (id, body) => {
-    // READY_TO_BUY -> PURCHASED_AND_RECEIPTS_SUBMITTED
     const newPurchaseTicket = PersonalPurchase.findByIdAndUpdate(id, body, {
         new: true,
     })
     const annotatedPPR = await getPersonalPurchase(id)
+
+    // READY_TO_BUY -> PURCHASED_AND_RECEIPTS_SUBMITTED
     if (body?.status === 'PURCHASED_AND_RECEIPTS_SUBMITTED') {
         await sendEmailPPRPurchasedAndReceiptsSubmittedToCoordinator(
             annotatedPPR
         )
+        // PURCHASED_AND_RECEIPTS_SUBMITTED -> REPORTER_PAID
     } else if (body?.status === 'REPORTER_PAID') {
         await sendEmailPPRReimbursedToReporter(annotatedPPR)
     }

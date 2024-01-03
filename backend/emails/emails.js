@@ -174,7 +174,7 @@ const sendEmailUPRPurchasedToReporter = async (upr) => {
             `Your UW Finance Purchase Request has been purchased! When the item is ready to be picked up, we will let you know.`
         ) +
         (await getUPRTicketInfoHTML(upr)) +
-        +getTicketLinkHTML(upr.path)
+        getTicketLinkHTML(upr.path)
     const To = await getEmailToSection(upr.reporter_id, [
         EMAIL_RECIPIENTS.reporter,
     ])
@@ -196,6 +196,25 @@ const sendEmailUPRPurchasedToCoordinator = async (upr) => {
         getTicketLinkHTML(upr.path)
     const To = await getEmailToSection(upr.reporter_id, [
         EMAIL_RECIPIENTS.coordinator,
+    ])
+
+    await sendEmail({
+        Subject,
+        HTMLPart,
+        To,
+    })
+}
+
+const sendEmailUPRReadyForPickupToCoordinator = async (upr) => {
+    const Subject = `[Ready for pickup] ${upr.codename}`
+    const HTMLPart =
+        getMainMessageHTML(
+            'Your UW Finance Request is ready to be picked up! Please view the ticket below for pickup instructions and confirm when you have picked it up.'
+        ) +
+        (await getUPRTicketInfoHTML(upr)) +
+        getTicketLinkHTML(upr.path)
+    const To = await getEmailToSection(upr.reporter_id, [
+        EMAIL_RECIPIENTS.reporter,
     ])
 
     await sendEmail({
@@ -287,7 +306,7 @@ const sendEmailSFReimbursementRequestToCoordinator = async (sf) => {
     const Subject = `[Action Needed] Submit Reimbursement Request ${sf.codename}`
     const HTMLPart =
         getMainMessageHTML(
-            `Claim has been submitted for ${sf.codename}! Please review it and submit a reimbursement request. Visit the ticket link below to confirm you have submitted the reimbursement request.`
+            `Please review the claim and submit a reimbursement request for ${sf.codename}. Once submitted, please visit the ticket link below to confirm that you have submitted it.`
         ) +
         (await getSFTicketInfoHTML(sf)) +
         getTicketLinkHTML(sf.path)
@@ -305,7 +324,7 @@ const sendEmailSFConfirmReimbursementSubmitToCoordinator = async (sf) => {
     const Subject = `[Action Needed] Confirm Reimbursement Received ${sf.codename}`
     const HTMLPart =
         getMainMessageHTML(
-            `Please visit the ticket link below to confirm you have received the reimbursement for ${sf.codename}.`
+            `Once the sponsorship fund for ${sf.codename} has reimbursed us, please visit the ticket link below to confirm it.`
         ) +
         (await getSFTicketInfoHTML(sf)) +
         getTicketLinkHTML(sf.path)
@@ -322,7 +341,7 @@ const sendEmailSFConfirmReimbursementSubmitToCoordinator = async (sf) => {
 const sendEmailSFReimbursementReceivedToTeam = async (sf) => {
     const Subject = `[Reimbursed] ${sf.codename}`
     const HTMLPart =
-        getMainMessageHTML(`${sf.codename} has been reimbursed.`) +
+        getMainMessageHTML(`${sf.codename} has been reimbursed!`) +
         (await getSFTicketInfoHTML(sf)) +
         getTicketLinkHTML(sf.path)
     const To = await getEmailToSection(sf.reporter_id, [
@@ -662,6 +681,7 @@ module.exports = {
     sendEmailUPRApprovedToCoordinator,
     sendEmailUPRPurchasedToReporter,
     sendEmailUPRPurchasedToCoordinator,
+    sendEmailUPRReadyForPickupToCoordinator,
     sendEmailPPRApprovedToReporter,
     sendEmailPPRCreatedToApprovers,
     sendEmailPPRPurchasedAndReceiptsSubmittedToCoordinator,

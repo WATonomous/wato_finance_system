@@ -9,6 +9,7 @@ const {
     sendEmailUPRApprovedToCoordinator,
     sendEmailUPRPurchasedToCoordinator,
     sendEmailUPRPurchasedToReporter,
+    sendEmailUPRReadyForPickupToCoordinator,
 } = require('../emails/emails')
 
 const getAllUWFinancePurchases = () => {
@@ -33,8 +34,6 @@ const createNewUWFinancePurchase = async (body) => {
 }
 
 const updateUWFinancePurchase = async (id, body) => {
-    const existingPurchaseTicket = await getUWFinancePurchase(id)
-    // SENT_TO_COORDINATOR -> ORDERED
     const newPurchaseTicket = await UWFinancePurchase.findByIdAndUpdate(
         id,
         body,
@@ -42,16 +41,19 @@ const updateUWFinancePurchase = async (id, body) => {
             new: true,
         }
     )
-    if (
-        existingPurchaseTicket.status === 'SENT_TO_COORDINATOR' &&
-        body.status === 'ORDERED'
-    ) {
+    // SENT_TO_COORDINATOR -> ORDERED
+    if (body.status === 'ORDERED') {
         const annotatedUPR = await getUWFinancePurchase(id)
         const emails = [
             sendEmailUPRPurchasedToCoordinator(annotatedUPR),
             sendEmailUPRPurchasedToReporter(annotatedUPR),
         ]
         await Promise.all(emails)
+    }
+    // ORDERED -> READY_FOR_PICKUP
+    if (body.status === 'READY_FOR_PICKUP') {
+        const annotatedUPR = await getUWFinancePurchase(id)
+        await sendEmailUPRReadyForPickupToCoordinator(annotatedUPR)
     }
     return newPurchaseTicket
 }
