@@ -98,8 +98,12 @@ const getSFTicketInfoHTML = async (sf) => {
         <p>
             Ticket Code: ${sf.code} <br />
             Sponsorship Fund: ${sf.name} <br />
-            Allocated Funding: CAD ${currencyFormatter.format(sf.funding_allocation)} <br/ >
-            Funding Spent: CAD ${currencyFormatter.format(sf.funding_spent)} <br />
+            Allocated Funding: CAD ${currencyFormatter.format(
+                sf.funding_allocation
+            )} <br/ >
+            Funding Spent: CAD ${currencyFormatter.format(
+                sf.funding_spent
+            )} <br />
             ${sf.proposal_url ? `Proposal URL: ${sf.proposal_url} <br />` : ``}
             ${
                 sf.presentation_url
