@@ -5,7 +5,7 @@ import {
     FormControl,
     FormLabel,
     InputGroup,
-    InputLeftElement,
+    InputLeftAddon,
     Select,
     Flex,
     Textarea,
@@ -86,11 +86,10 @@ export const SponsorshipFundForm = ({ register, control }) => {
 
                 <FormLabel mt="10px">Funding Allocation</FormLabel>
                 <InputGroup size="sm">
-                    <InputLeftElement children="$" />
+                    <InputLeftAddon>CAD $</InputLeftAddon>
                     <Input
                         id="funding_allocation"
                         h="1.95rem"
-                        pl="24px"
                         type="number"
                         {...register('funding_allocation', {
                             required: 'This is required',
@@ -152,11 +151,10 @@ export const FundingItemForm = ({ register, control, sfOptions }) => {
 
                 <FormLabel mt="10px">Funding Allocation</FormLabel>
                 <InputGroup size="sm">
-                    <InputLeftElement children="$" />
+                    <InputLeftAddon>CAD $</InputLeftAddon>
                     <Input
                         id="funding_allocation"
                         h="1.95rem"
-                        pl="24px"
                         type="number"
                         {...register('funding_allocation', {
                             required: 'This is required',
@@ -217,11 +215,10 @@ export const UWFinancePurchaseForm = ({ register, control, fiOptions }) => {
 
                 <FormLabel mt="10px">Cost</FormLabel>
                 <InputGroup size="sm">
-                    <InputLeftElement children="$" />
+                    <InputLeftAddon>CAD $</InputLeftAddon>
                     <Input
                         id="cost"
                         h="1.95rem"
-                        pl="24px"
                         type="number"
                         {...register('cost', {
                             required: 'This is required',
@@ -311,11 +308,10 @@ export const PersonalPurchaseForm = ({ register, control, fiOptions }) => {
 
                 <FormLabel mt="10px">Cost</FormLabel>
                 <InputGroup size="sm">
-                    <InputLeftElement children="$" />
+                    <InputLeftAddon>CAD $</InputLeftAddon>
                     <Input
                         id="cost"
                         h="1.95rem"
-                        pl="24px"
                         type="number"
                         {...register('cost', {
                             required: 'This is required',
