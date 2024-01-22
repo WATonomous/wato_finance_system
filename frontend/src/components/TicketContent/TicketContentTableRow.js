@@ -25,7 +25,8 @@ const TicketContentTableRow = ({ heading, value, onChange, type }) => {
                 {onChange ? (
                     <Input onChange={onChange} value={value} />
                 ) : type === 'URL' ? (
-                    <Link color="blue.500" href={value} isExternal>
+                    // force absolute URL
+                    <Link color="blue.500" href={`//${value}`} isExternal>
                         {value}
                     </Link>
                 ) : (
