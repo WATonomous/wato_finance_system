@@ -177,7 +177,10 @@ const Dashboard = () => {
                     <>
                         {auth.isAdmin && <SFAdminContentTable />}
                         <SFContentTable />
-                        <CommentSection ticket={currentTicket.code} allUsers={allUsers}/>
+                        <CommentSection
+                            ticket={currentTicket.code}
+                            allUsers={allUsers}
+                        />
                     </>
                 )
             case TICKET_TYPES.FI:
@@ -185,7 +188,10 @@ const Dashboard = () => {
                     <>
                         {auth.isAdmin && <FIAdminContentTable />}
                         <FIContentTable />
-                        <CommentSection ticket={currentTicket.code} allUsers={allUsers}/>
+                        <CommentSection
+                            ticket={currentTicket.code}
+                            allUsers={allUsers}
+                        />
                     </>
                 )
 
@@ -200,7 +206,10 @@ const Dashboard = () => {
                             />
                         )}
                         <PPRContentTable />
-                        <CommentSection ticket={currentTicket.code} allUsers={allUsers}/>
+                        <CommentSection
+                            ticket={currentTicket.code}
+                            allUsers={allUsers}
+                        />
                     </>
                 )
             case TICKET_TYPES.UPR:
@@ -208,7 +217,10 @@ const Dashboard = () => {
                     <>
                         {auth.isAdmin && <UPRAdminContentTable />}
                         <UPRContentTable />
-                        <CommentSection ticket={currentTicket.code} allUsers={allUsers}/>
+                        <CommentSection
+                            ticket={currentTicket.code}
+                            allUsers={allUsers}
+                        />
                     </>
                 )
             default:

@@ -5,41 +5,63 @@ import { axiosPreset } from '../axiosConfig'
 import CommentInput from './CommentInput'
 import CommentView from './CommentView'
 
-const CommentSection = ({ticket, allUsers}) => {
+const CommentSection = ({ ticket, allUsers }) => {
     const [comments, setComments] = useState([])
-    const [refreshKey, setRefreshKey] = useState(0);
+    const [refreshKey, setRefreshKey] = useState(0)
 
     const forceRefresh = () => {
-        setRefreshKey(oldKey => oldKey + 1);
-    };
+        setRefreshKey((oldKey) => oldKey + 1)
+    }
 
     const getComments = async (ref) => {
-        axiosPreset.get('/comments/' + ref)
-        .then((data) => {setComments([...data.data]); forceRefresh()})
+        axiosPreset.get('/comments/' + ref).then((data) => {
+            setComments([...data.data])
+            forceRefresh()
+            console.log(data)
+        })
     }
 
     useEffect(() => {
         getComments(ticket)
     }, [ticket])
 
-
     return (
-        <Box mt="50px"> 
-            <Box fontWeight='bold' fontSize='30px' textAlign="left" marginLeft='5px'>Comments</Box>
-            <div key = {refreshKey}>
-            <CommentInput getComments={getComments} code={ticket} type={'main'}/>
-            {comments.map((content, index) => {
-                return(
-                    <CommentView key={'comment-' + (comments.length - index).toString() + ticket} comment={content} allUsers={allUsers} getComments={getComments}/>
-                )
-            })}
+        <Box mt="50px">
+            <Box
+                fontWeight="bold"
+                fontSize="30px"
+                textAlign="left"
+                marginLeft="5px"
+            >
+                Comments
+            </Box>
+            <div key={refreshKey}>
+                <CommentInput
+                    getComments={getComments}
+                    ticket={ticket}
+                    code={ticket}
+                    type={'main'}
+                />
+                {comments.map((content, index) => {
+                    return (
+                        <CommentView
+                            key={
+                                'comment-' +
+                                (comments.length - index).toString() +
+                                ticket
+                            }
+                            comment={content}
+                            allUsers={allUsers}
+                            getComments={getComments}
+                        />
+                    )
+                })}
             </div>
         </Box>
     )
 }
 
 export default CommentSection
-
 
 /**
  * To do:

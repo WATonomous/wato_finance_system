@@ -114,7 +114,15 @@ export const Element = ({ attributes, children, element }) => {
     switch (element.type) {
         case 'block-quote':
             return (
-                <blockquote style={style} {...attributes}>
+                <blockquote
+                    style={{
+                        textAlign: element.align,
+                        borderLeft: '4px #e4eaf2 solid',
+                        paddingLeft: '5px',
+                        marginLeft: '5px',
+                    }}
+                    {...attributes}
+                >
                     {children}
                 </blockquote>
             )
@@ -191,8 +199,8 @@ export const Button = React.forwardRef(
                             ? 'white'
                             : '#aaa'
                         : active
-                        ? 'black'
-                        : '#ccc'};
+                          ? 'black'
+                          : '#ccc'};
                 `
             )}
         />

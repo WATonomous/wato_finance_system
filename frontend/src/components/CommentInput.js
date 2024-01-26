@@ -1,4 +1,4 @@
-import {useCallback, useMemo, useState} from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import isHotkey from 'is-hotkey'
 import { Editable, withReact, Slate } from 'slate-react'
 import { createEditor } from 'slate'
@@ -22,33 +22,41 @@ const HOTKEYS = {
     'mod+u': 'underline',
 }
 
-const CommentInput = ({code, getComments, reply, onClose, type}) => {
+const CommentInput = ({ code, getComments, reply, onClose, ticket }) => {
     const renderElement = useCallback((props) => <Element {...props} />, [])
     const renderLeaf = useCallback((props) => <Leaf {...props} />, [])
     const editor = useMemo(() => withHistory(withReact(createEditor())), [])
+    const [loading, setLoading] = useState(false)
     const auth = useAuth()
     const [val, setVal] = useState(editor.children)
-    const handleSubmit = (ref) => {
+    const handleSubmit = (ref, ticket) => {
+        setLoading(true)
         const payload = {
             author_id: auth.currentUser.uid,
             comment: editor.children,
             reference_code: ref,
         }
-        axiosPreset.post(
-            '/comments',
-            payload,
-        )
-            .then(() => getComments(ref))
+        axiosPreset
+            .post('/comments', payload)
+            .then(() => getComments(ticket).then(() => setLoading(false)))
+
+            .catch(() => setLoading(false))
     }
 
     return (
-        <Slate editor={editor} initialValue={initialValue} onChange={() => {setVal([...editor.children])}}>
+        <Slate
+            editor={editor}
+            initialValue={initialValue}
+            onChange={() => {
+                setVal([...editor.children])
+            }}
+        >
             <Editable
                 style={{
                     marginTop: '10px',
                     padding: '20px',
                     paddingLeft: '30px',
-                    minHeight: "150px",
+                    minHeight: '150px',
                     border: '2px #f0f0f0 solid',
                     borderRadius: '10px',
                 }}
@@ -66,11 +74,17 @@ const CommentInput = ({code, getComments, reply, onClose, type}) => {
                     }
                 }}
             />
-            <Box display='flex' width='100%' justifyContent='space-between' paddingLeft='5px'>
+            <Box
+                display="flex"
+                width="100%"
+                justifyContent="space-between"
+                paddingLeft="5px"
+            >
                 <Toolbar>
                     <MarkButton format="bold" icon="format_bold" />
                     <MarkButton format="italic" icon="format_italic" />
                     <MarkButton format="underline" icon="format_underlined" />
+                    <BlockButton format="block-quote" icon="format_quote" />
                     <BlockButton
                         format="numbered-list"
                         icon="format_list_numbered"
@@ -80,9 +94,37 @@ const CommentInput = ({code, getComments, reply, onClose, type}) => {
                         icon="format_list_bulleted"
                     />
                 </Toolbar>
-                <Box display='flex' gap='10px' marginTop='5px' paddingRight='5px'>
-                    {reply && <Button onClick={onClose} padding='10px' height='32px' colorScheme='red'>Cancel</Button>}
-                    <Button disabled={val.length === 0 || val[0]['children'][0]['text'] == ''} padding='10px' height='32px' colorScheme='blue' onClick={() => {handleSubmit(code)}}>{reply? 'Reply' : 'Comment'}</Button>
+                <Box
+                    display="flex"
+                    gap="10px"
+                    marginTop="5px"
+                    paddingRight="5px"
+                >
+                    {reply && (
+                        <Button
+                            onClick={onClose}
+                            padding="10px"
+                            height="32px"
+                            colorScheme="red"
+                        >
+                            Cancel
+                        </Button>
+                    )}
+                    <Button
+                        isLoading={loading}
+                        disabled={
+                            val.length === 0 ||
+                            val[0]['children'][0]['text'] == ''
+                        }
+                        padding="10px"
+                        height="32px"
+                        colorScheme="blue"
+                        onClick={() => {
+                            handleSubmit(code, ticket)
+                        }}
+                    >
+                        {reply ? 'Reply' : 'Comment'}
+                    </Button>
                 </Box>
             </Box>
         </Slate>
@@ -93,8 +135,8 @@ const CommentInput = ({code, getComments, reply, onClose, type}) => {
 // remove once dynamically fetched from backend
 const initialValue = [
     {
-    type: 'paragraph',
-    children: [{ text: '' }],
+        type: 'paragraph',
+        children: [{ text: '' }],
     },
 ]
 
