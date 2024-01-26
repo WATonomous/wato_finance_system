@@ -117,7 +117,7 @@ export const Element = ({ attributes, children, element }) => {
                 <blockquote
                     style={{
                         textAlign: element.align,
-                        borderLeft: '4px #e4eaf2 solid',
+                        borderLeft: '4px #d5dbe3 solid',
                         paddingLeft: '5px',
                         marginLeft: '5px',
                     }}

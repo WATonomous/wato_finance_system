@@ -129,7 +129,14 @@ const ReplyView = ({ comment, allUsers, getComments, parent }) => {
     const [showInput, setShowInput] = useState(false)
 
     return (
-        <div style={{ display: 'flex', gap: '15px', padding: '10px' }}>
+        <div
+            style={{
+                display: 'flex',
+                gap: '15px',
+                paddingTop: '10px',
+                paddingBottom: '10px',
+            }}
+        >
             <UserInfoPopUp author={author} img={true} />
             <div style={{ width: '100%' }}>
                 <div
@@ -195,7 +202,15 @@ const CommentView = ({ comment, allUsers, getComments }) => {
     const [showInput, setShowInput] = useState(false)
 
     return (
-        <div style={{ display: 'flex', gap: '15px', padding: '10px' }}>
+        <div
+            style={{
+                display: 'flex',
+                gap: '15px',
+                paddingTop: '10px',
+                paddingLeft: '10px',
+                paddingBottom: '10px',
+            }}
+        >
             <UserInfoPopUp author={author} img={true} />
             <div style={{ width: '100%' }}>
                 <div
@@ -203,7 +218,6 @@ const CommentView = ({ comment, allUsers, getComments }) => {
                         display: 'flex',
                         alignItems: 'center',
                         gap: '5px',
-                        marginBottom: '2px',
                     }}
                 >
                     <UserInfoPopUp author={author} img={false} />

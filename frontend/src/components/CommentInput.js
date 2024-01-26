@@ -22,6 +22,44 @@ const HOTKEYS = {
     'mod+u': 'underline',
 }
 
+const cleanInput = (val) => {
+    const res = []
+    let l = 0
+    let r = val.length - 1
+    while (l <= r) {
+        if (val[l]['children'][0]['text'] == '') {
+            l += 1
+        }
+        if (val[r]['children'][0]['text'] == '') {
+            r += -1
+        }
+
+        if (
+            val[l]['children'][0]['text'] != '' &&
+            val[r]['children'][0]['text'] != ''
+        ) {
+            break
+        }
+    }
+    for (let i = l; i <= r; i++) {
+        res.push(val[i])
+    }
+    return res
+}
+
+const invalidInput = (val) => {
+    if (val.length === 0) {
+        return true
+    }
+
+    for (let i = 0; i < val.length; i++) {
+        if (val[i]['children'][0]['text'] != '') {
+            return false
+        }
+    }
+    return true
+}
+
 const CommentInput = ({ code, getComments, reply, onClose, ticket }) => {
     const renderElement = useCallback((props) => <Element {...props} />, [])
     const renderLeaf = useCallback((props) => <Leaf {...props} />, [])
@@ -31,9 +69,14 @@ const CommentInput = ({ code, getComments, reply, onClose, ticket }) => {
     const [val, setVal] = useState(editor.children)
     const handleSubmit = (ref, ticket) => {
         setLoading(true)
+        const comment = cleanInput(val)
+        if (comment.length === 0) {
+            console.log('EMPTY')
+            return
+        }
         const payload = {
             author_id: auth.currentUser.uid,
-            comment: editor.children,
+            comment: comment,
             reference_code: ref,
         }
         axiosPreset
@@ -112,10 +155,7 @@ const CommentInput = ({ code, getComments, reply, onClose, ticket }) => {
                     )}
                     <Button
                         isLoading={loading}
-                        disabled={
-                            val.length === 0 ||
-                            val[0]['children'][0]['text'] == ''
-                        }
+                        disabled={val.length === 0 || invalidInput(val)}
                         padding="10px"
                         height="32px"
                         colorScheme="blue"
