@@ -3,7 +3,6 @@ const { Schema } = mongoose
 
 const Mixed = Schema.Types.Mixed
 
-//sort by new -> old for parent comments, old -> new for replies
 const CommentSchema = new Schema(
     {
         // reference_code would be parent ticket/parent comment here

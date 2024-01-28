@@ -22,36 +22,22 @@ const HOTKEYS = {
     'mod+u': 'underline',
 }
 
+//Cleans leading and ending white space
 const cleanInput = (val) => {
-    const res = []
-    let l = 0
-    let r = val.length - 1
-    while (l <= r) {
-        if (val[l]['children'][0]['text'] == '') {
-            l += 1
-        }
-        if (val[r]['children'][0]['text'] == '') {
-            r += -1
-        }
-
-        if (
-            val[l]['children'][0]['text'] != '' &&
-            val[r]['children'][0]['text'] != ''
-        ) {
-            break
-        }
+    const textList = val.map(item => item['children'][0]['text'])
+  
+    const firstIndex = textList.findIndex(text => text != '')
+    if (firstIndex == -1) {
+      return []
     }
-    for (let i = l; i <= r; i++) {
-        res.push(val[i])
-    }
-    return res
+  
+    const lastIndex = textList.findLastIndex(text => text != '')
+  
+    return val.slice(firstIndex, lastIndex + 1)
 }
 
+//Disables the "send" button if input isn't valid
 const invalidInput = (val) => {
-    if (val.length === 0) {
-        return true
-    }
-
     for (let i = 0; i < val.length; i++) {
         if (val[i]['children'][0]['text'] != '') {
             return false
@@ -71,7 +57,6 @@ const CommentInput = ({ code, getComments, reply, onClose, ticket }) => {
         setLoading(true)
         const comment = cleanInput(val)
         if (comment.length === 0) {
-            console.log('EMPTY')
             return
         }
         const payload = {
@@ -171,8 +156,7 @@ const CommentInput = ({ code, getComments, reply, onClose, ticket }) => {
     )
 }
 
-// example taken from https://github.com/ianstormtaylor/slate/blob/main/site/components.tsx
-// remove once dynamically fetched from backend
+//TODO: If replying another reply, make the initial value quote the comment above (makes it easier to keep track who's replying to who)
 const initialValue = [
     {
         type: 'paragraph',
@@ -181,6 +165,3 @@ const initialValue = [
 ]
 
 export default CommentInput
-
-//make a function that removes white lines in the start
-//parses data to make it look nice
