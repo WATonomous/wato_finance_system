@@ -1,5 +1,3 @@
-// from https://github.com/ianstormtaylor/slate/blob/main/site/components.tsx
-// probably best not to touch.
 import React from 'react'
 import { Editor, Transforms, Element as SlateElement } from 'slate'
 import ReactDOM from 'react-dom'
@@ -114,7 +112,15 @@ export const Element = ({ attributes, children, element }) => {
     switch (element.type) {
         case 'block-quote':
             return (
-                <blockquote style={style} {...attributes}>
+                <blockquote
+                    style={{
+                        textAlign: element.align,
+                        borderLeft: '4px #d5dbe3 solid',
+                        paddingLeft: '5px',
+                        marginLeft: '5px',
+                    }}
+                    {...attributes}
+                >
                     {children}
                 </blockquote>
             )
@@ -191,8 +197,8 @@ export const Button = React.forwardRef(
                             ? 'white'
                             : '#aaa'
                         : active
-                        ? 'black'
-                        : '#ccc'};
+                          ? 'black'
+                          : '#ccc'};
                 `
             )}
         />
@@ -311,10 +317,8 @@ export const Toolbar = React.forwardRef(({ className, ...props }, ref) => (
             className,
             css`
                 position: relative;
-                padding: 1px 18px 17px;
+                padding: 1px 18px 0px;
                 margin: 0 -20px;
-                border-bottom: 2px solid #eee;
-                margin-bottom: 20px;
             `
         )}
     />
