@@ -1,5 +1,3 @@
-// from https://github.com/ianstormtaylor/slate/blob/main/site/components.tsx
-// probably best not to touch.
 import React from 'react'
 import { Editor, Transforms, Element as SlateElement } from 'slate'
 import ReactDOM from 'react-dom'

@@ -5,7 +5,6 @@ export const getStandardizedDate = (dateStr) => {
     return date.format('YYYY-MM-DD')
 }
 
-
 export const timeAgo = (dateString) => {
     const date = new Date(dateString)
     const now = new Date()

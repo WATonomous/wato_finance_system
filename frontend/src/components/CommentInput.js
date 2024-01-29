@@ -24,15 +24,15 @@ const HOTKEYS = {
 
 //Cleans leading and ending white space
 const cleanInput = (val) => {
-    const textList = val.map(item => item['children'][0]['text'])
-  
-    const firstIndex = textList.findIndex(text => text != '')
+    const textList = val.map((item) => item['children'][0]['text'])
+
+    const firstIndex = textList.findIndex((text) => text != '')
     if (firstIndex == -1) {
-      return []
+        return []
     }
-  
-    const lastIndex = textList.findLastIndex(text => text != '')
-  
+
+    const lastIndex = textList.findLastIndex((text) => text != '')
+
     return val.slice(firstIndex, lastIndex + 1)
 }
 
