@@ -86,80 +86,7 @@ const UserInfoPopUp = ({ author, img }) => {
     )
 }
 
-const ReplyView = ({ comment, allUsers, getComments, parent }) => {
-    const editor = React.useMemo(
-        () => withReact(withHistory(createEditor())),
-        []
-    )
-    const author = allUsers.users.find((user) => user.uid === comment.author_id)
-    const renderElement = React.useCallback(
-        (props) => <Element {...props} />,
-        []
-    )
-    const renderLeaf = React.useCallback((props) => <Leaf {...props} />, [])
-    const [showInput, setShowInput] = useState(false)
-
-    return (
-        <div
-            style={{
-                display: 'flex',
-                gap: '15px',
-                paddingTop: '10px',
-                paddingBottom: '10px',
-            }}
-        >
-            <UserInfoPopUp author={author} img={true} />
-            <div style={{ width: '100%' }}>
-                <div
-                    style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '5px',
-                    }}
-                >
-                    <UserInfoPopUp author={author} img={false} />
-                    <div style={{ fontSize: '12px', color: 'grey' }}>
-                        {timeAgo(comment.createdAt)}
-                    </div>
-                </div>
-                <Slate
-                    editor={editor}
-                    initialValue={comment.comment}
-                    children={comment.comment}
-                >
-                    <Editable
-                        readOnly
-                        renderElement={renderElement}
-                        renderLeaf={renderLeaf}
-                    />
-                </Slate>
-                <div
-                    style={{
-                        cursor: 'pointer',
-                        fontSize: '12px',
-                        color: 'grey',
-                        width: '29px',
-                        userSelect: 'none',
-                    }}
-                    onClick={() => setShowInput(!showInput)}
-                >
-                    reply
-                </div>
-                {showInput && (
-                    <CommentInput
-                        reply={showInput}
-                        onClose={() => setShowInput(false)}
-                        ticket={parent.reference_code}
-                        code={parent._id}
-                        getComments={getComments}
-                    />
-                )}
-            </div>
-        </div>
-    )
-}
-
-const CommentView = ({ comment, allUsers, getComments }) => {
+const CommentView = ({ comment, allUsers, getComments, parent }) => {
     const editor = React.useMemo(
         () => withReact(withHistory(createEditor())),
         []
@@ -223,14 +150,14 @@ const CommentView = ({ comment, allUsers, getComments }) => {
                     <CommentInput
                         reply={showInput}
                         onClose={() => setShowInput(false)}
-                        ticket={comment.reference_code}
-                        code={comment._id}
+                        ticket={parent? parent.reference_code : comment.reference_code}
+                        code={parent? parent._id : comment._id}
                         getComments={getComments}
                     />
                 )}
-                {comment.replies.map((reply) => {
+                {comment.replies?.map((reply) => {
                     return (
-                        <ReplyView
+                        <CommentView
                             parent={comment}
                             comment={reply}
                             allUsers={allUsers}
