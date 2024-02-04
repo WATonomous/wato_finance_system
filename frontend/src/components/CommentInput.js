@@ -49,13 +49,19 @@ const invalidInput = (val) => {
 const CommentInput = ({ code, getComments, reply, onClose, ticket }) => {
     const renderElement = useCallback((props) => <Element {...props} />, [])
     const renderLeaf = useCallback((props) => <Leaf {...props} />, [])
-    const editor = useMemo(() => withHistory(withReact(createEditor())), [])
+    const [editor] = useState(() => withReact(createEditor()))
+    const [value, setValue] = useState([
+        {
+          type: 'paragraph',
+          children: [{ text: '' }],
+        },
+    ])
     const [loading, setLoading] = useState(false)
     const auth = useAuth()
-    const [val, setVal] = useState(editor.children)
+
     const handleSubmit = (ref, ticket) => {
         setLoading(true)
-        const comment = cleanInput(val)
+        const comment = cleanInput(value)
         if (comment.length === 0) {
             return
         }
@@ -66,18 +72,18 @@ const CommentInput = ({ code, getComments, reply, onClose, ticket }) => {
         }
         axiosPreset
             .post('/comments', payload)
-            .then(() => getComments(ticket).then(() => setLoading(false)))
-
+            .then(() => getComments(ticket).then(() => {setLoading(false); onClose()}))
             .catch(() => setLoading(false))
     }
 
     return (
         <Slate
             editor={editor}
-            initialValue={initialValue}
-            onChange={() => {
-                setVal([...editor.children])
+            initialValue={value}
+            onChange={(val) => {
+                setValue(val)
             }}
+            value = {value}
         >
             <Editable
                 style={{
@@ -140,7 +146,7 @@ const CommentInput = ({ code, getComments, reply, onClose, ticket }) => {
                     )}
                     <Button
                         isLoading={loading}
-                        disabled={val.length === 0 || invalidInput(val)}
+                        disabled={value.length === 0 || invalidInput(value)}
                         padding="10px"
                         height="32px"
                         colorScheme="blue"

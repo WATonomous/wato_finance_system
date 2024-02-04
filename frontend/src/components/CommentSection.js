@@ -7,12 +7,8 @@ import CommentView from './CommentView'
 
 const CommentSection = ({ ticket, allUsers }) => {
     const [comments, setComments] = useState([])
-    const [refreshKey, setRefreshKey] = useState(0)
+    const [reset, setReset] = useState(false)
     const [loading, setLoading] = useState(false)
-
-    const forceRefresh = () => {
-        setRefreshKey((oldKey) => oldKey + 1)
-    }
 
     const getComments = async (ref) => {
         setLoading(true)
@@ -20,7 +16,6 @@ const CommentSection = ({ ticket, allUsers }) => {
             .get('/comments/' + ref)
             .then((data) => {
                 setComments([...data.data])
-                forceRefresh()
                 console.log(data)
             })
             .then(() => {
@@ -33,6 +28,7 @@ const CommentSection = ({ ticket, allUsers }) => {
 
     useEffect(() => {
         getComments(ticket)
+        setReset((data) => !data)
     }, [ticket])
 
     return (
@@ -45,12 +41,14 @@ const CommentSection = ({ ticket, allUsers }) => {
             >
                 Comments
             </Box>
-            <div key={refreshKey}>
+            <div>
                 <CommentInput
                     getComments={getComments}
                     ticket={ticket}
                     code={ticket}
                     type={'main'}
+                    onClose={() => setReset((data) => !data)}
+                    key = {"Comment Input" + reset}
                 />
                 <Box display="flex" alignItems="center" flexDirection="column">
                     {loading && (

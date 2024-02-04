@@ -14,6 +14,12 @@ import {
 import { timeAgo } from '../utils/utils'
 import { Element, Leaf } from './SlateComponents'
 import CommentInput from './CommentInput'
+import {
+    Menu,
+    MenuButton,
+    MenuList,
+    MenuItem,
+  } from '@chakra-ui/react'
 
 const UserInfoPopUp = ({ author, img }) => {
     return (
@@ -98,6 +104,7 @@ const CommentView = ({ comment, allUsers, getComments, parent }) => {
     )
     const renderLeaf = React.useCallback((props) => <Leaf {...props} />, [])
     const [showInput, setShowInput] = useState(false)
+    const [showReplies, setShowReplies] = useState(null) //Number means number of replies to show
 
     return (
         <div
@@ -105,7 +112,7 @@ const CommentView = ({ comment, allUsers, getComments, parent }) => {
                 display: 'flex',
                 gap: '15px',
                 paddingTop: '10px',
-                paddingLeft: '10px',
+                paddingLeft: parent? '0px' : '10px',
                 paddingBottom: '10px',
             }}
         >
@@ -134,17 +141,31 @@ const CommentView = ({ comment, allUsers, getComments, parent }) => {
                         renderLeaf={renderLeaf}
                     />
                 </Slate>
-                <div
-                    style={{
+                <div style={{display: 'flex', gap: '10px'}}>
+                    <div style={{
                         cursor: 'pointer',
                         fontSize: '12px',
                         color: 'grey',
-                        width: '29px',
                         userSelect: 'none',
                     }}
-                    onClick={() => setShowInput(!showInput)}
-                >
-                    reply
+                    onClick={() => setShowInput(!showInput)}>reply</div>
+                    {!parent && showReplies != false && <Box fontSize='12px' color='grey' cursor='pointer' onClick={() => {setShowReplies(false)}}>hide replies</Box>}
+                    {!parent && showReplies == false && <Box fontSize='12px' color='grey' cursor='pointer' onClick={() => setShowReplies(true)}>show replies</Box>}
+                    <Menu>
+                        <MenuButton style={{
+                        cursor: 'pointer',
+                        fontSize: '20px',
+                        marginTop: '-11px',
+                        color: 'grey',
+                        userSelect: 'none',
+                    }}>
+                            ...
+                        </MenuButton>
+                        <MenuList>
+                            <MenuItem>Edit</MenuItem>
+                            <MenuItem>Delete</MenuItem>
+                        </MenuList>
+                    </Menu>
                 </div>
                 {showInput && (
                     <CommentInput
@@ -155,19 +176,25 @@ const CommentView = ({ comment, allUsers, getComments, parent }) => {
                         getComments={getComments}
                     />
                 )}
-                {comment.replies?.map((reply) => {
-                    return (
-                        <CommentView
-                            parent={comment}
-                            comment={reply}
-                            allUsers={allUsers}
-                            getComments={getComments}
-                        />
-                    )
+                {!parent && showReplies != false && comment.replies?.map((reply, index) => {
+                    if (showReplies == true || (showReplies == null && index < 2)) {
+                        return (
+                            <CommentView
+                                parent={comment}
+                                comment={reply}
+                                allUsers={allUsers}
+                                getComments={getComments}
+                            />
+                        )
+                    }
                 })}
+                {!parent && showReplies == null && comment.replies?.length > 2 && <Box fontSize='12px' color='grey' cursor='pointer' onClick={() => setShowReplies(true)}>show more replies</Box>}
+                {!parent && showReplies == true && <Box fontSize='12px' color='grey' cursor='pointer' onClick={() => {setShowReplies(false)}}>hide replies</Box>}
             </div>
         </div>
     )
 }
 
 export default CommentView
+
+//TODO, isAuthor function that checks if comment is made by user
