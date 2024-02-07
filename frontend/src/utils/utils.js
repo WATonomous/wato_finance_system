@@ -41,3 +41,11 @@ export const getFormattedCurrency = (currencyStr) => {
     })
     return `CAD ${currencyFormatter.format(currencyStr)}`
 }
+
+// adds https protocol if the url doesnt contain it
+export const addhttps = (url) => {
+    if (!/^(?:f|ht)tps?:\/\//.test(url)) {
+        url = 'https://' + url
+    }
+    return url
+}

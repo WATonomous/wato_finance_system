@@ -1,5 +1,6 @@
 import React from 'react'
 import { Input, Td, Th, Tr, Link } from '@chakra-ui/react'
+import { addhttps } from '../../utils/utils'
 
 const TicketContentTableRow = ({ heading, value, onChange, type }) => {
     return (
@@ -25,7 +26,7 @@ const TicketContentTableRow = ({ heading, value, onChange, type }) => {
                 {onChange ? (
                     <Input onChange={onChange} value={value} />
                 ) : type === 'URL' ? (
-                    <Link color="blue.500" href={value} isExternal>
+                    <Link color="blue.500" href={addhttps(value)} isExternal>
                         {value}
                     </Link>
                 ) : (
