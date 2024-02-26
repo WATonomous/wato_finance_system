@@ -1,4 +1,4 @@
-# Setup Guide
+# Setup Guide - LOCAL
 
 After you clone the repository, run
 
@@ -116,6 +116,26 @@ To start the frontend, in a different terminal run
 ```
 cd frontend
 npm start
+```
+
+# Docker setup
+
+Assuming your .env files are configured properly, you can run them in docker containers as well.
+
+## Docker setup - frontend
+
+```
+cd frontend
+docker build -t wato-finance-frontend .
+docker run -p 3000:3000 -d wato-finance-frontend
+```
+
+## Docker setup - backend
+
+```
+cd backend
+docker build -t wato-finance-backend.
+docker run -p 5000:5000 -d wato-finance-backend
 ```
 
 ---
