@@ -134,7 +134,7 @@ docker run -p 3000:3000 -d wato-finance-frontend
 
 ```
 cd backend
-docker build -t wato-finance-backend.
+docker build -t wato-finance-backend .
 docker run -p 5000:5000 -d wato-finance-backend
 ```
 
