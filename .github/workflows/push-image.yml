@@ -29,18 +29,38 @@ jobs:
                   username: ${{ env.REGISTRY_USER }}
                   password: ${{ env.REGISTRY_PASSWORD }}
 
-            - name: Extract metadata (tags, labels) for Docker
-              id: meta
+            - name: Extract metadata (tags, labels) for Docker (frontend)
+              id: meta-frontend
               uses: docker/metadata-action@c4ee3adeed93b1fa6a762f209fb01608c1a22f1e
               with:
                   images: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}
-
-            - name: Build and push Docker image
+                  tags: |
+                      prefix=frontend
+                  
+            - name: Extract metadata (tags, labels) for Docker (backend)
+              id: meta-backend
+              uses: docker/metadata-action@c4ee3adeed93b1fa6a762f209fb01608c1a22f1e
+              with:
+                  images: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}
+                  tags: |
+                      prefix=backend
+                  
+            - name: Build and push Docker image (frontend)
               uses: docker/build-push-action@91df6b874e498451163feb47610c87c4a218c1ee
               with:
-                  context: .
+                  context: frontend
                   push: true
                   build-args: |
                       DOCKER_METADATA_OUTPUT_JSON
-                  tags: ${{ steps.meta.outputs.tags }}
-                  labels: ${{ steps.meta.outputs.labels }}
+                  tags: ${{ steps.meta-frontend.outputs.tags }}
+                  labels: ${{ steps.meta-frontend.outputs.labels }}
+
+            - name: Build and push Docker image (backend)
+              uses: docker/build-push-action@91df6b874e498451163feb47610c87c4a218c1ee
+              with:
+                  context: backend
+                  push: true
+                  build-args: |
+                      DOCKER_METADATA_OUTPUT_JSON
+                  tags: ${{ steps.meta-backend.outputs.tags }}
+                  labels: ${{ steps.meta-backend.outputs.labels }}
