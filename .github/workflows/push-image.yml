@@ -36,7 +36,7 @@ jobs:
                   images: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}
                   flavor: |
                       suffix=-frontend
-                  
+
             - name: Extract metadata (tags, labels) for Docker (backend)
               id: meta-backend
               uses: docker/metadata-action@c4ee3adeed93b1fa6a762f209fb01608c1a22f1e
@@ -44,7 +44,7 @@ jobs:
                   images: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}
                   flavor: |
                       suffix=-backend
-                  
+
             - name: Build and push Docker image (frontend)
               uses: docker/build-push-action@91df6b874e498451163feb47610c87c4a218c1ee
               with:
