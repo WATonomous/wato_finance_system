@@ -16,7 +16,7 @@ const getAllFilesByReference = async (reference) => {
         files.map(async (file) => {
             // generate a presigned url for each file
             const presignedUrl = await generatePresignedUrl(
-                process.env.AWS_FINANCE_BUCKET_NAME,
+                process.env.WATO_FINANCE_AWS_FINANCE_BUCKET_NAME,
                 getS3FileKey(file.reference_code, file.name)
             )
             return {
@@ -78,7 +78,7 @@ const deleteFile = async (referenceCode, fileName) => {
     // first delete from s3 first, as its ok to have orphaned files in mongo (no cost) since we only store metadata
     // then delete from db
     await deleteS3File(
-        process.env.AWS_FINANCE_BUCKET_NAME,
+        process.env.WATO_FINANCE_AWS_FINANCE_BUCKET_NAME,
         getS3FileKey(referenceCode, fileName)
     )
     return File.findOneAndDelete({

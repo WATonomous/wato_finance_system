@@ -13,7 +13,8 @@ const numFundingItemsToCreatePerSponsorshipFund = 2
 const numPersonalPurchasesToCreatePerFundingItem = 2
 const numUWFinancePurchasesToCreatePerFundingItem = 2
 
-const backend_url = process.env.BACKEND_URL || 'http://localhost:5000'
+const backend_url =
+    process.env.WATO_FINANCE_BACKEND_URL || 'http://localhost:5000'
 
 const lorem = new LoremIpsum({
     wordsPerSentence: {

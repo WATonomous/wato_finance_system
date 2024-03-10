@@ -16,7 +16,7 @@ const currencyFormatter = new Intl.NumberFormat('en-CA', {
 
 const getEmailToSection = async (reporter_id, recipients) => {
     const emailToSet = new Set(
-        process.env.EMAIL_RECIPIENTS?.split(',') || [
+        process.env.WATO_FINANCE_EMAIL_RECIPIENTS?.split(',') || [
             'jw4he@watonomous.ca',
             'v2zheng@watonomous.ca',
             'william.li@watonomous.ca',
@@ -42,7 +42,7 @@ const getEmailToSection = async (reporter_id, recipients) => {
     }
 
     if (recipients.includes(EMAIL_RECIPIENTS.finance)) {
-        // emailToSet.add(process.env.FINANCE_EMAIL)
+        // emailToSet.add(process.env.WATO_FINANCE_FINANCE_EMAIL)
     }
 
     if (recipients.includes(EMAIL_RECIPIENTS.reporter)) {
@@ -122,9 +122,9 @@ const getTicketLinkHTML = (ticketPath) => `
     <p>
         View the ticket here: 
         <a
-            href=${process.env.CLIENT_URL}${ticketPath}
+            href=${process.env.WATO_FINANCE_CLIENT_URL}${ticketPath}
         >
-            ${process.env.CLIENT_URL}${ticketPath}
+            ${process.env.WATO_FINANCE_CLIENT_URL}${ticketPath}
         </a>
     </p>
 `
