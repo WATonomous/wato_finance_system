@@ -1,8 +1,8 @@
 const Mailjet = require('node-mailjet')
 
 const mailjet = Mailjet.apiConnect(
-    process.env.MAILJET_API_KEY,
-    process.env.MAILJET_SECRET_KEY
+    process.env.WATO_FINANCE_MAILJET_API_KEY,
+    process.env.WATO_FINANCE_MAILJET_SECRET_KEY
 )
 
 const sendEmail = async ({ To, Subject, HTMLPart }) => {
@@ -11,7 +11,7 @@ const sendEmail = async ({ To, Subject, HTMLPart }) => {
             Messages: [
                 {
                     From: {
-                        Email: process.env.FINANCE_EMAIL,
+                        Email: process.env.WATO_FINANCE_FINANCE_EMAIL,
                     },
                     To,
                     Subject,

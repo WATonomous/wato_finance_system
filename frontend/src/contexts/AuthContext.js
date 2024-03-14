@@ -74,7 +74,7 @@ export const AuthProvider = ({ children }) => {
             const identifier = searchWithEmail ? userEmail : userWatiam
 
             const retrievedGroup = await axiosPreset.get(
-                `${process.env.REACT_APP_BACKEND_URL}/googlegroups/${identifier}`
+                `${process.env.REACT_APP_WATO_FINANCE_BACKEND_URL}/googlegroups/${identifier}`
             )
             setCurrentUserGroup(retrievedGroup?.data?.title)
 

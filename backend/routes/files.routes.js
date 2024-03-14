@@ -8,7 +8,7 @@ const upload = multer({
     storage: multerS3({
         s3: s3Client,
         contentType: multerS3.AUTO_CONTENT_TYPE,
-        bucket: process.env.AWS_FINANCE_BUCKET_NAME,
+        bucket: process.env.WATO_FINANCE_AWS_FINANCE_BUCKET_NAME,
         storageClass: 'STANDARD_IA',
         metadata: function (req, file, cb) {
             cb(null, {
