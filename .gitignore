@@ -26,6 +26,5 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# will be added upon deployment as it is located on separate repo. Will store user roles.
-#  see https://github.com/WATonomous/infra-config/tree/master/directory/users/data
-/backend/data
+# will be mounted on deployment. Will store user roles. For local development, create one in the shape specified in README.md
+/backend/user_directory.json
