@@ -52,7 +52,24 @@ cd backend
 nodemon start
 ```
 
-## Generating seeding data
+### Permissions
+
+Create a file `/backend/user_directory.json` that has the following shape. This will determine your approval levels. If for some reason you have multiple accounts, simply add more elements to the array.
+In the production environment this file is mounted automatically based on https://github.com/WATonomous/infra-config/tree/master/directory/users/data
+
+```
+[
+    {
+        finance_system: {
+        email: <YOUR_WATO_EMAIL>
+        enabled: true
+        membership: 'Administrator' | 'Member'
+        }
+    }
+ ]
+```
+
+### Generating seeding data
 
 To generate seed data, in the terminal in the backend directory, run:
 
