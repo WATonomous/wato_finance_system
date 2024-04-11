@@ -101,6 +101,7 @@ const ReplyView = ({ comment, allUsers, getComments, parent }) => {
 
     return (
         <div
+            key={comment._id}
             style={{
                 display: 'flex',
                 gap: '15px',
@@ -109,7 +110,7 @@ const ReplyView = ({ comment, allUsers, getComments, parent }) => {
             }}
         >
             <UserInfoPopUp author={author} img={true} />
-            <div style={{ width: '100%' }}>
+            <div key={comment._id} style={{ width: '100%' }}>
                 <div
                     style={{
                         display: 'flex',
@@ -231,6 +232,7 @@ const CommentView = ({ comment, allUsers, getComments }) => {
                 {comment.replies.map((reply) => {
                     return (
                         <ReplyView
+                            key={reply._id}
                             parent={comment}
                             comment={reply}
                             allUsers={allUsers}

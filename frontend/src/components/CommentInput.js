@@ -26,12 +26,12 @@ const HOTKEYS = {
 const cleanInput = (val) => {
     const textList = val.map((item) => item['children'][0]['text'])
 
-    const firstIndex = textList.findIndex((text) => text != '')
-    if (firstIndex == -1) {
+    const firstIndex = textList.findIndex((text) => text !== '')
+    if (firstIndex === -1) {
         return []
     }
 
-    const lastIndex = textList.findLastIndex((text) => text != '')
+    const lastIndex = textList.findLastIndex((text) => text !== '')
 
     return val.slice(firstIndex, lastIndex + 1)
 }
@@ -39,7 +39,7 @@ const cleanInput = (val) => {
 //Disables the "send" button if input isn't valid
 const invalidInput = (val) => {
     for (let i = 0; i < val.length; i++) {
-        if (val[i]['children'][0]['text'] != '') {
+        if (val[i]['children'][0]['text'] !== '') {
             return false
         }
     }

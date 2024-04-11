@@ -21,7 +21,6 @@ const CommentSection = ({ ticket, allUsers }) => {
             .then((data) => {
                 setComments([...data.data])
                 forceRefresh()
-                console.log(data)
             })
             .then(() => {
                 setLoading(false)
@@ -60,11 +59,7 @@ const CommentSection = ({ ticket, allUsers }) => {
                         {comments.map((content, index) => {
                             return (
                                 <CommentView
-                                    key={
-                                        'comment-' +
-                                        (comments.length - index).toString() +
-                                        ticket
-                                    }
+                                    key={content._id}
                                     comment={content}
                                     allUsers={allUsers}
                                     getComments={getComments}
