@@ -59,7 +59,11 @@ const CommentSection = ({ ticket, allUsers }) => {
                         {comments.map((content, index) => {
                             return (
                                 <CommentView
-                                    key={content._id}
+                                    key={
+                                        'comment-' +
+                                        (comments.length - index).toString() +
+                                        ticket
+                                    }
                                     comment={content}
                                     allUsers={allUsers}
                                     getComments={getComments}
