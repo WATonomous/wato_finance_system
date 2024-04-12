@@ -13,6 +13,7 @@ import {
     useDisclosure,
     Grid,
     useToast,
+    Popover,
 } from '@chakra-ui/react'
 import TreeView from '../components/TreeView'
 import Navbar from '../components/Navbar'
@@ -45,6 +46,7 @@ import PPRReporterTable from '../components/TicketContent/PPRReporterTable'
 import ClaimSummary from './ClaimSummary'
 import { createErrorMessage } from '../utils/errorToasts'
 import { useGetCurrentTicket } from '../hooks/hooks'
+import ReporterTableRow from '../components/ReporterInfoTableRow'
 
 const Dashboard = () => {
     const navigate = useNavigate()
@@ -313,30 +315,42 @@ const Dashboard = () => {
                         <Heading mb="8px" fontSize="2xl">
                             Metadata
                         </Heading>
-                        <Table>
-                            <Tbody>
-                                <ReporterInfoTip
-                                    heading={'Reporter Id'}
-                                    reporter={allUsers.users.find(
-                                        (user) =>
-                                            user.uid ===
-                                            currentTicket.reporter_id
-                                    )}
-                                />
-                                <TicketContentTableRow
-                                    heading={'Created at'}
-                                    value={getStandardizedDate(
-                                        currentTicket.createdAt
-                                    )}
-                                />
-                                <TicketContentTableRow
-                                    heading={'Updated at'}
-                                    value={getStandardizedDate(
-                                        currentTicket.updatedAt
-                                    )}
-                                />
-                            </Tbody>
-                        </Table>
+                        <Popover
+                            trigger="hover"
+                            closeDelay={200}
+                            placement="top-start"
+                        >
+                            <Table>
+                                <Tbody>
+                                    <ReporterTableRow
+                                        heading={'Reporter Id'}
+                                        reporter={allUsers.users.find(
+                                            (user) =>
+                                                user.uid ===
+                                                currentTicket.reporter_id
+                                        )}
+                                    />
+                                    <TicketContentTableRow
+                                        heading={'Created at'}
+                                        value={getStandardizedDate(
+                                            currentTicket.createdAt
+                                        )}
+                                    />
+                                    <TicketContentTableRow
+                                        heading={'Updated at'}
+                                        value={getStandardizedDate(
+                                            currentTicket.updatedAt
+                                        )}
+                                    />
+                                </Tbody>
+                            </Table>
+                            <ReporterInfoTip
+                                reporter={allUsers.users.find(
+                                    (user) =>
+                                        user.uid === currentTicket.reporter_id
+                                )}
+                            />
+                        </Popover>
                     </Box>
                     {supportingDocuments.length > 0 && (
                         <Box w="100%" mt="12px">
@@ -345,7 +359,12 @@ const Dashboard = () => {
                             </Heading>
                             <Grid gap="5px">
                                 {supportingDocuments?.map((file) => {
-                                    return <FileViewer file={file} />
+                                    return (
+                                        <FileViewer
+                                            key={file._id}
+                                            file={file}
+                                        />
+                                    )
                                 })}
                             </Grid>
                         </Box>
@@ -357,7 +376,12 @@ const Dashboard = () => {
                             </Heading>
                             <Grid gap="5px">
                                 {attachments?.map((file) => {
-                                    return <FileViewer file={file} />
+                                    return (
+                                        <FileViewer
+                                            key={file._id}
+                                            file={file}
+                                        />
+                                    )
                                 })}
                             </Grid>
                         </Box>

@@ -12,8 +12,8 @@ import { useGetCurrentTicket } from '../../hooks/hooks'
 const UPRAdminContentTable = () => {
     const location = useLocation()
     const currentTicket = useGetCurrentTicket()
-    const [reqNum, setReqNum] = useState(currentTicket.requisition_number)
-    const [poNum, setPoNum] = useState(currentTicket.po_number)
+    const [reqNum, setReqNum] = useState('')
+    const [poNum, setPoNum] = useState('')
     const [changed, setChanged] = React.useState(false)
     const setAllTickets = useSetRecoilState(allTicketsState)
     const changeReqNumber = (e) => {

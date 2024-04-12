@@ -21,7 +21,6 @@ const CommentSection = ({ ticket, allUsers }) => {
             .then((data) => {
                 setComments([...data.data])
                 forceRefresh()
-                console.log(data)
             })
             .then(() => {
                 setLoading(false)

@@ -231,6 +231,7 @@ const CommentView = ({ comment, allUsers, getComments }) => {
                 {comment.replies.map((reply) => {
                     return (
                         <ReplyView
+                            key={reply._id}
                             parent={comment}
                             comment={reply}
                             allUsers={allUsers}
