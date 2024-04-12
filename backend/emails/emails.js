@@ -99,16 +99,17 @@ const getSFTicketInfoHTML = async (sf) => {
             Ticket Code: ${sf.code} <br />
             Sponsorship Fund: ${sf.name} <br />
             Allocated Funding: CAD ${currencyFormatter.format(
-        sf.funding_allocation
-    )} <br/ >
+                sf.funding_allocation
+            )} <br/ >
             Funding Spent: CAD ${currencyFormatter.format(
-        sf.funding_spent
-    )} <br />
+                sf.funding_spent
+            )} <br />
             ${sf.proposal_url ? `Proposal URL: ${sf.proposal_url} <br />` : ``}
-            ${sf.presentation_url
-            ? `Presentation URL: ${sf.presentation_url} <br />`
-            : ``
-        }
+            ${
+                sf.presentation_url
+                    ? `Presentation URL: ${sf.presentation_url} <br />`
+                    : ``
+            }
             Status: ${sf.status} <br />
             Reporter: ${reporter.displayName} &lt;${reporter.email}&gt; <br />
             Created: ${new Date(sf.createdAt).toDateString()} <br />
