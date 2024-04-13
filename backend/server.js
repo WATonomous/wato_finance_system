@@ -33,7 +33,6 @@ const groupRouter = require('./routes/googlegroup.routes')
 const filesRouter = require('./routes/files.routes')
 const commentRouter = require('./routes/comments.routes')
 
-app.use(express.json())
 app.use('/fundingitems', fundingItemsRouter)
 app.use('/personalpurchases', personalPurchaseRouter)
 app.use('/sponsorshipfunds', sponsorshipFundsRouter)

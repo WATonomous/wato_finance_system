@@ -4,7 +4,8 @@
     "description": "",
     "main": "server.js",
     "scripts": {
-        "seeddata": "node utils/seedData.js"
+        "seeddata": "node utils/seedData.js",
+        "seeddata-prod": "node utils/seedData.js --prod"
     },
     "keywords": [],
     "author": "",
@@ -30,6 +31,7 @@
         "node-cron": "^3.0.2",
         "node-fetch": "^2.6.7",
         "node-mailjet": "^5.1.1",
-        "unique-names-generator": "^4.7.1"
+        "unique-names-generator": "^4.7.1",
+        "yargs": "^17.7.2"
     }
 }

@@ -11,7 +11,8 @@ const { authAdmin } = require('./auth')
 const authenticateUser = async (req, res, next) => {
     const bearerToken = req.headers.authorization?.split(' ')
     if (!bearerToken || bearerToken.length !== 2) {
-        return res.status(401).json({ error: `No user token provided` })
+        res.status(401).send({ error: `No user token provided` })
+        return
     }
     const token = bearerToken[1]
     try {
@@ -44,6 +45,11 @@ const authenticateUser = async (req, res, next) => {
             }
         }
 
+        // special case for seed token, we don't have a user id attached to it
+        if (decodedToken.uid === 'seed-token') {
+            next()
+            return
+        }
         const { isDirector, isAdmin, isTeamCaptain, isReporter } =
             await getAuthRoles(
                 decodedToken.uid,
@@ -56,7 +62,7 @@ const authenticateUser = async (req, res, next) => {
         req.user.isReporter = isReporter
         next()
     } catch (err) {
-        res.status(401).json({ error: `Invalid user token: ${err}` })
+        res.status(401).send({ error: `Invalid user token: ${err}` })
         return
     }
 }
