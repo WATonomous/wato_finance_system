@@ -69,10 +69,16 @@ To generate seed data, in the terminal in the backend directory, you must first 
 run:
 
 ```
-npm run utils/seedData.js [--prod]
+npm run seeddata
 ```
 
-Note that this step is not optional due to the fact we need to inject wato cash's id as it is a special case for a funding item. If you pass in --prod, it will only create the wato cash fund, and no dummy data will be created.
+or
+
+```
+npm run seeddata-prod
+```
+
+Note that this step is not optional due to the fact we need to inject wato cash's id as it is a special case for a funding item. The -prod version will only create the wato cash fund, and no dummy data will be created.
 
 ---
 

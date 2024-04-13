@@ -4,7 +4,8 @@
     "description": "",
     "main": "server.js",
     "scripts": {
-        "seeddata": "node utils/seedData.js"
+        "seeddata": "node utils/seedData.js",
+        "seeddata-prod": "node utils/seedData.js --prod"
     },
     "keywords": [],
     "author": "",
