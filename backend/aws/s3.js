@@ -5,12 +5,6 @@ const {
 } = require('@aws-sdk/client-s3')
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner')
 
-const { HttpRequest } = require('@aws-sdk/protocol-http')
-const { formatUrl } = require('@aws-sdk/util-format-url')
-
-const { S3RequestPresigner } = require('@aws-sdk/s3-request-presigner')
-const { Hash } = require('@aws-sdk/hash-node')
-
 const s3Client = new S3Client({
     region: 'us-east-2',
 })

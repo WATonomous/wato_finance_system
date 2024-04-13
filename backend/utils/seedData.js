@@ -6,6 +6,33 @@ const {
     animals,
 } = require('unique-names-generator')
 const fetch = require('node-fetch')
+const admin = require('firebase-admin')
+const fs = require('fs')
+// ------------------- Seed Data -------------------
+const yargs = require('yargs')
+const argv = yargs.option('prod', {
+    alias: 'p',
+    describe: 'Set to true to only create necessary data for production',
+    type: 'boolean',
+}).argv
+// ------------------- Seed Data -------------------
+
+// ------------------- Auth Setup -------------------
+if (!fs.existsSync('./serviceAccountKey.json')) {
+    console.log('❌ No service account key provided. Exiting...')
+    process.exit(1)
+}
+const serviceAccount = require('../serviceAccountKey.json')
+require('dotenv').config()
+if (!process.env.WATO_FINANCE_FIREBASE_API_KEY) {
+    console.log('❌ No firebase api key provided. Exiting...')
+    process.exit(1)
+}
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+})
+let headers
+// ------------------- Auth Setup -------------------
 
 const numSponsorhipFundsToCreate = 2
 const minFundingAllocationForSponsorshipFunds = 1000
@@ -41,6 +68,11 @@ const generateDummyData = async () => {
         // as the cash fund even though it takes the shape of a funding item
         await createCashFund()
         console.log('✅ cash fund created')
+        if (argv.prod) {
+            // don't create dummy data for production
+            console.log('Exiting early due to prod flag.')
+            return
+        }
         const sponsorshipFundIds = await createSponsorshipFunds()
         console.log('✅ sponsorship funds created')
         const fundingItemIds = await createFundingItems(sponsorshipFundIds)
@@ -66,8 +98,11 @@ const createCashFund = async () => {
     }
     await fetch(`${backend_url}/fundingitems`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: headers,
         body: JSON.stringify(cashFund),
+    }).catch((err) => {
+        console.log('❌ cash fund failed to create: ')
+        console.log(err)
     })
 }
 
@@ -168,7 +203,7 @@ const createSponsorshipFunds = async () => {
         sponsorshipFundsData.map(async (sponsorshipFund) => {
             const res = await fetch(`${backend_url}/sponsorshipfunds`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: headers,
                 body: JSON.stringify(sponsorshipFund),
             })
             const data = await res.json()
@@ -191,7 +226,7 @@ const createFundingItems = async (sf_ids) => {
         fundingItemsData.map(async (fundingItem) => {
             const res = await fetch(`${backend_url}/fundingitems`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: headers,
                 body: JSON.stringify(fundingItem),
             })
             const data = await res.json()
@@ -214,7 +249,7 @@ const createPersonalPurchases = async (fi_ids) => {
         personalPurchases.map(async (personalPurchase) => {
             const res = await fetch(`${backend_url}/personalpurchases`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: headers,
                 body: JSON.stringify(personalPurchase),
             })
             const data = await res.json()
@@ -237,7 +272,7 @@ const createUWFinancePurchases = async (fi_ids) => {
         uwFinancePurchases.map(async (uwFinancePurchase) => {
             const res = await fetch(`${backend_url}/uwfinancepurchases`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: headers,
                 body: JSON.stringify(uwFinancePurchase),
             })
             const data = await res.json()
@@ -246,4 +281,27 @@ const createUWFinancePurchases = async (fi_ids) => {
     )
 }
 
-generateDummyData()
+const getIdToken = async () => {
+    const token = await admin.auth().createCustomToken('seed-token')
+    // fetch firebase api key
+    const res = await fetch(
+        `https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken?key=${process.env.WATO_FINANCE_FIREBASE_API_KEY}`,
+        {
+            method: 'POST',
+            body: JSON.stringify({
+                token: token,
+                returnSecureToken: true,
+            }),
+        }
+    )
+    const data = await res.json()
+    return data.idToken
+}
+
+getIdToken().then((token) => {
+    headers = {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token,
+    }
+    generateDummyData()
+})

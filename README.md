@@ -19,29 +19,20 @@ create a `.env` file in the "backend" folder
 Please contact Victor or Anson if you do not know how to set it up
 
 ```
-ATLAS_URI=<YOUR_MONGO_ATLAS_URI_HERE>
-MAILJET_API_KEY=<YOUR_MAILJET_API_KEY>
-MAILJET_SECRET_KEY=<YOUR_MAILJET_SECRET_KEY>
-FINANCE_EMAIL=<EMAIL_WHERE_YOU_WANT_TO_SEND_FROM>
-EMAIL_RECIPIENTS=<EMAILS_TO_RECEIVE_SEPERATED_BY_COMMA_(NO_SPACE)>
-CLIENT_URL=http://localhost:3000
-```
-
-In order to run the cron that updates the db from the WATO members spreadsheet, please contact Victor or Anson for the following variables you will add in your `.env`
-
-```
-GOOGLE_SHEET_ID=<WATO_MEMBERS_SPREADSHEET_ID>
-SHEET_TAB_ID=<WATO_MEMBERS_SPREADSHEET_TAB_ID>
-SERVICE_ACCOUNT_EMAIL=<DISCORD_AUTOMATION_SERVICE_ACCOUNT>
-SERVICE_ACCOUNT_PRIVATE_KEY=<DISCORD_AUTOMATION_SERVICE_ACCOUNT_PRIVATE_KEY>
+WATO_FINANCE_ATLAS_URI=<YOUR_MONGO_ATLAS_URI_HERE>
+WATO_FINANCE_MAILJET_API_KEY=<YOUR_MAILJET_API_KEY>
+WATO_FINANCE_MAILJET_SECRET_KEY=<YOUR_MAILJET_SECRET_KEY>
+WATO_FINANCE_FINANCE_EMAIL=<EMAIL_WHERE_YOU_WANT_TO_SEND_FROM>
+WATO_FINANCE_EMAIL_RECIPIENTS=<EMAILS_TO_RECEIVE_SEPERATED_BY_COMMA_(NO_SPACE)>
+WATO_FINANCE_CLIENT_URL=http://localhost:3000
 ```
 
 In order to upload attachments, AWS credentials are needed. To access a role that is already set up with policies on WATonomous' AWS account, please contact Victor.
 
 ```
-AWS_SECRET_ACCESS_KEY=<YOUR_SECRET_ACCESS_KEY>
-AWS_ACCESS_KEY_ID=<YOUR_ACCESS_KEY>
-AWS_FINANCE_BUCKET_NAME=<S3_BUCKET_NAME>
+WATO_FINANCE_AWS_SECRET_ACCESS_KEY=<YOUR_SECRET_ACCESS_KEY>
+WATO_FINANCE_AWS_ACCESS_KEY_ID=<YOUR_ACCESS_KEY>
+WATO_FINANCE_AWS_FINANCE_BUCKET_NAME=<S3_BUCKET_NAME>
 ```
 
 To start the server, run
@@ -71,13 +62,17 @@ In the production environment this file is mounted automatically based on https:
 
 ### Generating seeding data
 
-To generate seed data, in the terminal in the backend directory, run:
+To generate seed data, in the terminal in the backend directory, you must first add an additional environment variable to `backend/.env`. Note that this is the same firebase api key as the web app, instructions can be found later in this README.
+
+`WATO_FINANCE_FIREBASE_API_KEY=<YOUR_FIREBASE_API_KEY>`
+
+run:
 
 ```
-npm run seeddata
+npm run utils/seedData.js [--prod]
 ```
 
-Note that this step is not optional due to the fact we need to inject wato cash's id as it is a special case for a funding item.
+Note that this step is not optional due to the fact we need to inject wato cash's id as it is a special case for a funding item. If you pass in --prod, it will only create the wato cash fund, and no dummy data will be created.
 
 ---
 
@@ -99,13 +94,13 @@ Note that this step is not optional due to the fact we need to inject wato cash'
 3. Look for the `firebaseConfig` constant and fill in the following info in the `.env` file you create in the "frontend" folder
 
 ```
-REACT_APP_API_KEY=<YOUR_FIREBASE_API_KEY>
-REACT_APP_AUTH_DOMAIN=<YOUR_FIREBASE_AUTH_DOMAIN>
-REACT_APP_PROJECT_ID=<YOUR_FIREBASE_PROJECT_ID>
-REACT_APP_STORAGE_BUCKET=<YOUR_FIREBASE_STORAGE_BUCKET>
-REACT_APP_MESSAGING_SENDER_ID=<YOUR_FIREBASE_MESSAGING_SENDER_ID>
-REACT_APP_APP_ID=<YOUR_FIREBASE_API_ID>
-REACT_APP_BACKEND_URL=http://localhost:5000
+REACT_APP_WATO_FINANCE_API_KEY=<YOUR_FIREBASE_API_KEY>
+REACT_APP_WATO_FINANCE_AUTH_DOMAIN=<YOUR_FIREBASE_AUTH_DOMAIN>
+REACT_APP_WATO_FINANCE_PROJECT_ID=<YOUR_FIREBASE_PROJECT_ID>
+REACT_APP_WATO_FINANCE_STORAGE_BUCKET=<YOUR_FIREBASE_STORAGE_BUCKET>
+REACT_APP_WATO_FINANCE_MESSAGING_SENDER_ID=<YOUR_FIREBASE_MESSAGING_SENDER_ID>
+REACT_APP_WATO_FINANCE_APP_ID=<YOUR_FIREBASE_API_ID>
+REACT_APP_WATO_FINANCE_BACKEND_URL=http://localhost:5000
 ```
 
 ### Connect Backend to Project
