@@ -16,9 +16,10 @@ const PersonalPurchaseSchema = new Schema(
         purchase_url: { type: String, required: true },
         cost: { type: Number, required: true },
         purchase_justification: { type: String, required: true },
-        director_approval: { type: Boolean, default: false },
-        team_captain_approval: { type: Boolean, default: false },
+        director_approval: { type: Boolean, default: false }, // deprecated
+        team_captain_approval: { type: Boolean, default: false }, // deprecated
         admin_approval: { type: Boolean, default: false },
+        faculty_advisor_approval: { type: Boolean, default: false },
     },
     {
         _id: false,

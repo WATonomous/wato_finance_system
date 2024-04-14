@@ -26,9 +26,15 @@ const UPR_STATUS = [
 const UPR_STATUS_FUNDING_SPENT = ['ORDERED', 'READY_FOR_PICKUP', 'PICKED_UP']
 
 const APPROVAL_LEVELS = Object.freeze({
-    director_approval: 'director_approval',
-    team_captain_approval: 'team_captain_approval',
+    director_approval: 'director_approval', // deprecated
+    team_captain_approval: 'team_captain_approval', // deprecated
     admin_approval: 'admin_approval',
+    faculty_advisor_approval: 'faculty_advisor_approval',
+})
+
+const AUTH_ROLES = Object.freeze({
+    Member: 'Member',
+    Administrator: 'Administrator',
 })
 
 const EMAIL_RECIPIENTS = Object.freeze({
@@ -49,8 +55,6 @@ const TICKET_ENDPOINTS = Object.freeze({
 })
 
 const ADMIN_IDENTIFIERS = ['drayside', 'v2zheng', 'jw4he', 'william.li']
-const TEAM_CAPTAIN_TITLES = ['Team Captain']
-const DIRECTOR_TITLES = ['Director']
 
 module.exports = {
     ENDOWMENT_FUNDS,
@@ -61,8 +65,7 @@ module.exports = {
     UPR_STATUS_FUNDING_SPENT,
     TICKET_ENDPOINTS,
     APPROVAL_LEVELS,
+    AUTH_ROLES,
     EMAIL_RECIPIENTS,
     ADMIN_IDENTIFIERS,
-    TEAM_CAPTAIN_TITLES,
-    DIRECTOR_TITLES,
 }

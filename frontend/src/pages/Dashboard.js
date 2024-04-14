@@ -112,10 +112,6 @@ const Dashboard = () => {
         fetchData()
     }, [setAllTickets, toast])
 
-    const isReporter = () => {
-        return auth.currentUser.uid === currentTicket.reporter_id
-    }
-
     const getUploadedFiles = useCallback(async () => {
         if (!currentTicket?.code) {
             return
@@ -201,7 +197,7 @@ const Dashboard = () => {
                 return (
                     <>
                         {auth.isAdmin && <PPRAdminContentTable />}
-                        {(isReporter() || auth.isAdmin) && (
+                        {(isCurrentTicketReporter || auth.isAdmin) && (
                             <PPRReporterTable
                                 supportingDocuments={supportingDocuments}
                                 currentTicket={currentTicket}
@@ -265,7 +261,7 @@ const Dashboard = () => {
                     </Heading>
                     {/* Do not display update/delete button for WATO Cash */}
                     {currentTicket.sf_link !== -1 &&
-                        (isCurrentTicketReporter || auth.isDirector) && (
+                        (isCurrentTicketReporter || auth.isAdmin) && (
                             <Flex
                                 flexDir="row"
                                 mb="12px"

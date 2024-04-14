@@ -32,7 +32,6 @@ const UPRContentTable = () => {
 
         const payload = {
             new_approval_levels: newApprovalLevels,
-            approval_type: currentApprovalType,
         }
         try {
             setLoading(true)
@@ -90,36 +89,19 @@ const UPRContentTable = () => {
             <Table>
                 <Tbody>
                     <TicketContentTableRow
-                        heading={'Director Approval'}
+                        heading={'Finance/Admin Approval'}
                         value={
                             <Checkbox
                                 disabled={
-                                    !auth.isDirector ||
+                                    !auth.isAdmin ||
                                     currentTicket.status !==
                                         SEEKING_APPROVAL_STATUS ||
                                     loading
                                 }
                                 onChange={handleUpdateApproval(
-                                    APPROVAL_LEVELS.director_approval
+                                    APPROVAL_LEVELS.admin_approval
                                 )}
-                                isChecked={currentTicket.director_approval}
-                            />
-                        }
-                    />
-                    <TicketContentTableRow
-                        heading={'Team Captain Approval'}
-                        value={
-                            <Checkbox
-                                disabled={
-                                    !auth.isTeamCaptain ||
-                                    currentTicket.status !==
-                                        SEEKING_APPROVAL_STATUS ||
-                                    loading
-                                }
-                                onChange={handleUpdateApproval(
-                                    APPROVAL_LEVELS.team_captain_approval
-                                )}
-                                isChecked={currentTicket.team_captain_approval}
+                                isChecked={currentTicket.admin_approval}
                             />
                         }
                     />
@@ -134,9 +116,11 @@ const UPRContentTable = () => {
                                     loading
                                 }
                                 onChange={handleUpdateApproval(
-                                    APPROVAL_LEVELS.admin_approval
+                                    APPROVAL_LEVELS.faculty_advisor_approval
                                 )}
-                                isChecked={currentTicket.admin_approval}
+                                isChecked={
+                                    currentTicket.faculty_advisor_approval
+                                }
                             />
                         }
                     />
