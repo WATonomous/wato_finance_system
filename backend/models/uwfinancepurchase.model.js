@@ -18,9 +18,10 @@ const UWFinancePurchaseSchema = new Schema(
         cost: { type: Number, required: true },
         purchase_justification: { type: String, required: true },
         pickup_instruction: { type: String },
-        director_approval: { type: Boolean, default: false },
-        team_captain_approval: { type: Boolean, default: false },
+        director_approval: { type: Boolean, default: false }, // deprecated
+        team_captain_approval: { type: Boolean, default: false }, // deprecated
         admin_approval: { type: Boolean, default: false },
+        faculty_advisor_approval: { type: Boolean, default: false },
         requisition_number: { type: String },
         po_number: { type: String },
     },

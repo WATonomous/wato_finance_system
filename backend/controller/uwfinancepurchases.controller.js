@@ -32,8 +32,8 @@ const createNewUWFinancePurchaseController = (req, res) => {
 }
 
 const updateUWFinancePurchaseController = (req, res) => {
-    if (!req.user.isDirector && !req.user.isReporter) {
-        res.status(403).json('Error: Must be Director+ or reporter to update')
+    if (!req.user.isAdmin && !req.user.isReporter) {
+        res.status(403).json('Error: Must be admin or reporter to update')
         return
     }
 
@@ -50,8 +50,8 @@ const updateUWFinancePurchaseController = (req, res) => {
 }
 
 const updateFILinkUWFinancePurchaseController = async (req, res) => {
-    if (!req.user.isDirector && !req.user.isReporter) {
-        res.status(403).json('Error: Must be Director+ or reporter to update')
+    if (!req.user.isAdmin && !req.user.isReporter) {
+        res.status(403).json('Error: Must be admin or reporter to update')
         return
     }
 
@@ -69,16 +69,9 @@ const updateFILinkUWFinancePurchaseController = async (req, res) => {
 }
 
 const updateApprovalsUWFinancePurchaseController = async (req, res) => {
-    const { new_approval_levels, approval_type } = req.body
-    const canUpdateApproval =
-        (approval_type === APPROVAL_LEVELS.admin_approval &&
-            req.user.isAdmin) ||
-        (approval_type === APPROVAL_LEVELS.team_captain_approval &&
-            req.user.isTeamCaptain) ||
-        (approval_type === APPROVAL_LEVELS.director_approval &&
-            req.user.isDirector)
+    const { new_approval_levels } = req.body
 
-    if (!canUpdateApproval) {
+    if (!req.user.isAdmin) {
         res.status(403).json('Error: Permission Denied')
         return
     }
@@ -93,8 +86,8 @@ const updateApprovalsUWFinancePurchaseController = async (req, res) => {
 }
 
 const deleteUWFinancePurchaseController = (req, res) => {
-    if (!req.user.isDirector && !req.user.isReporter) {
-        res.status(403).json('Error: Must be Director+ or reporter to delete')
+    if (!req.user.isAdmin && !req.user.isReporter) {
+        res.status(403).json('Error: Must be admin or reporter to delete')
         return
     }
     deleteUWFinancePurchase(req.params.id)

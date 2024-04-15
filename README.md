@@ -123,10 +123,6 @@ REACT_APP_WATO_FINANCE_BACKEND_URL=http://localhost:5000
 4. Set Project support email to your own email
 5. Select Save and ensure that the Google Provider has the Enabled Status
 
-### Changing authorization for debugging
-
-1. If you would like to change your authorization for debugging, set `REACT_APP_AUTH_OVERRIDE=ADMIN | TEAM_CAPTAIN | DIRECTOR` in the frontend env, and `AUTH_OVERRIDE=ADMIN | TEAM_CAPTAIN | DIRECTOR` in the backend env.
-
 ### Starting the app
 
 To start the frontend, in a different terminal run

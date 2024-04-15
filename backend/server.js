@@ -21,7 +21,7 @@ mongoose.connect(uri, {
 
 const connection = mongoose.connection
 connection.once('open', () => {
-    console.log('MongoDB database connection established successfully')
+    console.log('🛢️  MongoDB database connection established successfully')
 })
 
 const fundingItemsRouter = require('./routes/fundingitems.routes')
@@ -43,6 +43,6 @@ app.use('/files', filesRouter)
 app.use('/comments', commentRouter)
 
 app.listen(port, async () => {
-    console.log(`Server is running on port: ${port}`)
+    console.log(`🗄️  Server is running on port: ${port}`)
     await updateGroup()
 })

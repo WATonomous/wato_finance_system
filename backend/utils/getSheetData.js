@@ -22,7 +22,7 @@ const updateGroup = async () => {
     const users = await readUserGroupsv2()
     try {
         await updateGoogleGroups(users)
-        console.log('Updated google groups')
+        console.log('✅ Finished updating user groups in db successfully')
     } catch (err) {
         console.error(err)
     }

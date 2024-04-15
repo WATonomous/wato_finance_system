@@ -70,7 +70,7 @@ const generateDummyData = async () => {
         console.log('✅ cash fund created')
         if (argv.prod) {
             // don't create dummy data for production
-            console.log('Exiting early due to prod flag.')
+            console.log('🏃💨 Exiting early due to prod flag.')
             return
         }
         const sponsorshipFundIds = await createSponsorshipFunds()
@@ -160,9 +160,10 @@ const generateDummyPersonalPurchase = () => {
         purchase_url: 'https://www.google.com/',
         cost: generateRandomAmount(maxCost / 2, maxCost / 2),
         purchase_justification: lorem.generateSentences(1),
-        director_approval: false,
-        team_captain_approval: false,
+        director_approval: false, // deprecated
+        team_captain_approval: false, // deprecated
         admin_approval: false,
+        faculty_advisor_approval: false,
     }
 }
 
@@ -186,9 +187,10 @@ const generateDummyUWFinancePurchaseRequest = () => {
         cost: generateRandomAmount(maxCost / 2, maxCost / 2),
         purchase_justification: lorem.generateSentences(1),
         pickup_instruction: lorem.generateSentences(1),
-        director_approval: false,
-        team_captain_approval: false,
+        director_approval: false, // deprecated
+        team_captain_approval: false, // deprecated
         admin_approval: false,
+        faculty_advisor_approval: false,
         requisition_number: getRandomNumberFromLength(10),
         po_number: getRandomNumberFromLength(8),
     }

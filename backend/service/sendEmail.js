@@ -6,6 +6,8 @@ const mailjet = Mailjet.apiConnect(
 )
 
 const sendEmail = async ({ To, Subject, HTMLPart }) => {
+    console.log('📧 Subject:', Subject)
+    console.log('📬 Recipients:', To)
     try {
         await mailjet.post('send', { version: 'v3.1' }).request({
             Messages: [
@@ -19,9 +21,9 @@ const sendEmail = async ({ To, Subject, HTMLPart }) => {
                 },
             ],
         })
-        console.log('sendEmail success!')
+        console.log('✅ sendEmail success!')
     } catch (err) {
-        console.log(`sendEmail failed: ${err}`)
+        console.log(`❌ sendEmail failed: ${err}`)
     }
 }
 

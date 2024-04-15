@@ -50,15 +50,12 @@ const authenticateUser = async (req, res, next) => {
             next()
             return
         }
-        const { isDirector, isAdmin, isTeamCaptain, isReporter } =
-            await getAuthRoles(
-                decodedToken.uid,
-                decodedToken.email,
-                reporter_id
-            )
-        req.user.isDirector = isDirector
+        const { isAdmin, isReporter } = await getAuthRoles(
+            decodedToken.uid,
+            decodedToken.email,
+            reporter_id
+        )
         req.user.isAdmin = isAdmin
-        req.user.isTeamCaptain = isTeamCaptain
         req.user.isReporter = isReporter
         next()
     } catch (err) {

@@ -47,7 +47,9 @@ const getEmailToSection = async (reporter_id, recipients) => {
 
     if (recipients.includes(EMAIL_RECIPIENTS.reporter)) {
         const reporter = await getUserByUID(reporter_id)
-        emailToSet.add(reporter.email)
+        if (reporter.email) {
+            emailToSet.add(reporter.email)
+        }
     }
 
     if (recipients.includes(EMAIL_RECIPIENTS.team_captain)) {
@@ -61,6 +63,7 @@ const getMainMessageHTML = (msg) => `<p>${msg}</p>`
 
 const getPPRTicketInfoHTML = async (ppr) => {
     const reporter = await getUserByUID(ppr.reporter_id)
+    const reporterEmail = reporter.email ? `&lt;${reporter.email}&gt;` : ''
     return `
         <p>
             Ticket Code: ${ppr.code} <br />
@@ -69,7 +72,7 @@ const getPPRTicketInfoHTML = async (ppr) => {
             Purchase URL: ${ppr.purchase_url} <br />
             Purchase Justification: ${ppr.purchase_justification} <br />
             Status: ${ppr.status} <br />
-            Reporter: ${reporter.displayName} &lt;${reporter.email}&gt; <br />
+            Reporter: ${reporter.displayName} ${reporterEmail} <br />
             Created: ${new Date(ppr.createdAt).toDateString()}
         </p>
     `
@@ -77,6 +80,7 @@ const getPPRTicketInfoHTML = async (ppr) => {
 
 const getUPRTicketInfoHTML = async (upr) => {
     const reporter = await getUserByUID(upr.reporter_id)
+    const reporterEmail = reporter.email ? `&lt;${reporter.email}&gt;` : ''
     return `
         <p>
             Ticket Code: ${upr.code} <br />
@@ -86,7 +90,7 @@ const getUPRTicketInfoHTML = async (upr) => {
             Purchase Instructions: ${upr.purchase_instructions} <br />
             Purchase Justification: ${upr.purchase_justification} <br />
             Status: ${upr.status} <br />
-            Reporter: ${reporter.displayName} &lt;${reporter.email}&gt; <br />
+            Reporter: ${reporter.displayName} ${reporterEmail} <br />
             Created: ${new Date(upr.createdAt).toDateString()}
         </p>
     `
@@ -94,6 +98,7 @@ const getUPRTicketInfoHTML = async (upr) => {
 
 const getSFTicketInfoHTML = async (sf) => {
     const reporter = await getUserByUID(sf.reporter_id)
+    const reporterEmail = reporter.email ? `&lt;${reporter.email}&gt;` : ''
     return `
         <p>
             Ticket Code: ${sf.code} <br />
@@ -111,7 +116,7 @@ const getSFTicketInfoHTML = async (sf) => {
                     : ``
             }
             Status: ${sf.status} <br />
-            Reporter: ${reporter.displayName} &lt;${reporter.email}&gt; <br />
+            Reporter: ${reporter.displayName} ${reporterEmail} <br />
             Created: ${new Date(sf.createdAt).toDateString()} <br />
             Claim Deadline: ${new Date(sf.claim_deadline).toDateString()} <br />
         </p>

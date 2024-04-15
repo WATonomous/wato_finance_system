@@ -30,8 +30,8 @@ const createPersonalPurchaseController = (req, res) => {
 }
 
 const updatePersonalPurchaseController = (req, res) => {
-    if (!req.user.isDirector && !req.user.isReporter) {
-        res.status(403).json('Error: Must be Director+ or reporter to update')
+    if (!req.user.isAdmin && !req.user.isReporter) {
+        res.status(403).json('Error: Must be admin or reporter to update')
         return
     }
 
@@ -48,8 +48,8 @@ const updatePersonalPurchaseController = (req, res) => {
 }
 
 const updateFILinkPersonalPurchaseController = async (req, res) => {
-    if (!req.user.isDirector && !req.user.isReporter) {
-        res.status(403).json('Error: Must be Director+ or reporter to update')
+    if (!req.user.isAdmin && !req.user.isReporter) {
+        res.status(403).json('Error: Must be admin or reporter to update')
         return
     }
     const { fi_link } = req.params
@@ -66,16 +66,9 @@ const updateFILinkPersonalPurchaseController = async (req, res) => {
 }
 
 const updateApprovalsPersonalPurchaseController = async (req, res) => {
-    const { new_approval_levels, approval_type } = req.body
-    const canUpdateApproval =
-        (approval_type === APPROVAL_LEVELS.admin_approval &&
-            req.user.isAdmin) ||
-        (approval_type === APPROVAL_LEVELS.team_captain_approval &&
-            req.user.isTeamCaptain) ||
-        (approval_type === APPROVAL_LEVELS.director_approval &&
-            req.user.isDirector)
+    const { new_approval_levels } = req.body
 
-    if (!canUpdateApproval) {
+    if (!req.user.isAdmin) {
         res.status(403).json('Error: Permission Denied')
         return
     }
@@ -88,8 +81,8 @@ const updateApprovalsPersonalPurchaseController = async (req, res) => {
 }
 
 const deletePersonalPurchaseController = (req, res) => {
-    if (!req.user.isDirector && !req.user.isReporter) {
-        res.status(403).json('Error: Must be Director+ or reporter to delete')
+    if (!req.user.isAdmin && !req.user.isReporter) {
+        res.status(403).json('Error: Must be admin or reporter to delete')
         return
     }
     deletePersonalPurchase(req.params.id)

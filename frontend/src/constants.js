@@ -13,14 +13,18 @@ export const TICKET_ENDPOINTS = Object.freeze({
 })
 
 export const APPROVAL_LEVELS = Object.freeze({
-    director_approval: 'director_approval',
-    team_captain_approval: 'team_captain_approval',
+    director_approval: 'director_approval', // deprecated
+    team_captain_approval: 'team_captain_approval', // deprecated
     admin_approval: 'admin_approval',
+    faculty_advisor_approval: 'faculty_advisor_approval',
+})
+
+export const AUTH_ROLES = Object.freeze({
+    Member: 'Member',
+    Administrator: 'Administrator',
 })
 
 export const ADMIN_IDENTIFIERS = ['drayside', 'v2zheng', 'jw4he', 'william.li']
-export const TEAM_CAPTAIN_TITLES = ['Team Captain']
-export const DIRECTOR_TITLES = ['Director']
 
 export const ENDOWMENT_FUNDS = ['MEF', 'WEEF', 'EngSoc', 'Dean of Eng']
 

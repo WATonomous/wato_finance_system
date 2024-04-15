@@ -69,9 +69,8 @@ const updateFILinkPersonalPurchase = async (id, new_fi_link) => {
 
 const updateApprovalsPersonalPurchase = async (id, new_approval_levels) => {
     const completedApprovals =
-        new_approval_levels.team_captain_approval &&
         new_approval_levels.admin_approval &&
-        new_approval_levels.director_approval
+        new_approval_levels.faculty_advisor_approval
 
     if (completedApprovals) {
         const newPersonalPurchase = await PersonalPurchase.findByIdAndUpdate(
