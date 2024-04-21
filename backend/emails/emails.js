@@ -2,6 +2,7 @@ const { EMAIL_RECIPIENTS } = require('../models/constants')
 const { sendEmail } = require('../service/sendEmail')
 const { getUserByUID } = require('../service/users.service')
 
+const FINANCE_GROUP_EMAIL = 'finance@watonomous.ca'
 const DivisionEmails = {
     software: 'software-leads@watonomous.ca',
     mechanical: 'mechanical-leads@watonomous.ca',
@@ -15,13 +16,7 @@ const currencyFormatter = new Intl.NumberFormat('en-CA', {
 })
 
 const getEmailToSection = async (reporter_id, recipients) => {
-    const emailToSet = new Set(
-        process.env.WATO_FINANCE_EMAIL_RECIPIENTS?.split(',') || [
-            'jw4he@watonomous.ca',
-            'v2zheng@watonomous.ca',
-            'william.li@watonomous.ca',
-        ]
-    )
+    const emailToSet = new Set([FINANCE_GROUP_EMAIL])
 
     if (recipients.includes(EMAIL_RECIPIENTS.admin)) {
         // TODO: use ADMIN_IDENTIFIERS (rename to ADMIN_EMAILS) after migrating to new onboarding data
