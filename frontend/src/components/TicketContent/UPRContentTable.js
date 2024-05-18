@@ -47,13 +47,33 @@ const UPRContentTable = () => {
         }
     }
 
+    const statusToStatusText = {
+        SEEKING_APPROVAL: 'Seeking Approval',
+        SENT_TO_COORDINATOR: 'Sent to Coordinator',
+        ORDERED: 'Ordered',
+        READY_FOR_PICKUP: 'Ready for Pickup',
+        PICKED_UP: 'Picked up',
+    }
+
+    const statusToNextStatusText = {
+        SEEKING_APPROVAL: 'Sent to Coordinator',
+        SENT_TO_COORDINATOR: 'Ordered',
+        ORDERED: 'Ready for Pickup',
+        READY_FOR_PICKUP: 'Picked up',
+        PICKED_UP: 'N/A',
+    }
+
     return (
         <VStack>
             <Table mb="12px">
                 <Tbody>
                     <TicketContentTableRow
                         heading={'Status'}
-                        value={currentTicket.status}
+                        value={statusToStatusText[currentTicket.status]}
+                    />
+                    <TicketContentTableRow
+                        heading={'Next Status'}
+                        value={statusToNextStatusText[currentTicket.status]}
                     />
                     <TicketContentTableRow
                         heading={'Cost'}
@@ -92,6 +112,7 @@ const UPRContentTable = () => {
                         heading={'Finance/Admin Approval'}
                         value={
                             <Checkbox
+                                borderColor="lightslategrey"
                                 disabled={
                                     !auth.isAdmin ||
                                     currentTicket.status !==
@@ -109,6 +130,7 @@ const UPRContentTable = () => {
                         heading={'Faculty Advisor Approval'}
                         value={
                             <Checkbox
+                                borderColor="lightslategrey"
                                 disabled={
                                     !auth.isAdmin ||
                                     currentTicket.status !==

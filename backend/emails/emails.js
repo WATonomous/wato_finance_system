@@ -172,10 +172,10 @@ const sendEmailUPRCreatedToApprovers = async (upr) => {
 }
 
 const sendEmailUPRPurchasedToReporter = async (upr) => {
-    const Subject = `[Purchased] ${upr.codename}`
+    const Subject = `[Ordered] ${upr.codename}`
     const HTMLPart =
         getMainMessageHTML(
-            `Your UW Finance Purchase Request has been purchased! When the item is ready to be picked up, we will let you know.`
+            `Your UW Finance Purchase Request has been ordered! When the item is ready to be picked up, we will let you know.`
         ) +
         (await getUPRTicketInfoHTML(upr)) +
         getTicketLinkHTML(upr.path)
@@ -191,10 +191,10 @@ const sendEmailUPRPurchasedToReporter = async (upr) => {
 }
 
 const sendEmailUPRPurchasedToCoordinator = async (upr) => {
-    const Subject = `[Purchased] ${upr.codename}`
+    const Subject = `[Ordered] ${upr.codename}`
     const HTMLPart =
         getMainMessageHTML(
-            'Thanks for purchasing the item(s)! When the item is ready to be picked up, please update the ticket below.'
+            'Thanks for ordering the item(s)! When the item is ready to be picked up, please update the ticket below.'
         ) +
         (await getUPRTicketInfoHTML(upr)) +
         getTicketLinkHTML(upr.path)

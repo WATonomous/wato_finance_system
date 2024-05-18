@@ -47,13 +47,33 @@ const PPRContentTable = () => {
         }
     }
 
+    const statusToStatusText = {
+        SEEKING_APPROVAL: 'Seeking Approval',
+        READY_TO_BUY: 'Ready to Buy',
+        PURCHASED_AND_RECEIPTS_SUBMITTED: 'Purchased and Receipts Submitted',
+        REPORTER_PAID: 'Reporter Paid',
+        REPORTER_REIMBURSE_CONFIRMED: 'Reporter Reimbursed',
+    }
+
+    const statusToNextStatusText = {
+        SEEKING_APPROVAL: 'Ready to Buy',
+        READY_TO_BUY: 'Purchased and Receipts Submitted',
+        PURCHASED_AND_RECEIPTS_SUBMITTED: 'Reporter Paid',
+        REPORTER_PAID: 'Reporter Reimbursed',
+        REPORTER_REIMBURSE_CONFIRMED: 'N/A',
+    }
+
     return (
         <VStack>
             <Table mb="12px">
                 <Tbody>
                     <TicketContentTableRow
                         heading={'Status'}
-                        value={currentTicket.status}
+                        value={statusToStatusText[currentTicket.status]}
+                    />
+                    <TicketContentTableRow
+                        heading={'Next Status'}
+                        value={statusToNextStatusText[currentTicket.status]}
                     />
                     <TicketContentTableRow
                         heading={'Cost'}
@@ -84,6 +104,7 @@ const PPRContentTable = () => {
                         heading={'Finance/Admin Approval'}
                         value={
                             <Checkbox
+                                borderColor="lightslategrey"
                                 disabled={
                                     !auth.isAdmin ||
                                     currentTicket.status !==
@@ -101,6 +122,7 @@ const PPRContentTable = () => {
                         heading={'Faculty Advisor Approval'}
                         value={
                             <Checkbox
+                                borderColor="lightslategrey"
                                 disabled={
                                     !auth.isAdmin ||
                                     currentTicket.status !==

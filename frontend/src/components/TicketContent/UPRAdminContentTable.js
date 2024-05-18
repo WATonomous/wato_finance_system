@@ -117,7 +117,7 @@ const UPRAdminContentTable = () => {
                         onClick={transitionToPurchased}
                         disabled={!poNum || !reqNum}
                     >
-                        Transition To Purchased
+                        Transition To Ordered
                     </Button>
                 )}
                 {currentTicket.status === 'ORDERED' && (

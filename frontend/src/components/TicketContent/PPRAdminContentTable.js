@@ -25,24 +25,19 @@ const PPRAdminContentTable = () => {
             case 'SEEKING_APPROVAL':
                 return (
                     <>
-                        <h1>No Current Actions Available</h1>
-                        <h2>Will automatically transition to READY_TO_BUY</h2>
                         <h2>
-                            Condition: All three approvals below must be checked
+                            To transition status, all three approvals below must
+                            be checked
                         </h2>
                     </>
                 )
             case 'READY_TO_BUY':
                 return (
                     <>
-                        <h1>No Current Actions Available</h1>
                         <h2>
-                            Will automatically transition to
-                            PURCHASED_AND_RECEIPTS_SUBMITTED
-                        </h2>
-                        <h2>
-                            Condition: Reporter uploads supporting documents and
-                            manually transitions status
+                            To transition status, reporter must upload
+                            supporting documents and manually transition the
+                            status
                         </h2>
                     </>
                 )
@@ -51,14 +46,10 @@ const PPRAdminContentTable = () => {
             case 'REPORTER_PAID':
                 return (
                     <>
-                        <h1>No Current Actions Available</h1>
                         <h2>
-                            Will automatically transition to
-                            REPORTER_REIMBURSE_CONFIRMED
-                        </h2>
-                        <h2>
-                            Condition: Reporter confirms they have been
-                            reimbursed and manually transitions status
+                            To transition status, reporter must confirm they
+                            have been reimbursed and manually transition the
+                            status
                         </h2>
                     </>
                 )

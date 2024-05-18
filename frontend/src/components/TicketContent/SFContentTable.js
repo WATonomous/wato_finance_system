@@ -6,6 +6,11 @@ import { useGetCurrentTicket } from '../../hooks/hooks'
 
 const SFContentTable = () => {
     const currentTicket = useGetCurrentTicket()
+    const statusToText = {
+        ALLOCATED: 'Allocated',
+        CLAIM_SUBMITTED: 'Claim Submitted',
+        REIMBURSED: 'Reimbursed',
+    }
 
     return (
         <VStack>
@@ -13,7 +18,7 @@ const SFContentTable = () => {
                 <Tbody>
                     <TicketContentTableRow
                         heading={'Status'}
-                        value={currentTicket.status}
+                        value={statusToText[currentTicket.status]}
                     />
                     <TicketContentTableRow
                         heading={'Funding Allocation'}
