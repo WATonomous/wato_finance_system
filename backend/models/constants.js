@@ -55,6 +55,7 @@ const TICKET_ENDPOINTS = Object.freeze({
 })
 
 const ADMIN_IDENTIFIERS = ['drayside', 'v2zheng', 'jw4he', 'william.li']
+const ADMIN_GROUP_EMAIL = 'finance-admin@watonomous.ca'
 
 module.exports = {
     ENDOWMENT_FUNDS,
@@ -68,4 +69,5 @@ module.exports = {
     AUTH_ROLES,
     EMAIL_RECIPIENTS,
     ADMIN_IDENTIFIERS,
+    ADMIN_GROUP_EMAIL,
 }
