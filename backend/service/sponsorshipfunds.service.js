@@ -9,7 +9,7 @@ const {
 const {
     sendEmailSFReimbursementRequestToCoordinator,
     sendEmailSFConfirmReimbursementSubmitToCoordinator,
-    sendEmailSFReimbursementReceivedToTeam,
+    sendEmailSFReimbursementReceivedToAdmin,
 } = require('../emails/emails')
 
 const getAllSponsorshipFunds = () => {
@@ -79,7 +79,7 @@ const updateSponsorshipFund = async (id, body) => {
     }
 
     if (status === 'REIMBURSED') {
-        await sendEmailSFReimbursementReceivedToTeam(annotatedSponsorshipFund)
+        await sendEmailSFReimbursementReceivedToAdmin(annotatedSponsorshipFund)
     }
 
     return newSponsorshipFund

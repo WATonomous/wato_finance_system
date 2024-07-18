@@ -5,7 +5,7 @@ const mailjet = Mailjet.apiConnect(
     process.env.WATO_FINANCE_MAILJET_SECRET_KEY
 )
 
-const sendEmail = async ({ To, Subject, HTMLPart }) => {
+const sendEmail = async ({ Subject, HTMLPart, To, Cc = [] }) => {
     console.log('📧 Subject:', Subject)
     console.log('📬 Recipients:', To)
     try {
@@ -16,6 +16,7 @@ const sendEmail = async ({ To, Subject, HTMLPart }) => {
                         Email: process.env.WATO_FINANCE_FINANCE_EMAIL,
                     },
                     To,
+                    Cc,
                     Subject,
                     HTMLPart,
                 },
