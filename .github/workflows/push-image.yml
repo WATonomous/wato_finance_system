@@ -48,7 +48,7 @@ jobs:
                       type=ref,event=tag
                       type=ref,event=pr
                       type=sha,format=long
-            
+
             - name: Extract metadata (tags, labels) for Docker (backend)
               id: meta-backend
               uses: docker/metadata-action@c4ee3adeed93b1fa6a762f209fb01608c1a22f1e
