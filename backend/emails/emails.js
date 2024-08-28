@@ -1,14 +1,6 @@
-const { EMAIL_RECIPIENTS } = require('../models/constants')
+const { EMAIL_RECIPIENTS, ADMIN_GROUP_EMAIL } = require('../models/constants')
 const { sendEmail } = require('../service/sendEmail')
 const { getUserByUID } = require('../service/users.service')
-
-const FINANCE_GROUP_EMAIL = 'finance@watonomous.ca'
-const DivisionEmails = {
-    software: 'software-leads@watonomous.ca',
-    mechanical: 'mechanical-leads@watonomous.ca',
-    business: 'business-leads@watonomous.ca',
-    electrical: 'electrical-leads@watonomous.ca',
-}
 
 const currencyFormatter = new Intl.NumberFormat('en-CA', {
     style: 'currency',
@@ -16,28 +8,18 @@ const currencyFormatter = new Intl.NumberFormat('en-CA', {
 })
 
 const getEmailToSection = async (reporter_id, recipients) => {
-    const emailToSet = new Set([FINANCE_GROUP_EMAIL])
+    const emailToSet = new Set([ADMIN_GROUP_EMAIL])
 
     if (recipients.includes(EMAIL_RECIPIENTS.admin)) {
-        // TODO: use ADMIN_IDENTIFIERS (rename to ADMIN_EMAILS) after migrating to new onboarding data
+        emailToSet.add(ADMIN_GROUP_EMAIL)
     }
 
     if (recipients.includes(EMAIL_RECIPIENTS.coordinator)) {
-        // TODO: determine which is the correct coordinator email
         // emailToSet.add('studentdesigncentreengineering@uwaterloo.ca')
-        // emailToSet.add('srfeeney@uwaterloo.ca')
-    }
-
-    if (recipients.includes(EMAIL_RECIPIENTS.director)) {
-        // TODO: get director emails
     }
 
     if (recipients.includes(EMAIL_RECIPIENTS.faculty_advisor)) {
-        // emailToSet.add('drayside@uwaterloo.ca')
-    }
-
-    if (recipients.includes(EMAIL_RECIPIENTS.finance)) {
-        // emailToSet.add(process.env.WATO_FINANCE_FINANCE_EMAIL)
+        // TODO: emailToSet.add('drayside@uwaterloo.ca')
     }
 
     if (recipients.includes(EMAIL_RECIPIENTS.reporter)) {
@@ -45,10 +27,6 @@ const getEmailToSection = async (reporter_id, recipients) => {
         if (reporter.email) {
             emailToSet.add(reporter.email)
         }
-    }
-
-    if (recipients.includes(EMAIL_RECIPIENTS.team_captain)) {
-        // TODO: get team captain emails
     }
 
     return [...emailToSet].map((Email) => ({ Email }))
@@ -129,26 +107,7 @@ const getTicketLinkHTML = (ticketPath) => `
     </p>
 `
 
-const sendEmailPPRCreatedToApprovers = async (ppr) => {
-    const Subject = `[Seeking Approval] ${ppr.codename}`
-    const HTMLPart =
-        getMainMessageHTML(
-            'A new Personal Purchase Request needs your approval!'
-        ) +
-        (await getPPRTicketInfoHTML(ppr)) +
-        getTicketLinkHTML(ppr.path)
-    const To = await getEmailToSection(ppr.reporter_id, [
-        EMAIL_RECIPIENTS.faculty_advisor,
-        EMAIL_RECIPIENTS.team_captain,
-        EMAIL_RECIPIENTS.director,
-    ])
-
-    await sendEmail({
-        Subject,
-        HTMLPart,
-        To,
-    })
-}
+// ******************** UPR EMAILS ********************
 
 const sendEmailUPRCreatedToApprovers = async (upr) => {
     const Subject = `[Seeking Approval] ${upr.codename}`
@@ -160,8 +119,27 @@ const sendEmailUPRCreatedToApprovers = async (upr) => {
         getTicketLinkHTML(upr.path)
     const To = await getEmailToSection(upr.reporter_id, [
         EMAIL_RECIPIENTS.faculty_advisor,
-        EMAIL_RECIPIENTS.team_captain,
-        EMAIL_RECIPIENTS.director,
+        EMAIL_RECIPIENTS.admin,
+    ])
+
+    await sendEmail({
+        Subject,
+        HTMLPart,
+        To,
+    })
+}
+
+const sendEmailUPRApprovedToCoordinator = async (upr) => {
+    const Subject = `[Ready to Buy] ${upr.codename}`
+    const HTMLPart =
+        getMainMessageHTML(
+            `A new UW Finance Purchase Request has been approved! Please purchase the approved item(s).<br>
+            After purchase, update the purchase order number and requisition number at the ticket link below.`
+        ) +
+        (await getUPRTicketInfoHTML(upr)) +
+        getTicketLinkHTML(upr.path)
+    const To = await getEmailToSection(upr.reporter_id, [
+        EMAIL_RECIPIENTS.coordinator,
     ])
 
     await sendEmail({
@@ -209,7 +187,7 @@ const sendEmailUPRPurchasedToCoordinator = async (upr) => {
     })
 }
 
-const sendEmailUPRReadyForPickupToCoordinator = async (upr) => {
+const sendEmailUPRReadyForPickupToReporter = async (upr) => {
     const Subject = `[Ready for pickup] ${upr.codename}`
     const HTMLPart =
         getMainMessageHTML(
@@ -219,6 +197,49 @@ const sendEmailUPRReadyForPickupToCoordinator = async (upr) => {
         getTicketLinkHTML(upr.path)
     const To = await getEmailToSection(upr.reporter_id, [
         EMAIL_RECIPIENTS.reporter,
+    ])
+    const Cc = await getEmailToSection(upr.reporter_id, [
+        EMAIL_RECIPIENTS.coordinator, // cc'd for convenience if reporter needs to contact coordinator
+    ])
+
+    await sendEmail({
+        Subject,
+        HTMLPart,
+        To,
+        Cc,
+    })
+}
+
+const sendEmailUPRPickedUpToAdmin = async (upr) => {
+    const Subject = `[Picked up] ${upr.codename}`
+    const HTMLPart =
+        getMainMessageHTML(`${upr.codename} has been picked up!`) +
+        (await getUPRTicketInfoHTML(upr)) +
+        getTicketLinkHTML(upr.path)
+    const To = await getEmailToSection(upr.reporter_id, [
+        EMAIL_RECIPIENTS.admin,
+    ])
+
+    await sendEmail({
+        Subject,
+        HTMLPart,
+        To,
+    })
+}
+
+// ******************** PPR EMAILS ********************
+
+const sendEmailPPRCreatedToApprovers = async (ppr) => {
+    const Subject = `[Seeking Approval] ${ppr.codename}`
+    const HTMLPart =
+        getMainMessageHTML(
+            'A new Personal Purchase Request needs your approval!'
+        ) +
+        (await getPPRTicketInfoHTML(ppr)) +
+        getTicketLinkHTML(ppr.path)
+    const To = await getEmailToSection(ppr.reporter_id, [
+        EMAIL_RECIPIENTS.faculty_advisor,
+        EMAIL_RECIPIENTS.admin,
     ])
 
     await sendEmail({
@@ -248,26 +269,6 @@ const sendEmailPPRApprovedToReporter = async (ppr) => {
     })
 }
 
-const sendEmailUPRApprovedToCoordinator = async (upr) => {
-    const Subject = `[Ready to Buy] ${upr.codename}`
-    const HTMLPart =
-        getMainMessageHTML(
-            `A new UW Finance Purchase Request has been approved! Please purchase the approved item(s).<br>
-            After purchase, update the purchase order number and requisition number at the ticket link below.`
-        ) +
-        (await getUPRTicketInfoHTML(upr)) +
-        getTicketLinkHTML(upr.path)
-    const To = await getEmailToSection(upr.reporter_id, [
-        EMAIL_RECIPIENTS.coordinator,
-    ])
-
-    await sendEmail({
-        Subject,
-        HTMLPart,
-        To,
-    })
-}
-
 const sendEmailPPRPurchasedAndReceiptsSubmittedToCoordinator = async (ppr) => {
     const Subject = `[Purchased And Receipts Submitted] ${ppr.codename}`
     const HTMLPart =
@@ -277,13 +278,16 @@ const sendEmailPPRPurchasedAndReceiptsSubmittedToCoordinator = async (ppr) => {
         (await getPPRTicketInfoHTML(ppr)) +
         getTicketLinkHTML(ppr.path)
     const To = await getEmailToSection(ppr.reporter_id, [
-        EMAIL_RECIPIENTS.finance,
         EMAIL_RECIPIENTS.coordinator,
+    ])
+    const Cc = await getEmailToSection(ppr.reporter_id, [
+        EMAIL_RECIPIENTS.reporter, // cc'd for convenience if coordinator needs to contact reporter
     ])
     await sendEmail({
         Subject,
         HTMLPart,
         To,
+        Cc,
     })
 }
 
@@ -296,8 +300,7 @@ const sendEmailPPRReimbursedToReporter = async (ppr) => {
         (await getPPRTicketInfoHTML(ppr)) +
         getTicketLinkHTML(ppr.path)
     const To = await getEmailToSection(ppr.reporter_id, [
-        EMAIL_RECIPIENTS.finance,
-        EMAIL_RECIPIENTS.coordinator,
+        EMAIL_RECIPIENTS.reporter,
     ])
     await sendEmail({
         Subject,
@@ -305,6 +308,8 @@ const sendEmailPPRReimbursedToReporter = async (ppr) => {
         To,
     })
 }
+
+// ******************** SF EMAILS ********************
 
 const sendEmailSFReimbursementRequestToCoordinator = async (sf) => {
     const Subject = `[Action Needed] Submit Reimbursement Request ${sf.codename}`
@@ -342,17 +347,13 @@ const sendEmailSFConfirmReimbursementSubmitToCoordinator = async (sf) => {
     })
 }
 
-const sendEmailSFReimbursementReceivedToTeam = async (sf) => {
+const sendEmailSFReimbursementReceivedToAdmin = async (sf) => {
     const Subject = `[Reimbursed] ${sf.codename}`
     const HTMLPart =
         getMainMessageHTML(`${sf.codename} has been reimbursed!`) +
         (await getSFTicketInfoHTML(sf)) +
         getTicketLinkHTML(sf.path)
-    const To = await getEmailToSection(sf.reporter_id, [
-        EMAIL_RECIPIENTS.finance,
-        EMAIL_RECIPIENTS.coordinator,
-        EMAIL_RECIPIENTS.team_captain,
-    ])
+    const To = await getEmailToSection(sf.reporter_id, [EMAIL_RECIPIENTS.admin])
     await sendEmail({
         Subject,
         HTMLPart,
@@ -365,12 +366,13 @@ module.exports = {
     sendEmailUPRApprovedToCoordinator,
     sendEmailUPRPurchasedToReporter,
     sendEmailUPRPurchasedToCoordinator,
-    sendEmailUPRReadyForPickupToCoordinator,
-    sendEmailPPRApprovedToReporter,
+    sendEmailUPRReadyForPickupToReporter,
+    sendEmailUPRPickedUpToAdmin,
     sendEmailPPRCreatedToApprovers,
+    sendEmailPPRApprovedToReporter,
     sendEmailPPRPurchasedAndReceiptsSubmittedToCoordinator,
     sendEmailPPRReimbursedToReporter,
     sendEmailSFReimbursementRequestToCoordinator,
     sendEmailSFConfirmReimbursementSubmitToCoordinator,
-    sendEmailSFReimbursementReceivedToTeam,
+    sendEmailSFReimbursementReceivedToAdmin,
 }

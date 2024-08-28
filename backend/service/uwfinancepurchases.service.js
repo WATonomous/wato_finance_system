@@ -9,7 +9,8 @@ const {
     sendEmailUPRApprovedToCoordinator,
     sendEmailUPRPurchasedToCoordinator,
     sendEmailUPRPurchasedToReporter,
-    sendEmailUPRReadyForPickupToCoordinator,
+    sendEmailUPRReadyForPickupToReporter,
+    sendEmailUPRPickedUpToAdmin,
 } = require('../emails/emails')
 
 const getAllUWFinancePurchases = () => {
@@ -53,7 +54,12 @@ const updateUWFinancePurchase = async (id, body) => {
     // ORDERED -> READY_FOR_PICKUP
     if (body.status === 'READY_FOR_PICKUP') {
         const annotatedUPR = await getUWFinancePurchase(id)
-        await sendEmailUPRReadyForPickupToCoordinator(annotatedUPR)
+        await sendEmailUPRReadyForPickupToReporter(annotatedUPR)
+    }
+    // READY_FOR_PICKUP -> PICKED_UP
+    if (body.status === 'PICKED_UP') {
+        const annotatedUPR = await getUWFinancePurchase(id)
+        await sendEmailUPRPickedUpToAdmin(annotatedUPR)
     }
     return newPurchaseTicket
 }
