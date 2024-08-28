@@ -128,7 +128,7 @@ const DeleteTicketAlertDialog = ({ isOpen, onClose }) => {
                             Cancel
                         </Button>
                         <Button
-                            colorScheme="red"
+                            variant="redDark"
                             onClick={handleDeleteCurrentTicket}
                             ml={3}
                         >

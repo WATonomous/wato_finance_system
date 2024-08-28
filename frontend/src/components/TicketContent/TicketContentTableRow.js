@@ -26,7 +26,11 @@ const TicketContentTableRow = ({ heading, value, onChange, type }) => {
                 {onChange ? (
                     <Input onChange={onChange} value={value} />
                 ) : type === 'URL' ? (
-                    <Link color="blue.500" href={addhttps(value)} isExternal>
+                    <Link
+                        color="wato.secondary"
+                        href={addhttps(value)}
+                        isExternal
+                    >
                         {value}
                     </Link>
                 ) : (

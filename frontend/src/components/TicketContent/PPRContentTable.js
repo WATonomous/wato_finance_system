@@ -104,7 +104,7 @@ const PPRContentTable = () => {
                         heading={'Finance/Admin Approval'}
                         value={
                             <Checkbox
-                                borderColor="lightslategrey"
+                                borderColor="wato.grey"
                                 disabled={
                                     !auth.isAdmin ||
                                     currentTicket.status !==

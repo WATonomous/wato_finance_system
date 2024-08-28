@@ -17,7 +17,8 @@ const TreeViewWithLinks = () => {
         <Box key={fi.code} m="0 !important">
             <Link href={getPreserveParamsHref(fi.path)}>
                 <Box
-                    bgColor="blue.200"
+                    bgColor="wato.primary"
+                    color="white"
                     m="4px 10% 0"
                     p="4px 8px"
                     borderRadius="8px"
@@ -36,7 +37,8 @@ const TreeViewWithLinks = () => {
                 return (
                     <Link key={ppr.code} href={getPreserveParamsHref(ppr.path)}>
                         <Box
-                            bgColor="cyan.200"
+                            bgColor="wato.secondary"
+                            color="white"
                             m="4px 0 0 20%"
                             p="4px 8px"
                             borderRadius="8px"
@@ -59,7 +61,8 @@ const TreeViewWithLinks = () => {
                 return (
                     <Link key={upr.code} href={getPreserveParamsHref(upr.path)}>
                         <Box
-                            bgColor="teal.200"
+                            bgColor="wato.greenDark"
+                            color="white"
                             m="4px 0 0 20%"
                             p="4px 8px"
                             borderRadius="8px"
@@ -98,7 +101,8 @@ const TreeViewWithLinks = () => {
         <Stack w="100%">
             <Link href={getPreserveParamsHref(currentTree.path)}>
                 <Box
-                    bgColor="purple.200"
+                    bgColor="wato.primaryDark"
+                    color="white"
                     p="4px 8px"
                     mr="20%"
                     borderRadius="8px"

@@ -270,21 +270,21 @@ const Dashboard = () => {
                             >
                                 <Button
                                     size="sm"
-                                    colorScheme="cyan"
+                                    variant="secondary"
                                     onClick={onOpenUpdateTicket}
                                 >
                                     <Text>Update</Text>
                                 </Button>
                                 <Button
                                     size="sm"
-                                    colorScheme="red"
+                                    variant="redDark"
                                     onClick={onOpenDeleteTicket}
                                 >
                                     <Text>Delete</Text>
                                 </Button>
                                 <Button
                                     size="sm"
-                                    colorScheme="gray"
+                                    variant="grey"
                                     onClick={onOpenUploadModal}
                                 >
                                     <Text>Upload Files</Text>
@@ -292,7 +292,7 @@ const Dashboard = () => {
                                 {currentTicket.type === TICKET_TYPES.PPR && (
                                     <Button
                                         size="sm"
-                                        colorScheme="blackAlpha"
+                                        variant="greenDark"
                                         onClick={onOpenSupportingDocumentsModal}
                                     >
                                         <Text>Upload Expense Claim Form</Text>

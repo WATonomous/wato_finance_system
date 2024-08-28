@@ -16,7 +16,8 @@ const TreeView = () => {
     const getFundingItemTree = (fi) => (
         <Box key={fi.code} m="0 !important">
             <Box
-                bgColor="blue.200"
+                bgColor="wato.primary"
+                color="white"
                 m="4px 10% 0"
                 p="4px 8px"
                 borderRadius="8px"
@@ -34,7 +35,8 @@ const TreeView = () => {
                 return (
                     <Box
                         key={ppr.code}
-                        bgColor="cyan.200"
+                        bgColor="wato.secondary"
+                        color="white"
                         m="4px 0 0 20%"
                         p="4px 8px"
                         borderRadius="8px"
@@ -56,7 +58,8 @@ const TreeView = () => {
                 return (
                     <Box
                         key={upr.code}
-                        bgColor="teal.200"
+                        bgColor="wato.greenDark"
+                        color="white"
                         m="4px 0 0 20%"
                         p="4px 8px"
                         borderRadius="8px"
@@ -93,7 +96,8 @@ const TreeView = () => {
     return (
         <Stack>
             <Box
-                bgColor="purple.200"
+                bgColor="wato.primaryDark"
+                color="white"
                 p="4px 8px"
                 mr="20%"
                 borderRadius="8px"

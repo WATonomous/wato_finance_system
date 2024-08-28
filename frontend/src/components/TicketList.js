@@ -99,7 +99,7 @@ const TicketList = ({ isLoading }) => {
                         return (
                             <Card
                                 _hover={{
-                                    bg: 'blue.500',
+                                    bgColor: 'wato.secondary',
                                     color: 'white',
                                     cursor: 'pointer',
                                 }}
@@ -113,7 +113,11 @@ const TicketList = ({ isLoading }) => {
                                     preserveParamsNavigate(ticket.path)
                                 }
                                 cursor="pointer"
-                                bg={ticket === currentTicket ? 'blue.600' : ''}
+                                bgColor={
+                                    ticket === currentTicket
+                                        ? 'wato.primary'
+                                        : ''
+                                }
                                 color={
                                     ticket === currentTicket ? 'white' : 'black'
                                 }

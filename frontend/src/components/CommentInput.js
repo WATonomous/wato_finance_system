@@ -133,7 +133,7 @@ const CommentInput = ({ code, getComments, reply, onClose, ticket }) => {
                             onClick={onClose}
                             padding="10px"
                             height="32px"
-                            colorScheme="red"
+                            variant="redDark"
                         >
                             Cancel
                         </Button>
@@ -143,7 +143,7 @@ const CommentInput = ({ code, getComments, reply, onClose, ticket }) => {
                         disabled={val.length === 0 || invalidInput(val)}
                         padding="10px"
                         height="32px"
-                        colorScheme="blue"
+                        variant="secondary"
                         onClick={() => {
                             handleSubmit(code, ticket)
                         }}
