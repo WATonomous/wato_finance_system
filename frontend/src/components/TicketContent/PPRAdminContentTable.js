@@ -35,8 +35,8 @@ const PPRAdminContentTable = () => {
                 return (
                     <>
                         <h2>
-                            To transition status, reporter must upload
-                            supporting documents and manually transition the
+                            To transition status, reporter must upload the
+                            expense claim form and manually transition the
                             status
                         </h2>
                     </>
