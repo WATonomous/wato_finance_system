@@ -289,13 +289,15 @@ const Dashboard = () => {
                                 >
                                     <Text>Upload Files</Text>
                                 </Button>
-                                <Button
-                                    size="sm"
-                                    colorScheme="blackAlpha"
-                                    onClick={onOpenSupportingDocumentsModal}
-                                >
-                                    <Text>Upload Supporting Documents</Text>
-                                </Button>
+                                {currentTicket.type === TICKET_TYPES.PPR && (
+                                    <Button
+                                        size="sm"
+                                        colorScheme="blackAlpha"
+                                        onClick={onOpenSupportingDocumentsModal}
+                                    >
+                                        <Text>Upload Expense Claim Form</Text>
+                                    </Button>
+                                )}
                             </Flex>
                         )}
                     {getCurrentTicketContentTable()}
@@ -351,7 +353,7 @@ const Dashboard = () => {
                     {supportingDocuments.length > 0 && (
                         <Box w="100%" mt="12px">
                             <Heading mb="8px" fontSize="2xl">
-                                Supporting Documents
+                                Expense Claim Form
                             </Heading>
                             <Grid gap="5px">
                                 {supportingDocuments?.map((file) => {
@@ -419,7 +421,7 @@ const Dashboard = () => {
                         (file) => file.is_supporting_document
                     )}
                     refetchFiles={getUploadedFiles}
-                    isSupportingDocument={true}
+                    isSupportingDocument
                 />
             )}
             {isDeleteTicketOpen && (

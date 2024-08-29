@@ -4,6 +4,7 @@ import {
     Button,
     CloseButton,
     Divider,
+    Link,
     ListItem,
     Modal,
     ModalBody,
@@ -21,6 +22,7 @@ import { axiosPreset } from '../axiosConfig'
 import LoadingSpinner from './LoadingSpinner'
 import { createErrorMessage } from '../utils/errorToasts'
 import { useGetCurrentTicket } from '../hooks/hooks'
+import { ExternalLinkIcon } from '@chakra-ui/icons'
 
 const fileTypes = ['PNG', 'JPG', 'PDF']
 const UploadFileModal = ({
@@ -101,10 +103,22 @@ const UploadFileModal = ({
             <ModalContent>
                 <ModalHeader>
                     {isSupportingDocument
-                        ? 'Upload Supporting Documents'
+                        ? 'Upload Expense Claim Form'
                         : 'Upload Files'}
                 </ModalHeader>
                 <ModalBody>
+                    {isSupportingDocument && (
+                        <Box marginBottom="10px">
+                            <Link
+                                href="https://wiki.watonomous.ca/finance/creating_personal_purchases"
+                                color="blue.600"
+                                isExternal
+                            >
+                                Expense Claim Form Guide
+                                <ExternalLinkIcon mx="2px" />
+                            </Link>
+                        </Box>
+                    )}
                     <FileUploader
                         handleChange={onFileAttach}
                         name="file"
