@@ -161,12 +161,12 @@ export function CreateTicketModal({ isOpen, onClose }) {
                     {displayTicketType()}
                 </ModalBody>
                 <ModalFooter>
-                    <Button colorScheme="red" mr={3} onClick={onClose}>
+                    <Button variant="redDark" mr={3} onClick={onClose}>
                         Close
                     </Button>
                     <Button
                         isLoading={isLoading}
-                        colorScheme="blue"
+                        variant="greenDark"
                         onClick={handleSubmit(createTicket)}
                     >
                         Create Ticket

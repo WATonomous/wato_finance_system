@@ -19,11 +19,11 @@ const ConfirmationModal = ({ title, body, onConfirm, isOpen, onClose }) => {
                 <ModalBody>{body}</ModalBody>
 
                 <ModalFooter>
-                    <Button colorScheme="red" mr={3} onClick={onClose}>
+                    <Button variant="redDark" mr={3} onClick={onClose}>
                         Cancel
                     </Button>
                     <Button
-                        colorScheme="green"
+                        variant="greenDark"
                         onClick={() => {
                             onClose()
                             onConfirm()

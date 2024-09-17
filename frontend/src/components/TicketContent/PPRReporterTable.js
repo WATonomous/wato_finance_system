@@ -28,7 +28,7 @@ const PPRReporterTable = ({ currentTicket, supportingDocuments }) => {
                 isDisabled={supportingDocuments.length !== 0}
             >
                 <Button
-                    colorScheme="blue"
+                    variant="secondary"
                     size="sm"
                     mr="20px"
                     onClick={() => {
@@ -45,7 +45,7 @@ const PPRReporterTable = ({ currentTicket, supportingDocuments }) => {
     const getReimbursementConfirmationBody = () => {
         return (
             <Button
-                colorScheme="blue"
+                variant="secondary"
                 size="sm"
                 mr="20px"
                 onClick={() => {

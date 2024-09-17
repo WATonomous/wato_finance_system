@@ -61,7 +61,7 @@ const PPRAdminContentTable = () => {
         return (
             <Center pb="7px">
                 <Button
-                    colorScheme="blue"
+                    variant="secondary"
                     size="sm"
                     onClick={() => handleUpdateStatus('REPORTER_PAID')}
                 >

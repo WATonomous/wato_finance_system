@@ -47,11 +47,11 @@ const Navbar = () => {
             left="0"
             alignItems="center"
             p="16px 24px"
-            bgColor="deepskyblue"
+            bgColor="wato.primary"
             w="100%"
             h="80px"
         >
-            <Link href="/">
+            <Link href="/" color="white">
                 <Heading
                     lineHeight="48px"
                     fontSize={{ base: 'lg', md: '2xl', lg: '3xl' }}
@@ -61,13 +61,14 @@ const Navbar = () => {
             </Link>
             <Spacer />
             {currentUser && (
-                <Button onClick={onOpen} colorScheme="green" mr="20px">
+                <Button onClick={onOpen} variant="greenLight" mr="20px">
                     Create New Ticket
                 </Button>
             )}
             <Button
                 onClick={currentUser ? handleLogout : handleLogin}
                 disabled={loading}
+                variant="offWhite"
             >
                 {error ? error : currentUser ? 'Log Out' : 'Log In'}
             </Button>

@@ -7,6 +7,7 @@ import {
     createRoutesFromElements,
 } from 'react-router-dom'
 import { ChakraProvider } from '@chakra-ui/react'
+import { WATonomousTheme } from './theme'
 
 import { AuthLayout } from './contexts/AuthContext'
 import { PrivateRoute, LoggedInRedirect } from './contexts/CustomRoutes'
@@ -39,7 +40,7 @@ const router = createBrowserRouter(
 const App = () => {
     return (
         <RecoilRoot>
-            <ChakraProvider>
+            <ChakraProvider theme={WATonomousTheme}>
                 <RouterProvider router={router} />
             </ChakraProvider>
         </RecoilRoot>

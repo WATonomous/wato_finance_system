@@ -20,6 +20,7 @@ const FilterDropdown = ({ filter, setFilter }) => {
             <Menu closeOnSelect={false}>
                 <MenuButton
                     as={Button}
+                    variant="offWhite"
                     w="100%"
                     rightIcon={<ChevronDownIcon />}
                 >

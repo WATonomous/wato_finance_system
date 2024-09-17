@@ -112,7 +112,7 @@ const UPRContentTable = () => {
                         heading={'Finance/Admin Approval'}
                         value={
                             <Checkbox
-                                borderColor="lightslategrey"
+                                borderColor="wato.grey"
                                 disabled={
                                     !auth.isAdmin ||
                                     currentTicket.status !==
@@ -130,7 +130,7 @@ const UPRContentTable = () => {
                         heading={'Faculty Advisor Approval'}
                         value={
                             <Checkbox
-                                borderColor="lightslategrey"
+                                borderColor="wato.grey"
                                 disabled={
                                     !auth.isAdmin ||
                                     currentTicket.status !==

@@ -92,7 +92,7 @@ const SFAdminContentTable = () => {
                     )}
                     {currentTicket.status !== 'REIMBURSED' && (
                         <Button
-                            colorScheme="blue"
+                            variant="secondary"
                             size="sm"
                             onClick={handleOpenConfirmation}
                         >
@@ -105,7 +105,7 @@ const SFAdminContentTable = () => {
                             `/claim/${currentTicket._id}`
                         )}
                     >
-                        <Button colorScheme="green" size="sm">
+                        <Button variant="greenDark" size="sm">
                             View Claim Page
                         </Button>
                     </Link>

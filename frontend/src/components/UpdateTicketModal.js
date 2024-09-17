@@ -165,13 +165,13 @@ const UpdateTicketModal = ({ isOpen, onClose }) => {
                 <ModalCloseButton />
                 <ModalBody>{displayTicketType()}</ModalBody>
                 <ModalFooter>
-                    <Button colorScheme="red" mr={3} onClick={onClose}>
+                    <Button variant="redDark" mr={3} onClick={onClose}>
                         Close
                     </Button>
                     <Button
                         isDisabled={isDisabled}
                         isLoading={isLoading}
-                        colorScheme="blue"
+                        variant="secondary"
                         onClick={handleSubmit(updateTicket)}
                     >
                         Update Ticket

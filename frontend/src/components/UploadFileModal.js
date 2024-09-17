@@ -173,7 +173,7 @@ const UploadFileModal = ({
                     </UnorderedList>
                 </ModalBody>
                 <ModalFooter>
-                    <Button colorScheme="red" mr={3} onClick={onClose}>
+                    <Button variant="redDark" mr={3} onClick={onClose}>
                         Close
                     </Button>
                     <Button
@@ -181,7 +181,7 @@ const UploadFileModal = ({
                             filesToUpload.length === 0 &&
                             filesToDelete.length === 0
                         }
-                        colorScheme="blue"
+                        variant="secondary"
                         onClick={submitFiles}
                     >
                         Save Changes

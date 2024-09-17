@@ -111,7 +111,7 @@ const UPRAdminContentTable = () => {
             <Center pb="7px">
                 {currentTicket.status === 'SENT_TO_COORDINATOR' && (
                     <Button
-                        colorScheme="blue"
+                        variant="secondary"
                         size="sm"
                         mr="20px"
                         onClick={transitionToPurchased}
@@ -122,7 +122,7 @@ const UPRAdminContentTable = () => {
                 )}
                 {currentTicket.status === 'ORDERED' && (
                     <Button
-                        colorScheme="blue"
+                        variant="secondary"
                         size="sm"
                         mr="20px"
                         onClick={transitionToReadyForPickup}
@@ -132,7 +132,7 @@ const UPRAdminContentTable = () => {
                 )}
                 {currentTicket.status === 'READY_FOR_PICKUP' && (
                     <Button
-                        colorScheme="blue"
+                        variant="secondary"
                         size="sm"
                         mr="20px"
                         onClick={transitionToPickedUp}
@@ -141,7 +141,7 @@ const UPRAdminContentTable = () => {
                     </Button>
                 )}
                 <Button
-                    colorScheme="green"
+                    variant="greenDark"
                     size="sm"
                     onClick={saveFields}
                     disabled={!changed}
