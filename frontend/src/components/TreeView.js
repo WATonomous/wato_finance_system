@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, Box, Stack } from '@chakra-ui/react'
+import { Text, Box, Stack, Button } from '@chakra-ui/react'
 import { useGetCurrentTicket, usePreserveParamsNavigate } from '../hooks/hooks'
 import { useRecoilValue } from 'recoil'
 import { currentTreeState } from '../state/atoms'
@@ -15,13 +15,12 @@ const TreeView = () => {
 
     const getFundingItemTree = (fi) => (
         <Box key={fi.code} m="0 !important">
-            <Box
-                bgColor="wato.primary"
-                color="white"
+            <Button
+                variant="primary"
+                height="auto"
                 m="4px 10% 0"
-                p="4px 8px"
+                p="8px"
                 borderRadius="8px"
-                cursor="pointer"
                 onClick={() => preserveParamsNavigate(fi.path)}
             >
                 <Text
@@ -30,17 +29,16 @@ const TreeView = () => {
                 >
                     {fi.codename}
                 </Text>
-            </Box>
+            </Button>
             {sortTickets(fi.personalPurchases).map((ppr) => {
                 return (
-                    <Box
+                    <Button
                         key={ppr.code}
-                        bgColor="wato.secondary"
-                        color="white"
+                        variant="secondary"
+                        height="auto"
                         m="4px 0 0 20%"
-                        p="4px 8px"
+                        p="8px"
                         borderRadius="8px"
-                        cursor="pointer"
                         onClick={() => preserveParamsNavigate(ppr.path)}
                     >
                         <Text
@@ -51,19 +49,18 @@ const TreeView = () => {
                         >
                             {ppr.codename}
                         </Text>
-                    </Box>
+                    </Button>
                 )
             })}
             {sortTickets(fi.uwFinancePurchases).map((upr) => {
                 return (
-                    <Box
+                    <Button
                         key={upr.code}
-                        bgColor="wato.greenDark"
-                        color="white"
+                        variant="greenDark"
+                        height="auto"
                         m="4px 0 0 20%"
-                        p="4px 8px"
+                        p="8px"
                         borderRadius="8px"
-                        cursor="pointer"
                         onClick={() => preserveParamsNavigate(upr.path)}
                     >
                         <Text
@@ -74,7 +71,7 @@ const TreeView = () => {
                         >
                             {upr.codename}
                         </Text>
-                    </Box>
+                    </Button>
                 )
             })}
         </Box>
@@ -95,13 +92,13 @@ const TreeView = () => {
 
     return (
         <Stack>
-            <Box
-                bgColor="wato.primaryDark"
-                color="white"
-                p="4px 8px"
+            <Button
+                variant="primaryDark"
+                height="auto"
                 mr="20%"
+                p="8px"
+                w="fit-content"
                 borderRadius="8px"
-                cursor="pointer"
                 onClick={() => preserveParamsNavigate(currentTree.path)}
             >
                 <Text
@@ -112,7 +109,7 @@ const TreeView = () => {
                 >
                     {currentTree.codename}
                 </Text>
-            </Box>
+            </Button>
             {sortTickets(currentTree.fundingItems).map(getFundingItemTree)}
         </Stack>
     )

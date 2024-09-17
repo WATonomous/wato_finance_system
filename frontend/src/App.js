@@ -6,7 +6,8 @@ import {
     RouterProvider,
     createRoutesFromElements,
 } from 'react-router-dom'
-import { ChakraProvider, extendTheme } from '@chakra-ui/react'
+import { ChakraProvider } from '@chakra-ui/react'
+import { WATonomousTheme } from './theme'
 
 import { AuthLayout } from './contexts/AuthContext'
 import { PrivateRoute, LoggedInRedirect } from './contexts/CustomRoutes'
@@ -45,71 +46,5 @@ const App = () => {
         </RecoilRoot>
     )
 }
-
-const WATonomousTheme = extendTheme({
-    colors: {
-        wato: {
-            offBlack: '#222222',
-            grey: '#414141',
-            offWhite: '#c7cfd8',
-
-            primaryDark: '#08192d',
-            primary: '#0f4271',
-            secondary: '#1f5d96',
-
-            greenDark: '#0c4842',
-            greenLight: '#66ddc8',
-
-            redDark: '#92093a',
-            redLight: '#d8436d',
-        },
-    },
-    components: {
-        Button: {
-            variants: {
-                offWhite: {
-                    bgColor: 'wato.offWhite',
-                    _hover: {
-                        bgColor: 'wato.offWhite',
-                    },
-                },
-                grey: {
-                    color: 'white',
-                    bgColor: 'wato.grey',
-                    _hover: {
-                        bgColor: 'wato.grey',
-                    },
-                },
-                secondary: {
-                    color: 'white',
-                    bgColor: 'wato.secondary',
-                    _hover: {
-                        bgColor: 'wato.secondary',
-                    },
-                },
-                greenDark: {
-                    color: 'white',
-                    bgColor: 'wato.greenDark',
-                    _hover: {
-                        bgColor: 'wato.greenDark',
-                    },
-                },
-                greenLight: {
-                    bgColor: 'wato.greenLight',
-                    _hover: {
-                        bgColor: 'wato.greenLight',
-                    },
-                },
-                redDark: {
-                    color: 'white',
-                    bgColor: 'wato.redDark',
-                    _hover: {
-                        bgColor: 'wato.redDark',
-                    },
-                },
-            },
-        },
-    },
-})
 
 export default App

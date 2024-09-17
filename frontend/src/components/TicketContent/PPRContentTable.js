@@ -122,7 +122,7 @@ const PPRContentTable = () => {
                         heading={'Faculty Advisor Approval'}
                         value={
                             <Checkbox
-                                borderColor="lightslategrey"
+                                borderColor="wato.grey"
                                 disabled={
                                     !auth.isAdmin ||
                                     currentTicket.status !==
