@@ -47,8 +47,8 @@ def run(
     # we need to build the env file like this because docker --env-file is weird.
     # https://github.com/docker/cli/issues/3630
     with tempfile.NamedTemporaryFile(mode='w', newline='\n') as env_file:
-        for var, value in env_vars.items():
-            env_file.write(f"{var}={value}\n")
+        for line in env_file_lines:
+            env_file.write(f"{line}\n")
         env_file.flush()
 
         docker_flags = [
