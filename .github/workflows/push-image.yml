@@ -99,4 +99,4 @@ jobs:
                   VCLUSTER_KUBECONFIG_B64: ${{ secrets.VCLUSTER_KUBECONFIG_B64 }}
               # no-op run for now:
               run: |
-                  python ./deployment/run-ci.py --help
+                  python ./deployment/run-ci.py --dry-run
