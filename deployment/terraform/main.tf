@@ -45,12 +45,19 @@ locals {
   frontend_app_port = 3000
 }
 
-import {
-  to = kubernetes_namespace.wato_finance_backend
-  id = "wato-finance-backend"
-}
-resource "kubernetes_namespace" "wato_finance_backend" {
+// Synced with the vcluster from the host:
+// https://www.vcluster.com/docs/vcluster/configure/vcluster-yaml/sync/from-host
+data "kubernetes_namespace" "wato_finance_backend" {
   metadata {
     name = "wato-finance-backend"
+  }
+}
+
+// Synced with the vcluster from the host:
+// https://www.vcluster.com/docs/vcluster/configure/vcluster-yaml/sync/from-host
+data "kubernetes_secret" "user_directory_json" {
+  metadata {
+    name = "user-directory-json"
+    namespace = data.kubernetes_namespace.wato_finance_backend.metadata[0].name
   }
 }
