@@ -16,6 +16,7 @@ env:
 
 jobs:
     build-and-push-image:
+        if: github.ref_name == 'master'
         runs-on: ubuntu-latest
         permissions:
             contents: read
@@ -98,10 +99,10 @@ jobs:
                   TERRAFORM_CLOUD_TOKEN: ${{ secrets.TERRAFORM_CLOUD_TOKEN }}
                   VCLUSTER_KUBECONFIG_B64: ${{ secrets.VCLUSTER_KUBECONFIG_B64 }}
               run: |
-                  if [[ "${{ github.ref_name }}" == "master" ]]; then
-                    echo "Deploying application"
+                  if [[ "${GITHUB_REF_NAME}" == "master" ]]; then
+                    echo "Deploying application for ref name ${GITHUB_REF_NAME}"
                     python ./deployment/run-ci.py
                   else
-                    echo "Running in dry-run mode"
+                    echo "Running in dry-run mode for ref name ${GITHUB_REF_NAME}"
                     python ./deployment/run-ci.py --dry-run
                   fi
