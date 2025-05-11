@@ -1,4 +1,4 @@
-name: Create and publish Docker images
+name: Publish Docker Images and Deploy Application
 
 on:
     push:
@@ -84,3 +84,24 @@ jobs:
                       DOCKER_METADATA_OUTPUT_JSON
                   tags: ${{ steps.meta-backend.outputs.tags }}
                   labels: ${{ steps.meta-backend.outputs.labels }}
+    deploy-image:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            packages: write
+        steps:
+            - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+            - name: Install dependencies
+              run: pip3 install typer python-dotenv
+            - name: Provision
+              env:
+                  TERRAFORM_CLOUD_TOKEN: ${{ secrets.TERRAFORM_CLOUD_TOKEN }}
+                  VCLUSTER_KUBECONFIG_B64: ${{ secrets.VCLUSTER_KUBECONFIG_B64 }}
+              run: |
+                  if [[ "${GITHUB_REF_NAME}" == "master" ]]; then
+                    echo "Deploying application for ref name ${GITHUB_REF_NAME}"
+                    python ./deployment/run-ci.py
+                  else
+                    echo "Running in dry-run mode for ref name ${GITHUB_REF_NAME}"
+                    python ./deployment/run-ci.py --dry-run
+                  fi
