@@ -97,6 +97,11 @@ jobs:
               env:
                   TERRAFORM_CLOUD_TOKEN: ${{ secrets.TERRAFORM_CLOUD_TOKEN }}
                   VCLUSTER_KUBECONFIG_B64: ${{ secrets.VCLUSTER_KUBECONFIG_B64 }}
-              # no-op run for now:
               run: |
-                  python ./deployment/run-ci.py --dry-run
+                  if [[ "${{ github.ref_name }}" == "master" ]]; then
+                    echo "Deploying application"
+                    python ./deployment/run-ci.py
+                  else
+                    echo "Running in dry-run mode"
+                    python ./deployment/run-ci.py --dry-run
+                  fi
