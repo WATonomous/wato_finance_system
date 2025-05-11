@@ -30,7 +30,7 @@ TF_VARS = {
     "kube_config_path": EnvVarToFile("VCLUSTER_KUBECONFIG_B64", f"{RUN_DIR}/kube_config")
 }
 
-def setup_environment():
+def set_up_environment():
     in_docker = Path("/.dockerenv").exists()
     if not in_docker:
         raise EnvironmentError("Script is expected to be run in a Docker container.")
@@ -84,7 +84,7 @@ def terraform_deploy(auto_approve):
 
 @app.command()
 def provision(auto_approve: bool = False):
-    setup_environment()
+    set_up_environment()
     terraform_init()
     terraform_deploy(auto_approve)
 
