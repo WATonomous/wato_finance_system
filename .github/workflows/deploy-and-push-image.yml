@@ -97,6 +97,9 @@ jobs:
               env:
                   TERRAFORM_CLOUD_TOKEN: ${{ secrets.TERRAFORM_CLOUD_TOKEN }}
                   VCLUSTER_KUBECONFIG_B64: ${{ secrets.VCLUSTER_KUBECONFIG_B64 }}
+                  BACKEND_ENV_FILE_B64: ${{ secrets.BACKEND_ENV_FILE_B64 }}
+                  BACKEND_SERVICE_ACCOUNT_FILE_B64: ${{ secrets.BACKEND_SERVICE_ACCOUNT_FILE_B64 }}
+                  FRONTEND_ENV_FILE_B64: ${{ secrets.FRONTEND_ENV_FILE_B64 }}
               run: |
                   if [[ "${GITHUB_REF_NAME}" == "master" ]]; then
                     echo "Deploying application for ref name ${GITHUB_REF_NAME}"

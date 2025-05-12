@@ -87,6 +87,17 @@ resource "kubernetes_deployment" "wato_finance_frontend_deployment" {
             timeout_seconds       = 5
             failure_threshold     = 12
           }
+          // TODO: is this even needed?
+          security_context {
+            allow_privilege_escalation = false
+            run_as_non_root            = false
+            capabilities {
+              drop = ["ALL"]
+            }
+            seccomp_profile {
+              type = "RuntimeDefault"
+            }
+          }
         }
         volume {
           name = local.frontend_env_volume_name

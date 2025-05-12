@@ -8,15 +8,16 @@ resource "kubernetes_namespace" "reloader" {
   }
 }
 
-resource "helm_release" "reloader" {
-  name             = "stakater"
-  namespace        = kubernetes_namespace.reloader.metadata[0].name
-  chart            = "reloader"
-  repository       = "https://stakater.github.io/stakater-charts"
-  version          = "v1.0.51"
-  values = [<<EOF
-    reloader:
-      reloadStrategy: annotations
-    EOF
-  ]
-}
+# TODO: get this working
+# resource "helm_release" "reloader" {
+#   name             = "stakater"
+#   namespace        = kubernetes_namespace.reloader.metadata[0].name
+#   chart            = "reloader"
+#   repository       = "https://stakater.github.io/stakater-charts"
+#   version          = "v1.0.51"
+#   values = [<<EOF
+#     reloader:
+#       reloadStrategy: annotations
+#     EOF
+#   ]
+# }

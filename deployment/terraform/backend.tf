@@ -1,11 +1,5 @@
 // Misc. Deployment Resources:
 
-resource "kubernetes_namespace" "wato_finance_backend" {
-  metadata {
-    name = "wato-finance-backend"
-  }
-}
-
 // Variables in env file:
 # ATLAS_URI=<YOUR_MONGO_ATLAS_URI_HERE>
 # MAILJET_API_KEY=<YOUR_MAILJET_API_KEY>
@@ -29,7 +23,7 @@ variable "backend_service_account_path" {
 resource "kubernetes_secret" "backend_env_vars" {
   metadata {
     name = "wato-finance-backend-env-vars"
-    namespace = kubernetes_namespace.wato_finance_backend.metadata[0].name
+    namespace = data.kubernetes_namespace.wato_finance_backend.metadata[0].name
   }
   data = {
     ".env" = file(var.backend_env_file_path)
@@ -42,7 +36,7 @@ resource "kubernetes_secret" "backend_env_vars" {
 resource "kubernetes_deployment" "wato_finance_backend_deployment" {
   metadata {
     name        = local.backend_app_name
-    namespace   = kubernetes_namespace.wato_finance_backend.metadata[0].name
+    namespace   = data.kubernetes_namespace.wato_finance_backend.metadata[0].name
     annotations = {
       "reloader.stakater.com/auto" = "true"
     }
@@ -84,6 +78,17 @@ resource "kubernetes_deployment" "wato_finance_backend_deployment" {
              mount_path = "/usr/src/app/backend/user_directory.json"
              sub_path   = "user_directory.json"
              read_only  = true
+          }
+          // TODO: is this even needed?
+          security_context {
+            allow_privilege_escalation = false
+            run_as_non_root            = false
+            capabilities {
+              drop = ["ALL"]
+            }
+            seccomp_profile {
+              type = "RuntimeDefault"
+            }
           }
         }
         volume { # volume containing .env file and service account key

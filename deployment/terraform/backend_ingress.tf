@@ -4,7 +4,7 @@ resource "kubernetes_manifest" "wato_finance_backend_service" {
     kind = "Service"
     metadata = {
       name = "wato-finance-backend-service"
-      namespace = kubernetes_namespace.wato_finance_backend.metadata[0].name
+      namespace = data.kubernetes_namespace.wato_finance_backend.metadata[0].name
     }
     spec = {
       selector = {
@@ -28,7 +28,7 @@ resource "kubernetes_manifest" "wato_finance_backend_ingress" {
     kind = "Ingress"
     metadata = {
       name = "wato-finance-backend-ingress"
-      namespace = kubernetes_namespace.wato_finance_backend.metadata[0].name
+      namespace = data.kubernetes_namespace.wato_finance_backend.metadata[0].name
       annotations = {
         "nginx.ingress.kubernetes.io/rewrite-target" = "/$1"
         "nginx.ingress.kubernetes.io/enable-cors" = "true"
