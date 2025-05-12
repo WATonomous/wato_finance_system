@@ -27,7 +27,10 @@ class EnvVarToFile:
 RUN_DIR = "/run"
 TF_CODE_DIR = "./terraform"
 TF_VARS = {
-    "kube_config_path": EnvVarToFile("VCLUSTER_KUBECONFIG_B64", f"{RUN_DIR}/kube_config")
+    "kube_config_path": EnvVarToFile("VCLUSTER_KUBECONFIG_B64", f"{RUN_DIR}/kube_config"),
+    "backend_env_file_path": EnvVarToFile("VCLUSTER_KUBECONFIG_B64", f"{RUN_DIR}/.env-backend"),
+    "backend_service_account_path": EnvVarToFile("VCLUSTER_KUBECONFIG_B64", f"{RUN_DIR}/serviceAccountKey.json"),
+    "frontend_env_file_path": EnvVarToFile("VCLUSTER_KUBECONFIG_B64", f"{RUN_DIR}/.env-frontend")
 }
 
 def set_up_environment():

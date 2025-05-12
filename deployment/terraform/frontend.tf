@@ -20,10 +20,6 @@ variable "frontend_env_file_path" {
   description = "path to .env file in provisioner"
 }
 
-variable "frontend_image" {
-  type = string
-}
-
 // Secrets
 
 resource "kubernetes_secret" "frontend_env_vars" {
@@ -61,7 +57,7 @@ resource "kubernetes_deployment" "wato_finance_frontend_deployment" {
       }
       spec {
         container {
-          image = var.frontend_image
+          image = local.frontend_image
           name  = local.frontend_app_name
           image_pull_policy = "Always"
           port { 

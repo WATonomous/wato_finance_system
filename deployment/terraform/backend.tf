@@ -24,15 +24,6 @@ variable "backend_service_account_path" {
   description = "path to serviceAccountKey.json file in provisioner"
 }
 
-variable "backend_image" {
-  type = string
-}
-
-locals {
-  // synced with the corresponding secret in the host cluster
-  user_directory_secret_name = ""
-}
-
 // Secrets
 
 resource "kubernetes_secret" "backend_env_vars" {
@@ -71,7 +62,7 @@ resource "kubernetes_deployment" "wato_finance_backend_deployment" {
       }
       spec {
         container {
-          image = var.backend_image
+          image = local.backend_image
           name  = local.backend_app_name
           image_pull_policy = "Always"
           port { 
@@ -89,7 +80,7 @@ resource "kubernetes_deployment" "wato_finance_backend_deployment" {
             }
           }
           volume_mount { // volume mount for user directory
-             name       = local.backend_env_volume_name
+             name       = local.user_directory_volume_name
              mount_path = "/usr/src/app/backend/user_directory.json"
              sub_path   = "user_directory.json"
              read_only  = true
@@ -104,7 +95,7 @@ resource "kubernetes_deployment" "wato_finance_backend_deployment" {
         volume { # volume containing user directory
           name = local.user_directory_volume_name
           secret {
-            secret_name = local.user_directory_secret_name
+            secret_name = data.kubernetes_secret.user_directory_json.metadata[0].name
           }
         }
         toleration { # Allow scheduling on spot nodes.

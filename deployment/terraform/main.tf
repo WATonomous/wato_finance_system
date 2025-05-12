@@ -26,7 +26,7 @@ provider "kubernetes" {
 }
 
 locals {
-  backend_hostname = "finance-api.watonomous.ca"
+  backend_hostname = "vc-finance-api.watonomous.ca"
   backend_app_name = "wato-finance-backend"
   backend_env_volume_name = "backend-env"
   user_directory_volume_name = "user-directory"
@@ -39,10 +39,15 @@ locals {
     "https://*.use.devtunnels.ms", # vscode tunnel
   ]
 
-  frontend_hostname = "finance-frontend.watonomous.ca"
+  frontend_hostname = "vc-finance-frontend.watonomous.ca"
   frontend_app_name = "wato-finance-frontend"
   frontend_env_volume_name = "frontend-env"
   frontend_app_port = 3000
+}
+
+locals {
+  backend_image = "ghcr.io/watonomous/wato_finance_system:master-backend"
+  frontend_image = "ghcr.io/watonomous/wato_finance_system:master-frontend"
 }
 
 // Synced with the vcluster from the host:
