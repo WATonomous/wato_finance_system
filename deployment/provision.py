@@ -2,7 +2,9 @@ import base64
 import json
 import os
 from pathlib import Path
+import signal
 import subprocess
+import sys
 from typing import Callable
 import typer
 
@@ -12,6 +14,21 @@ app = typer.Typer()
 
 def base64_decode(x):
     return base64.b64decode(x).decode('utf-8')
+
+
+def signal_handler(signum, frame):
+    global interrupted_once
+    if not interrupted_once:
+        print("\nInterrupt received. Waiting for Terraform to shut down cleanly...")
+        print("Press Ctrl+C again to force quit.")
+        interrupted_once = True
+    else:
+        print("Force quitting Terraform...")
+        sys.exit(1)
+
+
+interrupted_once = False
+signal.signal(signal.SIGINT, signal_handler)
 
 class EnvVarToFile:
     def __init__(
@@ -27,11 +44,20 @@ class EnvVarToFile:
 RUN_DIR = "/run"
 TF_CODE_DIR = "./terraform"
 TF_VARS = {
-    "kube_config_path": EnvVarToFile("VCLUSTER_KUBECONFIG_B64", f"{RUN_DIR}/kube_config"),
-    "backend_env_file_path": EnvVarToFile("VCLUSTER_KUBECONFIG_B64", f"{RUN_DIR}/.env-backend"),
-    "backend_service_account_path": EnvVarToFile("VCLUSTER_KUBECONFIG_B64", f"{RUN_DIR}/serviceAccountKey.json"),
-    "frontend_env_file_path": EnvVarToFile("VCLUSTER_KUBECONFIG_B64", f"{RUN_DIR}/.env-frontend")
+    "kube_config_path": EnvVarToFile(
+        "VCLUSTER_KUBECONFIG_B64", f"{RUN_DIR}/kube_config"
+    ),
+    "backend_env_file_path": EnvVarToFile(
+        "BACKEND_ENV_FILE_B64", f"{RUN_DIR}/.env-backend"
+    ),
+    "backend_service_account_path": EnvVarToFile(
+        "BACKEND_SERVICE_ACCOUNT_FILE_B64", f"{RUN_DIR}/serviceAccountKey.json"
+    ),
+    "frontend_env_file_path": EnvVarToFile(
+        "FRONTEND_ENV_FILE_B64", f"{RUN_DIR}/.env-frontend"
+    ),
 }
+
 
 def set_up_environment():
     in_docker = Path("/.dockerenv").exists()
@@ -41,11 +67,12 @@ def set_up_environment():
     for key, value in TF_VARS.items():
         if isinstance(value, EnvVarToFile):
             env_var, file_path = value.env_var, value.path
-            content = value.decode(os.getenv(env_var))
+            content = os.getenv(env_var)
             if content is None:
                 raise EnvironmentError(f"Required environment variable '{env_var}' is not set.")
+            decoded_content = value.decode(content)
             with open(file_path, "w") as f:
-                f.write(content)
+                f.write(decoded_content)
             os.environ[f"TF_VAR_{key}"] = file_path
         else:
             os.environ[f"TF_VAR_{key}"] = value
