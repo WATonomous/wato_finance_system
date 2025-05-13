@@ -1,4 +1,4 @@
-const { EMAIL_RECIPIENTS, ADMIN_GROUP_EMAIL } = require('../models/constants')
+const { EMAIL_RECIPIENTS, ADMIN_GROUP_EMAIL, GENERAL_CONTACT_EMAIL } = require('../models/constants')
 const { sendEmail } = require('../service/sendEmail')
 const { getUserByUID } = require('../service/users.service')
 
@@ -27,6 +27,10 @@ const getEmailToSection = async (reporter_id, recipients) => {
         if (reporter.email) {
             emailToSet.add(reporter.email)
         }
+    }
+
+    if (recipients.includes(EMAIL_RECIPIENTS.general)) {
+        emailToSet.add(GENERAL_CONTACT_EMAIL)
     }
 
     return [...emailToSet].map((Email) => ({ Email }))
@@ -120,6 +124,7 @@ const sendEmailUPRCreatedToApprovers = async (upr) => {
     const To = await getEmailToSection(upr.reporter_id, [
         EMAIL_RECIPIENTS.faculty_advisor,
         EMAIL_RECIPIENTS.admin,
+        EMAIL_RECIPIENTS.general,
     ])
 
     await sendEmail({
@@ -240,6 +245,7 @@ const sendEmailPPRCreatedToApprovers = async (ppr) => {
     const To = await getEmailToSection(ppr.reporter_id, [
         EMAIL_RECIPIENTS.faculty_advisor,
         EMAIL_RECIPIENTS.admin,
+        EMAIL_RECIPIENTS.general,
     ])
 
     await sendEmail({

@@ -45,6 +45,7 @@ const EMAIL_RECIPIENTS = Object.freeze({
     finance: 'finance',
     reporter: 'reporter',
     team_captain: 'team_captain',
+    general: 'hello',
 })
 
 const TICKET_ENDPOINTS = Object.freeze({
@@ -56,6 +57,7 @@ const TICKET_ENDPOINTS = Object.freeze({
 
 const ADMIN_IDENTIFIERS = ['drayside', 'v2zheng', 'jw4he', 'william.li']
 const ADMIN_GROUP_EMAIL = 'finance-admin@watonomous.ca'
+const GENERAL_CONTACT_EMAIL = 'hello@watonomous.ca'
 
 module.exports = {
     ENDOWMENT_FUNDS,
@@ -70,4 +72,5 @@ module.exports = {
     EMAIL_RECIPIENTS,
     ADMIN_IDENTIFIERS,
     ADMIN_GROUP_EMAIL,
+    GENERAL_CONTACT_EMAIL,
 }
