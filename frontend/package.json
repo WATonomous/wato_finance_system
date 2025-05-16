@@ -30,12 +30,14 @@
         "react-router-dom": "^6.6.1",
         "react-scripts": "5.0.1",
         "recoil": "^0.7.7",
+        "serve": "^14.2.4",
         "slate": "^0.102.0",
         "slate-history": "^0.93.0",
         "slate-react": "^0.99.0",
         "web-vitals": "^2.1.4"
     },
     "scripts": {
+        "production": "serve -s build",
         "start": "react-scripts start",
         "server": "nodemon backend/server.js",
         "build": "react-scripts build",
