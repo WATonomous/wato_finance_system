@@ -90,6 +90,16 @@ resource "kubernetes_deployment" "wato_finance_backend_deployment" {
               type = "RuntimeDefault"
             }
           }
+          resources {
+            limits = {
+              cpu = "300m"
+              memory = "256Mi"
+            }
+            requests = {
+              cpu = "100m"
+              memory = "64Mi"
+            }
+          }
         }
         volume { # volume containing .env file and service account key
           name = local.backend_env_volume_name
