@@ -87,10 +87,10 @@ resource "kubernetes_secret" "frontend_env_vars" {
 #             timeout_seconds       = 5
 #             failure_threshold     = 12
 #           }
-#           // TODO: is this even needed?
 #           security_context {
 #             allow_privilege_escalation = false
-#             run_as_non_root            = false
+#             run_as_non_root            = true
+#             run_as_user                = 12345 # from vcluster's security context
 #             capabilities {
 #               drop = ["ALL"]
 #             }

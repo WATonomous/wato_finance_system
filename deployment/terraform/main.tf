@@ -46,9 +46,8 @@ locals {
 }
 
 locals {
-  // TODO: change images to pull non-root containers
-  backend_image = "ghcr.io/watonomous/wato_finance_system:pr-206-frontend"
-  frontend_image = "ghcr.io/watonomous/wato_finance_system:pr-206-backend"
+  backend_image  = "ghcr.io/watonomous/wato_finance_system:master-backend"
+  frontend_image = "ghcr.io/watonomous/wato_finance_system:master-frontend"
 }
 
 // Synced with the vcluster from the host:
