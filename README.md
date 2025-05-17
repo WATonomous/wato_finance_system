@@ -141,7 +141,7 @@ Assuming your .env files are configured properly, you can run them in docker con
 ```
 cd frontend
 docker build -t wato-finance-frontend .
-docker run -p 3000:3000 -d wato-finance-frontend
+docker run -p 3000:3000 -d wato-finance-frontend npm start
 ```
 
 ## Docker setup - backend
