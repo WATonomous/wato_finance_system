@@ -3,7 +3,6 @@ WORKDIR /usr/src/app/frontend
 COPY package*.json ./
 RUN npm ci
 COPY . .
-RUN npm run build
 
 # Switch to non-root user
 RUN useradd --uid 12345 --create-home --shell /bin/bash user12345
