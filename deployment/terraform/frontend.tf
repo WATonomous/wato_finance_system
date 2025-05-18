@@ -102,13 +102,13 @@ resource "kubernetes_deployment" "wato_finance_frontend_deployment" {
           resources {
             limits = {
               cpu    = "500m"
-              memory = "1Gi"
-              ephemeral-storage: "1Gi",
+              memory = "2Gi"
+              ephemeral-storage = "1Gi",
             }
             requests = {
               cpu    = "100m"
               memory = "512Mi",
-              ephemeral-storage: "512Mi"
+              ephemeral-storage = "512Mi"
             }
           }
         }
