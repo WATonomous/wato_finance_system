@@ -8,16 +8,31 @@ resource "kubernetes_namespace" "reloader" {
   }
 }
 
-# TODO: get this working
-# resource "helm_release" "reloader" {
-#   name             = "stakater"
-#   namespace        = kubernetes_namespace.reloader.metadata[0].name
-#   chart            = "reloader"
-#   repository       = "https://stakater.github.io/stakater-charts"
-#   version          = "v1.0.51"
-#   values = [<<EOF
-#     reloader:
-#       reloadStrategy: annotations
-#     EOF
-#   ]
-# }
+# https://github.com/stakater/Reloader/blob/master/deployments/kubernetes/chart/reloader/README.md
+locals {
+  reloader_values = {
+    reloader = {
+      reloadStrategy = "annotations"
+      deployment = {
+        containerSecurityContext = {
+          allowPrivilegeEscalation = false
+          capabilities = {
+            drop = ["ALL"]
+          }
+          seccompProfile = {
+            type = "RuntimeDefault"
+          }
+        }
+      }
+    }
+  }
+}
+
+resource "helm_release" "reloader" {
+  name             = "stakater"
+  namespace        = kubernetes_namespace.reloader.metadata[0].name
+  chart            = "reloader"
+  repository       = "https://stakater.github.io/stakater-charts"
+  version          = "v1.0.51"
+  values = [yamlencode(local.reloader_values)]
+}

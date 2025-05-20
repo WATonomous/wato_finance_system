@@ -69,25 +69,24 @@ resource "kubernetes_deployment" "wato_finance_frontend_deployment" {
             sub_path   = ".env"
             read_only  = true
           }
-          # TODO: Add these correctly
-          # liveness_probe {
-          #   http_get {
-          #     path = "/"
-          #     port = local.frontend_app_port
-          #   }
-          #   period_seconds    = 10
-          #   timeout_seconds   = 5
-          #   failure_threshold = 3
-          # }
-          # startup_probe {
-          #   http_get {
-          #     path = "/"
-          #     port = local.frontend_app_port
-          #   }
-          #   period_seconds        = 10
-          #   timeout_seconds       = 5
-          #   failure_threshold     = 12
-          # }
+          liveness_probe {
+            http_get {
+              path = "/"
+              port = local.frontend_app_port
+            }
+            period_seconds    = 10
+            timeout_seconds   = 5
+            failure_threshold = 3
+          }
+          startup_probe {
+            http_get {
+              path = "/"
+              port = local.frontend_app_port
+            }
+            period_seconds        = 20
+            timeout_seconds       = 5
+            failure_threshold     = 15
+          }
           security_context {
             allow_privilege_escalation = false
             run_as_non_root            = true
@@ -124,6 +123,16 @@ resource "kubernetes_deployment" "wato_finance_frontend_deployment" {
           value = "spot"
           effect = "NoSchedule"
         }
+      }
+    }
+
+    # Ensure old pod is fully terminated before new one starts
+    # to stay within memory quota and avoid exceeding limits
+    strategy {
+      type = "RollingUpdate"
+      rolling_update {
+        max_surge       = 0
+        max_unavailable = 1
       }
     }
   }
