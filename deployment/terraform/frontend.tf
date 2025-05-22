@@ -83,9 +83,9 @@ resource "kubernetes_deployment" "wato_finance_frontend_deployment" {
               path = "/"
               port = local.frontend_app_port
             }
-            period_seconds        = 20
+            period_seconds        = 12
             timeout_seconds       = 5
-            failure_threshold     = 15
+            failure_threshold     = 10
           }
           security_context {
             allow_privilege_escalation = false
@@ -98,13 +98,13 @@ resource "kubernetes_deployment" "wato_finance_frontend_deployment" {
           }
           resources {
             limits = {
-              cpu    = "500m"
-              memory = "2Gi"
+              cpu    = "300m"
+              memory = "512Mi"
               ephemeral-storage = "1Gi",
             }
             requests = {
               cpu    = "100m"
-              memory = "512Mi",
+              memory = "64Mi",
               ephemeral-storage = "512Mi"
             }
           }
@@ -121,16 +121,6 @@ resource "kubernetes_deployment" "wato_finance_frontend_deployment" {
           value = "spot"
           effect = "NoSchedule"
         }
-      }
-    }
-
-    # Ensure old pod is fully terminated before new one starts
-    # to stay within memory quota and avoid exceeding limits
-    strategy {
-      type = "RollingUpdate"
-      rolling_update {
-        max_surge       = 0
-        max_unavailable = 1
       }
     }
   }
