@@ -81,8 +81,6 @@ resource "kubernetes_deployment" "wato_finance_backend_deployment" {
           }
           security_context {
             allow_privilege_escalation = false
-            run_as_non_root            = true
-            run_as_user                = 12345 # from vcluster's security context
             capabilities {
               drop = ["ALL"]
             }
