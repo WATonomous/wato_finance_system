@@ -71,6 +71,7 @@ jobs:
                   push: true
                   build-args: |
                       DOCKER_METADATA_OUTPUT_JSON
+                      FRONTEND_ENV_FILE_B64=${{ secrets.FRONTEND_ENV_FILE_B64 }}
                   tags: ${{ steps.meta-frontend.outputs.tags }}
                   labels: ${{ steps.meta-frontend.outputs.labels }}
 
