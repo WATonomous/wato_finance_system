@@ -53,9 +53,6 @@ TF_VARS = {
     "backend_service_account_path": EnvVarToFile(
         "BACKEND_SERVICE_ACCOUNT_FILE_B64", f"{RUN_DIR}/serviceAccountKey.json"
     ),
-    "frontend_env_file_path": EnvVarToFile(
-        "FRONTEND_ENV_FILE_B64", f"{RUN_DIR}/.env-frontend"
-    ),
 }
 
 

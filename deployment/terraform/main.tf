@@ -47,7 +47,6 @@ locals {
 
   frontend_hostname = "vc-finance-frontend.watonomous.ca"
   frontend_app_name = "wato-finance-frontend"
-  frontend_env_volume_name = "frontend-env"
   frontend_app_port = 3000
 }
 

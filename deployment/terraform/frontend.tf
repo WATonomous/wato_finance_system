@@ -6,32 +6,6 @@ resource "kubernetes_namespace" "wato_finance_frontend" {
   }
 }
 
-// Variables in env file:
-# REACT_APP_API_KEY=<YOUR_FIREBASE_API_KEY>
-# REACT_APP_AUTH_DOMAIN=<YOUR_FIREBASE_AUTH_DOMAIN>
-# REACT_APP_PROJECT_ID=<YOUR_FIREBASE_PROJECT_ID>
-# REACT_APP_STORAGE_BUCKET=<YOUR_FIREBASE_STORAGE_BUCKET>
-# REACT_APP_MESSAGING_SENDER_ID=<YOUR_FIREBASE_MESSAGING_SENDER_ID>
-# REACT_APP_APP_ID=<YOUR_FIREBASE_API_ID>
-# REACT_APP_BACKEND_URL=http://localhost:5000
-
-variable "frontend_env_file_path" {
-  type = string
-  description = "path to .env file in provisioner"
-}
-
-// Secrets
-
-resource "kubernetes_secret" "frontend_env_vars" {
-  metadata {
-    name = "wato-finance-frontend-env-vars"
-    namespace = kubernetes_namespace.wato_finance_frontend.metadata[0].name
-  }
-  data = {
-    ".env" = file(var.frontend_env_file_path)
-  }
-}
-
 // Deployment
 
 resource "kubernetes_deployment" "wato_finance_frontend_deployment" {
@@ -62,12 +36,6 @@ resource "kubernetes_deployment" "wato_finance_frontend_deployment" {
           image_pull_policy = "Always"
           port { 
             container_port = local.frontend_app_port
-          } 
-          volume_mount {
-            name       = local.frontend_env_volume_name
-            mount_path = "/usr/src/app/frontend/.env"
-            sub_path   = ".env"
-            read_only  = true
           }
           liveness_probe {
             http_get {
@@ -107,12 +75,6 @@ resource "kubernetes_deployment" "wato_finance_frontend_deployment" {
               memory = "64Mi",
               ephemeral-storage = "512Mi"
             }
-          }
-        }
-        volume {
-          name = local.frontend_env_volume_name
-          secret {
-            secret_name = kubernetes_secret.frontend_env_vars.metadata[0].name
           }
         }
         toleration { # Allow scheduling on spot nodes.
