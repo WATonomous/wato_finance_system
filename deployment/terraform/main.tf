@@ -52,8 +52,8 @@ locals {
 }
 
 locals {
-  backend_image  = "ghcr.io/watonomous/wato_finance_system:pr-206-backend"
-  frontend_image = "ghcr.io/watonomous/wato_finance_system:pr-209-frontend"
+  backend_image  = "ghcr.io/watonomous/wato_finance_system:master-backend"
+  frontend_image = "ghcr.io/watonomous/wato_finance_system:master-frontend"
 }
 
 // Synced with the vcluster from the host:
