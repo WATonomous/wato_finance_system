@@ -1,4 +1,8 @@
-const { EMAIL_RECIPIENTS, ADMIN_GROUP_EMAIL, GENERAL_CONTACT_EMAIL } = require('../models/constants')
+const {
+    EMAIL_RECIPIENTS,
+    ADMIN_GROUP_EMAIL,
+    GENERAL_CONTACT_EMAIL,
+} = require('../models/constants')
 const { sendEmail } = require('../service/sendEmail')
 const { getUserByUID } = require('../service/users.service')
 
