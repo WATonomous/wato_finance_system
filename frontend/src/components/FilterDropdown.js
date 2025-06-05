@@ -4,6 +4,7 @@ import {
     Button,
     Menu,
     MenuButton,
+    MenuItem,
     MenuList,
     MenuItemOption,
     MenuOptionGroup,
@@ -26,10 +27,30 @@ const FilterDropdown = ({ filter, setFilter }) => {
                 >
                     Filter Tickets
                 </MenuButton>
-                <MenuList minWidth="240px">
+                <MenuList>
+                    <MenuItem
+                        onClick={() => {
+                            if (
+                                filter.length ===
+                                Object.keys(TICKET_TYPES).length
+                            ) {
+                                setFilter([])
+                                setSearchParams({
+                                    tickettypes: '',
+                                })
+                            } else {
+                                setFilter(Object.keys(TICKET_TYPES))
+                                searchParams.delete('tickettypes')
+                                setSearchParams(searchParams)
+                            }
+                        }}
+                    >
+                        {filter.length === Object.keys(TICKET_TYPES).length
+                            ? 'Deselect All'
+                            : 'Select All'}
+                    </MenuItem>
                     <MenuOptionGroup
-                        defaultValue={filter}
-                        title="Ticket Type"
+                        value={filter}
                         type="checkbox"
                         onChange={(value) => {
                             setFilter(value)
@@ -47,16 +68,16 @@ const FilterDropdown = ({ filter, setFilter }) => {
                             }
                         }}
                     >
-                        <MenuItemOption value={`${TICKET_TYPES.SF}`}>
+                        <MenuItemOption value={TICKET_TYPES.SF}>
                             Sponsorship Funds
                         </MenuItemOption>
-                        <MenuItemOption value={`${TICKET_TYPES.FI}`}>
+                        <MenuItemOption value={TICKET_TYPES.FI}>
                             Funding Items
                         </MenuItemOption>
-                        <MenuItemOption value={`${TICKET_TYPES.PPR}`}>
+                        <MenuItemOption value={TICKET_TYPES.PPR}>
                             Personal Purchase Requests
                         </MenuItemOption>
-                        <MenuItemOption value={`${TICKET_TYPES.UPR}`}>
+                        <MenuItemOption value={TICKET_TYPES.UPR}>
                             UW Finance Purchase Requests
                         </MenuItemOption>
                     </MenuOptionGroup>
