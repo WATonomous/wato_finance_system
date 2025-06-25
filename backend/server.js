@@ -33,17 +33,17 @@ async function tryConnectMongo(uri) {
         socketTimeoutMS: 1000 * 20,
         connectTimeoutMS: 1000 * 20,
     });
-    console.log('🛢️ MongoDB database connection established successfully');
+    console.log('🛢️  MongoDB database connection established successfully');
 }
 
 function handleConnectionError(err, attempts, maxRetries, delay) {
     console.error(
-        `❌ MongoDB connection failed (attempt ${attempts}/${maxRetries}), ` +
+        `❌  MongoDB connection failed (attempt ${attempts}/${maxRetries}), ` +
         `retrying in ${delay / 1000} seconds...`,
         err.message
     );
     if (attempts >= maxRetries) {
-        console.error('❌ Maximum connection attempts reached. Exiting.');
+        console.error('❌  Maximum connection attempts reached. Exiting.');
         process.exit(1);
     }
 }
